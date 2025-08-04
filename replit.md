@@ -1,0 +1,72 @@
+# Overview
+
+PerformanceHub is a comprehensive performance tracking web application designed for team-based organizations. The application provides role-based dashboards for admins, managers, and team members to conduct and track performance reviews across monthly, quarterly, and annual cycles. The system combines self-assessments with manager evaluations, uses customizable scoring templates, and supports file attachments for comprehensive performance documentation.
+
+# User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+# System Architecture
+
+## Frontend Architecture
+- **React with TypeScript**: Main UI framework using functional components and hooks
+- **Vite**: Build tool and development server with hot module replacement
+- **Routing**: Wouter for client-side routing with role-based page access
+- **State Management**: TanStack Query (React Query) for server state management and caching
+- **UI Components**: Shadcn/ui component library built on Radix UI primitives
+- **Styling**: Tailwind CSS with CSS variables for theming and responsive design
+- **Form Handling**: React Hook Form with Zod validation for type-safe form management
+
+## Backend Architecture
+- **Express.js**: REST API server with TypeScript
+- **Database ORM**: Drizzle ORM with PostgreSQL dialect for type-safe database operations
+- **Authentication**: Replit-based OpenID Connect authentication with session management
+- **Session Storage**: PostgreSQL-based session store using connect-pg-simple
+- **File Uploads**: Integration with Google Cloud Storage and Uppy for file handling
+- **API Design**: RESTful endpoints with role-based access control and error handling middleware
+
+## Database Design
+- **PostgreSQL**: Primary database using Neon serverless PostgreSQL
+- **Schema Management**: Drizzle Kit for migrations and schema evolution
+- **Key Tables**: 
+  - Users with role-based permissions (admin, manager, team_member)
+  - Review templates with customizable categories
+  - Reviews with scoring, notes, and attachment support
+  - Session management for authentication
+
+## Authentication & Authorization
+- **OpenID Connect**: Replit-based authentication using Passport.js strategy
+- **Role-Based Access**: Three-tier permission system (admin, manager, team_member)
+- **Session Management**: Secure server-side sessions with PostgreSQL storage
+- **Route Protection**: Middleware-based authentication checks on both client and server
+
+## Data Flow Patterns
+- **Client-Server Communication**: REST API with JSON payloads
+- **Caching Strategy**: React Query for client-side caching with automatic invalidation
+- **Error Handling**: Centralized error boundaries and toast notifications
+- **Form Validation**: Client-side validation with Zod schemas shared between frontend and backend
+
+# External Dependencies
+
+## Database Services
+- **Neon Database**: Serverless PostgreSQL hosting with connection pooling
+- **DATABASE_URL**: Environment variable for database connection string
+
+## Authentication Services
+- **Replit Auth**: OpenID Connect provider for user authentication
+- **ISSUER_URL**: Authentication service endpoint
+- **SESSION_SECRET**: Server-side session encryption key
+
+## File Storage
+- **Google Cloud Storage**: Cloud storage service for review attachments
+- **Uppy**: File upload library with drag-and-drop support and progress tracking
+
+## Development Tools
+- **Replit Integration**: Development environment with live reload and error overlay
+- **Vite Plugins**: Runtime error modal and cartographer for enhanced development experience
+
+## UI/UX Libraries
+- **Radix UI**: Headless component primitives for accessibility
+- **Lucide React**: Icon library for consistent iconography
+- **date-fns**: Date manipulation and formatting utilities
+- **Tailwind CSS**: Utility-first CSS framework with custom design system
