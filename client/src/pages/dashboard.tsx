@@ -13,7 +13,8 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  IconButton
+  IconButton,
+  Divider
 } from '@mui/material';
 import { 
   People as PeopleIcon,
@@ -22,7 +23,8 @@ import {
   CheckCircle as CheckCircleIcon,
   Schedule as ScheduleIcon,
   Star as StarIcon,
-  MoreVert as MoreVertIcon
+  MoreVert as MoreVertIcon,
+  PendingActions as PendingActionsIcon
 } from '@mui/icons-material';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
@@ -45,106 +47,117 @@ interface Review {
   overallScore?: number;
 }
 
-const StatisticsCard: React.FC<{
+const MaterialDashboardCard: React.FC<{
   title: string;
   count: string | number;
   icon: React.ReactNode;
   color: string;
-  percentage?: string;
-  percentageColor?: string;
-}> = ({ title, count, icon, color, percentage, percentageColor = 'success' }) => {
+  percentage?: {
+    amount: string;
+    color: 'success' | 'error' | 'warning';
+    label: string;
+  };
+}> = ({ title, count, icon, color, percentage }) => {
+  const getGradientByColor = (colorName: string) => {
+    switch (colorName) {
+      case 'primary': return 'linear-gradient(195deg, #42424a, #191919)';
+      case 'success': return 'linear-gradient(195deg, #66bb6a, #43a047)';
+      case 'info': return 'linear-gradient(195deg, #49a3f1, #1a73e8)';
+      case 'warning': return 'linear-gradient(195deg, #ffa726, #fb8c00)';
+      case 'error': return 'linear-gradient(195deg, #ef5350, #e53935)';
+      case 'dark': return 'linear-gradient(195deg, #42424a, #191919)';
+      default: return 'linear-gradient(195deg, #66bb6a, #43a047)';
+    }
+  };
+
+  const getShadowByColor = (colorName: string) => {
+    switch (colorName) {
+      case 'primary': return '0 4px 20px 0 rgba(66, 66, 74, 0.14), 0 7px 10px -5px rgba(66, 66, 74, 0.4)';
+      case 'success': return '0 4px 20px 0 rgba(102, 187, 106, 0.14), 0 7px 10px -5px rgba(76, 175, 80, 0.4)';
+      case 'info': return '0 4px 20px 0 rgba(73, 163, 241, 0.14), 0 7px 10px -5px rgba(26, 115, 232, 0.4)';
+      case 'warning': return '0 4px 20px 0 rgba(255, 167, 38, 0.14), 0 7px 10px -5px rgba(251, 140, 0, 0.4)';
+      case 'error': return '0 4px 20px 0 rgba(239, 83, 80, 0.14), 0 7px 10px -5px rgba(229, 57, 53, 0.4)';
+      case 'dark': return '0 4px 20px 0 rgba(66, 66, 74, 0.14), 0 7px 10px -5px rgba(66, 66, 74, 0.4)';
+      default: return '0 4px 20px 0 rgba(102, 187, 106, 0.14), 0 7px 10px -5px rgba(76, 175, 80, 0.4)';
+    }
+  };
+
   return (
-    <Card 
-      sx={{ 
-        height: '100%', 
-        position: 'relative', 
-        overflow: 'visible',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        borderRadius: 3,
-        border: 'none',
-        '&:hover': {
-          transform: 'translateY(-2px)',
-          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-          transition: 'all 0.3s ease'
-        }
-      }}
-    >
-      <CardContent sx={{ p: 3, pt: 4 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <Box sx={{ flex: 1, pr: 1 }}>
-            <Typography 
-              variant="body2" 
-              color="text.secondary" 
-              sx={{ 
-                mb: 1, 
-                textTransform: 'uppercase', 
-                fontWeight: 600,
-                fontSize: '0.75rem',
-                letterSpacing: 0.5
-              }}
-            >
-              {title}
-            </Typography>
-            <Typography 
-              variant="h4" 
-              component="div" 
-              sx={{ 
-                fontWeight: 700, 
-                color: '#344767',
-                fontSize: '2rem',
-                lineHeight: 1.2
-              }}
-            >
-              {count}
-            </Typography>
-            {percentage && (
-              <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
-                    color: percentageColor === 'success' ? '#4caf50' : '#f44336',
-                    fontWeight: 600,
-                    fontSize: '0.875rem'
-                  }}
-                >
-                  {percentage}
-                </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary" 
-                  sx={{ 
-                    ml: 0.5,
-                    fontSize: '0.875rem'
-                  }}
-                >
-                  than last month
-                </Typography>
-              </Box>
-            )}
-          </Box>
-          <Box
-            sx={{
-              position: 'absolute',
-              top: -25,
-              right: 20,
-              width: 70,
-              height: 70,
-              borderRadius: 3,
-              background: `linear-gradient(195deg, ${color}, ${color}dd)`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              boxShadow: `0 8px 26px -4px ${color}66`,
-              '& svg': {
-                fontSize: '2rem'
-              }
+    <Card sx={{ height: '100%', position: 'relative', overflow: 'visible' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 1, px: 2 }}>
+        <Box
+          sx={{
+            background: getGradientByColor(color),
+            color: 'white',
+            borderRadius: '0.75rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '4rem',
+            height: '4rem',
+            mt: -3,
+            boxShadow: getShadowByColor(color),
+            '& svg': {
+              fontSize: '1.5rem'
+            }
+          }}
+        >
+          {icon}
+        </Box>
+        <Box sx={{ textAlign: 'right', lineHeight: 1.25 }}>
+          <Typography 
+            variant="button" 
+            sx={{ 
+              fontWeight: 300, 
+              color: '#7b809a',
+              fontSize: '0.875rem',
+              textTransform: 'capitalize'
             }}
           >
-            {icon}
-          </Box>
+            {title}
+          </Typography>
+          <Typography 
+            variant="h4" 
+            sx={{ 
+              fontWeight: 600, 
+              color: '#344767',
+              fontSize: '1.625rem',
+              lineHeight: 1.25
+            }}
+          >
+            {count}
+          </Typography>
         </Box>
-      </CardContent>
+      </Box>
+      <Divider sx={{ my: 1 }} />
+      <Box sx={{ pb: 2, px: 2 }}>
+        <Typography 
+          component="p" 
+          variant="button" 
+          sx={{ 
+            color: '#7b809a',
+            display: 'flex',
+            fontSize: '0.875rem',
+            lineHeight: 1.625
+          }}
+        >
+          {percentage && (
+            <Typography
+              component="span"
+              variant="button"
+              sx={{
+                fontWeight: 700,
+                color: percentage.color === 'success' ? '#4caf50' : 
+                       percentage.color === 'error' ? '#f44336' : 
+                       percentage.color === 'warning' ? '#ffa726' : '#4caf50'
+              }}
+            >
+              {percentage.amount}
+            </Typography>
+          )}
+          {percentage && `\u00A0${percentage.label}`}
+        </Typography>
+      </Box>
     </Card>
   );
 };
@@ -278,43 +291,55 @@ export default function Dashboard() {
       {/* Statistics Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={12} md={6} lg={3}>
-          <StatisticsCard
+          <MaterialDashboardCard
             title="Team Members"
             count={metrics?.totalTeamMembers || 0}
             icon={<PeopleIcon />}
-            color="#66bb6a"
-            percentage="+12%"
-            percentageColor="success"
+            color="success"
+            percentage={{
+              amount: "+12%",
+              color: "success",
+              label: "than last month"
+            }}
           />
         </Grid>
         <Grid item xs={12} md={6} lg={3}>
-          <StatisticsCard
+          <MaterialDashboardCard
             title="Pending Reviews"
             count={metrics?.pendingReviews || 0}
-            icon={<ScheduleIcon />}
-            color="#ff9800"
-            percentage="-2%"
-            percentageColor="error"
+            icon={<PendingActionsIcon />}
+            color="warning"
+            percentage={{
+              amount: "-2%",
+              color: "error",
+              label: "than last month"
+            }}
           />
         </Grid>
         <Grid item xs={12} md={6} lg={3}>
-          <StatisticsCard
+          <MaterialDashboardCard
             title="Completed Reviews"
             count={metrics?.completedReviews || 0}
             icon={<CheckCircleIcon />}
-            color="#2196f3"
-            percentage="+5%"
-            percentageColor="success"
+            color="info"
+            percentage={{
+              amount: "+5%",
+              color: "success",
+              label: "than last month"
+            }}
           />
         </Grid>
         <Grid item xs={12} md={6} lg={3}>
-          <StatisticsCard
+          <MaterialDashboardCard
             title="Average Score"
             count={metrics?.averageScore ? `${metrics.averageScore}/5` : 'N/A'}
             icon={<TrendingUpIcon />}
-            color="#9c27b0"
-            percentage="+0.2"
-            percentageColor="success"
+            color="primary"
+            percentage={{
+              amount: "+0.2",
+              color: "success",
+              label: "than last month"
+            }}
           />
         </Grid>
       </Grid>
