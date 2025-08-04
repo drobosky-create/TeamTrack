@@ -71,6 +71,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         users = await storage.getAllUsers();
       } else if (currentUser.role === 'manager') {
         users = await storage.getUsersUnderManager(currentUser.id);
+      } else if (currentUser.role === 'team_member') {
+        // Team members can view all users but with limited information
+        users = await storage.getAllUsers();
       } else {
         return res.status(403).json({ message: "Insufficient permissions" });
       }
