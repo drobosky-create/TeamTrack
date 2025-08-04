@@ -18,7 +18,7 @@ export default function TeamDirectory() {
   const [showUserModal, setShowUserModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const { data: users, isLoading: usersLoading, refetch } = useQuery({
+  const { data: users, isLoading: usersLoading, refetch } = useQuery<User[]>({
     queryKey: ["/api/users"],
     enabled: !!user,
   });
@@ -93,7 +93,7 @@ export default function TeamDirectory() {
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center space-x-3">
                         <Avatar className="h-12 w-12">
-                          <AvatarImage src={teamMember.profileImageUrl} />
+                          <AvatarImage src={teamMember.profileImageUrl || undefined} />
                           <AvatarFallback>
                             {teamMember.firstName?.[0]}{teamMember.lastName?.[0]}
                           </AvatarFallback>

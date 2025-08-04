@@ -77,14 +77,14 @@ export default function ReviewFormModal({ open, onClose, review, onSuccess }: Re
         employeeId: review.employeeId,
         templateId: review.templateId,
         reviewType: review.reviewType,
-        dueDate: review.dueDate.split('T')[0],
+        dueDate: new Date(review.dueDate).toISOString().split('T')[0],
         selfReviewNotes: review.selfReviewNotes || '',
         managerReviewNotes: review.managerReviewNotes || '',
-        requiresFollowUp: review.requiresFollowUp,
+        requiresFollowUp: review.requiresFollowUp || false,
         followUpNotes: review.followUpNotes || '',
       });
       setScores((review.scores as CategoryScore) || {});
-      setAttachments(review.attachments || []);
+      setAttachments((review.attachments as string[]) || []);
     } else {
       form.reset();
       setScores({});
@@ -258,7 +258,7 @@ export default function ReviewFormModal({ open, onClose, review, onSuccess }: Re
                       label={category}
                       value={scores[category] || 0}
                       onChange={(score) => handleScoreChange(category, score)}
-                      disabled={isReadOnly}
+                      disabled={isReadOnly || false}
                     />
                   ))}
                 </div>

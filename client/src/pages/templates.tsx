@@ -17,7 +17,7 @@ export default function Templates() {
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<ReviewTemplate | null>(null);
 
-  const { data: templates, isLoading: templatesLoading, refetch } = useQuery({
+  const { data: templates, isLoading: templatesLoading, refetch } = useQuery<ReviewTemplate[]>({
     queryKey: ["/api/templates"],
     enabled: !!user,
   });

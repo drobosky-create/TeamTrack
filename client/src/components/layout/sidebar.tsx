@@ -81,7 +81,7 @@ export default function Sidebar() {
       <div className="p-4 border-t border-gray-200">
         <div className="flex items-center space-x-3">
           <Avatar className="h-10 w-10">
-            <AvatarImage src={user?.profileImageUrl} />
+            <AvatarImage src={user?.profileImageUrl || undefined} />
             <AvatarFallback>
               {user?.firstName?.[0]}{user?.lastName?.[0]}
             </AvatarFallback>

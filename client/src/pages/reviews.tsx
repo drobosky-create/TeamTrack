@@ -18,7 +18,7 @@ export default function Reviews() {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
 
-  const { data: reviews, isLoading: reviewsLoading, refetch } = useQuery({
+  const { data: reviews, isLoading: reviewsLoading, refetch } = useQuery<Review[]>({
     queryKey: ["/api/reviews"],
     enabled: !!user,
   });

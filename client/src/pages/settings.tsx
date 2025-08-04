@@ -70,7 +70,7 @@ export default function Settings() {
               <CardContent>
                 <div className="flex items-start space-x-6">
                   <Avatar className="h-20 w-20">
-                    <AvatarImage src={user.profileImageUrl} />
+                    <AvatarImage src={user.profileImageUrl || undefined} />
                     <AvatarFallback className="text-lg">
                       {user.firstName?.[0]}{user.lastName?.[0]}
                     </AvatarFallback>
