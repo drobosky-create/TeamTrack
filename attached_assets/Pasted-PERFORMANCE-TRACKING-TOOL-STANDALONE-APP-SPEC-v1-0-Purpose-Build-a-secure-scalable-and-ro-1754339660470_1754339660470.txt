@@ -1,0 +1,182 @@
+PERFORMANCE TRACKING TOOL – STANDALONE APP SPEC (v1.0)
+🎯 Purpose
+Build a secure, scalable, and role-based performance review web app that supports monthly, quarterly, and annual team evaluations. The app must blend self and manager input, use a customizable scoring system (5 categories, 5-point scale), and support white-label deployments.
+
+🧱 Core Functional Modules
+1. User Roles & Access Control
+Admin
+
+Full platform access
+
+Can create/edit templates, assign roles, configure branding
+
+Manager
+
+Can view team dashboard
+
+Complete manager reviews
+
+See direct report history
+
+Team Member
+
+Can complete self-reviews
+
+View personal review history
+
+2. Review Engine
+Review Types: Monthly, Quarterly, Annual
+
+Each review includes:
+
+5 scoring categories (admin-fillable per template)
+
+Self-review notes
+
+Manager review notes
+
+Auto-calculated outcome (pass if all scores ≥ 3)
+
+Follow-up action toggle
+
+Attachments (PDF, images, screenshots, etc.)
+
+Review Status: Not Started / In Progress / Complete / Overdue
+
+3. Template Builder
+Admin can define templates by review type
+
+Fields:
+
+Review Type (M/Q/A)
+
+Category Labels (5)
+
+Instructions
+
+Attach default questions or prompts
+
+Save as reusable templates
+
+Assign templates by role or department
+
+4. Team Directory
+Add/Edit users
+
+Assign department, manager, employment type (employee/contractor)
+
+Review cadence (Monthly/Quarterly/Annual)
+
+Display org chart view (future feature or use embedded diagram)
+
+Filter: By manager, department, review status
+
+5. KPI Tracker (Future Phase)
+Optional module to log performance metrics
+
+Target vs Actual
+
+Comments per metric
+
+Visual status indicators (R/Y/G)
+
+Filter by user, manager, or quarter
+
+6. Dashboard Views
+Admin View: Global stats, overdue reviews, average scores, user activity
+
+Manager View: Direct reports only
+
+Team Member View: Personal review history, KPI progress, next due review
+
+⚙️ Technical Stack Recommendations
+⛓ Backend
+Node.js (Express) or Django (Python)
+
+PostgreSQL or Firebase for DB
+
+REST or GraphQL API
+
+💻 Frontend
+React.js with Tailwind or Material UI
+
+Role-based dashboard components
+
+Form engine with dynamic scoring
+
+🔐 Authentication
+Auth0 or Firebase Auth
+
+JWT for session control
+
+Role-based access permissions
+
+📁 File Storage
+AWS S3 or Firebase Storage for file uploads (attachments, logos)
+
+🧩 Optional Integrations
+Zapier or Make (for Slack, GHL alerts)
+
+Notion/ClickUp API sync (future)
+
+Email/SMS Reminders via SendGrid or Twilio
+
+🖼️ Wireframe – Visual Flow (Rendered in Chat)
+pgsql
+Copy
+Edit
+Home (Login)
+├── Dashboard
+│   ├── Team Summary (Admin/Manager)
+│   ├── My Reviews (Team Member)
+│   ├── Alerts: Overdue, Upcoming
+│
+├── Team Directory
+│   ├── Add/Edit User
+│   ├── Org Chart View
+│   └── Review Cadence Setting
+│
+├── Templates
+│   ├── Monthly / Quarterly / Annual
+│   ├── Category Label Editor (fillable x5)
+│   ├── Default Instructions
+│
+├── Reviews
+│   ├── Review Form (Self + Manager Input)
+│   ├── Score Tracker (1–5 per category)
+│   └── Notes + Follow-up Flag
+│
+├── Settings
+│   ├── Branding / Logo / Company Name
+│   ├── Permissions Settings
+│   ├── Export Options (PDF, CSV)
+📦 White-Label Requirements
+Editable company name, logo, and brand color scheme
+
+Custom domain or subdomain support (future phase)
+
+Admin tool to duplicate environments for client accounts
+
+Hidden view toggle (for resellers or consultants)
+
+🔐 Security & Compliance
+Role-based access control (RBAC)
+
+Encrypted data at rest and in transit
+
+Audit log (Phase 2)
+
+GDPR-compliant design (optional Phase 2)
+
+🔜 Phase 2 Features
+Org chart builder
+
+KPI integration (ClickUp/Ninety)
+
+Custom email reminder logic
+
+Reporting dashboards with heatmaps
+
+AI-generated summaries or feedback flags
+
+Gusto/HRIS integration for employee sync
