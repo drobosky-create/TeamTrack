@@ -167,11 +167,15 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
         variant="permanent"
         sx={{
           display: { xs: 'none', md: 'block' },
+          width: drawerWidth,
+          flexShrink: 0,
           '& .MuiDrawer-paper': {
-            boxSizing: 'border-box',
             width: drawerWidth,
+            boxSizing: 'border-box',
             background: 'linear-gradient(195deg, #66bb6a, #43a047)',
             border: 'none',
+            position: 'fixed',
+            height: '100vh',
           },
         }}
         open
@@ -204,9 +208,13 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
         component="main"
         sx={{
           flexGrow: 1,
-          width: { md: `calc(100% - ${drawerWidth}px)` },
+          ml: { md: `${drawerWidth}px` },
           backgroundColor: '#f8f9fa',
           minHeight: '100vh',
+          transition: (theme) => theme.transitions.create(['margin'], {
+            easing: theme.transitions.easing.easeInOut,
+            duration: theme.transitions.duration.enteringScreen,
+          }),
         }}
       >
         {/* Top Navigation */}
