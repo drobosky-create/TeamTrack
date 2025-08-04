@@ -8,7 +8,10 @@ import {
   Settings as SettingsIcon,
   TrackChanges as TargetIcon,
   Menu as MenuIcon,
-  Logout as LogoutIcon
+  Logout as LogoutIcon,
+  Person as PersonIcon,
+  Notifications as NotificationsIcon,
+  CreditCard as CreditCardIcon
 } from '@mui/icons-material';
 import { Link, useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
@@ -49,6 +52,24 @@ const navigationItems = [
     text: 'Templates',
     icon: <AssessmentIcon />,
     path: '/templates',
+    roles: ['admin']
+  },
+  {
+    text: 'Profile',
+    icon: <PersonIcon />,
+    path: '/profile',
+    roles: ['admin', 'manager', 'team_member']
+  },
+  {
+    text: 'Notifications',
+    icon: <NotificationsIcon />,
+    path: '/notifications',
+    roles: ['admin', 'manager', 'team_member']
+  },
+  {
+    text: 'Billing',
+    icon: <CreditCardIcon />,
+    path: '/billing',
     roles: ['admin']
   },
   {

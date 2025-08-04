@@ -15,6 +15,9 @@ import Reviews from "@/pages/reviews";
 import Goals from "@/pages/goals";
 import Templates from "@/pages/templates";
 import Settings from "@/pages/settings";
+import Profile from "@/pages/profile";
+import Notifications from "@/pages/notifications";
+import Billing from "@/pages/billing";
 
 const theme = createTheme({
   palette: {
@@ -46,6 +49,9 @@ function Router() {
             <Route path="/goals" component={Goals} />
             <Route path="/templates" component={Templates} />
             <Route path="/settings" component={Settings} />
+            <Route path="/profile" component={Profile} />
+            <Route path="/notifications" component={Notifications} />
+            <Route path="/billing" component={Billing} />
             <Route component={NotFound} />
           </Switch>
         </MaterialDashboardLayout>
