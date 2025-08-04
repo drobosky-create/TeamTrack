@@ -266,7 +266,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
         </AppBar>
 
         {/* Page Content */}
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 4, ml: 2 }}>
           {children}
         </Box>
       </Box>
