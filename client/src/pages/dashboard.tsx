@@ -54,28 +54,69 @@ const StatisticsCard: React.FC<{
   percentageColor?: string;
 }> = ({ title, count, icon, color, percentage, percentageColor = 'success' }) => {
   return (
-    <Card sx={{ height: '100%', position: 'relative', overflow: 'visible' }}>
-      <CardContent sx={{ p: 3 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Box>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 1, textTransform: 'uppercase', fontWeight: 600 }}>
+    <Card 
+      sx={{ 
+        height: '100%', 
+        position: 'relative', 
+        overflow: 'visible',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        borderRadius: 3,
+        border: 'none',
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+          transition: 'all 0.3s ease'
+        }
+      }}
+    >
+      <CardContent sx={{ p: 3, pt: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <Box sx={{ flex: 1, pr: 1 }}>
+            <Typography 
+              variant="body2" 
+              color="text.secondary" 
+              sx={{ 
+                mb: 1, 
+                textTransform: 'uppercase', 
+                fontWeight: 600,
+                fontSize: '0.75rem',
+                letterSpacing: 0.5
+              }}
+            >
               {title}
             </Typography>
-            <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', color: '#344767' }}>
+            <Typography 
+              variant="h4" 
+              component="div" 
+              sx={{ 
+                fontWeight: 700, 
+                color: '#344767',
+                fontSize: '2rem',
+                lineHeight: 1.2
+              }}
+            >
               {count}
             </Typography>
             {percentage && (
-              <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
                 <Typography 
                   variant="body2" 
                   sx={{ 
                     color: percentageColor === 'success' ? '#4caf50' : '#f44336',
-                    fontWeight: 600 
+                    fontWeight: 600,
+                    fontSize: '0.875rem'
                   }}
                 >
                   {percentage}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ ml: 0.5 }}>
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary" 
+                  sx={{ 
+                    ml: 0.5,
+                    fontSize: '0.875rem'
+                  }}
+                >
                   than last month
                 </Typography>
               </Box>
@@ -84,17 +125,20 @@ const StatisticsCard: React.FC<{
           <Box
             sx={{
               position: 'absolute',
-              top: -20,
+              top: -25,
               right: 20,
-              width: 60,
-              height: 60,
-              borderRadius: 2,
+              width: 70,
+              height: 70,
+              borderRadius: 3,
               background: `linear-gradient(195deg, ${color}, ${color}dd)`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: 'white',
-              boxShadow: `0 4px 20px 0 ${color}40`,
+              boxShadow: `0 8px 26px -4px ${color}66`,
+              '& svg': {
+                fontSize: '2rem'
+              }
             }}
           >
             {icon}
@@ -128,32 +172,60 @@ const ReviewCard: React.FC<{ review: Review }> = ({ review }) => {
     <ListItem 
       sx={{ 
         bgcolor: 'background.paper',
-        borderRadius: 1,
-        mb: 1,
-        border: '1px solid',
-        borderColor: 'divider'
+        borderRadius: 2,
+        mb: 2,
+        border: '1px solid #e9ecef',
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        '&:hover': {
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+          transform: 'translateY(-1px)',
+          transition: 'all 0.2s ease'
+        }
       }}
     >
       <ListItemAvatar>
-        <Avatar sx={{ bgcolor: 'primary.main' }}>
+        <Avatar 
+          sx={{ 
+            bgcolor: 'primary.main',
+            background: 'linear-gradient(195deg, #66bb6a, #43a047)',
+            width: 45,
+            height: 45
+          }}
+        >
           <AssignmentIcon />
         </Avatar>
       </ListItemAvatar>
       <ListItemText
         primary={
-          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+          <Typography 
+            variant="subtitle2" 
+            sx={{ 
+              fontWeight: 700,
+              color: '#344767',
+              fontSize: '1rem'
+            }}
+          >
             {review.revieweeName || `Review #${review.id}`}
           </Typography>
         }
         secondary={
-          <Box sx={{ mt: 0.5 }}>
+          <Box sx={{ mt: 1 }}>
             <Chip 
               label={getStatusLabel(review.status)}
               color={getStatusColor(review.status) as any}
               size="small"
-              sx={{ mr: 1 }}
+              sx={{ 
+                mr: 1,
+                fontWeight: 600,
+                fontSize: '0.75rem'
+              }}
             />
-            <Typography variant="body2" color="text.secondary" component="span">
+            <Typography 
+              variant="body2" 
+              color="text.secondary" 
+              component="span"
+              sx={{ fontSize: '0.875rem' }}
+            >
               Due: {new Date(review.dueDate).toLocaleDateString()}
             </Typography>
           </Box>
@@ -161,13 +233,21 @@ const ReviewCard: React.FC<{ review: Review }> = ({ review }) => {
       />
       {review.overallScore && (
         <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>
-          <StarIcon sx={{ color: '#ffa726', mr: 0.5, fontSize: '1rem' }} />
-          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+          <StarIcon sx={{ color: '#ffa726', mr: 0.5, fontSize: '1.2rem' }} />
+          <Typography variant="body2" sx={{ fontWeight: 700, color: '#344767' }}>
             {review.overallScore}/5
           </Typography>
         </Box>
       )}
-      <IconButton size="small">
+      <IconButton 
+        size="small"
+        sx={{ 
+          color: '#344767',
+          '&:hover': {
+            backgroundColor: 'rgba(102, 187, 106, 0.1)'
+          }
+        }}
+      >
         <MoreVertIcon />
       </IconButton>
     </ListItem>
@@ -242,9 +322,24 @@ export default function Dashboard() {
       {/* Charts and Lists */}
       <Grid container spacing={3}>
         <Grid item xs={12} lg={8}>
-          <Card sx={{ height: 400 }}>
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+          <Card 
+            sx={{ 
+              height: 400,
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+              borderRadius: 3,
+              border: 'none'
+            }}
+          >
+            <CardContent sx={{ p: 4 }}>
+              <Typography 
+                variant="h6" 
+                sx={{ 
+                  mb: 3, 
+                  fontWeight: 700,
+                  color: '#344767',
+                  fontSize: '1.25rem'
+                }}
+              >
                 Performance Overview
               </Typography>
               <Box sx={{ 
@@ -252,9 +347,12 @@ export default function Dashboard() {
                 alignItems: 'center', 
                 justifyContent: 'center', 
                 height: 300,
-                color: 'text.secondary'
+                color: 'text.secondary',
+                backgroundColor: '#f8f9fa',
+                borderRadius: 2,
+                border: '2px dashed #e9ecef'
               }}>
-                <Typography variant="body1">
+                <Typography variant="body1" sx={{ fontSize: '1rem', fontWeight: 500 }}>
                   Performance charts will be displayed here
                 </Typography>
               </Box>
@@ -263,9 +361,24 @@ export default function Dashboard() {
         </Grid>
 
         <Grid item xs={12} lg={4}>
-          <Card sx={{ height: 400 }}>
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+          <Card 
+            sx={{ 
+              height: 400,
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+              borderRadius: 3,
+              border: 'none'
+            }}
+          >
+            <CardContent sx={{ p: 4 }}>
+              <Typography 
+                variant="h6" 
+                sx={{ 
+                  mb: 3, 
+                  fontWeight: 700,
+                  color: '#344767',
+                  fontSize: '1.25rem'
+                }}
+              >
                 Recent Activity
               </Typography>
               <Box sx={{ height: 300, overflow: 'auto' }}>
@@ -281,9 +394,12 @@ export default function Dashboard() {
                     alignItems: 'center', 
                     justifyContent: 'center', 
                     height: '100%',
-                    color: 'text.secondary'
+                    color: 'text.secondary',
+                    backgroundColor: '#f8f9fa',
+                    borderRadius: 2,
+                    border: '2px dashed #e9ecef'
                   }}>
-                    <Typography variant="body2">
+                    <Typography variant="body1" sx={{ fontSize: '1rem', fontWeight: 500 }}>
                       No recent activity
                     </Typography>
                   </Box>
@@ -297,9 +413,23 @@ export default function Dashboard() {
       {/* Upcoming Reviews */}
       <Grid container spacing={3} sx={{ mt: 2 }}>
         <Grid item xs={12}>
-          <Card>
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+          <Card 
+            sx={{ 
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+              borderRadius: 3,
+              border: 'none'
+            }}
+          >
+            <CardContent sx={{ p: 4 }}>
+              <Typography 
+                variant="h6" 
+                sx={{ 
+                  mb: 3, 
+                  fontWeight: 700,
+                  color: '#344767',
+                  fontSize: '1.25rem'
+                }}
+              >
                 Upcoming Reviews
               </Typography>
               {upcomingReviews.length > 0 ? (
@@ -313,10 +443,13 @@ export default function Dashboard() {
                   display: 'flex', 
                   alignItems: 'center', 
                   justifyContent: 'center', 
-                  py: 4,
-                  color: 'text.secondary'
+                  py: 6,
+                  color: 'text.secondary',
+                  backgroundColor: '#f8f9fa',
+                  borderRadius: 2,
+                  border: '2px dashed #e9ecef'
                 }}>
-                  <Typography variant="body1">
+                  <Typography variant="body1" sx={{ fontSize: '1rem', fontWeight: 500 }}>
                     No upcoming reviews scheduled
                   </Typography>
                 </Box>
