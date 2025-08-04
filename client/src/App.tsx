@@ -9,6 +9,7 @@ import Landing from "@/pages/landing";
 import Dashboard from "@/pages/dashboard";
 import TeamDirectory from "@/pages/team-directory";
 import Reviews from "@/pages/reviews";
+import Goals from "@/pages/goals";
 import Templates from "@/pages/templates";
 import Settings from "@/pages/settings";
 
@@ -24,6 +25,7 @@ function Router() {
           <Route path="/" component={Dashboard} />
           <Route path="/team" component={TeamDirectory} />
           <Route path="/reviews" component={Reviews} />
+          <Route path="/goals" component={Goals} />
           <Route path="/templates" component={Templates} />
           <Route path="/settings" component={Settings} />
         </>

@@ -223,6 +223,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Goals routes
+  app.get("/api/goals", isAuthenticated, async (req: any, res) => {
+    try {
+      const currentUser = await storage.getUser(req.user.claims.sub);
+      if (!currentUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const goals = await storage.getGoalsForUser(currentUser.id, currentUser.role);
+      res.json(goals);
+    } catch (error) {
+      console.error("Error fetching goals:", error);
+      res.status(500).json({ message: "Failed to fetch goals" });
+    }
+  });
+
+  app.post("/api/goals", isAuthenticated, async (req: any, res) => {
+    try {
+      const goalData = req.body;
+      goalData.userId = req.user.claims.sub;
+      const goal = await storage.createGoal(goalData);
+      res.json(goal);
+    } catch (error) {
+      console.error("Error creating goal:", error);
+      res.status(500).json({ message: "Failed to create goal" });
+    }
+  });
+
+  app.put("/api/goals/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const { id } = req.params;
+      const goalData = req.body;
+      const goal = await storage.updateGoal(id, goalData);
+      res.json(goal);
+    } catch (error) {
+      console.error("Error updating goal:", error);
+      res.status(500).json({ message: "Failed to update goal" });
+    }
+  });
+
+  app.delete("/api/goals/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const { id } = req.params;
+      await storage.deleteGoal(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting goal:", error);
+      res.status(500).json({ message: "Failed to delete goal" });
+    }
+  });
+
   app.post('/api/templates', isAuthenticated, async (req: any, res) => {
     try {
       const currentUser = await storage.getUser(req.user.claims.sub);

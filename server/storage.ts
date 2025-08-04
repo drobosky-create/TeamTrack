@@ -2,6 +2,7 @@ import {
   users,
   reviews,
   reviewTemplates,
+  goals,
   type User,
   type UpsertUser,
   type InsertUser,
@@ -10,6 +11,9 @@ import {
   type UpdateReview,
   type ReviewTemplate,
   type InsertReviewTemplate,
+  type Goal,
+  type InsertGoal,
+  type UpdateGoal,
   type UserRole,
   type ReviewStatus,
 } from "@shared/schema";
@@ -43,6 +47,13 @@ export interface IStorage {
   getTemplate(id: string): Promise<ReviewTemplate | undefined>;
   getAllTemplates(): Promise<ReviewTemplate[]>;
   updateTemplate(id: string, updates: Partial<InsertReviewTemplate>): Promise<ReviewTemplate | undefined>;
+  
+  // Goals operations
+  createGoal(goal: InsertGoal): Promise<Goal>;
+  getGoal(id: string): Promise<Goal | undefined>;
+  getGoalsForUser(userId: string, role: UserRole): Promise<Goal[]>;
+  updateGoal(id: string, updates: UpdateGoal): Promise<Goal | undefined>;
+  deleteGoal(id: string): Promise<void>;
   
   // Dashboard metrics
   getDashboardMetrics(): Promise<{
@@ -263,6 +274,56 @@ export class DatabaseStorage implements IStorage {
       .where(eq(reviewTemplates.id, id))
       .returning();
     return template;
+  }
+
+  // Goals operations
+  async createGoal(goalData: InsertGoal): Promise<Goal> {
+    const [goal] = await db
+      .insert(goals)
+      .values(goalData)
+      .returning();
+    return goal;
+  }
+
+  async getGoal(id: string): Promise<Goal | undefined> {
+    const [goal] = await db.select().from(goals).where(eq(goals.id, id));
+    return goal;
+  }
+
+  async getGoalsForUser(userId: string, role: UserRole): Promise<Goal[]> {
+    if (role === 'admin') {
+      // Admin can see all goals
+      return await db.select().from(goals).orderBy(desc(goals.createdAt));
+    } else if (role === 'manager') {
+      // Manager can see their own goals and their team's goals
+      const managedUsers = await this.getUsersUnderManager(userId);
+      const managedUserIds = managedUsers.map(u => u.id);
+      const allUserIds = [userId, ...managedUserIds];
+      
+      return await db.select()
+        .from(goals)
+        .where(or(...allUserIds.map(id => eq(goals.userId, id))))
+        .orderBy(desc(goals.createdAt));
+    } else {
+      // Team member can only see their own goals
+      return await db.select()
+        .from(goals)
+        .where(eq(goals.userId, userId))
+        .orderBy(desc(goals.createdAt));
+    }
+  }
+
+  async updateGoal(id: string, updates: UpdateGoal): Promise<Goal | undefined> {
+    const [goal] = await db
+      .update(goals)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(goals.id, id))
+      .returning();
+    return goal;
+  }
+
+  async deleteGoal(id: string): Promise<void> {
+    await db.delete(goals).where(eq(goals.id, id));
   }
 
   // Dashboard metrics
