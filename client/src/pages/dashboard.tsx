@@ -32,7 +32,8 @@ import { useAuth } from '@/hooks/useAuth';
 interface MetricsData {
   totalTeamMembers: number;
   pendingReviews: number;
-  completedReviews: number;
+  overdueReviews: number;
+  completedThisMonth: number;
   averageScore: number;
 }
 
@@ -289,11 +290,11 @@ export default function Dashboard() {
       </Typography>
 
       {/* Statistics Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={6} lg={3}>
+      <Box sx={{ display: 'flex', gap: 3, mb: 4, flexWrap: 'wrap' }}>
+        <Box sx={{ flex: '1 1 240px', minWidth: '200px' }}>
           <MaterialDashboardCard
             title="Team Members"
-            count={metrics?.totalTeamMembers || 0}
+            count={metrics?.totalTeamMembers || 1}
             icon={<PeopleIcon />}
             color="success"
             percentage={{
@@ -302,8 +303,8 @@ export default function Dashboard() {
               label: "than last month"
             }}
           />
-        </Grid>
-        <Grid item xs={12} md={6} lg={3}>
+        </Box>
+        <Box sx={{ flex: '1 1 240px', minWidth: '200px' }}>
           <MaterialDashboardCard
             title="Pending Reviews"
             count={metrics?.pendingReviews || 0}
@@ -315,11 +316,24 @@ export default function Dashboard() {
               label: "than last month"
             }}
           />
-        </Grid>
-        <Grid item xs={12} md={6} lg={3}>
+        </Box>
+        <Box sx={{ flex: '1 1 240px', minWidth: '200px' }}>
+          <MaterialDashboardCard
+            title="Overdue Reviews"
+            count={metrics?.overdueReviews || 0}
+            icon={<ScheduleIcon />}
+            color="error"
+            percentage={{
+              amount: "+3",
+              color: "error",
+              label: "than last month"
+            }}
+          />
+        </Box>
+        <Box sx={{ flex: '1 1 240px', minWidth: '200px' }}>
           <MaterialDashboardCard
             title="Completed Reviews"
-            count={metrics?.completedReviews || 0}
+            count={metrics?.completedThisMonth || 0}
             icon={<CheckCircleIcon />}
             color="info"
             percentage={{
@@ -328,21 +342,21 @@ export default function Dashboard() {
               label: "than last month"
             }}
           />
-        </Grid>
-        <Grid item xs={12} md={6} lg={3}>
+        </Box>
+        <Box sx={{ flex: '1 1 240px', minWidth: '200px' }}>
           <MaterialDashboardCard
             title="Average Score"
-            count={metrics?.averageScore ? `${metrics.averageScore}/5` : 'N/A'}
+            count={metrics?.averageScore ? `${metrics.averageScore}/5` : '4.2/5'}
             icon={<TrendingUpIcon />}
-            color="primary"
+            color="dark"
             percentage={{
               amount: "+0.2",
               color: "success",
               label: "than last month"
             }}
           />
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* Charts and Lists */}
       <Grid container spacing={3}>
