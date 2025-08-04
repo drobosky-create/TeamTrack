@@ -358,9 +358,9 @@ export default function Dashboard() {
         </Box>
       </Box>
 
-      {/* Charts and Lists */}
-      <Grid container spacing={3}>
-        <Grid item xs={12} lg={8}>
+      {/* Performance Overview and Recent Activity */}
+      <Box sx={{ display: 'flex', gap: 3, mb: 4, flexWrap: 'wrap' }}>
+        <Box sx={{ flex: '2 1 600px', minWidth: '400px' }}>
           <Card 
             sx={{ 
               height: 400,
@@ -397,9 +397,9 @@ export default function Dashboard() {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
 
-        <Grid item xs={12} lg={4}>
+        <Box sx={{ flex: '1 1 300px', minWidth: '300px' }}>
           <Card 
             sx={{ 
               height: 400,
@@ -446,12 +446,11 @@ export default function Dashboard() {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* Upcoming Reviews */}
-      <Grid container spacing={3} sx={{ mt: 2 }}>
-        <Grid item xs={12}>
+      <Box sx={{ width: '100%' }}>
           <Card 
             sx={{ 
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
@@ -495,8 +494,7 @@ export default function Dashboard() {
               )}
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+      </Box>
     </Box>
   );
 }
