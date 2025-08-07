@@ -46,7 +46,9 @@ export interface IStorage {
   createTemplate(template: InsertReviewTemplate): Promise<ReviewTemplate>;
   getTemplate(id: string): Promise<ReviewTemplate | undefined>;
   getAllTemplates(): Promise<ReviewTemplate[]>;
+  getTemplatesByType(templateType: 'standard' | 'army'): Promise<ReviewTemplate[]>;
   updateTemplate(id: string, updates: Partial<InsertReviewTemplate>): Promise<ReviewTemplate | undefined>;
+  deleteTemplate(id: string): Promise<void>;
   
   // Goals operations
   createGoal(goal: InsertGoal): Promise<Goal>;
@@ -267,6 +269,15 @@ export class DatabaseStorage implements IStorage {
       .orderBy(asc(reviewTemplates.name));
   }
 
+  async getTemplatesByType(templateType: 'standard' | 'army'): Promise<ReviewTemplate[]> {
+    return await db.select().from(reviewTemplates)
+      .where(and(
+        eq(reviewTemplates.isActive, true),
+        eq(reviewTemplates.templateType, templateType)
+      ))
+      .orderBy(asc(reviewTemplates.name));
+  }
+
   async updateTemplate(id: string, updates: Partial<InsertReviewTemplate>): Promise<ReviewTemplate | undefined> {
     const [template] = await db
       .update(reviewTemplates)
@@ -274,6 +285,12 @@ export class DatabaseStorage implements IStorage {
       .where(eq(reviewTemplates.id, id))
       .returning();
     return template;
+  }
+
+  async deleteTemplate(id: string): Promise<void> {
+    await db.update(reviewTemplates)
+      .set({ isActive: false, updatedAt: new Date() })
+      .where(eq(reviewTemplates.id, id));
   }
 
   // Goals operations

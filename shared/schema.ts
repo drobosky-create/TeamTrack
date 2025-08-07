@@ -61,8 +61,13 @@ export const reviewTemplates = pgTable("review_templates", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: varchar("name").notNull(),
   reviewType: reviewTypeEnum("review_type").notNull(),
+  templateType: varchar("template_type").default('standard').notNull(), // 'standard' or 'army'
   categories: jsonb("categories").notNull(), // Array of category names
   instructions: text("instructions"),
+  // Army-specific fields
+  armyValues: jsonb("army_values"), // Array of Army values
+  leadershipCompetencies: jsonb("leadership_competencies"), // Array of competencies
+  sections: jsonb("sections"), // Structured template sections
   isActive: boolean("is_active").default(true),
   createdBy: varchar("created_by").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
@@ -84,6 +89,14 @@ export const reviews = pgTable("reviews", {
   requiresFollowUp: boolean("requires_follow_up").default(false),
   followUpNotes: text("follow_up_notes"),
   attachments: jsonb("attachments"), // Array of file paths
+  // Army-specific fields
+  strengths: jsonb("strengths"), // Array of strength entries
+  areasForImprovement: jsonb("areas_for_improvement"), // Array of improvement areas
+  planOfAction: jsonb("plan_of_action"), // Structured plan of action
+  leaderResponsibilities: text("leader_responsibilities"),
+  employeeComments: text("employee_comments"),
+  employeeSignatureDate: timestamp("employee_signature_date"),
+  raterSignatureDate: timestamp("rater_signature_date"),
   completedAt: timestamp("completed_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

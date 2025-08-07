@@ -1,48 +1,58 @@
-import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
-import Sidebar from "@/components/layout/sidebar";
-import Header from "@/components/layout/header";
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import TemplateFormModal from "@/components/templates/template-form-modal";
-import { Plus, Edit, FileText, Calendar } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Plus, Edit, Trash2, FileText, Shield, Users } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import ArmyTemplateModal from "../components/templates/army-template-modal";
 import type { ReviewTemplate } from "@shared/schema";
 
 export default function Templates() {
-  const { toast } = useToast();
-  const { isAuthenticated, isLoading, user } = useAuth();
-  const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<ReviewTemplate | null>(null);
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [activeTab, setActiveTab] = useState("all");
+  const { toast } = useToast();
 
-  const { data: templates, isLoading: templatesLoading, refetch } = useQuery<ReviewTemplate[]>({
+  // Fetch all templates
+  const { data: allTemplates, isLoading: isLoadingAll } = useQuery({
     queryKey: ["/api/templates"],
-    enabled: !!user,
   });
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+  // Fetch Army templates
+  const { data: armyTemplates, isLoading: isLoadingArmy } = useQuery({
+    queryKey: ["/api/templates", { type: "army" }],
+    enabled: activeTab === "army",
+  });
+
+  // Fetch standard templates
+  const { data: standardTemplates, isLoading: isLoadingStandard } = useQuery({
+    queryKey: ["/api/templates", { type: "standard" }],
+    enabled: activeTab === "standard",
+  });
+
+  // Delete template mutation
+  const deleteTemplateMutation = useMutation({
+    mutationFn: async (templateId: string) => {
+      return await apiRequest(`/api/templates/${templateId}`, "DELETE");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/templates"] });
       toast({
-        title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
+        title: "Success",
+        description: "Template deleted successfully",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete template",
         variant: "destructive",
       });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-    }
-  }, [isAuthenticated, isLoading, toast]);
-
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'annual': return 'bg-purple-100 text-purple-800';
-      case 'quarterly': return 'bg-blue-100 text-blue-800';
-      case 'monthly': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+    },
+  });
 
   const handleCreateTemplate = () => {
     setSelectedTemplate(null);
@@ -54,7 +64,39 @@ export default function Templates() {
     setShowTemplateModal(true);
   };
 
-  if (isLoading) {
+  const handleDeleteTemplate = async (template: ReviewTemplate) => {
+    if (confirm(`Are you sure you want to delete the template "${template.name}"?`)) {
+      deleteTemplateMutation.mutate(template.id);
+    }
+  };
+
+  const getTemplateTypeColor = (templateType: string) => {
+    return templateType === 'army' 
+      ? 'bg-green-100 text-green-800 border-green-200' 
+      : 'bg-blue-100 text-blue-800 border-blue-200';
+  };
+
+  const getTemplateIcon = (templateType: string) => {
+    return templateType === 'army' ? Shield : FileText;
+  };
+
+  const getCurrentTemplates = (): ReviewTemplate[] => {
+    switch (activeTab) {
+      case 'army': return (armyTemplates as ReviewTemplate[]) || [];
+      case 'standard': return (standardTemplates as ReviewTemplate[]) || [];
+      default: return (allTemplates as ReviewTemplate[]) || [];
+    }
+  };
+
+  const isLoading = () => {
+    switch (activeTab) {
+      case 'army': return isLoadingArmy;
+      case 'standard': return isLoadingStandard;
+      default: return isLoadingAll;
+    }
+  };
+
+  if (isLoading()) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
@@ -62,137 +104,155 @@ export default function Templates() {
     );
   }
 
-  if (!user) return null;
-
-  // Only admins can access templates
-  if (user.role !== 'admin') {
-    return (
-      <div className="flex h-screen bg-background">
-        <Sidebar />
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <Header title="Access Denied" />
-          <main className="flex-1 flex items-center justify-center">
-            <Card>
-              <CardContent className="p-12 text-center">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Access Denied</h3>
-                <p className="text-gray-600">Only administrators can manage review templates.</p>
-              </CardContent>
-            </Card>
-          </main>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex h-screen bg-background">
-      <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header 
-          title="Review Templates" 
-          subtitle="Create and manage reusable review templates for different review types"
-        >
-          <Button onClick={handleCreateTemplate} data-testid="button-create-template">
-            <Plus className="h-4 w-4 mr-2" />
+    <div className="flex flex-col h-full bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Review Templates</h1>
+            <p className="text-gray-600 text-sm mt-1">Manage standard and Army-style performance review templates</p>
+          </div>
+          <Button onClick={handleCreateTemplate} className="flex items-center gap-2" data-testid="button-create-template">
+            <Plus className="h-4 w-4" />
             New Template
           </Button>
-        </Header>
-
-        <main className="flex-1 overflow-y-auto p-6">
-          {templatesLoading ? (
-            <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            </div>
-          ) : templates && templates.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-              {templates.map((template: ReviewTemplate) => (
-                <Card key={template.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle className="text-lg" data-testid={`text-template-${template.id}`}>
-                          {template.name}
-                        </CardTitle>
-                        <Badge 
-                          className={getTypeColor(template.reviewType)} 
-                          data-testid={`badge-type-${template.id}`}
-                        >
-                          <Calendar className="h-3 w-3 mr-1" />
-                          {template.reviewType?.charAt(0).toUpperCase() + template.reviewType?.slice(1)}
-                        </Badge>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEditTemplate(template)}
-                        data-testid={`button-edit-${template.id}`}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent>
-                    <div className="space-y-3">
-                      {template.instructions && (
-                        <p className="text-sm text-gray-600 line-clamp-3" data-testid={`text-instructions-${template.id}`}>
-                          {template.instructions}
-                        </p>
-                      )}
-
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-900 mb-2">Categories</h4>
-                        <div className="flex flex-wrap gap-1">
-                          {(template.categories as string[])?.map((category, index) => (
-                            <Badge 
-                              key={index} 
-                              variant="secondary" 
-                              className="text-xs"
-                              data-testid={`badge-category-${template.id}-${index}`}
-                            >
-                              {category}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="pt-2 text-xs text-gray-500 border-t">
-                        Created {new Date(template.createdAt!).toLocaleDateString()}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <Card>
-              <CardContent className="p-12 text-center">
-                <div className="text-gray-400 mb-4">
-                  <FileText className="h-16 w-16 mx-auto" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">No Templates Found</h3>
-                <p className="text-gray-600 mb-6">
-                  Create your first review template to standardize your performance review process.
-                </p>
-                <Button onClick={handleCreateTemplate} data-testid="button-create-first-template">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create First Template
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-        </main>
+        </div>
       </div>
 
-      <TemplateFormModal
-        open={showTemplateModal}
-        onClose={() => setShowTemplateModal(false)}
-        template={selectedTemplate}
-        onSuccess={() => {
-          refetch();
-          setShowTemplateModal(false);
-        }}
-      />
+      <main className="flex-1 overflow-y-auto p-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <div className="flex items-center justify-between mb-6">
+            <TabsList className="grid w-fit grid-cols-3">
+              <TabsTrigger value="all" className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                All Templates
+              </TabsTrigger>
+              <TabsTrigger value="army" className="flex items-center gap-2">
+                <Shield className="h-4 w-4" />
+                Army Style
+              </TabsTrigger>
+              <TabsTrigger value="standard" className="flex items-center gap-2">
+                <FileText className="h-4 w-4" />
+                Standard
+              </TabsTrigger>
+            </TabsList>
+          </div>
+
+          <TabsContent value={activeTab}>
+            {getCurrentTemplates().length === 0 ? (
+              <div className="flex items-center justify-center h-64 bg-white rounded-lg border-2 border-dashed border-gray-300">
+                <div className="text-center">
+                  <FileText className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                  <p className="text-gray-500 font-medium">No templates found</p>
+                  <p className="text-gray-400 text-sm">Create your first template to get started</p>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {getCurrentTemplates().map((template) => {
+                  const Icon = getTemplateIcon(template.templateType || 'standard');
+                  return (
+                    <Card key={template.id} className="bg-white hover:shadow-md transition-shadow">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-center gap-2">
+                            <Icon className="h-5 w-5 text-gray-600" />
+                            <div>
+                              <CardTitle className="text-lg">{template.name}</CardTitle>
+                              <CardDescription className="mt-1">
+                                {template.reviewType} review
+                              </CardDescription>
+                            </div>
+                          </div>
+                          <Badge 
+                            variant="secondary" 
+                            className={getTemplateTypeColor(template.templateType || 'standard')}
+                          >
+                            {template.templateType === 'army' ? 'Army Style' : 'Standard'}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          {template.instructions && (
+                            <p className="text-sm text-gray-600 line-clamp-2">
+                              {template.instructions}
+                            </p>
+                          )}
+                          
+                          <div className="flex flex-wrap gap-1">
+                            {Array.isArray(template.categories) && template.categories.map((category: string, index: number) => (
+                              <Badge key={index} variant="outline" className="text-xs">
+                                {category}
+                              </Badge>
+                            ))}
+                          </div>
+
+                          {template.templateType === 'army' && (
+                            <div className="space-y-2">
+                              {Array.isArray(template.armyValues) && template.armyValues.length > 0 && (
+                                <div>
+                                  <p className="text-xs font-medium text-gray-700">Army Values:</p>
+                                  <div className="flex flex-wrap gap-1">
+                                    {template.armyValues.slice(0, 3).map((value: string, index: number) => (
+                                      <Badge key={index} variant="outline" className="text-xs bg-green-50">
+                                        {value}
+                                      </Badge>
+                                    ))}
+                                    {template.armyValues.length > 3 && (
+                                      <Badge variant="outline" className="text-xs">
+                                        +{template.armyValues.length - 3} more
+                                      </Badge>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          <div className="flex justify-between items-center pt-2 border-t">
+                            <span className="text-xs text-gray-500">
+                              Created {template.createdAt ? new Date(template.createdAt).toLocaleDateString() : 'N/A'}
+                            </span>
+                            <div className="flex gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleEditTemplate(template)}
+                                data-testid={`button-edit-${template.id}`}
+                                className="h-8 w-8 p-0"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteTemplate(template)}
+                                data-testid={`button-delete-${template.id}`}
+                                className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+      </main>
+
+      {showTemplateModal && (
+        <ArmyTemplateModal
+          template={selectedTemplate}
+          onClose={() => setShowTemplateModal(false)}
+        />
+      )}
     </div>
   );
 }

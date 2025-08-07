@@ -218,7 +218,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Template routes
   app.get('/api/templates', isAuthenticated, async (req, res) => {
     try {
-      const templates = await storage.getAllTemplates();
+      const { type } = req.query;
+      let templates;
+      
+      if (type === 'army' || type === 'standard') {
+        templates = await storage.getTemplatesByType(type as 'army' | 'standard');
+      } else {
+        templates = await storage.getAllTemplates();
+      }
+      
       res.json(templates);
     } catch (error) {
       console.error("Error fetching templates:", error);
@@ -320,6 +328,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       console.error("Error updating template:", error);
       res.status(500).json({ message: "Failed to update template" });
+    }
+  });
+
+  app.delete('/api/templates/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const currentUser = await storage.getUser(req.user.claims.sub);
+      if (currentUser?.role !== 'admin') {
+        return res.status(403).json({ message: "Only admins can delete templates" });
+      }
+
+      await storage.deleteTemplate(req.params.id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting template:", error);
+      res.status(500).json({ message: "Failed to delete template" });
     }
   });
 
