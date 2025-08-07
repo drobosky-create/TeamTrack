@@ -18,6 +18,7 @@ import Settings from "@/pages/settings";
 import Profile from "@/pages/profile";
 import Notifications from "@/pages/notifications";
 import Billing from "@/pages/billing";
+import SetupWizard from "@/pages/setup-wizard";
 
 const theme = createTheme({
   palette: {
@@ -44,6 +45,7 @@ function Router() {
         <MaterialDashboardLayout>
           <Switch>
             <Route path="/" component={Dashboard} />
+            <Route path="/setup" component={SetupWizard} />
             <Route path="/team" component={TeamDirectory} />
             <Route path="/reviews" component={Reviews} />
             <Route path="/goals" component={Goals} />

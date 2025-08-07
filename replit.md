@@ -8,6 +8,15 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
+## Setup Wizard Implementation (Jan 8, 2025)
+- Created comprehensive setup wizard to guide users through performance review system configuration
+- 6-step wizard process covering welcome, template selection, configuration, team setup, scheduling, and completion
+- Interactive template type selection between Standard and Structured templates
+- Built-in customization tools for company values and competencies with quick-add examples
+- Team member overview and setup guidance with role-based access
+- Integrated into navigation sidebar and dashboard with prominent call-to-action banner
+- Wizard creates fully configured templates ready for immediate use in performance reviews
+
 ## Customizable Template System Transformation (Jan 8, 2025)
 - Transformed Army-specific template system into fully customizable company template system based on user feedback
 - Updated database schema to use generic field names (coreValues, competencies) instead of military-specific terms

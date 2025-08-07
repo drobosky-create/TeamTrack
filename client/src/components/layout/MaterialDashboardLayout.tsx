@@ -11,7 +11,8 @@ import {
   Logout as LogoutIcon,
   Person as PersonIcon,
   Notifications as NotificationsIcon,
-  CreditCard as CreditCardIcon
+  CreditCard as CreditCardIcon,
+  Star as StarIcon
 } from '@mui/icons-material';
 import { Link, useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
@@ -70,6 +71,12 @@ const navigationItems = [
     text: 'Billing',
     icon: <CreditCardIcon />,
     path: '/billing',
+    roles: ['admin']
+  },
+  {
+    text: 'Setup Wizard',
+    icon: <StarIcon />,
+    path: '/setup',
     roles: ['admin']
   },
   {

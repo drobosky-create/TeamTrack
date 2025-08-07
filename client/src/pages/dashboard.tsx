@@ -289,6 +289,60 @@ export default function Dashboard() {
         Dashboard
       </Typography>
 
+      {/* Setup Wizard Quick Access Banner */}
+      <Paper sx={{ mb: 4, p: 3, background: 'linear-gradient(195deg, #e3f2fd, #bbdefb)', border: 'none', boxShadow: 'none' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ 
+              width: 56, 
+              height: 56, 
+              borderRadius: '50%', 
+              background: 'linear-gradient(195deg, #42a5f5, #1976d2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 4px 8px rgba(66, 165, 245, 0.3)'
+            }}>
+              <StarIcon sx={{ color: 'white', fontSize: '1.75rem' }} />
+            </Box>
+            <Box>
+              <Typography variant="h6" sx={{ fontWeight: 600, color: '#1976d2', mb: 0.5 }}>
+                Get Started with Performance Reviews
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#424242', maxWidth: '500px' }}>
+                Use our guided setup wizard to configure customizable review templates and get your team started with performance evaluations in just a few steps.
+              </Typography>
+            </Box>
+          </Box>
+          <Box 
+            component="a" 
+            href="/setup"
+            sx={{ 
+              textDecoration: 'none',
+              background: 'linear-gradient(195deg, #66bb6a, #43a047)',
+              color: 'white',
+              px: 3,
+              py: 1.5,
+              borderRadius: 2,
+              fontWeight: 600,
+              fontSize: '0.875rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+              transition: 'all 0.3s ease',
+              boxShadow: '0 2px 4px rgba(102, 187, 106, 0.3)',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: '0 6px 12px rgba(102, 187, 106, 0.4)'
+              }
+            }}
+          >
+            <StarIcon sx={{ fontSize: '1rem' }} />
+            Launch Setup Wizard
+          </Box>
+        </Box>
+      </Paper>
+
       {/* Statistics Cards */}
       <Box sx={{ display: 'flex', gap: 3, mb: 4, flexWrap: 'wrap' }}>
         <Box sx={{ flex: '1 1 240px', minWidth: '200px' }}>
