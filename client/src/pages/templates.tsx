@@ -21,10 +21,10 @@ export default function Templates() {
     queryKey: ["/api/templates"],
   });
 
-  // Fetch Army templates
-  const { data: armyTemplates, isLoading: isLoadingArmy } = useQuery({
-    queryKey: ["/api/templates", { type: "army" }],
-    enabled: activeTab === "army",
+  // Fetch Structured templates
+  const { data: structuredTemplates, isLoading: isLoadingStructured } = useQuery({
+    queryKey: ["/api/templates", { type: "structured" }],
+    enabled: activeTab === "structured",
   });
 
   // Fetch standard templates
@@ -71,18 +71,18 @@ export default function Templates() {
   };
 
   const getTemplateTypeColor = (templateType: string) => {
-    return templateType === 'army' 
+    return templateType === 'structured' 
       ? 'bg-green-100 text-green-800 border-green-200' 
       : 'bg-blue-100 text-blue-800 border-blue-200';
   };
 
   const getTemplateIcon = (templateType: string) => {
-    return templateType === 'army' ? Shield : FileText;
+    return templateType === 'structured' ? Shield : FileText;
   };
 
   const getCurrentTemplates = (): ReviewTemplate[] => {
     switch (activeTab) {
-      case 'army': return (armyTemplates as ReviewTemplate[]) || [];
+      case 'structured': return (structuredTemplates as ReviewTemplate[]) || [];
       case 'standard': return (standardTemplates as ReviewTemplate[]) || [];
       default: return (allTemplates as ReviewTemplate[]) || [];
     }
@@ -90,7 +90,7 @@ export default function Templates() {
 
   const isLoading = () => {
     switch (activeTab) {
-      case 'army': return isLoadingArmy;
+      case 'structured': return isLoadingStructured;
       case 'standard': return isLoadingStandard;
       default: return isLoadingAll;
     }
@@ -128,9 +128,9 @@ export default function Templates() {
                 <Users className="h-4 w-4" />
                 All Templates
               </TabsTrigger>
-              <TabsTrigger value="army" className="flex items-center gap-2">
+              <TabsTrigger value="structured" className="flex items-center gap-2">
                 <Shield className="h-4 w-4" />
-                Army Style
+                Structured
               </TabsTrigger>
               <TabsTrigger value="standard" className="flex items-center gap-2">
                 <FileText className="h-4 w-4" />
@@ -169,7 +169,7 @@ export default function Templates() {
                             variant="secondary" 
                             className={getTemplateTypeColor(template.templateType || 'standard')}
                           >
-                            {template.templateType === 'army' ? 'Army Style' : 'Standard'}
+                            {template.templateType === 'structured' ? 'Structured' : 'Standard'}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -189,20 +189,20 @@ export default function Templates() {
                             ))}
                           </div>
 
-                          {template.templateType === 'army' && (
+                          {template.templateType === 'structured' && (
                             <div className="space-y-2">
-                              {Array.isArray(template.armyValues) && template.armyValues.length > 0 && (
+                              {Array.isArray(template.coreValues) && template.coreValues.length > 0 && (
                                 <div>
-                                  <p className="text-xs font-medium text-gray-700">Army Values:</p>
+                                  <p className="text-xs font-medium text-gray-700">Core Values:</p>
                                   <div className="flex flex-wrap gap-1">
-                                    {template.armyValues.slice(0, 3).map((value: string, index: number) => (
+                                    {template.coreValues.slice(0, 3).map((value: string, index: number) => (
                                       <Badge key={index} variant="outline" className="text-xs bg-green-50">
                                         {value}
                                       </Badge>
                                     ))}
-                                    {template.armyValues.length > 3 && (
+                                    {template.coreValues.length > 3 && (
                                       <Badge variant="outline" className="text-xs">
-                                        +{template.armyValues.length - 3} more
+                                        +{template.coreValues.length - 3} more
                                       </Badge>
                                     )}
                                   </div>

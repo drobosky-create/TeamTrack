@@ -64,9 +64,9 @@ export const reviewTemplates = pgTable("review_templates", {
   templateType: varchar("template_type").default('standard').notNull(), // 'standard' or 'army'
   categories: jsonb("categories").notNull(), // Array of category names
   instructions: text("instructions"),
-  // Army-specific fields
-  armyValues: jsonb("army_values"), // Array of Army values
-  leadershipCompetencies: jsonb("leadership_competencies"), // Array of competencies
+  // Structured template fields (customizable for any organization)
+  coreValues: jsonb("core_values"), // Array of company/organization values
+  competencies: jsonb("competencies"), // Array of competencies
   sections: jsonb("sections"), // Structured template sections
   isActive: boolean("is_active").default(true),
   createdBy: varchar("created_by").references(() => users.id),

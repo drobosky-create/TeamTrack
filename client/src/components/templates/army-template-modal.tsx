@@ -21,25 +21,26 @@ interface ArmyTemplateModalProps {
   onClose: () => void;
 }
 
-const armyValuesOptions = [
-  "Loyalty", "Duty", "Respect", "Selfless Service", 
-  "Honor", "Integrity", "Personal Courage"
+// Default examples that companies can customize
+const defaultCoreValuesExamples = [
+  "Integrity", "Excellence", "Innovation", "Collaboration", 
+  "Customer Focus", "Accountability", "Respect"
 ];
 
-const leadershipCompetenciesOptions = [
-  "Leads by Example", "Builds Trust", "Extends Influence",
-  "Leads Others", "Creates Positive Environment", "Prepares Self",
-  "Develops Others", "Gets Results"
+const defaultCompetenciesExamples = [
+  "Leadership", "Communication", "Problem Solving",
+  "Team Collaboration", "Strategic Thinking", "Adaptability",
+  "Results Orientation", "Professional Development"
 ];
 
 const templateFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
   reviewType: z.enum(["monthly", "quarterly", "annual"]),
-  templateType: z.enum(["standard", "army"]),
+  templateType: z.enum(["standard", "structured"]),
   instructions: z.string().optional(),
   categories: z.array(z.string()).min(1, "At least one category is required"),
-  armyValues: z.array(z.string()).optional(),
-  leadershipCompetencies: z.array(z.string()).optional(),
+  coreValues: z.array(z.string()).optional(),
+  competencies: z.array(z.string()).optional(),
   sections: z.any().optional(),
 });
 
@@ -47,12 +48,14 @@ type TemplateFormData = z.infer<typeof templateFormSchema>;
 
 export default function ArmyTemplateModal({ template, onClose }: ArmyTemplateModalProps) {
   const [newCategory, setNewCategory] = useState("");
-  const [selectedArmyValues, setSelectedArmyValues] = useState<string[]>(
-    template?.armyValues as string[] || []
+  const [customCoreValues, setCustomCoreValues] = useState<string[]>(
+    template?.coreValues as string[] || []
   );
-  const [selectedCompetencies, setSelectedCompetencies] = useState<string[]>(
-    template?.leadershipCompetencies as string[] || []
+  const [customCompetencies, setCustomCompetencies] = useState<string[]>(
+    template?.competencies as string[] || []
   );
+  const [newCoreValue, setNewCoreValue] = useState("");
+  const [newCompetency, setNewCompetency] = useState("");
   const { toast } = useToast();
 
   const form = useForm<TemplateFormData>({
@@ -60,11 +63,11 @@ export default function ArmyTemplateModal({ template, onClose }: ArmyTemplateMod
     defaultValues: {
       name: template?.name || "",
       reviewType: template?.reviewType || "monthly",
-      templateType: template?.templateType as "standard" | "army" || "army",
+      templateType: template?.templateType as "standard" | "structured" || "structured",
       instructions: template?.instructions || "",
       categories: template?.categories as string[] || [],
-      armyValues: selectedArmyValues,
-      leadershipCompetencies: selectedCompetencies,
+      coreValues: customCoreValues,
+      competencies: customCompetencies,
     },
   });
 
@@ -76,9 +79,9 @@ export default function ArmyTemplateModal({ template, onClose }: ArmyTemplateMod
     mutationFn: async (data: TemplateFormData) => {
       const templateData = {
         ...data,
-        armyValues: templateType === "army" ? selectedArmyValues : undefined,
-        leadershipCompetencies: templateType === "army" ? selectedCompetencies : undefined,
-        sections: templateType === "army" ? getArmySections() : undefined,
+        coreValues: templateType === "structured" ? customCoreValues : undefined,
+        competencies: templateType === "structured" ? customCompetencies : undefined,
+        sections: templateType === "structured" ? getStructuredSections() : undefined,
       };
 
       if (template) {
@@ -108,50 +111,51 @@ export default function ArmyTemplateModal({ template, onClose }: ArmyTemplateMod
     },
   });
 
-  const getArmySections = () => {
+  const getStructuredSections = () => {
     return {
-      purposeOfCounseling: {
-        title: "Purpose of Counseling",
-        description: "To discuss performance, identify strengths and areas for improvement, and establish a plan for development.",
+      purposeOfReview: {
+        title: "Purpose of Review",
+        description: "To discuss performance, recognize achievements, identify development opportunities, and establish goals for continued growth.",
       },
       keyPointsOfDiscussion: {
-        title: "Key Points of Discussion",
+        title: "Key Discussion Points",
         subsections: {
           strengths: {
-            title: "Strengths/Accomplishments",
+            title: "Strengths & Achievements",
             fields: [
-              "Army Values Demonstrated",
-              "Leader Attributes/Competencies Exhibited",
-              "Specific Achievements",
-              "Positive Impact"
+              "Core Values Demonstrated",
+              "Key Competencies Exhibited", 
+              "Notable Accomplishments",
+              "Positive Team Impact"
             ]
           },
-          areasForImprovement: {
-            title: "Areas for Improvement",
+          developmentAreas: {
+            title: "Development Opportunities",
             fields: [
-              "Specific Deficiencies",
-              "Impact of Deficiencies",
-              "Army Values/Competencies Needing Development"
+              "Skills to Enhance",
+              "Growth Areas",
+              "Learning Opportunities",
+              "Support Needed"
             ]
           }
         }
       },
-      planOfAction: {
-        title: "Plan of Action",
+      actionPlan: {
+        title: "Development Action Plan",
         fields: [
-          "Rater Responsibilities",
-          "Soldier Responsibilities", 
-          "Timeline",
-          "Training/Resources"
+          "Manager Support",
+          "Employee Commitments",
+          "Timeline & Milestones",
+          "Resources & Training"
         ]
       },
-      leaderResponsibilities: {
-        title: "Leader Responsibilities",
-        fields: ["Follow-up", "Mentorship"]
+      managerNotes: {
+        title: "Manager Notes",
+        fields: ["Follow-up Actions", "Additional Support"]
       },
-      signatures: {
-        title: "Signatures",
-        fields: ["Soldier's Comments", "Soldier's Signature", "Rater's Signature"]
+      acknowledgment: {
+        title: "Review Acknowledgment",
+        fields: ["Employee Comments", "Employee Signature", "Manager Signature"]
       }
     };
   };
@@ -168,20 +172,50 @@ export default function ArmyTemplateModal({ template, onClose }: ArmyTemplateMod
     form.setValue("categories", updatedCategories);
   };
 
-  const handleToggleArmyValue = (value: string) => {
-    const updated = selectedArmyValues.includes(value)
-      ? selectedArmyValues.filter(v => v !== value)
-      : [...selectedArmyValues, value];
-    setSelectedArmyValues(updated);
-    form.setValue("armyValues", updated);
+  const handleAddCoreValue = () => {
+    if (newCoreValue.trim() && !customCoreValues.includes(newCoreValue.trim())) {
+      const updated = [...customCoreValues, newCoreValue.trim()];
+      setCustomCoreValues(updated);
+      form.setValue("coreValues", updated);
+      setNewCoreValue("");
+    }
   };
 
-  const handleToggleCompetency = (competency: string) => {
-    const updated = selectedCompetencies.includes(competency)
-      ? selectedCompetencies.filter(c => c !== competency)
-      : [...selectedCompetencies, competency];
-    setSelectedCompetencies(updated);
-    form.setValue("leadershipCompetencies", updated);
+  const handleRemoveCoreValue = (index: number) => {
+    const updated = customCoreValues.filter((_, i) => i !== index);
+    setCustomCoreValues(updated);
+    form.setValue("coreValues", updated);
+  };
+
+  const handleAddCompetency = () => {
+    if (newCompetency.trim() && !customCompetencies.includes(newCompetency.trim())) {
+      const updated = [...customCompetencies, newCompetency.trim()];
+      setCustomCompetencies(updated);
+      form.setValue("competencies", updated);
+      setNewCompetency("");
+    }
+  };
+
+  const handleRemoveCompetency = (index: number) => {
+    const updated = customCompetencies.filter((_, i) => i !== index);
+    setCustomCompetencies(updated);
+    form.setValue("competencies", updated);
+  };
+
+  const handleQuickAddCoreValue = (value: string) => {
+    if (!customCoreValues.includes(value)) {
+      const updated = [...customCoreValues, value];
+      setCustomCoreValues(updated);
+      form.setValue("coreValues", updated);
+    }
+  };
+
+  const handleQuickAddCompetency = (competency: string) => {
+    if (!customCompetencies.includes(competency)) {
+      const updated = [...customCompetencies, competency];
+      setCustomCompetencies(updated);
+      form.setValue("competencies", updated);
+    }
   };
 
   const onSubmit = (data: TemplateFormData) => {
@@ -212,7 +246,7 @@ export default function ArmyTemplateModal({ template, onClose }: ArmyTemplateMod
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="basic">Basic Info</TabsTrigger>
               <TabsTrigger value="categories">Categories</TabsTrigger>
-              {templateType === "army" && <TabsTrigger value="army">Army Specific</TabsTrigger>}
+              {templateType === "structured" && <TabsTrigger value="structured">Values & Competencies</TabsTrigger>}
             </TabsList>
 
             <TabsContent value="basic" className="space-y-4 mt-6">
@@ -253,7 +287,7 @@ export default function ArmyTemplateModal({ template, onClose }: ArmyTemplateMod
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="standard">Standard</SelectItem>
-                    <SelectItem value="army">Army Style</SelectItem>
+                    <SelectItem value="structured">Structured/Counseling Style</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -305,56 +339,118 @@ export default function ArmyTemplateModal({ template, onClose }: ArmyTemplateMod
               </div>
             </TabsContent>
 
-            {templateType === "army" && (
-              <TabsContent value="army" className="space-y-6 mt-6">
+            {templateType === "structured" && (
+              <TabsContent value="structured" className="space-y-6 mt-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Army Values</CardTitle>
-                    <CardDescription>Select the Army values to include in this template</CardDescription>
+                    <CardTitle className="text-lg">Core Values</CardTitle>
+                    <CardDescription>Add your organization's core values to evaluate in reviews</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-2 gap-2">
-                      {armyValuesOptions.map((value) => (
-                        <button
-                          key={value}
-                          type="button"
-                          onClick={() => handleToggleArmyValue(value)}
-                          className={`p-2 text-left border rounded-lg transition-colors ${
-                            selectedArmyValues.includes(value)
-                              ? 'bg-green-100 border-green-300 text-green-800'
-                              : 'bg-white border-gray-300 hover:bg-gray-50'
-                          }`}
-                          data-testid={`button-army-value-${value}`}
-                        >
-                          {value}
-                        </button>
-                      ))}
+                    <div className="space-y-4">
+                      <div className="flex gap-2">
+                        <Input
+                          value={newCoreValue}
+                          onChange={(e) => setNewCoreValue(e.target.value)}
+                          placeholder="Add a core value"
+                          data-testid="input-new-core-value"
+                        />
+                        <Button type="button" onClick={handleAddCoreValue} data-testid="button-add-core-value">
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-600">Quick add examples:</p>
+                        <div className="flex flex-wrap gap-2">
+                          {defaultCoreValuesExamples.map((value) => (
+                            <Button
+                              key={value}
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleQuickAddCoreValue(value)}
+                              disabled={customCoreValues.includes(value)}
+                              data-testid={`button-quick-add-value-${value}`}
+                            >
+                              {value}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        {customCoreValues.map((value, index) => (
+                          <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                            {value}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveCoreValue(index)}
+                              className="ml-1 hover:text-red-600"
+                              data-testid={`button-remove-core-value-${index}`}
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Leadership Competencies</CardTitle>
-                    <CardDescription>Select the leadership competencies to evaluate</CardDescription>
+                    <CardTitle className="text-lg">Competencies</CardTitle>
+                    <CardDescription>Add the competencies your organization wants to evaluate</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-2 gap-2">
-                      {leadershipCompetenciesOptions.map((competency) => (
-                        <button
-                          key={competency}
-                          type="button"
-                          onClick={() => handleToggleCompetency(competency)}
-                          className={`p-2 text-left border rounded-lg transition-colors ${
-                            selectedCompetencies.includes(competency)
-                              ? 'bg-blue-100 border-blue-300 text-blue-800'
-                              : 'bg-white border-gray-300 hover:bg-gray-50'
-                          }`}
-                          data-testid={`button-competency-${competency}`}
-                        >
-                          {competency}
-                        </button>
-                      ))}
+                    <div className="space-y-4">
+                      <div className="flex gap-2">
+                        <Input
+                          value={newCompetency}
+                          onChange={(e) => setNewCompetency(e.target.value)}
+                          placeholder="Add a competency"
+                          data-testid="input-new-competency"
+                        />
+                        <Button type="button" onClick={handleAddCompetency} data-testid="button-add-competency">
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-600">Quick add examples:</p>
+                        <div className="flex flex-wrap gap-2">
+                          {defaultCompetenciesExamples.map((competency) => (
+                            <Button
+                              key={competency}
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleQuickAddCompetency(competency)}
+                              disabled={customCompetencies.includes(competency)}
+                              data-testid={`button-quick-add-competency-${competency}`}
+                            >
+                              {competency}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        {customCompetencies.map((competency, index) => (
+                          <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                            {competency}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveCompetency(index)}
+                              className="ml-1 hover:text-red-600"
+                              data-testid={`button-remove-competency-${index}`}
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
