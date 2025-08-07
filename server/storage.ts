@@ -269,7 +269,7 @@ export class DatabaseStorage implements IStorage {
       .orderBy(asc(reviewTemplates.name));
   }
 
-  async getTemplatesByType(templateType: 'standard' | 'army'): Promise<ReviewTemplate[]> {
+  async getTemplatesByType(templateType: 'standard' | 'structured'): Promise<ReviewTemplate[]> {
     return await db.select().from(reviewTemplates)
       .where(and(
         eq(reviewTemplates.isActive, true),

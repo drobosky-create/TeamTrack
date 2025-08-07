@@ -8,6 +8,15 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
+## Customizable Template System Transformation (Jan 8, 2025)
+- Transformed Army-specific template system into fully customizable company template system based on user feedback
+- Updated database schema to use generic field names (coreValues, competencies) instead of military-specific terms
+- Modified template modal UI to support custom company values and competencies that can be edited and configured
+- Renamed template types from "army" to "structured" to reflect the flexible, non-military approach
+- Updated storage methods and API routes to handle the new customizable template structure
+- Companies can now create structured review templates with their own values, competencies, and evaluation criteria
+- Implemented editable core values and competencies with quick-add examples and custom field support
+
 ## Material Dashboard Integration (Jan 4, 2025)
 - Successfully integrated Material Dashboard React UI components from GitHub repository
 - Replaced basic UI with sophisticated Material Dashboard layout and styling
@@ -16,14 +25,6 @@ Preferred communication style: Simple, everyday language.
 - Fixed layout positioning issues ensuring content displays properly to the right of sidebar
 - Improved visual design with modern Material Design aesthetics, shadows, and hover effects
 - Updated card styling with professional gradients, proper spacing, and responsive design
-
-## Previous Integration Progress (Jan 4, 2025)
-- Successfully cloned perform-bright repository with 541 objects
-- Enhanced database schema with Goals, Documents, and Notifications tables
-- Implemented complete Goals Management system with CRUD operations
-- Added Goals API routes with role-based access control
-- Created Goals page with filtering, search, and form validation
-- User prefers UI from separate GitHub repository (Material Dashboard React)
 
 # System Architecture
 

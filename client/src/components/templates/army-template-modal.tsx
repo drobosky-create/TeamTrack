@@ -227,7 +227,7 @@ export default function ArmyTemplateModal({ template, onClose }: ArmyTemplateMod
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b">
           <div className="flex items-center gap-2">
-            {templateType === "army" ? (
+            {templateType === "structured" ? (
               <Shield className="h-5 w-5 text-green-600" />
             ) : (
               <FileText className="h-5 w-5 text-blue-600" />

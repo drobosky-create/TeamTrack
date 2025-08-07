@@ -221,8 +221,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { type } = req.query;
       let templates;
       
-      if (type === 'army' || type === 'standard') {
-        templates = await storage.getTemplatesByType(type as 'army' | 'standard');
+      if (type === 'structured' || type === 'standard') {
+        templates = await storage.getTemplatesByType(type as 'structured' | 'standard');
       } else {
         templates = await storage.getAllTemplates();
       }

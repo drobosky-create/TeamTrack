@@ -61,7 +61,7 @@ export const reviewTemplates = pgTable("review_templates", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: varchar("name").notNull(),
   reviewType: reviewTypeEnum("review_type").notNull(),
-  templateType: varchar("template_type").default('standard').notNull(), // 'standard' or 'army'
+  templateType: varchar("template_type").default('standard').notNull(), // 'standard' or 'structured'
   categories: jsonb("categories").notNull(), // Array of category names
   instructions: text("instructions"),
   // Structured template fields (customizable for any organization)

@@ -111,7 +111,7 @@ export default function Templates() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Review Templates</h1>
-            <p className="text-gray-600 text-sm mt-1">Manage standard and Army-style performance review templates</p>
+            <p className="text-gray-600 text-sm mt-1">Manage standard and structured performance review templates</p>
           </div>
           <Button onClick={handleCreateTemplate} className="flex items-center gap-2" data-testid="button-create-template">
             <Plus className="h-4 w-4" />
