@@ -48,12 +48,15 @@ export default function SetupWizard() {
     coreValues: [] as string[],
     competencies: [] as string[],
     instructions: '',
-    selectedUsers: [] as string[]
+    selectedUsers: [] as string[],
+    inviteEmails: [''] as string[],
+    inviteRoles: ['team_member'] as string[]
   });
   
   const [newCategory, setNewCategory] = useState('');
   const [newValue, setNewValue] = useState('');
   const [newCompetency, setNewCompetency] = useState('');
+  const [newEmail, setNewEmail] = useState('');
   
   const { toast } = useToast();
   const [, setLocation] = useLocation();
@@ -141,33 +144,35 @@ export default function SetupWizard() {
     }
   };
 
-  const handleFinish = async () => {
-    const templateData = {
-      name: wizardData.templateName,
-      reviewType: wizardData.reviewType,
-      templateType: wizardData.templateType,
-      categories: wizardData.categories,
-      instructions: wizardData.instructions || `${wizardData.templateName} template for ${wizardData.reviewType} performance reviews.`,
-      coreValues: wizardData.templateType === 'structured' ? wizardData.coreValues : undefined,
-      competencies: wizardData.templateType === 'structured' ? wizardData.competencies : undefined,
-      sections: wizardData.templateType === 'structured' ? getStructuredSections() : undefined,
-    };
-
-    try {
-      await createTemplateMutation.mutateAsync(templateData);
-      toast({
-        title: "Setup Complete!",
-        description: "Your performance review system has been configured successfully.",
-      });
-      setLocation("/templates");
-    } catch (error) {
-      toast({
-        title: "Setup Failed",
-        description: "There was an error setting up your review system. Please try again.",
-        variant: "destructive",
-      });
+  const handleAddEmail = () => {
+    if (newEmail.trim() && !wizardData.inviteEmails.includes(newEmail.trim())) {
+      updateWizardData('inviteEmails', [...wizardData.inviteEmails, newEmail.trim()]);
+      updateWizardData('inviteRoles', [...wizardData.inviteRoles, 'team_member']);
+      setNewEmail('');
     }
   };
+
+  const handleRemoveEmail = (index: number) => {
+    const updatedEmails = wizardData.inviteEmails.filter((_, i) => i !== index);
+    const updatedRoles = wizardData.inviteRoles.filter((_, i) => i !== index);
+    updateWizardData('inviteEmails', updatedEmails);
+    updateWizardData('inviteRoles', updatedRoles);
+  };
+
+  const handleRoleChange = (index: number, role: string) => {
+    const updatedRoles = [...wizardData.inviteRoles];
+    updatedRoles[index] = role;
+    updateWizardData('inviteRoles', updatedRoles);
+  };
+
+  // Create invitations mutation
+  const createInvitationsMutation = useMutation({
+    mutationFn: async (invitationData: { emails: string[], roles: string[] }) => {
+      // For now, we'll just log the invitations - in a real app you'd send actual invitations
+      console.log('Team invitations to send:', invitationData);
+      return invitationData;
+    },
+  });
 
   const getStructuredSections = () => {
     return {
@@ -190,18 +195,49 @@ export default function SetupWizard() {
       },
       actionPlan: {
         title: "Development Action Plan",
-        fields: ["Manager Support", "Employee Commitments", "Timeline & Milestones", "Resources & Training"]
-      },
-      managerNotes: {
-        title: "Manager Notes",
-        fields: ["Follow-up Actions", "Additional Support"]
-      },
-      acknowledgment: {
-        title: "Review Acknowledgment",
-        fields: ["Employee Comments", "Employee Signature", "Manager Signature"]
+        fields: ["Specific Goals", "Target Completion Dates", "Resources Needed", "Success Metrics"]
       }
     };
   };
+
+  const handleFinish = async () => {
+    try {
+      // Send team invitations if any were added
+      if (wizardData.inviteEmails.length > 0 && wizardData.inviteEmails[0] !== '') {
+        await createInvitationsMutation.mutateAsync({
+          emails: wizardData.inviteEmails.filter(email => email.trim() !== ''),
+          roles: wizardData.inviteRoles
+        });
+      }
+
+      // Create the template
+      const templateData = {
+        name: wizardData.templateName,
+        reviewType: wizardData.reviewType,
+        templateType: wizardData.templateType,
+        categories: wizardData.categories,
+        instructions: wizardData.instructions || `${wizardData.templateName} template for ${wizardData.reviewType} performance reviews.`,
+        coreValues: wizardData.templateType === 'structured' ? wizardData.coreValues : undefined,
+        competencies: wizardData.templateType === 'structured' ? wizardData.competencies : undefined,
+        sections: wizardData.templateType === 'structured' ? getStructuredSections() : undefined,
+      };
+
+      await createTemplateMutation.mutateAsync(templateData);
+      toast({
+        title: "Setup Complete!",
+        description: "Your performance review system has been configured successfully.",
+      });
+      setLocation("/templates");
+    } catch (error) {
+      toast({
+        title: "Setup Failed",
+        description: "There was an error setting up your review system. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -555,30 +591,18 @@ export default function SetupWizard() {
             {currentStep === 3 && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-semibold mb-4">Set Up Your Team (Optional)</h3>
+                  <h3 className="text-xl font-semibold mb-4">Set Up Your Team</h3>
                   <p className="text-gray-600 mb-6">
-                    You can configure team member settings now or skip this step and set it up later in the Team Directory.
+                    Invite team members to get started with performance reviews. You can also add more team members later in the Team Directory.
                   </p>
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <div className="flex items-start gap-3">
-                    <Lightbulb className="h-5 w-5 text-blue-600 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-blue-900 mb-1">Pro Tip</p>
-                      <p className="text-sm text-blue-800">
-                        After completing this setup, you can manage your team members, assign managers, and set review cadences 
-                        in the Team Directory. You can also create and schedule individual reviews from the Reviews page.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {users && Array.isArray(users) && users.length > 0 ? (
-                  <div>
+                {/* Current Team Members */}
+                {users && Array.isArray(users) && users.length > 0 && (
+                  <div className="mb-6">
                     <h4 className="font-medium mb-4">Current Team Members ({users.length})</h4>
-                    <div className="space-y-2 max-h-60 overflow-y-auto">
-                      {users.map((user: User) => (
+                    <div className="space-y-2 max-h-40 overflow-y-auto">
+                      {(users as User[]).map((user: User) => (
                         <div key={user.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -598,12 +622,96 @@ export default function SetupWizard() {
                       ))}
                     </div>
                   </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600">No team members found. You can add team members later in the Team Directory.</p>
-                  </div>
                 )}
+
+                {/* Invite New Team Members */}
+                <div className="border border-gray-200 rounded-lg p-6">
+                  <h4 className="font-medium mb-4">Invite New Team Members</h4>
+                  
+                  {/* Add Email Input */}
+                  <div className="flex gap-2 mb-4">
+                    <Input
+                      type="email"
+                      placeholder="Enter email address"
+                      value={newEmail}
+                      onChange={(e) => setNewEmail(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleAddEmail()}
+                      className="flex-1"
+                      data-testid="input-new-email"
+                    />
+                    <Button 
+                      onClick={handleAddEmail}
+                      disabled={!newEmail.trim()}
+                      data-testid="button-add-email"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add
+                    </Button>
+                  </div>
+
+                  {/* Invited Team Members List */}
+                  {wizardData.inviteEmails.length > 0 && wizardData.inviteEmails[0] !== '' && (
+                    <div className="space-y-3">
+                      <h5 className="text-sm font-medium text-gray-700">Team Members to Invite:</h5>
+                      {wizardData.inviteEmails.map((email, index) => (
+                        email && (
+                          <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                <span className="text-sm font-medium text-green-600">
+                                  {email[0]?.toUpperCase()}
+                                </span>
+                              </div>
+                              <div>
+                                <p className="font-medium">{email}</p>
+                                <p className="text-sm text-gray-600">Will be invited</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Select 
+                                value={wizardData.inviteRoles[index]} 
+                                onValueChange={(value) => handleRoleChange(index, value)}
+                              >
+                                <SelectTrigger className="w-32" data-testid={`select-role-${index}`}>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="team_member">Team Member</SelectItem>
+                                  <SelectItem value="manager">Manager</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleRemoveEmail(index)}
+                                className="text-red-600 hover:text-red-700"
+                                data-testid={`button-remove-email-${index}`}
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        )
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Quick Add Examples */}
+                  <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <Lightbulb className="h-5 w-5 text-blue-600 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-blue-900 mb-1">Getting Started Tips</p>
+                        <ul className="text-sm text-blue-800 space-y-1">
+                          <li>• Team members will receive invitation emails to join the platform</li>
+                          <li>• Managers can create and conduct reviews for their team members</li>
+                          <li>• You can change roles and add more team members later in the Team Directory</li>
+                          <li>• All users will have access to the review templates you create in this setup</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 

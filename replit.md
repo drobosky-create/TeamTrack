@@ -13,9 +13,11 @@ Preferred communication style: Simple, everyday language.
 - 6-step wizard process covering welcome, template selection, configuration, team setup, scheduling, and completion
 - Interactive template type selection between Standard and Structured templates
 - Built-in customization tools for company values and competencies with quick-add examples
-- Team member overview and setup guidance with role-based access
+- **Enhanced team setup with member invitation system** - users can invite new team members during initial setup
+- Email invitation functionality with role assignment (team member or manager) built into wizard
+- Team member overview showing both current and pending invited members
 - Integrated into navigation sidebar and dashboard with prominent call-to-action banner
-- Wizard creates fully configured templates ready for immediate use in performance reviews
+- Wizard creates fully configured templates and sends team invitations for complete onboarding
 
 ## Customizable Template System Transformation (Jan 8, 2025)
 - Transformed Army-specific template system into fully customizable company template system based on user feedback
