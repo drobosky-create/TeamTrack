@@ -169,7 +169,12 @@ export default function SetupWizard() {
     switch (currentStep) {
       case 0: return true; // Welcome
       case 1: return wizardData.templateType !== ''; // Template type
-      case 2: return wizardData.templateName.trim() !== ''; // Template config
+      case 2: 
+        const hasSelectedCategories = Object.values(wizardData.selectedCategories).some(cat => cat !== '' && cat !== 'skip');
+        return wizardData.templateName.trim() !== '' && 
+               hasSelectedCategories &&
+               (wizardData.templateType !== 'structured' || 
+                (wizardData.coreValues.length > 0 && wizardData.competencies.length > 0));
       case 3: return true; // Team setup (optional)
       case 4: return true; // Schedule (we'll set defaults)
       default: return true;
@@ -271,7 +276,7 @@ export default function SetupWizard() {
       }
 
       // Convert selected categories to final categories array
-      const finalCategories = Object.values(wizardData.selectedCategories).filter(cat => cat !== '');
+      const finalCategories = Object.values(wizardData.selectedCategories).filter(cat => cat !== '' && cat !== 'skip');
 
       // Create the template
       const templateData = {
@@ -528,7 +533,7 @@ export default function SetupWizard() {
                                 <SelectValue placeholder={`Choose ${categoryType} category`} />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="">Skip this category</SelectItem>
+                                <SelectItem value="skip">Skip this category</SelectItem>
                                 {options.map((option) => (
                                   <SelectItem key={option} value={option}>{option}</SelectItem>
                                 ))}
@@ -542,13 +547,13 @@ export default function SetupWizard() {
                         <h4 className="font-medium mb-3">Selected Categories:</h4>
                         <div className="flex flex-wrap gap-2">
                           {Object.values(wizardData.selectedCategories)
-                            .filter(cat => cat !== '')
+                            .filter(cat => cat !== '' && cat !== 'skip')
                             .map((category, index) => (
                               <Badge key={index} variant="secondary" className="flex items-center gap-1">
                                 {category}
                               </Badge>
                             ))}
-                          {Object.values(wizardData.selectedCategories).filter(cat => cat !== '').length === 0 && (
+                          {Object.values(wizardData.selectedCategories).filter(cat => cat !== '' && cat !== 'skip').length === 0 && (
                             <p className="text-sm text-gray-500 italic">No categories selected yet</p>
                           )}
                         </div>
@@ -844,7 +849,7 @@ export default function SetupWizard() {
                       </div>
                       <div>
                         <p className="text-sm font-medium text-gray-700">Categories</p>
-                        <p className="text-gray-900">{Object.values(wizardData.selectedCategories).filter(cat => cat !== '').length} categories</p>
+                        <p className="text-gray-900">{Object.values(wizardData.selectedCategories).filter(cat => cat !== '' && cat !== 'skip').length} categories</p>
                       </div>
                     </div>
                     {wizardData.templateType === 'structured' && (
