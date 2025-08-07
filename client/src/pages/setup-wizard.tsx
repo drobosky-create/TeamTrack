@@ -38,13 +38,83 @@ const WIZARD_STEPS = [
   { id: 'complete', title: 'Complete', icon: Check }
 ];
 
+// Predefined category options for structured templates
+const CATEGORY_OPTIONS = {
+  performance: [
+    'Performance & Results',
+    'Job Performance', 
+    'Work Quality & Results',
+    'Performance Standards',
+    'Achievement & Results'
+  ],
+  goals: [
+    'Goals & Objectives',
+    'Goal Achievement',
+    'Strategic Goals',
+    'Performance Goals',
+    'Objective Setting'
+  ],
+  development: [
+    'Professional Development',
+    'Growth & Development',
+    'Learning & Development',
+    'Career Development',
+    'Skill Development'
+  ],
+  leadership: [
+    'Leadership & Management',
+    'Leadership Skills',
+    'Team Leadership',
+    'Management Effectiveness',
+    'Leadership Development'
+  ],
+  collaboration: [
+    'Teamwork & Collaboration',
+    'Team Collaboration',
+    'Cross-functional Collaboration',
+    'Team Effectiveness',
+    'Communication & Collaboration'
+  ],
+  innovation: [
+    'Innovation & Creativity',
+    'Creative Thinking',
+    'Innovation & Problem Solving',
+    'Initiative & Innovation',
+    'Creative Solutions'
+  ]
+};
+
+// Predefined value options
+const CORE_VALUE_OPTIONS = [
+  'Integrity', 'Excellence', 'Innovation', 'Teamwork', 'Accountability',
+  'Customer Focus', 'Quality', 'Respect', 'Trust', 'Transparency',
+  'Continuous Learning', 'Adaptability', 'Leadership', 'Collaboration',
+  'Results-Oriented', 'Ownership', 'Dedication', 'Diversity & Inclusion'
+];
+
+// Predefined competency options  
+const COMPETENCY_OPTIONS = [
+  'Communication', 'Problem Solving', 'Leadership', 'Technical Skills',
+  'Project Management', 'Analytical Thinking', 'Decision Making',
+  'Time Management', 'Adaptability', 'Team Building', 'Customer Service',
+  'Strategic Thinking', 'Conflict Resolution', 'Mentoring', 'Innovation',
+  'Quality Management', 'Change Management', 'Emotional Intelligence'
+];
+
 export default function SetupWizard() {
   const [currentStep, setCurrentStep] = useState(0);
   const [wizardData, setWizardData] = useState({
     templateType: '',
     templateName: '',
     reviewType: 'quarterly',
-    categories: ['Performance', 'Goals', 'Professional Development'],
+    selectedCategories: {
+      performance: '',
+      goals: '',
+      development: '',
+      leadership: '',
+      collaboration: '',
+      innovation: ''
+    },
     coreValues: [] as string[],
     competencies: [] as string[],
     instructions: '',
@@ -106,17 +176,7 @@ export default function SetupWizard() {
     }
   };
 
-  const handleAddCategory = () => {
-    if (newCategory.trim() && !wizardData.categories.includes(newCategory.trim())) {
-      updateWizardData('categories', [...wizardData.categories, newCategory.trim()]);
-      setNewCategory('');
-    }
-  };
 
-  const handleRemoveCategory = (index: number) => {
-    const updated = wizardData.categories.filter((_, i) => i !== index);
-    updateWizardData('categories', updated);
-  };
 
   const handleAddValue = () => {
     if (newValue.trim() && !wizardData.coreValues.includes(newValue.trim())) {
@@ -210,12 +270,15 @@ export default function SetupWizard() {
         });
       }
 
+      // Convert selected categories to final categories array
+      const finalCategories = Object.values(wizardData.selectedCategories).filter(cat => cat !== '');
+
       // Create the template
       const templateData = {
         name: wizardData.templateName,
         reviewType: wizardData.reviewType,
         templateType: wizardData.templateType,
-        categories: wizardData.categories,
+        categories: finalCategories,
         instructions: wizardData.instructions || `${wizardData.templateName} template for ${wizardData.reviewType} performance reviews.`,
         coreValues: wizardData.templateType === 'structured' ? wizardData.coreValues : undefined,
         competencies: wizardData.templateType === 'structured' ? wizardData.competencies : undefined,
@@ -443,33 +506,52 @@ export default function SetupWizard() {
                   </TabsContent>
 
                   <TabsContent value="categories" className="space-y-4 mt-6">
-                    <div className="space-y-2">
-                      <Label>Review Categories</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          placeholder="Add a category"
-                          value={newCategory}
-                          onChange={(e) => setNewCategory(e.target.value)}
-                          data-testid="input-new-category"
-                        />
-                        <Button type="button" onClick={handleAddCategory} data-testid="button-add-category">
-                          <Plus className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        {wizardData.categories.map((category, index) => (
-                          <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                            {category}
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveCategory(index)}
-                              className="ml-1 hover:text-red-600"
-                              data-testid={`button-remove-category-${index}`}
+                    <div>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Choose from our predefined categories for your performance reviews. Select the categories that best fit your organization's needs.
+                      </p>
+                      
+                      <div className="space-y-4">
+                        {Object.entries(CATEGORY_OPTIONS).map(([categoryType, options]) => (
+                          <div key={categoryType}>
+                            <Label className="text-sm font-medium capitalize mb-2 block">
+                              {categoryType} Category
+                            </Label>
+                            <Select 
+                              value={wizardData.selectedCategories[categoryType as keyof typeof wizardData.selectedCategories]} 
+                              onValueChange={(value) => updateWizardData('selectedCategories', {
+                                ...wizardData.selectedCategories,
+                                [categoryType]: value
+                              })}
                             >
-                              <X className="h-3 w-3" />
-                            </button>
-                          </Badge>
+                              <SelectTrigger data-testid={`select-category-${categoryType}`}>
+                                <SelectValue placeholder={`Choose ${categoryType} category`} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="">Skip this category</SelectItem>
+                                {options.map((option) => (
+                                  <SelectItem key={option} value={option}>{option}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
                         ))}
+                      </div>
+                      
+                      <div className="mt-6">
+                        <h4 className="font-medium mb-3">Selected Categories:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {Object.values(wizardData.selectedCategories)
+                            .filter(cat => cat !== '')
+                            .map((category, index) => (
+                              <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                                {category}
+                              </Badge>
+                            ))}
+                          {Object.values(wizardData.selectedCategories).filter(cat => cat !== '').length === 0 && (
+                            <p className="text-sm text-gray-500 italic">No categories selected yet</p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </TabsContent>
@@ -494,7 +576,7 @@ export default function SetupWizard() {
                           <div className="space-y-2">
                             <p className="text-sm text-gray-600">Quick add examples:</p>
                             <div className="flex flex-wrap gap-2">
-                              {["Integrity", "Excellence", "Innovation", "Collaboration", "Customer Focus"].map(value => (
+                              {CORE_VALUE_OPTIONS.slice(0, 8).map(value => (
                                 <Button
                                   key={value}
                                   type="button"
@@ -546,7 +628,7 @@ export default function SetupWizard() {
                           <div className="space-y-2">
                             <p className="text-sm text-gray-600">Quick add examples:</p>
                             <div className="flex flex-wrap gap-2">
-                              {["Leadership", "Communication", "Problem Solving", "Team Collaboration", "Strategic Thinking"].map(comp => (
+                              {COMPETENCY_OPTIONS.slice(0, 8).map(comp => (
                                 <Button
                                   key={comp}
                                   type="button"
@@ -762,7 +844,7 @@ export default function SetupWizard() {
                       </div>
                       <div>
                         <p className="text-sm font-medium text-gray-700">Categories</p>
-                        <p className="text-gray-900">{wizardData.categories.length} categories</p>
+                        <p className="text-gray-900">{Object.values(wizardData.selectedCategories).filter(cat => cat !== '').length} categories</p>
                       </div>
                     </div>
                     {wizardData.templateType === 'structured' && (
