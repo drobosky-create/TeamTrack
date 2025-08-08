@@ -70,6 +70,13 @@ export default function TeamDirectory() {
     setShowUserModal(true);
   };
 
+  const handleEditProfile = () => {
+    if (user) {
+      setSelectedUser(user);
+      setShowUserModal(true);
+    }
+  };
+
   const getRoleColor = (role: string) => {
     switch (role) {
       case 'admin': return 'bg-red-100 text-red-800';
@@ -287,7 +294,12 @@ export default function TeamDirectory() {
                 Add New Member
               </Button>
             )}
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              onClick={handleEditProfile}
+              className="flex items-center gap-2"
+              data-testid="button-edit-profile"
+            >
               <Edit2 className="h-4 w-4" />
               Edit My Profile
             </Button>
