@@ -380,18 +380,7 @@ export default function TeamDirectory() {
                               </p>
                             </div>
                           </div>
-                          {teamMember.id === user.id ? (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleEditProfile()}
-                              data-testid="button-edit-profile"
-                              className="h-8 px-3 text-xs"
-                            >
-                              <Edit2 className="h-3 w-3 mr-1" />
-                              Edit
-                            </Button>
-                          ) : (user.role === 'admin' || user.role === 'manager') && (
+                          {(user.role === 'admin' || user.role === 'manager') && teamMember.id !== user.id && (
                             <Button
                               variant="ghost"
                               size="sm"
@@ -435,6 +424,21 @@ export default function TeamDirectory() {
                               }) : 'N/A'}
                             </span>
                           </div>
+
+                          {teamMember.id === user.id && (
+                            <div className="pt-3 border-t border-gray-100 mt-3">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleEditProfile()}
+                                data-testid="button-edit-profile"
+                                className="w-full h-8 text-xs"
+                              >
+                                <Edit2 className="h-3 w-3 mr-1" />
+                                Edit Profile
+                              </Button>
+                            </div>
+                          )}
                         </div>
                       </CardContent>
                     </Card>
