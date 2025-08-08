@@ -380,17 +380,7 @@ export default function TeamDirectory() {
                               </p>
                             </div>
                           </div>
-                          {(user.role === 'admin' || user.role === 'manager') && teamMember.id !== user.id && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleEditUser(teamMember)}
-                              data-testid={`button-edit-${teamMember.id}`}
-                              className="h-6 w-6 p-0"
-                            >
-                              <MoreHorizontal className="h-3 w-3" />
-                            </Button>
-                          )}
+
                         </div>
 
                         <div className="space-y-2">
@@ -425,20 +415,24 @@ export default function TeamDirectory() {
                             </span>
                           </div>
 
-                          {teamMember.id === user.id && (
-                            <div className="pt-3 border-t border-gray-100 mt-3">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleEditProfile()}
-                                data-testid="button-edit-profile"
-                                className="w-full h-8 text-xs"
-                              >
-                                <Edit2 className="h-3 w-3 mr-1" />
-                                Edit Profile
-                              </Button>
-                            </div>
-                          )}
+                          <div className="pt-3 border-t border-gray-100 mt-3">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                if (teamMember.id === user.id) {
+                                  handleEditProfile();
+                                } else {
+                                  handleEditUser(teamMember);
+                                }
+                              }}
+                              data-testid={`button-edit-${teamMember.id}`}
+                              className="w-full h-8 text-xs"
+                            >
+                              <Edit2 className="h-3 w-3 mr-1" />
+                              Edit
+                            </Button>
+                          </div>
                         </div>
                       </CardContent>
                     </Card>
