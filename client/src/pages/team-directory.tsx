@@ -284,14 +284,16 @@ export default function TeamDirectory() {
                 Bulk Actions ({selectedUsers.length})
               </Button>
             )}
-            <Button 
-              onClick={handleCreateUser}
-              className="flex items-center gap-2"
-              data-testid="button-add-member"
-            >
-              <Users className="h-4 w-4" />
-              Add New Member
-            </Button>
+            {(user.role === 'admin' || user.role === 'manager') && (
+              <Button 
+                onClick={handleCreateUser}
+                className="flex items-center gap-2"
+                data-testid="button-add-member"
+              >
+                <Users className="h-4 w-4" />
+                Add New Member
+              </Button>
+            )}
 
           </div>
         </div>
