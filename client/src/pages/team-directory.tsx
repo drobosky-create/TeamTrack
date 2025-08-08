@@ -458,10 +458,9 @@ export default function TeamDirectory() {
                 ) : (
                   <div className="space-y-4">
                     {/* Root level users (no manager) */}
-                    {users?.filter(u => !u.managerId).map(rootUser => renderOrgNode(rootUser))}
-                    
-                    {/* If no hierarchy exists, show all users */}
-                    {users?.filter(u => !u.managerId).length === 0 && (
+                    {users?.filter(u => !u.managerId).length > 0 ? (
+                      users?.filter(u => !u.managerId).map(rootUser => renderOrgNode(rootUser))
+                    ) : (
                       <div className="text-center py-8">
                         <GitBranch className="h-12 w-12 text-gray-400 mx-auto mb-3" />
                         <p className="text-gray-500 font-medium">No organizational hierarchy defined</p>
