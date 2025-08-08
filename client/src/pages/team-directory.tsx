@@ -90,10 +90,22 @@ export default function TeamDirectory() {
             <h1 className="text-2xl font-bold text-gray-900">Team Directory</h1>
             <p className="text-gray-600 text-sm mt-1">Manage your team members and their review settings</p>
           </div>
-          <Button variant="outline" className="flex items-center gap-2">
-            <Edit2 className="h-4 w-4" />
-            Edit My Profile
-          </Button>
+          <div className="flex items-center gap-3">
+            {(user.role === 'admin' || user.role === 'manager') && (
+              <Button 
+                onClick={handleCreateUser}
+                className="flex items-center gap-2"
+                data-testid="button-add-member"
+              >
+                <Users className="h-4 w-4" />
+                Add New Member
+              </Button>
+            )}
+            <Button variant="outline" className="flex items-center gap-2">
+              <Edit2 className="h-4 w-4" />
+              Edit My Profile
+            </Button>
+          </div>
         </div>
       </div>
 
