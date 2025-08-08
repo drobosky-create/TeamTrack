@@ -294,15 +294,7 @@ export default function TeamDirectory() {
                 Add New Member
               </Button>
             )}
-            <Button 
-              variant="outline" 
-              onClick={handleEditProfile}
-              className="flex items-center gap-2"
-              data-testid="button-edit-profile"
-            >
-              <Edit2 className="h-4 w-4" />
-              Edit My Profile
-            </Button>
+
           </div>
         </div>
       </div>
@@ -388,7 +380,18 @@ export default function TeamDirectory() {
                               </p>
                             </div>
                           </div>
-                          {(user.role === 'admin' || user.role === 'manager') && (
+                          {teamMember.id === user.id ? (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleEditProfile()}
+                              data-testid="button-edit-profile"
+                              className="h-8 px-3 text-xs"
+                            >
+                              <Edit2 className="h-3 w-3 mr-1" />
+                              Edit
+                            </Button>
+                          ) : (user.role === 'admin' || user.role === 'manager') && (
                             <Button
                               variant="ghost"
                               size="sm"
