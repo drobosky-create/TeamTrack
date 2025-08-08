@@ -54,7 +54,7 @@ export default function UserFormModal({ open, onClose, user, onSuccess }: UserFo
       email: '',
       role: 'team_member',
       department: '',
-      managerId: '',
+      managerId: 'none',
       employmentType: 'employee',
       reviewCadence: 'quarterly',
     },
@@ -68,7 +68,7 @@ export default function UserFormModal({ open, onClose, user, onSuccess }: UserFo
         email: user.email || '',
         role: user.role,
         department: user.department || '',
-        managerId: user.managerId || '',
+        managerId: user.managerId || 'none',
         employmentType: user.employmentType || 'employee',
         reviewCadence: user.reviewCadence || 'quarterly',
       });
@@ -79,7 +79,7 @@ export default function UserFormModal({ open, onClose, user, onSuccess }: UserFo
         email: '',
         role: 'team_member',
         department: '',
-        managerId: '',
+        managerId: 'none',
         employmentType: 'employee',
         reviewCadence: 'quarterly',
       });
@@ -151,10 +151,16 @@ export default function UserFormModal({ open, onClose, user, onSuccess }: UserFo
   });
 
   const onSubmit = (data: UserFormData) => {
+    // Convert "none" managerId to null for database storage
+    const submitData = {
+      ...data,
+      managerId: data.managerId === 'none' ? null : data.managerId
+    };
+    
     if (user) {
-      updateMutation.mutate(data);
+      updateMutation.mutate(submitData);
     } else {
-      createMutation.mutate(data);
+      createMutation.mutate(submitData);
     }
   };
 
@@ -285,7 +291,7 @@ export default function UserFormModal({ open, onClose, user, onSuccess }: UserFo
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="">No Manager</SelectItem>
+                        <SelectItem value="none">No Manager</SelectItem>
                         {managers?.map((manager) => (
                           <SelectItem key={manager.id} value={manager.id}>
                             {manager.firstName} {manager.lastName}
