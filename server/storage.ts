@@ -3,6 +3,7 @@ import {
   reviews,
   reviewTemplates,
   goals,
+  organizationBranding,
   type User,
   type UpsertUser,
   type InsertUser,
@@ -14,6 +15,8 @@ import {
   type Goal,
   type InsertGoal,
   type UpdateGoal,
+  type OrganizationBranding,
+  type UpdateOrganizationBranding,
   type UserRole,
   type ReviewStatus,
 } from "@shared/schema";
@@ -65,6 +68,10 @@ export interface IStorage {
     averageScore: number;
     completedThisMonth: number;
   }>;
+
+  // Organization branding operations
+  getOrganizationBranding(): Promise<OrganizationBranding | undefined>;
+  updateOrganizationBranding(updates: UpdateOrganizationBranding, updatedBy: string): Promise<OrganizationBranding>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -390,6 +397,41 @@ export class DatabaseStorage implements IStorage {
       averageScore,
       completedThisMonth,
     };
+  }
+
+  // Organization branding operations
+  async getOrganizationBranding(): Promise<OrganizationBranding | undefined> {
+    const [branding] = await db.select().from(organizationBranding).limit(1);
+    return branding;
+  }
+
+  async updateOrganizationBranding(updates: UpdateOrganizationBranding, updatedBy: string): Promise<OrganizationBranding> {
+    // Check if branding record exists
+    const existingBranding = await this.getOrganizationBranding();
+    
+    if (existingBranding) {
+      // Update existing branding
+      const [updatedBranding] = await db
+        .update(organizationBranding)
+        .set({
+          ...updates,
+          updatedBy,
+          updatedAt: new Date(),
+        })
+        .where(eq(organizationBranding.id, existingBranding.id))
+        .returning();
+      return updatedBranding;
+    } else {
+      // Create new branding record
+      const [newBranding] = await db
+        .insert(organizationBranding)
+        .values({
+          ...updates,
+          updatedBy,
+        })
+        .returning();
+      return newBranding;
+    }
   }
 }
 

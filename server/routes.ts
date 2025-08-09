@@ -7,6 +7,8 @@ import {
   insertReviewSchema, 
   updateReviewSchema, 
   insertReviewTemplateSchema,
+  insertOrganizationBrandingSchema,
+  updateOrganizationBrandingSchema,
   type UserRole 
 } from "@shared/schema";
 import { ZodError } from "zod";
@@ -343,6 +345,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting template:", error);
       res.status(500).json({ message: "Failed to delete template" });
+    }
+  });
+
+  // Organization Branding routes
+  app.get('/api/branding', async (req, res) => {
+    try {
+      const branding = await storage.getOrganizationBranding();
+      res.json(branding);
+    } catch (error) {
+      console.error("Error fetching branding:", error);
+      res.status(500).json({ message: "Failed to fetch branding" });
+    }
+  });
+
+  app.put('/api/branding', isAuthenticated, async (req: any, res) => {
+    try {
+      const currentUser = await storage.getUser(req.user.claims.sub);
+      if (currentUser?.role !== 'admin') {
+        return res.status(403).json({ message: "Only admins can update branding" });
+      }
+
+      const validatedData = updateOrganizationBrandingSchema.parse(req.body);
+      const branding = await storage.updateOrganizationBranding(validatedData, currentUser.id);
+      res.json(branding);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ message: "Invalid branding data", errors: error.errors });
+      }
+      console.error("Error updating branding:", error);
+      res.status(500).json({ message: "Failed to update branding" });
     }
   });
 

@@ -40,6 +40,9 @@ export const goalStatusEnum = pgEnum('goal_status', ['draft', 'active', 'on-trac
 export const documentTypeEnum = pgEnum('document_type', ['policy', 'agreement', 'guide', 'form', 'template']);
 export const documentStatusEnum = pgEnum('document_status', ['draft', 'final', 'archived']);
 
+// Branding enums
+export const brandingElementEnum = pgEnum('branding_element', ['logo', 'favicon', 'banner']);
+
 // Users table (required for Replit Auth)
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -152,6 +155,46 @@ export const notifications = pgTable("notifications", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Organization branding and customization
+export const organizationBranding = pgTable("organization_branding", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  // Organization details
+  organizationName: varchar("organization_name").notNull().default('PerformanceHub'),
+  organizationTagline: varchar("organization_tagline"),
+  // Logo and visual assets
+  logoUrl: varchar("logo_url"),
+  faviconUrl: varchar("favicon_url"),
+  bannerUrl: varchar("banner_url"),
+  // Color scheme
+  primaryColor: varchar("primary_color").default('#3b82f6'), // Blue
+  secondaryColor: varchar("secondary_color").default('#64748b'), // Slate
+  accentColor: varchar("accent_color").default('#10b981'), // Emerald
+  backgroundColor: varchar("background_color").default('#ffffff'), // White
+  textColor: varchar("text_color").default('#1f2937'), // Gray-800
+  // Typography
+  primaryFont: varchar("primary_font").default('Inter'),
+  headingFont: varchar("heading_font").default('Inter'),
+  // Layout preferences
+  sidebarColor: varchar("sidebar_color").default('#f8fafc'), // Gray-50
+  headerColor: varchar("header_color").default('#ffffff'), // White
+  cardColor: varchar("card_color").default('#ffffff'), // White
+  // Footer customization
+  footerText: text("footer_text"),
+  footerLinks: jsonb("footer_links"), // Array of {label, url} objects
+  // Contact information
+  supportEmail: varchar("support_email"),
+  supportPhone: varchar("support_phone"),
+  websiteUrl: varchar("website_url"),
+  // Advanced customization
+  customCss: text("custom_css"),
+  customJs: text("custom_js"),
+  // Metadata
+  isActive: boolean("is_active").default(true),
+  updatedBy: varchar("updated_by").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ one, many }) => ({
   manager: one(users, {
@@ -233,6 +276,13 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
   }),
 }));
 
+export const organizationBrandingRelations = relations(organizationBranding, ({ one }) => ({
+  updatedBy: one(users, {
+    fields: [organizationBranding.updatedBy],
+    references: [users.id],
+  }),
+}));
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -298,6 +348,18 @@ export const insertNotificationSchema = createInsertSchema(notifications);
 
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
+
+// Organization branding schemas
+export const insertOrganizationBrandingSchema = createInsertSchema(organizationBranding).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export const updateOrganizationBrandingSchema = insertOrganizationBrandingSchema.partial();
+
+export type OrganizationBranding = typeof organizationBranding.$inferSelect;
+export type InsertOrganizationBranding = z.infer<typeof insertOrganizationBrandingSchema>;
+export type UpdateOrganizationBranding = z.infer<typeof updateOrganizationBrandingSchema>;
 
 export type UserRole = 'admin' | 'manager' | 'team_member';
 export type ReviewType = 'monthly' | 'quarterly' | 'annual';

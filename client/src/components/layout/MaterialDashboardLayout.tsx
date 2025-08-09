@@ -12,7 +12,8 @@ import {
   Person as PersonIcon,
   Notifications as NotificationsIcon,
   CreditCard as CreditCardIcon,
-  Star as StarIcon
+  Star as StarIcon,
+  Palette as PaletteIcon
 } from '@mui/icons-material';
 import { Link, useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
@@ -53,6 +54,12 @@ const navigationItems = [
     text: 'Templates',
     icon: <AssessmentIcon />,
     path: '/templates',
+    roles: ['admin']
+  },
+  {
+    text: 'Branding',
+    icon: <PaletteIcon />,
+    path: '/branding',
     roles: ['admin']
   },
   {

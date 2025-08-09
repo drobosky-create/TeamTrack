@@ -19,6 +19,7 @@ import Profile from "@/pages/profile";
 import Notifications from "@/pages/notifications";
 import Billing from "@/pages/billing";
 import SetupWizard from "@/pages/setup-wizard";
+import BrandingPage from "@/pages/branding";
 
 const theme = createTheme({
   palette: {
@@ -50,6 +51,7 @@ function Router() {
             <Route path="/reviews" component={Reviews} />
             <Route path="/goals" component={Goals} />
             <Route path="/templates" component={Templates} />
+            <Route path="/branding" component={BrandingPage} />
             <Route path="/settings" component={Settings} />
             <Route path="/profile" component={Profile} />
             <Route path="/notifications" component={Notifications} />
