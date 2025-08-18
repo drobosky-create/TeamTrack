@@ -8,13 +8,23 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
+## AppleBites Integration & Advanced Analytics (Jan 18, 2025)
+- Successfully integrated AppleBites business valuation functionality into PerformanceHub
+- Added comprehensive Value Drivers Heatmap component for visual performance assessment
+- Implemented Advanced Analytics dashboard with charts, metrics, and insights
+- Extended database schema with assessments table supporting A-F grading system
+- Created new analytics page with tabbed interface: Overview Dashboard, Performance Heatmap, Team Insights
+- Added "Advanced Analytics" navigation item for admin and manager roles
+- Seamlessly merged AppleBites components while maintaining Material-UI design consistency
+- Performance assessment system now supports 10 key areas: Financial Performance, Customer Relations, Leadership, Innovation, Goal Achievement, Systems & Processes, Quality Standards, Industry Knowledge, Risk Management, and Independence
+
 ## Enhanced Navigation Integration (Jan 18, 2025)
 - Successfully merged AppSidebar functionality into MaterialDashboardLayout while preserving Material-UI styling
-- Added new navigation items: Reports, Documents, My Report Card (user-specific), and Help
+- Added new navigation items: Reports, Documents, My Report Card (user-specific), Help, and Advanced Analytics
 - Implemented dynamic user-specific routing for personalized pages
 - Enhanced role-based filtering logic for better permission control
 - Maintained green gradient sidebar design with all Material Dashboard animations and effects
-- Navigation now includes 16 total menu items with proper role restrictions
+- Navigation now includes 17 total menu items with proper role restrictions
 
 ## Setup Wizard Implementation (Jan 8, 2025)
 - Created comprehensive setup wizard to guide users through performance review system configuration

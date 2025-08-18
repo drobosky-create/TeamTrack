@@ -43,6 +43,10 @@ export const documentStatusEnum = pgEnum('document_status', ['draft', 'final', '
 // Branding enums
 export const brandingElementEnum = pgEnum('branding_element', ['logo', 'favicon', 'banner']);
 
+// Assessment enums
+export const assessmentTierEnum = pgEnum('assessment_tier', ['free', 'growth', 'capital']);
+export const gradeEnum = pgEnum('grade', ['A', 'B', 'C', 'D', 'F']);
+
 // Users table (required for Replit Auth)
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -191,6 +195,37 @@ export const organizationBranding = pgTable("organization_branding", {
   // Metadata
   isActive: boolean("is_active").default(true),
   updatedBy: varchar("updated_by").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Assessment table (integrated from AppleBites for advanced evaluations)
+export const assessments = pgTable("assessments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  reviewId: varchar("review_id").references(() => reviews.id),
+  assessmentType: varchar("assessment_type").default('performance').notNull(), // 'performance', 'strategic', 'development'
+  
+  // Core Performance Areas (adapted from AppleBites value drivers)
+  financialPerformance: text("financial_performance"), // Revenue, budget management
+  customerConcentration: text("customer_concentration"), // Customer relations, satisfaction
+  managementTeam: text("management_team"), // Leadership, team management
+  competitivePosition: text("competitive_position"), // Innovation, market position
+  growthProspects: text("growth_prospects"), // Goal achievement, growth mindset
+  systemsProcesses: text("systems_processes"), // Process optimization, efficiency
+  assetQuality: text("asset_quality"), // Work quality, standards
+  industryOutlook: text("industry_outlook"), // Industry knowledge, awareness
+  riskFactors: text("risk_factors"), // Risk management, compliance
+  ownerDependency: text("owner_dependency"), // Independence, initiative
+  
+  // Overall Assessment
+  overallScore: text("overall_score"), // A-F grade
+  tier: assessmentTierEnum("tier").default('free').notNull(),
+  narrativeSummary: text("narrative_summary"),
+  executiveSummary: text("executive_summary"),
+  
+  // Processing and Status
+  isProcessed: boolean("is_processed").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

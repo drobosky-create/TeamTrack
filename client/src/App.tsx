@@ -20,6 +20,7 @@ import Notifications from "@/pages/notifications";
 import Billing from "@/pages/billing";
 import SetupWizard from "@/pages/setup-wizard";
 import BrandingPage from "@/pages/branding";
+import AnalyticsPage from "@/pages/analytics";
 
 const theme = createTheme({
   palette: {
@@ -52,6 +53,7 @@ function Router() {
             <Route path="/goals" component={Goals} />
             <Route path="/templates" component={Templates} />
             <Route path="/branding" component={BrandingPage} />
+            <Route path="/analytics" component={AnalyticsPage} />
             <Route path="/settings" component={Settings} />
             <Route path="/profile" component={Profile} />
             <Route path="/notifications" component={Notifications} />

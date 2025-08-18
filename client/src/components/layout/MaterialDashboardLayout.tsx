@@ -61,6 +61,12 @@ const getNavigationItems = (userId: string) => [
     roles: ['admin', 'manager']
   },
   {
+    text: 'Advanced Analytics',
+    icon: <AssessmentIcon />,
+    path: '/analytics',
+    roles: ['admin', 'manager']
+  },
+  {
     text: 'Documents',
     icon: <DocumentsIcon />,
     path: '/documents',
