@@ -21,6 +21,8 @@ import Billing from "@/pages/billing";
 import SetupWizard from "@/pages/setup-wizard";
 import BrandingPage from "@/pages/branding";
 import AnalyticsPage from "@/pages/analytics";
+import AssessmentPage from "@/pages/assessment";
+import CalculatorPage from "@/pages/calculator";
 
 const theme = createTheme({
   palette: {
@@ -54,6 +56,8 @@ function Router() {
             <Route path="/templates" component={Templates} />
             <Route path="/branding" component={BrandingPage} />
             <Route path="/analytics" component={AnalyticsPage} />
+            <Route path="/assessment" component={AssessmentPage} />
+            <Route path="/calculator" component={CalculatorPage} />
             <Route path="/settings" component={Settings} />
             <Route path="/profile" component={Profile} />
             <Route path="/notifications" component={Notifications} />

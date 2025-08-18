@@ -9,9 +9,14 @@ import {
   insertReviewTemplateSchema,
   insertOrganizationBrandingSchema,
   updateOrganizationBrandingSchema,
+  insertAssessmentSchema,
+  insertValuationAssessmentSchema,
   type UserRole 
 } from "@shared/schema";
+import * as schema from "@shared/schema";
 import { ZodError } from "zod";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -375,6 +380,98 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       console.error("Error updating branding:", error);
       res.status(500).json({ message: "Failed to update branding" });
+    }
+  });
+
+  // AppleBites Assessment Routes
+  app.get('/api/assessments', isAuthenticated, async (req: any, res) => {
+    try {
+      const currentUser = await storage.getUser(req.user.claims.sub);
+      if (!currentUser) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      const userAssessments = await db.query.assessments.findMany({
+        where: eq(schema.assessments.userId, currentUser.id),
+        orderBy: [desc(schema.assessments.createdAt)],
+      });
+
+      res.json(userAssessments);
+    } catch (error) {
+      console.error('Error fetching assessments:', error);
+      res.status(500).json({ message: 'Failed to fetch assessments' });
+    }
+  });
+
+  app.post('/api/assessments', isAuthenticated, async (req: any, res) => {
+    try {
+      const currentUser = await storage.getUser(req.user.claims.sub);
+      if (!currentUser) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      const validatedData = insertAssessmentSchema.parse({
+        ...req.body,
+        userId: currentUser.id,
+      });
+
+      const [assessment] = await db.insert(schema.assessments)
+        .values(validatedData)
+        .returning();
+
+      res.json(assessment);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ message: "Invalid assessment data", errors: error.errors });
+      }
+      console.error('Error creating assessment:', error);
+      res.status(500).json({ message: 'Failed to create assessment' });
+    }
+  });
+
+  // Valuation Assessment Routes (AppleBites business valuation)
+  app.get('/api/valuations', isAuthenticated, async (req: any, res) => {
+    try {
+      const currentUser = await storage.getUser(req.user.claims.sub);
+      if (!currentUser) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      const valuations = await db.query.valuationAssessments.findMany({
+        where: eq(schema.valuationAssessments.userId, currentUser.id),
+        orderBy: [desc(schema.valuationAssessments.createdAt)],
+      });
+
+      res.json(valuations);
+    } catch (error) {
+      console.error('Error fetching valuations:', error);
+      res.status(500).json({ message: 'Failed to fetch valuations' });
+    }
+  });
+
+  app.post('/api/valuations', isAuthenticated, async (req: any, res) => {
+    try {
+      const currentUser = await storage.getUser(req.user.claims.sub);
+      if (!currentUser) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      const validatedData = insertValuationAssessmentSchema.parse({
+        ...req.body,
+        userId: currentUser.id,
+      });
+
+      const [valuation] = await db.insert(schema.valuationAssessments)
+        .values(validatedData)
+        .returning();
+
+      res.json(valuation);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ message: "Invalid valuation data", errors: error.errors });
+      }
+      console.error('Error creating valuation:', error);
+      res.status(500).json({ message: 'Failed to create valuation' });
     }
   });
 

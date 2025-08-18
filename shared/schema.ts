@@ -9,6 +9,8 @@ import {
   integer,
   boolean,
   pgEnum,
+  serial,
+  decimal,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -230,6 +232,81 @@ export const assessments = pgTable("assessments", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// AppleBites Valuation Assessment Table for business valuation integration
+export const valuationAssessments = pgTable("valuation_assessments", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  
+  // Contact Information
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull(),
+  company: text("company").notNull(),
+  jobTitle: text("job_title"),
+  foundingYear: integer("founding_year"),
+  
+  // Industry Classification
+  naicsCode: text("naics_code"),
+  sicCode: text("sic_code"),
+  industryDescription: text("industry_description"),
+  
+  // Tier Information
+  tier: text("tier").default("free"), // "free", "growth", "capital"
+  reportTier: text("report_tier").notNull().default("free"), // "free" or "paid"
+  paymentStatus: text("payment_status").default("pending"), // "pending", "completed", "failed"
+  stripePaymentId: text("stripe_payment_id"),
+  
+  // EBITDA Components
+  netIncome: decimal("net_income", { precision: 15, scale: 2 }).notNull(),
+  interest: decimal("interest", { precision: 15, scale: 2 }).notNull(),
+  taxes: decimal("taxes", { precision: 15, scale: 2 }).notNull(),
+  depreciation: decimal("depreciation", { precision: 15, scale: 2 }).notNull(),
+  amortization: decimal("amortization", { precision: 15, scale: 2 }).notNull(),
+  
+  // Owner Adjustments
+  ownerSalary: decimal("owner_salary", { precision: 15, scale: 2 }).default("0"),
+  personalExpenses: decimal("personal_expenses", { precision: 15, scale: 2 }).default("0"),
+  oneTimeExpenses: decimal("one_time_expenses", { precision: 15, scale: 2 }).default("0"),
+  otherAdjustments: decimal("other_adjustments", { precision: 15, scale: 2 }).default("0"),
+  adjustmentNotes: text("adjustment_notes"),
+  
+  // Value Driver Scores (A-F grades)
+  financialPerformance: text("financial_performance").notNull(),
+  customerConcentration: text("customer_concentration").notNull(),
+  managementTeam: text("management_team").notNull(),
+  competitivePosition: text("competitive_position").notNull(),
+  growthProspects: text("growth_prospects").notNull(),
+  systemsProcesses: text("systems_processes").notNull(),
+  assetQuality: text("asset_quality").notNull(),
+  industryOutlook: text("industry_outlook").notNull(),
+  riskFactors: text("risk_factors").notNull(),
+  ownerDependency: text("owner_dependency").notNull(),
+  
+  // Follow-up and Results
+  followUpIntent: text("follow_up_intent").notNull(), // "yes", "maybe", "no"
+  additionalComments: text("additional_comments"),
+  
+  // Calculated Values
+  baseEbitda: decimal("base_ebitda", { precision: 15, scale: 2 }),
+  adjustedEbitda: decimal("adjusted_ebitda", { precision: 15, scale: 2 }),
+  valuationMultiple: decimal("valuation_multiple", { precision: 8, scale: 2 }),
+  lowEstimate: decimal("low_estimate", { precision: 15, scale: 2 }),
+  midEstimate: decimal("mid_estimate", { precision: 15, scale: 2 }),
+  highEstimate: decimal("high_estimate", { precision: 15, scale: 2 }),
+  overallScore: text("overall_score"),
+  
+  // Generated Content
+  narrativeSummary: text("narrative_summary"),
+  executiveSummary: text("executive_summary"),
+  pdfUrl: text("pdf_url"),
+  
+  // Processing Status
+  isProcessed: boolean("is_processed").default(false),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ one, many }) => ({
   manager: one(users, {
@@ -409,3 +486,27 @@ export type GoalStatus = 'draft' | 'active' | 'on-track' | 'at-risk' | 'behind' 
 // Documents types
 export type DocumentType = 'policy' | 'agreement' | 'guide' | 'form' | 'template';
 export type DocumentStatus = 'draft' | 'final' | 'archived';
+
+// Assessment schemas (AppleBites integration)
+export const insertAssessmentSchema = createInsertSchema(assessments).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export const updateAssessmentSchema = insertAssessmentSchema.partial();
+
+export type Assessment = typeof assessments.$inferSelect;
+export type InsertAssessment = z.infer<typeof insertAssessmentSchema>;
+export type UpdateAssessment = z.infer<typeof updateAssessmentSchema>;
+
+// Valuation Assessment schemas (AppleBites integration)
+export const insertValuationAssessmentSchema = createInsertSchema(valuationAssessments).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type ValuationAssessment = typeof valuationAssessments.$inferSelect;
+export type InsertValuationAssessment = z.infer<typeof insertValuationAssessmentSchema>;
+
+// Assessment Tier types
+export type AssessmentTier = 'free' | 'growth' | 'capital';

@@ -17,7 +17,9 @@ import {
   BarChart as ReportsIcon,
   Folder as DocumentsIcon,
   CardMembership as ReportCardIcon,
-  Help as HelpIcon
+  Help as HelpIcon,
+  BusinessCenter as BusinessCenterIcon,
+  Calculate as CalculateIcon
 } from '@mui/icons-material';
 import { Link, useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
@@ -65,6 +67,18 @@ const getNavigationItems = (userId: string) => [
     icon: <AssessmentIcon />,
     path: '/analytics',
     roles: ['admin', 'manager']
+  },
+  {
+    text: 'Business Assessment',
+    icon: <BusinessCenterIcon />,
+    path: '/assessment',
+    roles: ['admin', 'manager', 'team_member']
+  },
+  {
+    text: 'Value Calculator',
+    icon: <CalculateIcon />,
+    path: '/calculator',
+    roles: ['admin', 'manager', 'team_member']
   },
   {
     text: 'Documents',
