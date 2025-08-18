@@ -13,7 +13,11 @@ import {
   Notifications as NotificationsIcon,
   CreditCard as CreditCardIcon,
   Star as StarIcon,
-  Palette as PaletteIcon
+  Palette as PaletteIcon,
+  BarChart as ReportsIcon,
+  Folder as DocumentsIcon,
+  CardMembership as ReportCardIcon,
+  Help as HelpIcon
 } from '@mui/icons-material';
 import { Link, useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
@@ -25,7 +29,7 @@ interface MaterialDashboardLayoutProps {
 
 const drawerWidth = 280;
 
-const navigationItems = [
+const getNavigationItems = (userId: string) => [
   {
     text: 'Dashboard',
     icon: <DashboardIcon />,
@@ -51,6 +55,24 @@ const navigationItems = [
     roles: ['admin', 'manager', 'team_member']
   },
   {
+    text: 'Reports',
+    icon: <ReportsIcon />,
+    path: '/reports',
+    roles: ['admin', 'manager']
+  },
+  {
+    text: 'Documents',
+    icon: <DocumentsIcon />,
+    path: '/documents',
+    roles: ['admin', 'manager']
+  },
+  {
+    text: 'My Report Card',
+    icon: <ReportCardIcon />,
+    path: `/report-card/${userId}`,
+    roles: ['admin', 'manager', 'team_member']
+  },
+  {
     text: 'Templates',
     icon: <AssessmentIcon />,
     path: '/templates',
@@ -72,6 +94,12 @@ const navigationItems = [
     text: 'Notifications',
     icon: <NotificationsIcon />,
     path: '/notifications',
+    roles: ['admin', 'manager', 'team_member']
+  },
+  {
+    text: 'Help',
+    icon: <HelpIcon />,
+    path: '/help',
     roles: ['admin', 'manager', 'team_member']
   },
   {
@@ -124,7 +152,9 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
       </Box>
       
       <List sx={{ pt: 0 }}>
-        {navigationItems.map((item) => {
+        {getNavigationItems(user?.id || '').filter(item => 
+          item.roles.includes(user?.role || 'team_member')
+        ).map((item) => {
           const isActive = location === item.path;
           
           return (
