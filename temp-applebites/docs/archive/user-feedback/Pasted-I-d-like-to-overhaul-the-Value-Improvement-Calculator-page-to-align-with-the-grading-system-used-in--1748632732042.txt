@@ -1,0 +1,72 @@
+I'd like to overhaul the Value Improvement Calculator page to align with the grading system used in the Apple Bites Valuation Report. Currently, the slider uses a 30–90 “Value Builder Score” model, which doesn't match the output presented in the executive summary or financial breakdown. Please replace this system with a structure based on A–F grades to create internal consistency, improve clarity, and reflect our actual valuation methodology.
+
+📐 Requirements
+1. Replace Score-Based Slider with Grade-Based Slider
+Slider should now use discrete grade stops: A, B, C, D, and optionally F.
+
+Slider title: "Adjust Your Operational Grade"
+
+Subtext: Move the slider to see how improving your business operations impacts your valuation.
+
+2. Map Valuation Multiples to Grades
+Use the following logic to dynamically update valuation outputs when the grade slider changes. Each grade corresponds to a specific EBITDA multiple:
+
+Grade	EBITDA Multiple Range	Suggested Display
+A	6.5x to 9.0x	7.5x default
+B	5.0x to 6.4x	5.7x default
+C	3.5x to 4.9x	4.2x default
+D	2.5x to 3.4x	3.0x default
+F	< 2.5x	2.0x default
+
+Use adjusted EBITDA input (e.g., $1,379,841) to compute and display the valuation.
+
+🖥️ Display Logic
+Left card (Current Value):
+
+Title: Current Value
+
+Subtitle: Based on your Operational Grade of X
+
+Show EBITDA multiple and valuation
+
+Right card (Potential Value):
+
+Title: Potential Value
+
+Subtitle: With an Operational Grade of A
+
+Always assume grade A for this card unless it's already selected
+
+Show max EBITDA multiple from range and projected value
+
+Label color should change based on tier (green = A/B, yellow = C, red = D/F)
+
+📊 Visuals
+Replace the current numerical score range (30–90) with grade stops on the slider.
+
+Update the heatmap or bar at the bottom to reflect valuation distribution bands by grade.
+
+Example Labels:
+
+Red: F to D
+
+Yellow: C
+
+Green: B to A
+
+🧩 Optional Enhancements
+Allow admins to customize multiplier ranges later via dashboard
+
+Consider animations to show value growing as grade improves
+
+Preserve existing styling conventions (Apple Bites font, layout, branding)
+
+✅ Success Criteria
+Slider functions using A–F grading scale
+
+Valuation dynamically recalculates and displays based on grade
+
+Page visually and functionally aligns with the Apple Bites valuation report
+
+Text is business-professional and consumer-friendly
+

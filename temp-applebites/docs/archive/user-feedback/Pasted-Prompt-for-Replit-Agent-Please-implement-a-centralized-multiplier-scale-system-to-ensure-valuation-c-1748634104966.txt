@@ -1,0 +1,92 @@
+Prompt for Replit Agent
+Please implement a centralized multiplier scale system to ensure valuation calculations, executive summaries, and the value calculator all reference the same values and labels. This should replace hardcoded or distributed logic with a unified configuration model.
+
+🧱 Step 1: Create Centralized Multiplier Configuration
+Create this file:
+
+arduino
+Copy
+Edit
+/server/config/multiplierScale.ts
+Contents:
+
+ts
+Copy
+Edit
+export const gradeMultipliers = {
+  "A": { label: "Excellent", multiple: 7.5 },
+  "B": { label: "Good Operations", multiple: 5.7 },
+  "C": { label: "Average", multiple: 4.2 },
+  "D": { label: "Needs Improvement", multiple: 3.0 },
+  "F": { label: "At Risk", multiple: 2.0 }
+};
+🧠 Step 2: Update Valuation Calculation
+In /server/routes/summary.ts:
+
+Replace any hardcoded multiplier logic.
+
+Import the config and use it like this:
+
+ts
+Copy
+Edit
+import { gradeMultipliers } from "../config/multiplierScale";
+
+const grade = scoreToGrade(overallScore); // e.g., returns "B"
+const multiplier = gradeMultipliers[grade].multiple;
+const label = gradeMultipliers[grade].label;
+
+const valuation = adjustedEBITDA * multiplier;
+🧾 Step 3: Update Executive Summary Output
+Add the following sentence inside the executive summary:
+
+“Based on your Operational Grade of B (“Good Operations”), a multiplier of 5.7x was applied to your Adjusted EBITDA to generate the valuation estimate.”
+
+Build this dynamically:
+
+ts
+Copy
+Edit
+summary += ` Based on your Operational Grade of ${grade} (“${label}”), a multiplier of ${multiplier}x was applied to your Adjusted EBITDA to generate the valuation estimate.`;
+📊 Step 4: Update Calculator Page Logic
+Ensure /client/src/pages/value-calculator.tsx or /components/value-calculator.tsx references the same scale.
+
+If using static import:
+
+ts
+Copy
+Edit
+import { gradeMultipliers } from "../../../server/config/multiplierScale";
+const multiplier = gradeMultipliers[userGrade].multiple;
+If you're passing the grade from the report route, use the backend to inject the multiplier and label directly.
+
+🚀 Step 5: Redirect to Calculator on Completion
+At the end of /valuation-results.tsx, add:
+
+tsx
+Copy
+Edit
+<Button
+  onClick={() => router.push("/value-calculator?grade=" + summary.grade)}
+  className="mt-4"
+>
+  Explore Value Growth Opportunities
+</Button>
+🛠 Optional: Future-Proof for Industry
+Structure can be extended:
+
+ts
+Copy
+Edit
+export const industryMultipliers = {
+  default: gradeMultipliers,
+  "238160": { A: {...}, B: {...}, ... } // NAICS-specific
+}
+✅ Expected Outcomes
+Calculator, executive summary, and valuation math will all agree.
+
+Clear messaging to users.
+
+Flexible backend for future industry expansion.
+
+Easy override/update for multiple use cases without breaking alignment.

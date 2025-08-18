@@ -1,0 +1,201 @@
+Quick Start
+To start using this design system you will need to import some files in your current project or start from scratch using our template (scroll down in this page to view it).
+
+Local Development
+If you do not want to use our template as base for your project, and want to integrate our template into your own project, please skip this part and the Live Production one, and go straight to Packages.
+
+Install NodeJS LTS latest version from NodeJS Official Page
+Go to creative tim website and login into your account
+Go to downloads section on creative tim website (be sure to be logged into your account)
+Press the download button near NextJS Material Dashboard 2 or NextJS Material Dashboard 2 PRO product (this will download onto your computer a zip file)
+If NextJS Material Dashboard 2 product does not appear in your downloads section, proceed to download it from here (but please note that you need to be logged into your account)
+If NextJS Material Dashboard 2 PRO product does not appear in your downloads section, you need to first purchase it from here (and after you recieve the confirmation email, you can download the product)
+Unzip the downloaded file to a folder in your computer
+Open your terminal
+Go to your file project (where you’ve unzipped the product)
+Run in terminal yarn install or npm install
+Then run yarn dev or npm run dev
+Or you can simply run yarn run install:clean or npm run install:clean (if you use a linux based terminal) which will install node_modules and will also start your project.
+If you have an error something containing Module not found you need to add our jsconfig.json file to your project
+Navigate to https://localhost:3000
+More information → NextJS
+More information → MUI
+Live Production
+NOTE! Creative Tim unfortunately cannot help you with deploying your app. If you need help on deploying your app to gh-pages we are more than happy to help you with that, but unfortunately we have no other knowledge of deploying a MUI or a NextJS app.
+These are some free open source tutorial on how to deploy a create-react-app app on some servers. Please note that your project might need some additional configs to deploy it on these servers:
+
+Official NextJS docs on deploying
+Tutorial for deploying on heroku
+Tutorial for deploying on AWS S3
+Tutorial for deploying on gh-pages
+Packages
+If you want to add our template over your own project, please add all contents of the package.json file to your own package.json file. And also, please configure yournext.config.js like our own config file.
+
+CSS
+This product makes usage of emotion and sx prop, as our friends from MUI.
+
+We’ve used the ThemeProvider inside pages/_app.js: Style Library Interoperability
+We’ve used the CssBaseline inside pages/_app.js: CSS Baseline
+We’ve used the styled utility inside components/* and examples/* files: Styled
+If you are planning on adding our template into your own project, you will need to add our whole assets folder to your own project.
+
+Starter Template
+You will need to add to your mounting JS file (in our case it is pages/_app.js) the following imports:
+
+Copy
+// @mui material components
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
+// NextJS Material Dashboard 2 themes
+import theme from "/assets/theme";
+1// @mui material components
+2import { ThemeProvider } from "@mui/material/styles";
+3import CssBaseline from "@mui/material/CssBaseline";
+4
+5// NextJS Material Dashboard 2 themes
+6import theme from "/assets/theme";
+And after that, you will also need to initialize the app with our theme:
+
+Copy
+<ThemeProvider theme={theme}>
+  <CssBaseline />
+  // ... your code goes here
+</ThemeProvider>
+1<ThemeProvider theme={theme}>
+2  <CssBaseline />
+3  // ... your code goes here
+4</ThemeProvider>
+we’ve also added RTL support, which comes with its own theme. To get started with the RTL, you can use:
+
+Copy
+import { useState, useMemo } from "react";
+
+// @mui material components
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
+// NextJS Material Dashboard 2 themes
+import themeRTL from "/assets/theme/theme-rtl";
+
+// RTL plugins
+import rtlPlugin from "stylis-plugin-rtl";
+
+// @emotion components
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
+
+export default function MyApp() {
+  const [rtlCache, setRtlCache] = useState(null);
+
+  // Cache for the rtl
+  useMemo(() => {
+    const cacheRtl = createCache({
+      key: "rtl",
+      stylisPlugins: [rtlPlugin],
+    });
+
+    setRtlCache(cacheRtl);
+  }, []);
+
+  // Setting the dir attribute for the body element
+  useEffect(() => {
+    document.body.setAttribute("dir", "rtl");
+  }, []);
+
+  return (
+    <CacheProvider value={rtlCache}>
+      <ThemeProvider theme={themeRTL}>
+        <CssBaseline />
+        // ... your code goes here
+      </ThemeProvider>
+    </CacheProvider>
+  )
+}
+1import { useState, useMemo } from "react";
+2
+3// @mui material components
+4import { ThemeProvider } from "@mui/material/styles";
+5import CssBaseline from "@mui/material/CssBaseline";
+6
+7// NextJS Material Dashboard 2 themes
+8import themeRTL from "/assets/theme/theme-rtl";
+9
+10// RTL plugins
+11import rtlPlugin from "stylis-plugin-rtl";
+12
+13// @emotion components
+14import { CacheProvider } from "@emotion/react";
+15import createCache from "@emotion/cache";
+16
+17export default function MyApp() {
+18  const [rtlCache, setRtlCache] = useState(null);
+19
+20  // Cache for the rtl
+21  useMemo(() => {
+22    const cacheRtl = createCache({
+23      key: "rtl",
+24      stylisPlugins: [rtlPlugin],
+25    });
+26
+27    setRtlCache(cacheRtl);
+28  }, []);
+29
+30  // Setting the dir attribute for the body element
+31  useEffect(() => {
+32    document.body.setAttribute("dir", "rtl");
+33  }, []);
+34
+35  return (
+36    <CacheProvider value={rtlCache}>
+37      <ThemeProvider theme={themeRTL}>
+38        <CssBaseline />
+39        // ... your code goes here
+40      </ThemeProvider>
+41    </CacheProvider>
+42  )
+43}
+You can also follow the instructions from the official MUI docs: MUI Right to Left
+
+We’ve also added Dark Mode support, which comes with its own theme. To get started with the Dark Mode, you can use:
+
+Copy
+// @mui material components
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
+// NextJS Material Dashboard 2 themes
+import theme from "/assets/theme-dark";
+
+<ThemeProvider theme={theme}>
+  <CssBaseline />
+  // ... your code goes here
+</ThemeProvider>
+1// @mui material components
+2import { ThemeProvider } from "@mui/material/styles";
+3import CssBaseline from "@mui/material/CssBaseline";
+4
+5// NextJS Material Dashboard 2 themes
+6import theme from "/assets/theme-dark";
+7
+8<ThemeProvider theme={theme}>
+9  <CssBaseline />
+10  // ... your code goes here
+11</ThemeProvider>
+Fonts and Icons
+If you’ve started a new project and are copying our product there, be sure to add the following lines of code inside your pages/_document.js file:
+
+Copy
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+1<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+Important Globals
+NextJS Material Dashboard employs a handful of important global styles and settings that you’ll need to be aware of when using it, all of which are almost exclusively geared towards the normalization of cross browser styles. Let’s dive in.
+
+Responsive meta tag
+Material Design is developed mobile first, a strategy in which we optimize code for mobile devices first and then scale up components as necessary using CSS media queries. To ensure proper rendering and touch zooming for all devices, add the responsive viewport meta tag to your <head> inside the pages/_app.js file.
+
+Copy
+<meta name="viewport" content="initial-scale=1, width=device-width" />
+1<meta name="viewport" content="initial-scale=1, width=device-width" />
+MUI components
+MUI comes with some required dependencies, however, once you install @mui/material, all its dependencies are installed together with it, so you do not have to worry about this.

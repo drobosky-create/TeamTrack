@@ -1,0 +1,17 @@
+{
+  "name": "Apple Bites Business Valuator",
+  "short_name": "Apple Bites",
+  "description": "Professional business valuation platform with AI-powered insights",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#0b2147",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/apple-bites-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+[
+  {
+    "step": 3,
+    "title": "Financial Information",
+    "questions": [
+      {
+        "id": "financial-1",
+        "question": "What was your annual revenue in the last 12 months?",
+        "type": "number",
+        "valueDriver": "Financial Performance",
+        "scoreRange": [
+          0,
+          0
+        ],
+        "weights": []
+      },
+      {
+        "id": "financial-2",
+        "question": "What were your Cost of Goods Sold (COGS)?",
+        "type": "number",
+        "valueDriver": "Financial Performance",
+        "scoreRange": [
+          0,
+          0
+        ],
+        "weights": []
+      },
+      {
+        "id": "financial-3",
+        "question": "What were your total operating expenses?",
+        "type": "number",
+        "valueDriver": "Financial Performance",
+        "scoreRange": [
+          0,
+          0
+        ],
+        "weights": []
+      }
+    ]
+  },
+  {
+    "step": 4,
+    "title": "EBITDA Adjustments",
+    "questions": [
+      {
+        "id": "adjustments-1",
+        "question": "Owner\u2019s Salary Above Market Rate",
+        "type": "number",
+        "valueDriver": "Financial Performance",
+        "scoreRange": [
+          0,
+          0
+        ],
+        "weights": []
+      },
+      {
+        "id": "adjustments-2",
+        "question": "Personal Expenses Run Through Business",
+        "type": "number",
+        "valueDriver": "Financial Performance",
+        "scoreRange": [
+          0,
+          0
+        ],
+        "weights": []
+      },
+      {
+        "id": "adjustments-3",
+        "question": "One-Time Expenses",
+        "type": "number",
+        "valueDriver": "Financial Performance",
+        "scoreRange": [
+          0,
+          0
+        ],
+        "weights": []
+      },
+      {
+        "id": "adjustments-4",
+        "question": "Other Adjustments",
+        "type": "number",
+        "valueDriver": "Financial Performance",
+        "scoreRange": [
+          0,
+          0
+        ],
+        "weights": []
+      }
+    ]
+  },
+  {
+    "step": 5,
+    "title": "Strategic Value Drivers",
+    "questions": [
+      {
+        "id": "driver-financial-performance-1",
+        "question": "How profitable is your business compared to industry benchmarks?",
+        "type": "single-choice",
+        "options": [
+          "Not profitable",
+          "Below average",
+          "Average",
+          "Above average",
+          "Top-tier"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Financial Performance",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-recurring-revenue-1",
+        "question": "What percentage of your revenue is recurring (contracts, subscriptions)?",
+        "type": "single-choice",
+        "options": [
+          "0%",
+          "1\u201325%",
+          "26\u201350%",
+          "51\u201375%",
+          "76\u2013100%"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Recurring Revenue",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-growth-potential-1",
+        "question": "How much do you expect your revenue to grow in the next 12 months?",
+        "type": "single-choice",
+        "options": [
+          "Decrease",
+          "Flat",
+          "1\u201310%",
+          "11\u201330%",
+          "Over 30%"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Growth Potential",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-owner-dependency-1",
+        "question": "Could your business run for 90 days without your involvement?",
+        "type": "single-choice",
+        "options": [
+          "No",
+          "Barely",
+          "Somewhat",
+          "Mostly",
+          "Yes, seamlessly"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Owner Dependency",
+        "scoreRange": [
+          0,
+          5
+        ]
+      }
+    ]
+  }
+]

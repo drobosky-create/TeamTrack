@@ -1,0 +1,82 @@
+I've noticed several issues in the current implementation. Please address the following items precisely:
+
+🧩 GOAL
+Fix the Material Dashboard integration so that the free vs paid user logic is handled cleanly, and the layout is consistent. It currently shows a mix of both paid and free views in one screen.
+
+🧭 WHAT I EXPECT
+🔹 Sidebar (Left Panel)
+A clear tier indicator at the top showing:
+
+Name: Demo User
+
+Email: demo@applebites.ai
+
+Tier: Free (or Growth, Capital, etc.)
+
+Below that: Three buttons:
+
+New Assessment
+
+Upgrade Plan (if Free Tier)
+
+Past Assessments
+
+✅ These must be styled with Material Dashboard components (MDBox, MDBadge, MDBTypography, etc.) and behave based on the user tier.
+
+🔹 Main Panel (Dashboard Content)
+Title: “Your Free Assessment Dashboard” (or dynamic tier name)
+
+Status Widget: "Assessment Status" with button to Start Assessment
+
+Quick Actions (New Assessment / Upgrade Plan or View Report)
+
+Past Assessments Box with button and sample text if empty
+
+🧱 COMPONENT INTEGRATION REQUIREMENTS
+You mentioned the following are available:
+
+MDBox → Replaces Box
+
+MDTypography → Replaces Typography
+
+MDButton → Replaces Button
+
+✅ Please replace all components in this view with their MD* counterparts and maintain current layout & CSS as close as possible.
+
+⚠️ ISSUES I AM SEEING
+The current build has mixed layout logic (some components look like the free version, others like paid)
+
+Changes don’t seem to reflect after commits
+
+Sidebar buttons do not behave differently per user tier
+
+Dashboard styling and padding is inconsistent with the rest of the theme
+
+🧪 THINGS TO VERIFY
+✅ Conditional rendering: Free tier shows Upgrade button, paid tiers do not.
+
+✅ Styling: All buttons, boxes, and text use Material Dashboard styling.
+
+✅ State: Pull correct tier from current user (e.g. auth.user.tier)
+
+✅ Components render cleanly and fully in /dashboard
+
+🧰 BONUS
+If helpful, you may create a new layout file or route that is clean (no legacy code or demo views), as long as:
+
+The layout file clearly replaces the old dashboard view
+
+The sidebar and main content are encapsulated and reusable
+
+You inform me in comments what to update in routing if applicable
+
+Please respond with:
+
+Which components/pages you modified
+
+How the user tier logic is applied
+
+Any temporary files or logic used for testing
+
+Let me know if you want fallback instructions for a simplified version.
+

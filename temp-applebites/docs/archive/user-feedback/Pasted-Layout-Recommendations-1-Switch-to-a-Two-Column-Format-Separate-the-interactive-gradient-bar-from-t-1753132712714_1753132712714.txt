@@ -1,0 +1,101 @@
+Layout Recommendations
+1. Switch to a Two-Column Format
+Separate the interactive gradient bar from the details panel.
+
+plaintext
+Copy
+Edit
+--------------------------------------
+| Business Value by Operational Grade |
+|------------------------------------|
+|   Gradient Bar (Horizontal)        |
+|   A   B   C   D   F                |
+|   (clickable, evenly spaced)       |
+|                                    |
+|------------------------------------|
+|  ↙ Tooltip shifts based on space   |
+|------------------------------------|
+|  Details Panel below (Grade C)     |
+--------------------------------------
+2. Use Consistent Sizing and Spacing
+Make each grade marker (A, B, C, etc.) have:
+
+Fixed width
+
+Centered text
+
+Margin between them (not floating/absolute unless needed)
+
+Example:
+
+jsx
+Copy
+Edit
+<div className="grid grid-cols-5 gap-4 mt-6">
+  {grades.map(item => (
+    <div key={item.grade} className="text-center relative group">
+      <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-xl font-bold">
+        {item.grade}
+      </div>
+      <div className="text-xs mt-1 text-gray-500">{item.multiple}x</div>
+      <div className="text-xs text-gray-400">{item.label}</div>
+
+      {/* Tooltip (auto-shifting version below) */}
+      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-white text-sm text-gray-800 rounded shadow-md opacity-0 group-hover:opacity-100 transition pointer-events-none z-10 max-w-[150px]">
+        Grade {item.grade}: {item.multiple}x – {item.label}
+      </div>
+    </div>
+  ))}
+</div>
+3. Improve the Gradient Bar
+Make the gradient bar less bulky and move it higher, with a fixed container:
+
+jsx
+Copy
+Edit
+<div className="w-full h-4 bg-gradient-to-r from-blue-300 to-blue-900 rounded overflow-hidden shadow-inner mt-4 mb-6" />
+4. Tooltip Logic (Professional Behavior)
+Instead of absolute center:
+
+Shift left if it’s the last item (A)
+
+Shift right if it's the first (F)
+
+Center for middle items
+
+You can do that with utility classes OR:
+
+tsx
+Copy
+Edit
+<div className={`tooltip absolute ${
+  item.grade === 'A' ? 'right-0' :
+  item.grade === 'F' ? 'left-0' :
+  'left-1/2 transform -translate-x-1/2'
+}`}>
+5. Panel Styling
+The Grade Summary panel below could look more like a “card”:
+
+jsx
+Copy
+Edit
+<div className="bg-white rounded-lg shadow-md p-4 mt-8 text-center">
+  <div className="text-lg font-bold">Grade {selectedGrade}</div>
+  <div className="text-gray-500 text-sm">
+    Multiple: <span className="font-medium text-blue-600">{multiple}x</span> • {label} Operations
+  </div>
+</div>
+✨ Final Visual Flow:
+plaintext
+Copy
+Edit
+Title: Business Value by Grade
+
+[Gradient Bar] — clickable
+
+[A]  [B]  [C]  [D]  [F]   ← evenly spaced with tooltips on hover
+
+↓
+[Details Card]
+Grade C
+4.2x • Average Operations

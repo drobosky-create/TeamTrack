@@ -1,0 +1,57 @@
+ Refinement Suggestions
+1. Stepper Contrast & Readability
+Issue: Step text (Step 1, Step 2, etc.) is slightly hard to read on the navy.
+
+Fix:
+
+tsx
+Copy
+Edit
+text-slate-100 font-medium tracking-wide
+Optional: Add hover states to inactive steps (hover:bg-slate-700 hover:scale-[1.02])
+
+2. Form Layout
+Issue: The form still looks like a boilerplate form rather than a data-gathering diagnostic.
+
+Fix:
+
+Add section headers or groupings:
+Example:
+
+jsx
+Copy
+Edit
+<h3 className="text-sm font-semibold text-slate-500 mb-2">Contact Details</h3>
+Stack First/Last Name on one row (good).
+
+Stack Email/Phone on another (but align the fields tighter).
+
+Group “Company” and “Job Title” under a "Business Info" header.
+
+3. “Continue” CTA Button
+Upgrade:
+
+tsx
+Copy
+Edit
+className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] hover:from-[#112e5a] hover:to-[#1e4471] text-white font-semibold px-6 py-3 rounded-xl shadow-lg transition-all"
+Optional: Add a subtle arrow icon (<ArrowRightIcon className="w-4 h-4 ml-2" />)
+
+4. Visual Continuity / Branding
+Your current layout leans “corporate clean,” but Apple Bites is sharper than that—play into it:
+
+Make the left stepper bar background slightly glossy (bg-gradient-to-br, add subtle radial shimmer)
+
+Add your dark-apple watermark faintly in the background of the form card (absolute-positioned SVG watermark)
+
+🧭 Final Touches
+Area	Enhancement
+Stepper Icons	Add hover tooltips (e.g., "Start with basic contact info…")
+Mobile Responsiveness	Collapse stepper into dropdown or horizontal bar for mobile
+Validation Feedback	Add text-red-500 validation messages with animation for failed inputs
+Completion Feedback	Consider adding a subtle progress bar (20%, 40%, etc.) or summary preview right after Step 5
+
+Verdict:
+You're within striking distance of a refined, investor-facing valuation UX. With a few polish passes—grouping, gradient depth, CTA weight—this will look custom-built, not templated.
+
+Want the JSX for these upgrades? I can send it with Tailwind classes applied.

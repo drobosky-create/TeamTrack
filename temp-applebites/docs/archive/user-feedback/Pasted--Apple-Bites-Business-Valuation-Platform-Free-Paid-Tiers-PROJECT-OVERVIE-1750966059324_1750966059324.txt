@@ -1,0 +1,145 @@
+## 🍎 Apple Bites – Business Valuation Platform (Free & Paid Tiers)
+
+---
+
+### 🧭 PROJECT OVERVIEW
+
+Apple Bites needs to be a two-tier business valuation application designed for business owners and M\&A professionals. It uses a guided form to collect company data, apply scoring logic, and return an estimated valuation range.
+
+The platform delivers two types of assessments:
+
+---
+
+### 💡 VERSION TIERS
+
+#### 1️⃣ FREE VERSION (Basic Report)
+
+* No NAICS/SIC input or industry-specific logic
+* Uses a **fixed multiplier range** (e.g., 3x–8x)
+* Value estimate = Adjusted EBITDA × generic multiplier
+* A–F grades for value drivers
+* No AI narrative or NAICS-specific valuation curve
+* Results are shown on-screen only (no downloadable report)
+* Watermarked or labeled as “Starter Report”
+
+---
+
+#### 2️⃣ PAID VERSION (Strategic Report)
+
+* Includes NAICS and SIC code input
+* Multiplier range is dynamically tied to NAICS (e.g., 3.1x to 6.65x with strategic cap at 10.2x)
+* Score-weighted interpolation to determine precise multiple
+* GPT-generated narrative summary (3-paragraph strategic assessment)
+* Value driver breakdown (A–F grades) with a visual slider
+* Bell curve visual based on real market multiples
+* Exportable **PDF Report**
+* Optional **Google Slides** or **PowerPoint** presentation deck
+* Email delivery + GoHighLevel CRM webhook with tagging
+* Stripe paywall required to unlock this version
+
+---
+
+## 🔥 CURRENT PRIORITY TASK – PAID PDF REPORT GENERATION
+
+### ✅ GOAL:
+
+Build the infrastructure to generate a **presentation-ready PDF** containing:
+
+* Company name, NAICS/SIC, founding year
+* Adjusted EBITDA + calculated business value
+* Score-weighted multiplier explanation
+* Value driver results (A–F)
+* Visuals: gradient valuation slider + bell curve
+* Placeholder for GPT-generated narrative
+* Call-to-action footer (Schedule Call, Explore Value, etc.)
+
+### 🧰 TECH REQUIREMENTS:
+
+* Use **Puppeteer** to render HTML into PDF (server-side)
+* Use **Chart.js** or static SVGs for visuals
+* Use **Tailwind CSS** (or inline styles) for layout
+* Store PDFs in `/public/reports/[leadId].pdf`
+* Admins must be able to preview and re-generate
+
+### 🗂️ Suggested File Structure:
+
+```
+/api/report/generate.ts
+/templates/report.html
+/templates/report.css
+/utils/pdfRenderer.ts
+/public/reports/[slug].pdf
+```
+
+---
+
+## 📬 FUTURE TASK: EMAIL + CRM DELIVERY (Post-PDF)
+
+* Use **Resend** or **Postmark** to email report to the user
+* Webhook to **GoHighLevel** with lead name, score, tags
+* Auto-tag based on value range or weak drivers
+* Option to resend via Admin dashboard
+
+---
+
+## 🧠 FUTURE TASK: GPT NARRATIVE INJECTION
+
+* Generate summary using OpenAI GPT-4
+* Prompt includes:
+
+  * Industry (NAICS label)
+  * EBITDA
+  * Driver grades
+* Write 3-paragraph analyst-style summary
+* Inject into PDF and report page
+
+#### Sample Prompt:
+
+> "Write a business valuation summary for a company in the \[NAICS\_LABEL] industry with $\[EBITDA] EBITDA and these driver grades: Financial: B, Growth: C, Recurring: F... Summarize strengths, risks, and next steps to improve value."
+
+---
+
+## 🧾 FUTURE ENHANCEMENT: SLIDE DECK GENERATION (PAID USERS)
+
+### 🔄 Google Slides Integration
+
+* Use **Google Slides API** to inject:
+
+  * Company info
+  * Valuation range
+  * Value drivers
+  * Strategic narrative
+* Export view-only Slides link to user
+
+### 📥 PowerPoint Export (Optional)
+
+* Use `pptxgenjs` or Puppeteer-to-PPTX pipeline
+* Matches PDF content in slide format
+
+**Use Case:**
+
+* For users to present their value to investors, partners, or team
+* White-label opportunity for advisors
+
+**Output Paths:**
+
+```
+/public/slides/[leadId].pptx
+/public/slides/[leadId].gslides.json
+```
+
+**Trigger:**
+
+* Button: “Generate Presentation”
+* Post-PDF or on Paid Dashboard
+
+---
+
+## ✅ RECAP
+
+* Free users get a simple web-only report with generic logic
+* Paid users get a detailed, downloadable PDF, narrative, and optional deck
+* Current priority = **paid PDF builder**
+* Follow with GPT narrative, email delivery, CRM sync, and slide export
+
+This setup must support **scalable delivery**, **tiered access**, and **professional quality output** across all channels.

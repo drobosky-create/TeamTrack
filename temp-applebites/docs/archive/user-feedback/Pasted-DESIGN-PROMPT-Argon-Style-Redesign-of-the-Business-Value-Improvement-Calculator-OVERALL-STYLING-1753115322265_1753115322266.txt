@@ -1,0 +1,82 @@
+DESIGN PROMPT: Argon-Style Redesign of the Business Value Improvement Calculator
+
+🔷 OVERALL STYLING DIRECTION:
+
+Apply Argon’s visual language:
+
+Sleek glassmorphism-inspired containers
+
+Minimalist typography with strong hierarchy
+
+Soft shadows, clean spacing, and subtle hover/scroll animations
+
+Color tones with soft saturation—no overly bright reds/greens
+
+Responsive and mobile-first layout
+
+🧩 SECTION-BY-SECTION STYLING INSTRUCTIONS:
+
+1. Header Section:
+Title: Use large, bold text with wide letter spacing.
+Font: DM Sans or Inter, weight 600–700
+
+Subtitle: Muted gray (#64748B) with tighter line height
+
+Spacing: Add 32–48px top and bottom margin for clean separation
+
+2. Current vs Potential Value Cards:
+Use two responsive, rounded card containers with slight drop shadow and light blur
+
+Font sizes should scale with screen (use clamp() if possible)
+
+Value numbers: bold and dark (#0F172A), use $ formatting with commas
+
+"Move the slider" note → replace with “Adjust the slider below to explore your potential”, styled as muted secondary
+
+3. Adjust Your Operational Grade:
+Remove hard border; replace with soft-glow shadow
+
+Highlight “Your Current Grade” using a pill badge (Argon-style chip: rounded, white text, navy background)
+
+Gradient scale bar should use muted Argon-friendly hues:
+
+F: #DC2626
+
+C: #FACC15
+
+A: #22C55E
+Add hover tooltips for each grade
+
+Add subtle transition effect when changing grade (opacity fade + number counter)
+
+Replace “Selected Grade” box with a card-style display:
+
+yaml
+Copy
+Edit
+▓ Selected Grade ▓  
+Operational Grade: C  
+Multiple: 4.2x  
+4. How to Improve Your Operational Grade:
+Replace current box with a 2-column grid layout with soft card backgrounds
+
+Title: use H3 styling, semibold
+
+Each category (Financial Performance, Market Position, etc.):
+
+Use Argon icon bullets (or emojis) to draw the eye
+
+Highlight the grade + multiple in a badge-style callout (e.g., “Grade A: 7.5x” as a colored pill or label)
+
+Use tighter spacing and slightly larger font for category descriptions
+
+🎯 FUNCTIONAL UPGRADES (Optional but Recommended):
+
+Add a “Next Step” CTA under the chart:
+
+“Get Your Customized Value Roadmap →” (button styled in Argon blue #3B82F6, rounded full, shadow on hover)
+
+Enable sharing or download of results as PDF snapshot (Argon style export modal)
+
+Make slider or grade bar touch-responsive for mobile UX
+

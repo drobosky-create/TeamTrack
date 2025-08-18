@@ -1,0 +1,86 @@
+NAICS-Aware Overlay for Deal Structure Fit
+1. NAICS Categories to Watch
+Group NAICS codes into strategic “deal environment clusters” that reflect how transactions usually occur:
+
+Category	NAICS Prefix	Typical Deal Implications
+SaaS / Tech / Subscription	5112, 5182, 5191, 5415	Revenue-based valuation; PE roll-ups; Strategic IP acquisition; Recurring rev is king
+Healthcare Services	621, 623, 624	Regulatory hurdles; platform and add-on deals; often PE-backed
+Construction & Trades	23, 238, 236	High owner-dependency; often Owner-Op, SBA-backed, or roll-ups
+Professional Services	5411–5419	PE roll-ups (marketing, accounting); management transfer is key
+Manufacturing / Industrial	31–33	EBITDA multiples; LBOs, Strategic buys, ESOPs in legacy firms
+Retail / Consumer Goods	44–45, 31–33	Often asset-heavy; SKU/IP acquisitions, strategic distribution deals
+Logistics / Transportation	48–49	Route-based valuation; private equity consolidation; MBO or ESOP options
+Franchise / Local Service Ops	812, 561	Typically SBA, Seller-Financed, or Search Fund plays
+Media / Agency / Marketing	5418, 512	IP, contracts, and people are the value; Strategic or minority recap
+Financial Services	52, 53	Regulated—requires license transfer; common for recap or platform roll-ups
+
+2. How to Use This in Logic
+✅ Add NAICS as a required field on assessment submission
+(Support full 6-digit match, but fall back to prefix if needed)
+
+✅ Inject into scoring logic as a “constraint and enhancer”:
+Constraint:
+For example, do not suggest LBO or PE Platform if the NAICS code is in a highly fragmented, low-margin industry (e.g., 8121: Personal Care Services).
+
+Enhancer:
+If NAICS code is 541611 (Admin Management Consulting), even if recurring revenue is modest, still boost "Add-On Acquisition" likelihood due to active PE roll-up activity in that vertical.
+
+3. Sample Conditional Logic to Include in Agent
+ts
+Copy
+Edit
+if (naics.startsWith("5415") && recurringRevScore >= 3.5) {
+  deals.push({
+    dealType: "SaaS Roll-Up",
+    rationale: "Your NAICS code places you in a software-driven industry. Combined with strong recurring revenue, this makes you ideal for a SaaS aggregator or roll-up.",
+    relevanceScore: 0.95,
+    tags: ["SaaS", "Recurring Revenue", "NAICS 5415"]
+  });
+}
+
+if (naics.startsWith("621") && valuation > 7_000_000 && mgmtScore >= 4) {
+  deals.push({
+    dealType: "Private Equity Platform",
+    rationale: "As a healthcare provider with scale and leadership, you're highly attractive to healthcare-focused PE firms building platforms in NAICS 621.",
+    relevanceScore: 0.93,
+    tags: ["Healthcare", "PE Interest", "NAICS 621"]
+  });
+}
+4. How to Operationalize
+Add a NAICS parser module in the Agent backend that:
+
+Extracts the 2-, 3-, and 6-digit variants
+
+Maps them to deal strategy tags
+
+Maintain a JSON config for NAICS-to-deal-type boosting like:
+
+json
+Copy
+Edit
+{
+  "5415": ["SaaS Roll-Up", "Growth Equity", "Strategic Acquisition"],
+  "621": ["PE Platform", "Add-On", "MBO"],
+  "238": ["Owner-Operator", "SBA-Backed", "Roll-Up"]
+}
+🔚 Final Recommendation
+Update your generateDealStructureFit(profile) function to include:
+
+valueDriverScores
+
+estimatedValuation
+
+naicsCode
+
+industryTags[] (optional, inferred from NAICS)
+
+triggerFlags[] (e.g., "Recurring Revenue = A", "Owner Dep = High")
+
+Then return deal matches ranked by cumulative match weight across all three vectors:
+
+Assessment scores
+
+NAICS implications
+
+Strategic fit heuristics
+

@@ -1,0 +1,143 @@
+Perfect — thank you for the clarity.
+
+Here is the **accurate, corrected, and fully aligned AppleBites Replit Build Prompt**, using **your exact webhook versioning (1.0, 2.0, 2.1, 3.0)**, mapped correctly to **incoming and outgoing flow**. This version aligns with your latest directive to remove token logic, allow password-based account setup, and reflect **true customer journey + webhook behavior**.
+
+---
+
+## ✅ APPLEBITES REPLIT DEV PROMPT
+
+**Purpose**: Define backend logic for Replit to receive incoming GHL webhooks, create users, store results, and support password-based login without token gates.
+
+---
+
+### 🧭 CUSTOMER JOURNEY & BACKEND FLOW
+
+---
+
+### 🛒 **Step 1: User Makes a Purchase in GoHighLevel**
+
+* The customer chooses a product tier:
+
+  * Free (Basic Report)
+  * Growth (Pro Analysis)
+  * Capital (Coming Soon)
+* GHL processes the purchase and triggers a webhook to Replit.
+
+---
+
+### 🔄 **Step 2: Webhook Activity and Structure**
+
+| Webhook Version | Webhook Direction    | Tier Name        | URL / ID                                                   | Purpose                                                                 |
+| --------------- | -------------------- | ---------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------- |
+| 1.0             | Outgoing from Replit | Free Results     | `dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3`                     | Used to deliver free tier result data to external system (GHL or email) |
+| 2.0             | Incoming to Replit   | Growth Purchase  | `https://applebites.ai/api/webhook/growth-purchase`        | GHL → Replit: Triggers user creation for paid Growth tier               |
+| 2.1             | Outgoing from Replit | Growth Results   | `016d7395-74cf-4bd0-9c13-263f55efe657`                     | Sends Growth results once ready to external system (GHL or email)       |
+| 3.0             | Incoming to Replit   | Capital Purchase | `https://applebites.ai/api/webhook/capital-purchase` (TBD) | GHL → Replit: Will follow same flow as Growth Purchase                  |
+
+---
+
+### ⚙️ **Step 3: Replit Webhook Handler Logic**
+
+When Replit receives a webhook (2.0 or 3.0):
+
+1. ✅ **Verify Source**
+
+   * Validate the webhook using shared secret or header check.
+
+2. 📥 **Extract Payload**
+
+   * Required fields:
+
+     * `email`
+     * `full_name`
+     * `product_tier` (implied by endpoint hit)
+     * Optional: `ghl_contact_id`, `phone`
+
+3. 👤 **User Handling**
+
+   * **If user exists**: update their `tier`, `status`, or `result_available` field.
+   * **If new user**: create record:
+
+     * `email`, `name`, `tier`, `ghl_contact_id`, etc.
+     * `password_hash = NULL`
+     * `awaiting_password_creation = TRUE`
+
+4. 💬 **Trigger Transactional Message via GHL**
+
+   * GHL sends transactional email:
+
+     * **Subject**: “You're In — Set Up Your AppleBites Account”
+     * **CTA**: [Login to AppleBites](https://applebites.ai/login)
+   * Replit does not send this message — GHL handles it.
+
+---
+
+### 🔐 **Step 4: Login Flow & Account Creation**
+
+* User clicks the login CTA in the email.
+* They enter their email.
+* **If `password_hash = NULL`**:
+
+  * Redirect to “Create Password” screen.
+  * Store hashed password once submitted.
+* Then direct to the appropriate dashboard (`/free`, `/growth`, or `/capital`).
+
+---
+
+### 📊 **Step 5: Results Handling**
+
+* For **Free** or **Growth** users:
+
+  * Once analysis is complete:
+
+    * Replit triggers **outgoing webhook** (1.0 for Free, 2.1 for Growth).
+    * This sends results back to GHL, email, or another system.
+    * Also marks the user record in DB with `result_ready = true`.
+* When user logs in:
+
+  * If `result_ready = true`, display unlocked dashboard and results.
+
+---
+
+### 🧱 Database Notes (Schema Outline)
+
+```ts
+User {
+  email: string
+  full_name: string
+  password_hash: string | null
+  tier: "free" | "growth" | "capital"
+  ghl_contact_id?: string
+  awaiting_password_creation: boolean
+  result_ready: boolean
+  created_at: timestamp
+  updated_at: timestamp
+}
+```
+
+---
+
+### ✅ Replit Task Summary
+
+1. Set up 3 **incoming** webhook endpoints:
+
+   * `growth-purchase` (2.0)
+   * `capital-purchase` (3.0)
+   * `free-results` (1.0) \[only used as outbound sender for result delivery]
+
+2. Add logic to:
+
+   * Create/update users
+   * Support password-based account creation
+   * Mark `result_ready` status
+   * Sync GHL email triggers
+
+3. Provide endpoints/pages for:
+
+   * `/login` → email and password form
+   * `/create-password` if `password_hash = NULL`
+   * `/dashboard/free`, `/dashboard/growth`, etc.
+
+---
+
+Let me know if you want this as a downloadable .md or to drop into your `main.py` as structured comments.

@@ -1,0 +1,81 @@
+Visual Enhancement for Steps 1–5
+Right now it looks a bit plain and crowded. Here's what you can enhance:
+
+🎯 Suggestions:
+Add icons for each step to make them visually distinguishable.
+
+Use a pill-shaped background for active/current step
+
+Add hover/transition effects
+
+Scale down spacing between step items to make them all fit in a single line.
+
+🔧 CSS/JSX Improvement Example:
+jsx
+Copy
+Edit
+<div className="flex justify-between gap-4 px-4 py-4 bg-white rounded-xl shadow-md">
+  {steps.map((step, index) => {
+    const isCurrent = step.number === currentStepNumber;
+    const isCompleted = step.number < currentStepNumber;
+
+    return (
+      <div key={step.id} className="flex items-center space-x-2 flex-1">
+        <div
+          className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
+            isCurrent
+              ? "bg-[#0b2147] text-white scale-110 shadow-md"
+              : isCompleted
+              ? "bg-green-500 text-white"
+              : "bg-slate-200 text-slate-400"
+          }`}
+        >
+          {step.number}
+        </div>
+        <div>
+          <p
+            className={`text-xs font-semibold ${
+              isCurrent ? "text-slate-900" : "text-slate-400"
+            }`}
+          >
+            {step.label}
+          </p>
+          {isCurrent && (
+            <p className="text-xs text-[#0b2147] font-medium">Current</p>
+          )}
+        </div>
+      </div>
+    );
+  })}
+</div>
+✨ Optional: Add Icons
+If you're open to using icons (like react-icons or lucide-react), here's an idea:
+
+jsx
+Copy
+Edit
+import { FaUser, FaCalculator, FaWrench, FaStar, FaCheck } from 'react-icons/fa';
+
+const iconMap = {
+  1: <FaUser />,
+  2: <FaCalculator />,
+  3: <FaWrench />,
+  4: <FaStar />,
+  5: <FaCheck />,
+};
+
+// Inside your loop
+<div className="relative">
+  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-200">
+    {iconMap[step.number]}
+  </div>
+</div>
+This adds a modern, guided feel to each section.
+
+✅ Summary of What to Change:
+Area	Fix
+Logo	Remove negative margins; use mx-auto and mb-4
+Step Bar	Add padding (py-4), gap (gap-4), scale down spacing
+Current Step	Use scale-110, shadow-md, and bold text
+Icons (Optional)	Add react-icons or SVGs for visual clarity
+Hover/Transition	Add hover:scale-105, transition-all duration-300

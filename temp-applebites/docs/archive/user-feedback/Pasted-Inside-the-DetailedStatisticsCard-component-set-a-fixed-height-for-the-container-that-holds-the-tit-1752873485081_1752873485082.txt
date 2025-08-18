@@ -1,0 +1,75 @@
+Inside the DetailedStatisticsCard component, set a fixed height for the container that holds the title and count, ensuring consistent spacing:
+
+Step 1
+Wrap the title and count inside a fixed-height container.
+
+Update your DetailedStatisticsCard (if accessible) or adjust the surrounding markup:
+
+jsx
+Copy
+Edit
+<div className="flex flex-col h-full justify-between">
+  <div className="h-[80px]"> {/* Adjust the height to your needs */}
+    <ArgonTypography>{title}</ArgonTypography>
+    <ArgonTypography variant="h4">{count}</ArgonTypography>
+  </div>
+
+  <div className="mt-auto"> {/* This pushes the icon and percentage to bottom */}
+    <IconComponent />
+    <PercentageComponent />
+  </div>
+</div>
+Step 2 (If adjusting externally)
+If you prefer not to edit DetailedStatisticsCard, adjust the card containers from the parent grid container:
+
+jsx
+Copy
+Edit
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+  {/* Each DetailedStatisticsCard */}
+  <div className="flex flex-col justify-between h-full">
+    <DetailedStatisticsCard ... />
+  </div>
+</div>
+Why this works:
+By providing a fixed height for the upper content, the icons and percentage details naturally line up at the bottom.
+
+Final Recommended Adjustment:
+Your updated grid:
+
+jsx
+Copy
+Edit
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+  <div className="flex flex-col justify-between h-full">
+    <DetailedStatisticsCard
+      title="Account Status"
+      count="Active"
+      icon={{ color: "success", component: <CheckCircle className="w-6 h-6" /> }}
+      percentage={{ color: "success", count: "100%", text: "complete" }}
+    />
+  </div>
+  <div className="flex flex-col justify-between h-full">
+    <DetailedStatisticsCard
+      title="Assessment Tier"
+      count={tierInfo.price}
+      icon={{ color: "primary", component: <TierIcon className="w-6 h-6" /> }}
+    />
+  </div>
+  <div className="flex flex-col justify-between h-full">
+    <DetailedStatisticsCard
+      title="Reports Generated"
+      count="1"
+      icon={{ color: "warning", component: <FileText className="w-6 h-6" /> }}
+      percentage={{ color: "success", count: "+1", text: "this month" }}
+    />
+  </div>
+  <div className="flex flex-col justify-between h-full">
+    <DetailedStatisticsCard
+      title="Business Value"
+      count="$2.4M"
+      icon={{ color: "success", component: <DollarSign className="w-6 h-6" /> }}
+      percentage={{ color: "success", count: "+15%", text: "vs industry avg" }}
+    />
+  </div>
+</div>

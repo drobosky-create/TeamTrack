@@ -1,0 +1,100 @@
+Action Plan: Unify Replit Theme with GHL
+1. Extract GHL Brand Tokens
+From your CSS, the core brand values are:
+
+css
+Copy
+Edit
+:root {
+  --primary: #37ca37;
+  --secondary: #188bf6;
+  --white: #ffffff;
+  --black: #000000;
+  --gray: #cbd5e0;
+  --yellow: #faf089;
+  --overlay: rgba(0, 0, 0, 0.5);
+
+  --font-primary: 'Montserrat', sans-serif;
+  --font-content: 'Manrope', sans-serif;
+
+  /* GHL brand-specific additions */
+  --color-mctknad1: #0b2147; /* Used for header backgrounds */
+  --text-color: var(--white);
+  --link-color: #188bf6;
+}
+You should copy these variables into your client/src/index.css file in Replit inside a :root block.
+
+2. Update Tailwind Config (Optional but Recommended)
+In your tailwind.config.js, extend Tailwind's theme with these GHL styles:
+
+js
+Copy
+Edit
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#37ca37',
+        secondary: '#188bf6',
+        overlay: 'rgba(0, 0, 0, 0.5)',
+        deepNavy: '#0b2147',
+        brandGray: '#cbd5e0',
+        brandYellow: '#faf089',
+      },
+      fontFamily: {
+        heading: ['Montserrat', 'sans-serif'],
+        body: ['Manrope', 'sans-serif'],
+      },
+    },
+  },
+};
+Then use them in your Tailwind components:
+
+html
+Copy
+Edit
+<h1 className="text-primary font-heading">Welcome</h1>
+<p className="text-secondary font-body">This matches the GHL site.</p>
+3. Match Placeholder Styling
+Use this in your CSS to match GHL input placeholders:
+
+css
+Copy
+Edit
+input::placeholder {
+  color: #cbd5e0 !important; /* Matches GHL gray */
+  opacity: 1;
+}
+
+input:-webkit-autofill {
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+4. Import GHL Fonts in Replit
+In index.html or in the global layout component of your app, add:
+
+html
+Copy
+Edit
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+This ensures the same typography base as your GHL pages.
+
+5. Ask Replit AI to Match Styling
+Here’s what you can paste into Replit AI:
+
+🔧 “Please apply the following global CSS variables and Tailwind config updates to match our GHL theme:
+
+Primary: #37ca37
+
+Secondary: #188bf6
+
+Backgrounds: #0b2147
+
+Fonts: Montserrat for headings, Manrope for body
+
+Placeholder color: #cbd5e0
+
+Make sure all form fields, buttons, and hover states reflect this theme.
+
+Let’s also remove the yellow placeholder issue once and for all.”
+

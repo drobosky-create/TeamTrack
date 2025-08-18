@@ -1,0 +1,116 @@
+Problem: When the left sidebar (drawer) is open on mobile, the page content behind it continues to scroll and remains interactive.
+Expected: Opening the sidebar should lock background scroll and block interaction with underlying content.
+Actual: Sidebar stays fixed, but the document/body scrolls; elements behind remain tappable.
+Devices/Browsers: iOS Safari (repro on iPhone), likely all mobile browsers.
+Steps to reproduce:
+
+Open applebites.ai on mobile.
+
+Tap the hamburger to open the sidebar.
+
+Swipe/scroll—the main content behind the sidebar moves.
+
+Likely root causes to mention
+Body scroll isn’t locked when the drawer is open (overflow not changed, scroll lock disabled).
+
+Missing inert/backdrop, so background still receives pointer/touch events.
+
+iOS Safari quirk: overflow: hidden on body alone doesn’t always prevent touch scroll without additional handling.
+
+Ask the AI to implement these fixes
+Lock body scroll while the drawer is open (and restore it on close), preserving scroll position.
+
+Block background interaction with an overlay + inert (or aria-hidden) and pointer-events: none on the app root when the drawer is open.
+
+Handle iOS Safari properly (position: fixed technique or prevent touchmove on the background).
+
+Minimal patch (React/MUI example)
+tsx
+Copy
+Edit
+// Sidebar.tsx
+import { useEffect } from 'react';
+
+export function useBodyScrollLock(locked: boolean) {
+  useEffect(() => {
+    if (!locked) return;
+    const scrollY = window.scrollY;
+    const original = {
+      position: document.body.style.position,
+      top: document.body.style.top,
+      width: document.body.style.width,
+      overflow: document.body.style.overflow,
+      overscrollBehavior: document.body.style.overscrollBehavior,
+    };
+
+    // iOS-safe lock
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+    document.body.style.overscrollBehavior = 'contain';
+
+    return () => {
+      document.body.style.position = original.position;
+      document.body.style.top = original.top;
+      document.body.style.width = original.width;
+      document.body.style.overflow = original.overflow;
+      document.body.style.overscrollBehavior = original.overscrollBehavior;
+      window.scrollTo(0, scrollY);
+    };
+  }, [locked]);
+}
+
+// In your drawer component
+const [open, setOpen] = useState(false);
+useBodyScrollLock(open);
+
+<Drawer
+  anchor="left"
+  open={open}
+  onClose={() => setOpen(false)}
+  ModalProps={{
+    keepMounted: true,
+    // IMPORTANT: ensure scroll lock is NOT disabled
+    disableScrollLock: false,
+  }}
+  PaperProps={{ sx: { position: 'fixed', height: '100%', top: 0 } }}
+/>
+
+// App root wrapper
+<div id="app-root" inert={open ? '' : undefined} aria-hidden={open ? 'true' : undefined}
+     style={{ pointerEvents: open ? 'none' : 'auto' }}>
+  {/* main content */}
+</div>
+CSS overlay (if you’re not using MUI’s Modal backdrop)
+css
+Copy
+Edit
+.drawer-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1199; /* below drawer but above content */
+}
+.drawer {
+  position: fixed; top: 0; left: 0; height: 100vh; z-index: 1200;
+}
+If not using React/MUI
+Add a no-scroll class on body when the menu opens, and remove on close.
+
+js
+Copy
+Edit
+function lockBody() {
+  const y = window.scrollY;
+  document.body.dataset.scrollY = y;
+  Object.assign(document.body.style, {
+    position: 'fixed', top: `-${y}px`, width: '100%',
+    overflow: 'hidden', overscrollBehavior: 'contain'
+  });
+}
+function unlockBody() {
+  const y = +(document.body.dataset.scrollY || 0);
+  Object.assign(document.body.style, { position: '', top: '', width: '', overflow: '', overscrollBehavior: '' });
+  window.scrollTo(0, y);
+}
+Add a full-screen backdrop and set the main app container to inert or pointer-events: none while open.

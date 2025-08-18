@@ -1,0 +1,112 @@
+ Objective:
+The header section should be narrower than the form.
+
+It should appear like a floating card above the login fields.
+
+There should be visible white spacing around it (as you've marked in blue).
+
+💡 Here's How to Do It:
+Update your layout to:
+
+Set a fixed maxWidth (like 300px) for the <HeaderSection>
+
+Apply a border-radius + box-shadow
+
+Use margin: '0 auto' to center it horizontally inside the wider form.
+
+✅ Example Code
+Update your HeaderSection like this:
+
+tsx
+Copy
+Edit
+<HeaderSection
+  sx={{
+    maxWidth: '320px',
+    backgroundColor: '#2c2c3c', // or your brand gray/blue
+    borderRadius: '16px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+    padding: '24px 16px',
+    margin: '0 auto',
+    position: 'relative',
+    top: '-40px', // this pulls it visually into the white card
+    zIndex: 2,
+  }}
+>
+  <Box
+    component="img"
+    src={appleBitesLogo}
+    alt="Apple Bites Business Assessment"
+    sx={{
+      height: '200px',
+      width: 'auto',
+      filter: 'brightness(1.1)',
+      display: 'block',
+      mx: 'auto',
+      mb: 2,
+    }}
+  />
+
+  <Typography 
+    variant="h4" 
+    sx={{ 
+      fontWeight: 600,
+      mb: 2,
+      fontSize: '1.25rem',
+      fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+      color: '#fff',
+      textAlign: 'center',
+    }}
+  >
+    Sign in
+  </Typography>
+
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      gap: 1.5,
+      mt: 1,
+    }}
+  >
+    <SocialIconButton onClick={() => handleSocialLogin('facebook')}>
+      <Facebook fontSize="small" />
+    </SocialIconButton>
+    <SocialIconButton onClick={() => handleSocialLogin('github')}>
+      <GitHub fontSize="small" />
+    </SocialIconButton>
+    <SocialIconButton onClick={() => handleSocialLogin('google')}>
+      <Google fontSize="small" />
+    </SocialIconButton>
+    <SocialIconButton onClick={() => handleSocialLogin('apple')}>
+      <Apple fontSize="small" />
+    </SocialIconButton>
+    <SocialIconButton onClick={() => handleSocialLogin('email')}>
+      <Email fontSize="small" />
+    </SocialIconButton>
+  </Box>
+</HeaderSection>
+📌 Bonus: For the Parent <Card> or <Paper> (the white form)
+Make sure this wraps your login form and includes generous padding and position: relative so the floating card stacks over it:
+
+tsx
+Copy
+Edit
+<Card
+  sx={{
+    maxWidth: '400px',
+    margin: '0 auto',
+    mt: 6,
+    pt: 8,
+    borderRadius: '16px',
+    boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+    position: 'relative',
+    backgroundColor: '#fff',
+    zIndex: 1,
+  }}
+>
+  {/* <HeaderSection /> sits above this */}
+  <CardContent sx={{ p: 4, pt: 6 }}>
+    {/* form fields here */}
+  </CardContent>
+</Card>

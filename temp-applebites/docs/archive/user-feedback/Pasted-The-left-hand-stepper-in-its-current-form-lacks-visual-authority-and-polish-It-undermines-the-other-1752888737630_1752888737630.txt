@@ -1,0 +1,101 @@
+The left-hand stepper in its current form lacks visual authority and polish. It undermines the otherwise sharp layout. Let’s break down the issues and fix them surgically.
+
+🔍 What’s Off in the Side Menu
+Problem	Detail	Impact
+Icon placeholders look broken	Icons are either missing or white-on-white	Looks unfinished or buggy
+No visual progression	All steps have equal weight except “Current”	No hierarchy or momentum
+Typography is too neutral	Light grey text on navy isn’t strong enough	Dulls readability and confidence
+Spacing and sizing feel inconsistent	Too much dead space between items	Kills rhythm and visual engagement
+No hover or interactivity cues	Feels static and non-clickable	User doesn’t feel invited to explore or anticipate steps
+
+✅ Redesign Strategy: Professional SaaS Side Wizard
+📐 Structure Update
+plaintext
+Copy
+Edit
+| Logo       |
+|------------|
+| Contact     ← active step (bold, shaded, elevated)
+| EBITDA      ← upcoming (neutral but clickable)
+| Adjustments |
+| Value Drivers
+| Follow-up
+💡 Design Fixes
+1. Stepper Item Styling
+tsx
+Copy
+Edit
+<div
+  className={`flex items-center gap-3 py-2 px-3 rounded-lg transition-all
+    ${
+      step.number === currentStep
+        ? "bg-white text-[#0b2147] shadow-md"
+        : "text-white hover:bg-[#1a365d]/70 hover:pl-4"
+    }`}
+>
+  <div
+    className={`flex items-center justify-center w-8 h-8 rounded-full 
+      ${
+        step.number === currentStep
+          ? "bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white shadow"
+          : "bg-white text-[#0b2147]"
+      }`}
+  >
+    <IconComponent className="w-4 h-4" />
+  </div>
+  <div>
+    <div className="text-sm font-semibold">{step.label}</div>
+    <div className="text-xs tracking-wide">
+      Step {step.number}
+      {step.number === currentStep && (
+        <span className="ml-2 inline-block bg-[#0b2147]/10 text-[#0b2147] text-[10px] px-2 py-0.5 rounded-full font-medium">
+          Current
+        </span>
+      )}
+    </div>
+  </div>
+</div>
+2. Add Vertical Progress Indicator (Optional)
+Add a ::before bar to the left of each step item using:
+
+css
+Copy
+Edit
+relative border-l-4 border-transparent
+hover:border-[#1a365d]
+Make the active step:
+
+css
+Copy
+Edit
+border-[#1a365d] bg-white text-[#0b2147]
+3. Fix the Icons
+You're likely missing or not rendering the imported icon components. Example:
+
+tsx
+Copy
+Edit
+import { UserIcon, CalculatorIcon, CogIcon, ChartLineIcon, CheckCircleIcon } from 'lucide-react';
+// Or whichever icon library you're using
+
+const steps = [
+  { number: 1, label: "Contact", icon: UserIcon },
+  { number: 2, label: "EBITDA", icon: CalculatorIcon },
+  { number: 3, label: "Adjustments", icon: CogIcon },
+  { number: 4, label: "Value Drivers", icon: ChartLineIcon },
+  { number: 5, label: "Follow-up", icon: CheckCircleIcon },
+];
+🔁 Optional (but powerful):
+Add clickable navigation: onClick={() => setCurrentStep(step.number)}
+
+Make the current step pulse subtly or display a check icon if complete.
+
+Wrap in a component: <StepperSidebar currentStep={currentStep} steps={steps} />
+
+✅ Summary
+Fix Category	Action
+Visual Hierarchy	Add background, gradient, or hover scaling to active step
+Icon Clarity	Render real icons with consistent size and color logic
+Spacing & Rhythm	Reduce dead space, tighten layout to ~48px height per step
+Interactivity	Make steps clickable, hover responsive
+Typography	Bolder weight and color contrast for active/current steps

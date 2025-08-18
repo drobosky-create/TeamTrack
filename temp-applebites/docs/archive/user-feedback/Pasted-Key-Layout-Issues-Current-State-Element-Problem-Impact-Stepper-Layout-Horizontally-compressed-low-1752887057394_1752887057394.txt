@@ -1,0 +1,86 @@
+Key Layout Issues (Current State)
+Element	Problem	Impact
+Stepper Layout	Horizontally compressed, low interactivity, no visual rhythm	Feels basic, lacks depth or motion to guide the user
+Form Container	Overly boxy, generic fields, too much empty padding	Feels templated—no brand immersion
+Typography & Hierarchy	Everything is roughly the same weight	No “flow” or lead-in to key actions
+Brand Voice	Dollar-apple image is solid, but the UI doesn’t reflect that “sharp, finance-meets-tech” tone	Inconsistent experience for a valuation product
+
+✅ Redesign Recommendation
+Goal: Create a left-aligned vertical process wizard with visual depth, stronger iconography, and clear section breaks to feel like an executive platform—not a survey tool.
+
+🧭 New Layout Structure
+plaintext
+Copy
+Edit
+-----------------------------------------------------
+| APPLE LOGO + Step Tracker (Left vertical bar)     |
+|---------------------------------------------------|
+| Apple Bites Business Assessment (Header Section)  |
+| > "Let’s walk through your business’s valuation…" |
+|---------------------------------------------------|
+| STEP CONTENT:                                     |
+| - Section Title (e.g., “Contact Info”)            |
+| - Icon + Title left-aligned                       |
+| - Card with fields, grouped smartly               |
+|---------------------------------------------------|
+| Navigation buttons (Back, Next, Save, etc.)       |
+-----------------------------------------------------
+📐 Layout and UX Enhancements
+Feature	Recommendation
+Stepper	Move to a left vertical bar, Argon-styled (w-64 bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white) with icons and labels, each step as a card-like button.
+Header Section	Bold title (text-2xl font-bold) with light supporting copy (text-sm text-slate-500), centered if desktop, stacked if mobile.
+Content Area	Use Argon Cards (rounded-xl shadow-md p-6) per section, with stronger section labels (text-lg font-semibold) and dividers.
+Field Layout	Group fields logically (e.g., personal info vs. company info), possibly with collapsible blocks for later stages like EBITDA inputs.
+Navigation	Add sticky bottom nav bar with “Save Draft” and “Next” buttons using gradient backgrounds and hover states.
+
+🖼 Visual Hierarchy + Motion
+Animate step progress with slide/fade on step change.
+
+Add subtle microinteractions (button scale, input focus rings).
+
+Use brand colors more intentionally: dark navy for headers, light gradient accents in dividers and buttons.
+
+🔧 Optional Enhancements
+Add an illustration or small metric dashboard on the right for desktop view to preview live valuation data as user progresses.
+
+Embed tooltips or “?” icons for fields like EBITDA, adjustments, etc.
+
+Example Tech Stack Styling Reference
+jsx
+Copy
+Edit
+<div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-6">
+  {/* Sidebar Stepper */}
+  <aside className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white rounded-xl p-4 sticky top-4 h-fit">
+    {/* Steps map */}
+  </aside>
+
+  {/* Main Form Content */}
+  <section className="bg-white rounded-xl shadow-lg p-8">
+    <h1 className="text-2xl font-bold text-slate-800 mb-2">Apple Bites Business Assessment</h1>
+    <p className="text-sm text-slate-500 mb-6">Let’s walk through your valuation...</p>
+
+    <div className="space-y-4">
+      {/* Field Groups */}
+    </div>
+  </section>
+</div>
+🧩 Summary
+Change	Impact
+Vertical, branded stepper	High clarity, strong flow
+Sectioned layout with visual cards	Reduces form fatigue
+Better motion & hierarchy	Creates premium, guided feel
+Stronger use of Argon styles	Brand consistency across the app
+
+Want me to mock this up in Figma or generate the full JSX/React layout to match?
+
+
+
+
+
+
+
+
+
+Ask ChatGPT
+

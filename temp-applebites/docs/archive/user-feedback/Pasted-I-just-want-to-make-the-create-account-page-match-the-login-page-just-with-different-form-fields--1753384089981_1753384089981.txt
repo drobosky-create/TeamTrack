@@ -1,0 +1,125 @@
+I just want to make the create account page, match the login page, just with different form fields
+
+
+ChatGPT said:
+Perfect — here’s exactly how to make the “Create Account” (signup) page match the login page, with the only difference being the form fields.
+
+✅ Checklist for Matching the Login Page Layout
+Floating Header (above the card):
+
+Contains the logo.
+
+Contains the title (e.g., “Create Account”).
+
+Matches login page's HeaderSection styling.
+
+Form Card:
+
+Semi-transparent background (rgba(255, 255, 255, 0.1)).
+
+Blurred backdrop.
+
+Rounded corners, white border, and subtle box shadow.
+
+Matches spacing and alignment of the login card.
+
+Form Fields:
+
+The only difference — these should include:
+
+First Name
+
+Email
+
+Password
+
+Confirm Password
+
+Submit button: Create Account
+
+✅ Template Code for signup.tsx (Minimal Adjustments from Login Page)
+Replace your existing layout with this structure:
+
+tsx
+Copy
+Edit
+<>
+  {/* Floating Header Section */}
+  <Box
+    sx={{
+      position: 'absolute',
+      top: '20px',
+      left: 0,
+      right: 0,
+      mx: 'auto',
+      maxWidth: '300px',
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      borderRadius: '16px',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+      padding: '24px 16px',
+      zIndex: 2,
+      textAlign: 'center',
+      backdropFilter: 'blur(10px)',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+    }}
+  >
+    <img
+      src={appleBitesLogo}
+      alt="Apple Bites Business Assessment"
+      style={{
+        height: '225px',
+        width: 'auto',
+        filter: 'brightness(1.1)',
+        display: 'block',
+        margin: '0 auto 16px auto',
+      }}
+    />
+    <Typography
+      variant="h4"
+      sx={{
+        fontWeight: 600,
+        mb: 2,
+        fontSize: '1.25rem',
+        fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+        color: '#fff',
+      }}
+    >
+      Create Account
+    </Typography>
+  </Box>
+
+  {/* Form Card */}
+  <Box
+    sx={{
+      mt: 40, // Pushes below floating header
+      maxWidth: '400px',
+      mx: 'auto',
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      backdropFilter: 'blur(10px)',
+      borderRadius: '16px',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '32px 24px',
+    }}
+  >
+    <form onSubmit={handleSignup}>
+      <TextField fullWidth label="First Name" margin="normal" />
+      <TextField fullWidth label="Email Address" margin="normal" />
+      <TextField fullWidth type="password" label="Password" margin="normal" />
+      <TextField fullWidth type="password" label="Confirm Password" margin="normal" />
+
+      <Button
+        type="submit"
+        variant="contained"
+        fullWidth
+        sx={{ mt: 3, fontWeight: 'bold' }}
+      >
+        CREATE ACCOUNT
+      </Button>
+
+      <Typography sx={{ mt: 2, color: '#fff', textAlign: 'center' }}>
+        Already have an account? <Link href="/login">Sign in here</Link>
+      </Typography>
+    </form>
+  </Box>
+</>

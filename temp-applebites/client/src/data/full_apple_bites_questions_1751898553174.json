@@ -1,0 +1,608 @@
+[
+  {
+    "step": 5,
+    "title": "Strategic Value Drivers",
+    "questions": [
+      {
+        "id": "driver-financial-performance-1",
+        "question": "How profitable is your business compared to industry benchmarks?",
+        "type": "single-choice",
+        "options": [
+          "Not profitable",
+          "Below average",
+          "Average",
+          "Above average",
+          "Top-tier"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Financial Performance",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-financial-performance-2",
+        "question": "What is your adjusted net profit margin?",
+        "type": "single-choice",
+        "options": [
+          "< 5%",
+          "5–10%",
+          "11–15%",
+          "16–20%",
+          "> 20%"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Financial Performance",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-recurring-revenue-1",
+        "question": "What percentage of your revenue is recurring (contracts, subscriptions)?",
+        "type": "single-choice",
+        "options": [
+          "0%",
+          "1–25%",
+          "26–50%",
+          "51–75%",
+          "76–100%"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Recurring Revenue",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-recurring-revenue-2",
+        "question": "How secure are your recurring revenue contracts?",
+        "type": "single-choice",
+        "options": [
+          "No contracts",
+          "Month-to-month",
+          "Annual, not auto-renew",
+          "Annual with auto-renew",
+          "Multi-year, auto-renew"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Recurring Revenue",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-growth-potential-1",
+        "question": "How much do you expect your revenue to grow in the next 12 months?",
+        "type": "single-choice",
+        "options": [
+          "Decrease",
+          "Flat",
+          "1–10%",
+          "11–30%",
+          "Over 30%"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Growth Potential",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-growth-potential-2",
+        "question": "How much do you expect your profit to grow in the next 12 months?",
+        "type": "single-choice",
+        "options": [
+          "Decrease",
+          "Flat",
+          "1–10%",
+          "11–30%",
+          "Over 30%"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Growth Potential",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-owner-dependency-1",
+        "question": "How long could your business operate successfully without you?",
+        "type": "single-choice",
+        "options": [
+          "< 1 week",
+          "1 week – 1 month",
+          "1–3 months",
+          "3–12 months",
+          "Indefinitely"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Owner Dependency",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-owner-dependency-2",
+        "question": "How often do customers request to work directly with the owner?",
+        "type": "single-choice",
+        "options": [
+          "Always",
+          "Often",
+          "Sometimes",
+          "Rarely",
+          "Never"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Owner Dependency",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-revenue-diversity-1",
+        "question": "What % of your revenue comes from your single largest customer?",
+        "type": "single-choice",
+        "options": [
+          ">50%",
+          "26–50%",
+          "11–25%",
+          "6–10%",
+          "<5%"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Revenue Diversity",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-revenue-diversity-2",
+        "question": "How many different customer segments do you serve?",
+        "type": "single-choice",
+        "options": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5 or more"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Revenue Diversity",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-customer-satisfaction-1",
+        "question": "What percentage of your customers are 'very satisfied'?",
+        "type": "single-choice",
+        "options": [
+          "<25%",
+          "25–50%",
+          "51–75%",
+          "76–90%",
+          ">90%"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Customer Satisfaction",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-customer-satisfaction-2",
+        "question": "How often do customers refer others to your company?",
+        "type": "single-choice",
+        "options": [
+          "Never",
+          "Rarely",
+          "Sometimes",
+          "Often",
+          "Always"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Customer Satisfaction",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-operational-independence-1",
+        "question": "How standardized are your internal processes and SOPs?",
+        "type": "single-choice",
+        "options": [
+          "None exist",
+          "Some documentation",
+          "Basic SOPs exist",
+          "Well-documented",
+          "Automated and trained"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Operational Independence",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-operational-independence-2",
+        "question": "How easily can you delegate critical business functions?",
+        "type": "single-choice",
+        "options": [
+          "Impossible",
+          "Very difficult",
+          "Somewhat difficult",
+          "Fairly easy",
+          "Very easy"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Operational Independence",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-scalability-1",
+        "question": "If demand grew 5x, how easily could your company fulfill it?",
+        "type": "single-choice",
+        "options": [
+          "Impossible",
+          "Very difficult",
+          "Fairly difficult",
+          "Fairly easy",
+          "Very easy"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Scalability",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-scalability-2",
+        "question": "How easily could your business be replicated in another market?",
+        "type": "single-choice",
+        "options": [
+          "Impossible",
+          "Very difficult",
+          "Fairly difficult",
+          "Fairly easy",
+          "Very easy"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Scalability",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-team-talent-1",
+        "question": "How strong is your current leadership team?",
+        "type": "single-choice",
+        "options": [
+          "None",
+          "1 manager",
+          "A few informal leaders",
+          "Defined department heads",
+          "Full team with long-term incentives"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Team & Talent",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-team-talent-2",
+        "question": "How difficult would it be to replace your top-performing team member?",
+        "type": "single-choice",
+        "options": [
+          "Impossible",
+          "Very difficult",
+          "Fairly difficult",
+          "Fairly easy",
+          "Very easy"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Team & Talent",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-differentiation-1",
+        "question": "How unique is your product/service compared to competitors?",
+        "type": "single-choice",
+        "options": [
+          "Commodity",
+          "Slightly differentiated",
+          "Moderately unique",
+          "Very unique",
+          "One-of-a-kind"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Differentiation & Brand Strength",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "driver-differentiation-2",
+        "question": "How well recognized is your brand in the market?",
+        "type": "single-choice",
+        "options": [
+          "Not at all",
+          "Somewhat",
+          "Recognized locally",
+          "Known regionally",
+          "Category leader"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Differentiation & Brand Strength",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "bonus-financial-performance-3",
+        "question": "How audit-ready are your financial statements?",
+        "type": "single-choice",
+        "options": [
+          "Not tracked",
+          "Basic bookkeeping",
+          "Monthly close process",
+          "CPA-reviewed",
+          "Audit-ready"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Financial Performance",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "bonus-recurring-revenue-3",
+        "question": "What portion of recurring revenue is secured by contracts?",
+        "type": "single-choice",
+        "options": [
+          "None",
+          "Less than 25%",
+          "25–50%",
+          "51–75%",
+          "More than 75%"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Recurring Revenue",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "bonus-scalability-3",
+        "question": "Which systems are in place to scale your operations?",
+        "type": "single-choice",
+        "options": [
+          "None",
+          "CRM or Scheduling",
+          "CRM and Project Mgmt",
+          "CRM, Scheduling, and Billing",
+          "Fully integrated stack"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Scalability",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "bonus-differentiation-3",
+        "question": "How sensitive are your customers to price changes?",
+        "type": "single-choice",
+        "options": [
+          "Extremely sensitive",
+          "Very sensitive",
+          "Somewhat sensitive",
+          "Minimally sensitive",
+          "Not price sensitive"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Differentiation & Brand Strength",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "bonus-industry-tailwinds-1",
+        "question": "How favorable are growth trends in your industry?",
+        "type": "single-choice",
+        "options": [
+          "Declining",
+          "Flat",
+          "Moderate growth",
+          "Strong growth",
+          "Explosive growth"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Industry Outlook",
+        "scoreRange": [
+          0,
+          5
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Your Business Valuation Report - Meritage Partners</title>
+        <style>
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                margin: 0;
+                padding: 0;
+                background-color: #f5f7fa;
+            }
+
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .header {
+                background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+                color: white;
+                padding: 30px 20px;
+                text-align: center;
+            }
+
+            .header h1 {
+                margin: 0;
+                font-size: 28px;
+                font-weight: 600;
+            }
+
+            .header p {
+                margin: 10px 0 0 0;
+                font-size: 16px;
+                opacity: 0.9;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .greeting {
+                font-size: 18px;
+                margin-bottom: 20px;
+                color: #1e3a8a;
+            }
+
+            .intro {
+                margin-bottom: 30px;
+                font-size: 16px;
+                line-height: 1.6;
+            }
+
+            .metrics-section {
+                background: #f8fafc;
+                border-radius: 8px;
+                padding: 25px;
+                margin: 30px 0;
+                border-left: 4px solid #3b82f6;
+            }
+
+            .metrics-title {
+                font-size: 20px;
+                font-weight: 600;
+                color: #1e3a8a;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .metrics-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+
+            .metric {
+                text-align: center;
+                padding: 15px;
+                background: white;
+                border-radius: 6px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+
+            .metric-label {
+                font-size: 14px;
+                color: #64748b;
+                font-weight: 500;
+                margin-bottom: 5px;
+            }
+
+            .metric-value {
+                font-size: 18px;
+                font-weight: 700;
+                color: #1e3a8a;
+            }
+
+            .value-highlight {
+                text-align: center;
+                background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+                color: white;
+                padding: 20px;
+                border-radius: 8px;
+                margin: 25px 0;
+            }
+
+            .value-highlight .label {
+                font-size: 16px;
+                opacity: 0.9;
+                margin-bottom: 5px;
+            }
+
+            .value-highlight .amount {
+                font-size: 32px;
+                font-weight: 700;
+            }
+
+            .grade-section {
+                background: #ecfdf5;
+                border: 1px solid #d1fae5;
+                border-radius: 8px;
+                padding: 20px;
+                margin: 20px 0;
+                text-align: center;
+            }
+
+            .grade-label {
+                font-size: 16px;
+                color: #065f46;
+                margin-bottom: 10px;
+            }
+
+            .grade-value {
+                font-size: 48px;
+                font-weight: 700;
+                color: #059669;
+                margin: 0;
+            }
+
+            .next-steps {
+                background: #fefce8;
+                border: 1px solid #fde047;
+                border-radius: 8px;
+                padding: 25px;
+                margin: 30px 0;
+            }
+
+            .next-steps h3 {
+                color: #a16207;
+                margin-top: 0;
+                font-size: 18px;
+            }
+
+            .cta-button {
+                display: inline-block;
+                background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+                color: white;
+                text-decoration: none;
+                padding: 15px 30px;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 16px;
+                margin: 20px 0;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                transition: transform 0.2s;
+            }
+
+            .cta-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+
+            .footer {
+                background: #f8fafc;
+                padding: 25px 20px;
+                border-top: 1px solid #e2e8f0;
+                text-align: center;
+            }
+
+            .signature {
+                color: #1e3a8a;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
+
+            .disclaimer {
+                font-size: 12px;
+                color: #64748b;
+                margin-top: 20px;
+                line-height: 1.5;
+            }
+
+            @media (max-width: 600px) {
+                .metrics-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .value-highlight .amount {
+                    font-size: 24px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <h1>Your Business Valuation Report</h1>
+                <p>Professional Analysis by Meritage Partners</p>
+            </div>
+
+            <!-- Main Content -->
+            <div class="content">
+                <div class="greeting">Dear {{ contact.first_name }},</div>
+
+                <div class="intro">
+                    Thank you for completing our comprehensive business
+                    valuation assessment for
+                    <strong>{{ contact.company_name }}</strong>. We've analyzed
+                    your business across multiple value drivers and prepared
+                    this detailed report with our findings.
+                </div>
+
+                <!-- Valuation Highlight -->
+                <div class="value-highlight">
+                    <div class="label">Estimated Business Value</div>
+                    <div class="amount" id="primaryValuation">
+                        ${{ contact.valuation_estimate }}
+                    </div>
+                </div>
+
+                <!-- Overall Grade -->
+                <div class="grade-section">
+                    <div class="grade-label">Overall Operational Grade</div>
+                    <div class="grade-value">{{contact.overall_grade_af}}</div>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="metrics-section">
+                    <div class="metrics-title">Key Financial Metrics</div>
+                    <div class="metrics-grid">
+                        <div class="metric">
+                            <div class="metric-label">Valuation Range</div>
+                            <div class="metric-value" id="valuationRange">
+                                ${{ contact.valuation__low }} - ${{ contact.valuation__high }}
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Mean Valuation</div>
+                            <div class="metric-value" id="valuationEstimate">
+                                ${{contact.valuation_estimate}}
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Adjusted EBITDA</div>
+                            <div class="metric-value" id="adjustedEbitda">
+                                ${{contact.adjusted_ebitda}}
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Overall Grade</div>
+                            <div class="metric-value">
+                                {{ contact.overall_grade_af }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Executive Summary -->
+                <div class="metrics-section">
+                    <div class="metrics-title">Executive Analysis</div>
+                    <div
+                        style="
+                            background: white;
+                            padding: 20px;
+                            border-radius: 6px;
+                            line-height: 1.6;
+                        "
+                    >
+                        {{ contact.executive_summary }}
+                    </div>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="next-steps">
+                    <h3>🚀 Ready to Maximize Your Business Value?</h3>
+                    <p>
+                        Based on your assessment results, we've identified
+                        several opportunities to enhance your business value.
+                        Our team at Meritage Partners specializes in helping
+                        business owners like you maximize valuation and prepare
+                        for successful exits.
+                    </p>
+
+                    <!-- Conditional content based on follow-up intent -->
+                    <p>
+                        <strong
+                            >Since you expressed interest in follow-up
+                            discussions</strong
+                        >, our team will be reaching out within 24 hours to
+                        schedule a personalized strategy session to discuss your
+                        specific goals and value enhancement opportunities.
+                    </p>
+                </div>
+
+                <!-- Call to Action -->
+                <div style="text-align: center">
+                    <a
+                        href="https://calendly.com/meritageadvisors"
+                        class="cta-button"
+                    >
+                        Schedule Your Strategy Session
+                    </a>
+                </div>
+
+                <div style="margin-top: 30px">
+                    <p>
+                        This detailed analysis provides insights into your
+                        business's current position and highlights specific
+                        areas where strategic improvements could significantly
+                        increase your company's value.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="signature">
+                    Best regards,<br />
+                    <strong>The Meritage Partners Team</strong>
+                </div>
+
+                <div style="margin: 20px 0">
+                    <p style="margin: 0"><strong>Meritage Partners</strong></p>
+                    <p style="margin: 5px 0; color: #64748b">
+                        Business Valuation & Exit Planning Experts
+                    </p>
+                    <p style="margin: 5px 0; color: #64748b">
+                        📧 info@meritageadvisors.com | 📞 (555) 123-4567
+                    </p>
+                </div>
+
+                <div class="disclaimer">
+                    <strong>Important Disclaimer:</strong> This valuation is
+                    based on the information provided and current market
+                    conditions. It represents an estimated range of value for
+                    informational purposes only. For a comprehensive certified
+                    business valuation suitable for legal, tax, or transaction
+                    purposes, please contact our team for a detailed
+                    professional analysis.
+                </div>
+            </div>
+        </div>
+    
+    <script>
+        // Format currency values with commas
+        function formatCurrency(value) {
+            if (!value || isNaN(value)) return '$0';
+            return '$' + Number(value).toLocaleString();
+        }
+        
+        function formatCurrencyRange(lowValue, highValue) {
+            if (!lowValue || !highValue || isNaN(lowValue) || isNaN(highValue)) return '$0 - $0';
+            return formatCurrency(lowValue) + ' - ' + formatCurrency(highValue);
+        }
+        
+        // Wait for page to load, then format all monetary values
+        document.addEventListener('DOMContentLoaded', function() {
+            // Format primary valuation
+            const primaryValuation = document.getElementById('primaryValuation');
+            if (primaryValuation) {
+                const value = primaryValuation.textContent.replace(/[$,]/g, '');
+                primaryValuation.textContent = formatCurrency(value);
+            }
+            
+            // Format valuation estimate
+            const valuationEstimate = document.getElementById('valuationEstimate');
+            if (valuationEstimate) {
+                const value = valuationEstimate.textContent.replace(/[$,]/g, '');
+                valuationEstimate.textContent = formatCurrency(value);
+            }
+            
+            // Format adjusted EBITDA
+            const adjustedEbitda = document.getElementById('adjustedEbitda');
+            if (adjustedEbitda) {
+                const value = adjustedEbitda.textContent.replace(/[$,]/g, '');
+                adjustedEbitda.textContent = formatCurrency(value);
+            }
+            
+            // Format valuation range
+            const valuationRange = document.getElementById('valuationRange');
+            if (valuationRange) {
+                const text = valuationRange.textContent;
+                const values = text.replace(/[$,]/g, '').split(' - ');
+                if (values.length === 2) {
+                    valuationRange.textContent = formatCurrencyRange(values[0], values[1]);
+                }
+            }
+        });
+    </script>
+    </body>
+</html>

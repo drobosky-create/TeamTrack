@@ -1,0 +1,85 @@
+Your logic must evaluate the assessment responses across 11 core value drivers (25 total questions) and apply the following rules:
+
+1. Use these scoring indicators from the assessment:
+   - Each question is scored from 0 to 5
+   - Core dimensions to evaluate include:
+     - Adjusted EBITDA estimate (inferred from margin + industry question)
+     - Financial performance (Q1–Q3)
+     - Recurring revenue strength (Q4–Q6)
+     - Growth potential (Q7–Q8)
+     - Owner dependency (Q9–Q10)
+     - Customer concentration (Q11)
+     - Customer segment and satisfaction (Q12–Q14)
+     - Operational maturity (Q17–Q18)
+     - Scalability (Q19–Q21)
+     - Management team strength (Q21–Q22)
+     - Differentiation and brand (Q23–Q25)
+
+2. Based on the above inputs, return a JSON array of **3–4 top-fit deal structures**, each with:
+   - `dealType`: short name (e.g., "Private Equity Platform")
+   - `rationale`: 1–2 sentence reason for inclusion (include key trigger points)
+   - `relevanceScore`: a float from 0–1 indicating how well it fits the business profile
+   - `tags`: optional list of traits that triggered this match (e.g., ["High Recurring Revenue", "Delegated Ops"])
+
+3. Match deals using this structured list (abbreviated view):
+   - `Strategic Acquisition`
+   - `Private Equity Platform`
+   - `Add-On Acquisition`
+   - `Roll-Up`
+   - `Growth Equity`
+   - `Management Buyout (MBO)`
+   - `Leveraged Buyout (LBO)`
+   - `Minority Recapitalization`
+   - `Owner-Operator Acquisition`
+   - `SBA-Backed Deal`
+   - `Seller-Financed Exit`
+   - `Search Fund Acquisition`
+   - `Turnaround Investment`
+   - `SaaS Roll-Up`
+   - `ESOP`
+   - `Asset Sale`
+   - `Joint Venture`
+   - `Merger of Equals` (rare)
+
+4. Mapping logic rules (examples):
+   - Businesses with EBITDA > $10M and avg Financial + Mgmt scores ≥ 4.0 → Recommend "Private Equity Platform"
+   - High Recurring Revenue (Q4–Q6 avg ≥ 4) → Add "SaaS Roll-Up" to the mix
+   - Owner Dependency avg < 3.0 → Exclude MBO, flag "Owner-Op" or "Search Fund"
+   - Customer Concentration > 50% and Financial Score < 9 → Add "Turnaround" or "Seller Financing"
+   - Differentiation + Delegated Ops + Growth ≥ 4 → Favor "Strategic Acquisition" or "Growth Equity"
+   - If no criteria match well, return "Asset Sale" with rationale
+
+5. Output format:
+```json
+[
+  {
+    "dealType": "Add-On Acquisition",
+    "rationale": "Your business shows strong recurring revenue and scalable operations, making it attractive as a bolt-on for a larger platform.",
+    "relevanceScore": 0.92,
+    "tags": ["Recurring Revenue", "Delegated Ops", "Moderate Valuation"]
+  },
+  {
+    "dealType": "Growth Equity",
+    "rationale": "With above-average projected growth and a partially developed management team, you are a candidate for minority investment.",
+    "relevanceScore": 0.88,
+    "tags": ["Growth Potential", "Emerging Team"]
+  },
+  ...
+]
+Do not list more than 4 deals. Prioritize precision over breadth.
+
+If asked to explain your logic, cite the question categories and scores you used in your match.
+
+yaml
+Copy
+Edit
+
+---
+
+### 🔧 Optional Agent Configuration Notes
+
+If you're building this into the backend:
+- Use the question data stored in `full_apple_bites_questions_1751898553174.json`
+- Normalize question scores to 0–5 scale
+- Use `businessProfile` object passed from the frontend assessment results
+- Implement a `generateDealStructureFit(businessProfile)` function that outputs the JSON array

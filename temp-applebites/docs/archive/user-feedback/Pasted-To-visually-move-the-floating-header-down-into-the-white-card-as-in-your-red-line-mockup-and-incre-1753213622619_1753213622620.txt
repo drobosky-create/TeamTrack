@@ -1,0 +1,93 @@
+To visually move the floating header down into the white card (as in your red-line mockup) and increase the height of the white card, here’s exactly what to do:
+
+✅ 1. Adjust the Floating Header Position
+In your <HeaderSection>, add a position: absolute and top offset to slide it down. Wrap everything in a relatively positioned parent so the header can float over the white card.
+
+✅ 2. Increase the White Card Height
+Modify the AuthenticationCard and its internal padding to make it taller and allow room for the header to slide into it.
+
+🔁 REPLACE THIS BLOCK
+In your layout where you have:
+
+tsx
+Copy
+Edit
+<Box sx={{ width: '100%', maxWidth: 400, position: 'relative' }}>
+✅ WITH THIS UPDATED BLOCK
+tsx
+Copy
+Edit
+<Box sx={{ width: '100%', maxWidth: 400, position: 'relative', minHeight: '620px' }}>
+  {/* Floating Header Section */}
+  <HeaderSection
+    sx={{
+      position: 'absolute',
+      top: '40px', // adjust this value to slide lower
+      left: 0,
+      right: 0,
+      mx: 'auto',
+      maxWidth: '300px',
+      backgroundColor: '#2c2c3c',
+      borderRadius: '16px',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+      padding: '24px 16px',
+      zIndex: 2,
+      textAlign: 'center',
+    }}
+  >
+    <Box
+      component="img"
+      src={appleBitesLogo}
+      alt="Apple Bites Business Assessment"
+      sx={{
+        height: '200px',
+        width: 'auto',
+        filter: 'brightness(1.1)',
+        display: 'block',
+        mx: 'auto',
+        mb: 2,
+      }}
+    />
+    <Typography variant="h4" sx={{ fontWeight: 600, mb: 2, fontSize: '1.25rem', color: '#fff' }}>
+      Sign in
+    </Typography>
+    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1.5, mt: 1 }}>
+      <SocialIconButton onClick={() => handleSocialLogin('facebook')}>
+        <Facebook fontSize="small" />
+      </SocialIconButton>
+      <SocialIconButton onClick={() => handleSocialLogin('github')}>
+        <GitHub fontSize="small" />
+      </SocialIconButton>
+      <SocialIconButton onClick={() => handleSocialLogin('google')}>
+        <Google fontSize="small" />
+      </SocialIconButton>
+      <SocialIconButton onClick={() => handleSocialLogin('apple')}>
+        <Apple fontSize="small" />
+      </SocialIconButton>
+      <SocialIconButton onClick={() => handleSocialLogin('email')}>
+        <Email fontSize="small" />
+      </SocialIconButton>
+    </Box>
+  </HeaderSection>
+
+  {/* White card below */}
+  <AuthenticationCard
+    sx={{
+      mt: '140px', // creates room for the floating header
+      pt: 8,
+      borderRadius: '16px',
+      minHeight: '480px',
+      backgroundColor: '#fff',
+      position: 'relative',
+      zIndex: 1,
+    }}
+  >
+    <CardContent sx={{ p: 4 }}>
+      {/* login form as-is */}
+✅ Summary of Key Changes
+What You Did	How
+Moved header into card	top: 40px and position: absolute
+Increased card height	minHeight: '480px', mt: '140px'
+Controlled layering	zIndex: 2 for header, 1 for card
+Narrowed header nicely	maxWidth: 300px
+

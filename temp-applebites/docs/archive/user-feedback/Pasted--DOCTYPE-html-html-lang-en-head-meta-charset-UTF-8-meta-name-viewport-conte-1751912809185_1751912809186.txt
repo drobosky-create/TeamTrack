@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apple Bites Results</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; background: #f9f9f9; }
+    .container { background: #fff; border-radius: 8px; padding: 2rem; max-width: 800px; margin: 0 auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .score-meter { margin: 2rem 0; text-align: center; }
+    .bar { background: #eee; border-radius: 5px; margin-bottom: 1rem; overflow: hidden; }
+    .bar-fill { height: 24px; line-height: 24px; color: #fff; padding-left: 10px; }
+    .green { background: #4caf50; }
+    .yellow { background: #ff9800; }
+    .red { background: #f44336; }
+    .valuation-block { text-align: center; margin-top: 2rem; }
+    .cta-buttons { display: flex; justify-content: center; gap: 1rem; margin-top: 2rem; }
+    .cta-buttons button { padding: 0.75rem 1.5rem; font-size: 1rem; border: none; border-radius: 5px; cursor: pointer; }
+    .primary { background: #007bff; color: #fff; }
+    .secondary { background: #6c757d; color: #fff; }
+    .range-bar-container { margin-top: 2rem; }
+    .range-labels { display: flex; justify-content: space-between; font-size: 0.9rem; margin-top: 0.5rem; }
+    .range-bar {
+      position: relative;
+      height: 30px;
+      background: linear-gradient(to right, #f44336 0%, #ff9800 25%, #ffc107 50%, #4caf50 75%, #2e7d32 100%);
+      border-radius: 8px;
+    }
+    .range-indicator,
+    .range-target,
+    .range-average {
+      position: absolute;
+      top: -10px;
+      width: 2px;
+      height: 50px;
+      background-color: #000;
+    }
+    .range-indicator::after,
+    .range-target::after,
+    .range-average::after {
+      position: absolute;
+      top: -20px;
+      left: -10px;
+      font-size: 0.75rem;
+      color: #000;
+    }
+    .range-indicator {
+      left: 42%;
+    }
+    .range-indicator::after {
+      content: "\25B2 You";
+    }
+    .range-average {
+      left: 50%;
+      background-color: #007bff;
+    }
+    .range-average::after {
+      content: "Avg";
+      color: #007bff;
+    }
+    .range-target {
+      left: 80%;
+      background-color: #2e7d32;
+    }
+    .range-target::after {
+      content: "Strategic";
+      color: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Your Business Valuation Summary</h1>
+
+    <div class="score-meter">
+      <h2>Overall Score: <span id="overall-score">65</span>/100</h2>
+    </div>
+
+    <div class="valuation-block">
+      <h3>Estimated Business Value</h3>
+      <p>Low Estimate: <strong id="low-value">$1,200,000</strong></p>
+      <p>High Estimate: <strong id="high-value">$2,000,000</strong></p>
+      <p>Mean Estimate: <strong id="mean-value">$1,600,000</strong></p>
+    </div>
+
+    <div class="range-bar-container">
+      <p style="margin-top: 0; margin-bottom: 0.5rem; font-size: 0.95rem; color: #555;">Industry: 236118 – Residential Remodelers</p>
+      <h3 style="margin-bottom: 1rem;">Industry-Based Valuation Range</h3>
+      <div class="range-bar">
+        <div class="range-indicator"></div>
+        <div class="range-average"></div>
+        <div class="range-target"></div>
+      </div>
+      <div class="range-labels" style="margin-top: 1rem;">
+        <span>Low: 2.0x</span>
+        <span>Avg: 4.0x</span>
+        <span>High: 6.0x</span>
+      </div>
+    </div>
+
+    <div class="driver-scores">
+      <h3>Value Driver Breakdown</h3>
+      <div class="bar"><div class="bar-fill green" style="width: 76%">Financial Performance: 76</div></div>
+      <div class="bar"><div class="bar-fill green" style="width: 73%">Growth Potential: 73</div></div>
+      <div class="bar"><div class="bar-fill red" style="width: 25%">Differentiation: 25</div></div>
+      <div class="bar"><div class="bar-fill yellow" style="width: 50%">Recurring Revenue: 50</div></div>
+    </div>
+
+    <div class="recommendations">
+      <h3>Key Opportunities to Improve</h3>
+      <ul>
+        <li>Enhance your recurring revenue through contracts or subscriptions.</li>
+        <li>Clarify what makes your offering unique or defensible.</li>
+        <li>Explore new geographies or client segments to drive growth.</li>
+      </ul>
+    </div>
+
+    <div class="cta-buttons">
+      <button class="primary">Download Full Report</button>
+      <button class="secondary">Schedule a Call</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+Update social login row to include all 5 providers (Facebook, GitHub, Google, Apple, Email)
+
+Ensure button spacing and alignment is consistent (centered, evenly spaced)
+
+Add appropriate padding and ensure box shadow matches
+
+✨ Here’s the Updated HeaderSection Code:
+tsx
+Copy
+Edit
+<HeaderSection>
+  <Box
+    component="img"
+    src={appleBitesLogo}
+    alt="Apple Bites Business Assessment"
+    sx={{
+      height: '200px',
+      width: 'auto',
+      filter: 'brightness(1.1)',
+      display: 'block',
+      mx: 'auto',
+      mb: 2,
+    }}
+  />
+
+  <Typography 
+    variant="h4" 
+    sx={{ 
+      fontWeight: 600,
+      mb: 2,
+      fontSize: '1.25rem',
+      fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+    }}
+  >
+    Sign in
+  </Typography>
+
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      gap: 1.5, // consistent spacing between buttons
+      mt: 1,
+      mb: 2,
+    }}
+  >
+    <SocialIconButton onClick={() => handleSocialLogin('facebook')}>
+      <Facebook fontSize="small" />
+    </SocialIconButton>
+    <SocialIconButton onClick={() => handleSocialLogin('github')}>
+      <GitHub fontSize="small" />
+    </SocialIconButton>
+    <SocialIconButton onClick={() => handleSocialLogin('google')}>
+      <Google fontSize="small" />
+    </SocialIconButton>
+    <SocialIconButton onClick={() => handleSocialLogin('apple')}>
+      <Apple fontSize="small" />
+    </SocialIconButton>
+    <SocialIconButton onClick={() => handleSocialLogin('email')}>
+      <Email fontSize="small" />
+    </SocialIconButton>
+  </Box>
+</HeaderSection>
+✅ Optional Style Enhancements (To Match Image 2 Exactly)
+Make sure HeaderSection has a background like this if it's not already:
+
+tsx
+Copy
+Edit
+<HeaderSection
+  sx={{
+    backgroundColor: '#F5F7FA',
+    borderRadius: '16px',
+    paddingTop: 4,
+    paddingBottom: 4,
+    boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+    textAlign: 'center',
+  }}
+>
+Update SocialIconButton styling globally if needed:
+
+tsx
+Copy
+Edit
+const SocialIconButton = styled(IconButton)(({ theme }) => ({
+  backgroundColor: '#ffffff',
+  color: '#333',
+  borderRadius: '50%',
+  padding: 8,
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+  '&:hover': {
+    backgroundColor: theme.palette.grey[200],
+  },
+}));

@@ -1,0 +1,82 @@
+ Problem Summary (based on the image):
+Form Section is Bright Blue (#2563EB / Tailwind bg-blue-600)
+‼️ This does not match the brand palette (#1B263B, #415A77, #778DA9).
+
+Input Fields Are Still Using Light Background
+‼️ They’re showing #F8F9FA (off-white), which contrasts sharply and doesn’t match the marketplace look.
+
+Placeholder Text (esp. password) Is Bright Yellow
+‼️ Probably inherited incorrectly from somewhere in global styles or an override.
+
+✅ Solution — Fix the Incorrect Blue Background + Input Styling
+You likely applied a blue background to the entire <TabsContent> section, which wrapped the inputs. That’s where the bright blue is coming from.
+
+🔧 What to Do (Quick Fix)
+Update the TabsContent block like this:
+
+tsx
+Copy
+Edit
+<TabsContent
+  value="login"
+  className="space-y-4 bg-transparent p-6 rounded-lg mt-4 border border-[#415A77]"
+>
+Then fix the inputs:
+
+tsx
+Copy
+Edit
+<Input
+  className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] focus:ring-2 focus:ring-[#778DA9] rounded-lg"
+/>
+✅ Final Visual Goal
+Your form should blend like this:
+
+Element	Correct Color
+Form BG	transparent (inherits card)
+Card BG	#1B263B with 90% opacity
+Input BG	#1B263B
+Input Text	white
+Placeholder	#E0E1DD
+Borders	#415A77
+Button BG	#415A77 hover #778DA9
+
+🧱 Minimal Example of Corrected JSX
+tsx
+Copy
+Edit
+<TabsContent
+  value="login"
+  className="space-y-4 bg-transparent p-6 rounded-lg mt-4 border border-[#415A77]"
+>
+  <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
+    <div className="space-y-2">
+      <Label htmlFor="email" className="text-white font-medium">Email</Label>
+      <Input
+        id="email"
+        type="email"
+        placeholder="Enter your email address"
+        {...loginForm.register("email")}
+        className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
+      />
+    </div>
+
+    <div className="space-y-2">
+      <Label htmlFor="password" className="text-white font-medium">Password</Label>
+      <Input
+        id="password"
+        type={showPassword ? "text" : "password"}
+        placeholder="Enter your password"
+        {...loginForm.register("password")}
+        className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
+      />
+    </div>
+
+    <Button
+      type="submit"
+      className="w-full text-white font-semibold bg-[#415A77] hover:bg-[#778DA9] transition duration-200 rounded-lg"
+    >
+      Sign In <LogIn className="ml-2 h-4 w-4" />
+    </Button>
+  </form>
+</TabsContent>

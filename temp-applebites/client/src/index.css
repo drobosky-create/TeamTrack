@@ -1,0 +1,30 @@
+/* Apple Bites Business Valuation Platform - MUI Only Styles */
+
+/* Global font and basic styling */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Apple Bites Brand Colors for MUI Theme */
+:root {
+  --primary-navy: #0b2147;
+  --secondary-teal: #005b8c;
+  --accent-blue: #4493de;
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  --background-default: #fafafa;
+  --background-paper: #ffffff;
+}
