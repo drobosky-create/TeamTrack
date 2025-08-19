@@ -33,7 +33,7 @@ export default function AssessmentHeader({ title, subtitle, tier, features }: As
   });
   
   const formattedPrice = pricingData?.price 
-    ? `$${(pricingData.price.unit_amount / 100).toFixed(0)}`
+    ? `$${pricingData.price.toFixed(0)}`
     : '$795';
   
   return (
