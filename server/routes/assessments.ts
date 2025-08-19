@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { db } from '../db';
 import { valuationAssessments, auditLogs } from '@shared/schema';
 import { eq } from 'drizzle-orm';
+import OpenAI from 'openai';
 
 const router = Router();
 
@@ -10,6 +11,11 @@ const router = Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2024-11-20.acacia',
 });
+
+// Initialize OpenAI
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+}) : null;
 
 // Initialize GHL (GoHighLevel) client
 interface GHLContact {
@@ -440,6 +446,194 @@ router.get('/api/assessments/:id', async (req: Request, res: Response) => {
     res.status(500).json({ 
       success: false, 
       message: 'Failed to retrieve assessment' 
+    });
+  }
+});
+
+// Unified valuation endpoint used by the free assessment form
+router.post('/api/valuation', async (req: Request, res: Response) => {
+  try {
+    const formData = req.body;
+    
+    // Extract data from nested form structure
+    const { ebitda, adjustments, valueDrivers, followUp } = formData;
+    
+    // Calculate base EBITDA
+    const baseEbitda = 
+      (parseFloat(ebitda.netIncome) || 0) +
+      (parseFloat(ebitda.interest) || 0) +
+      (parseFloat(ebitda.taxes) || 0) +
+      (parseFloat(ebitda.depreciation) || 0) +
+      (parseFloat(ebitda.amortization) || 0);
+    
+    // Calculate adjustments
+    const totalAdjustments = 
+      (parseFloat(adjustments.ownerSalary) || 0) +
+      (parseFloat(adjustments.personalExpenses) || 0) +
+      (parseFloat(adjustments.oneTimeExpenses) || 0) +
+      (parseFloat(adjustments.otherAdjustments) || 0);
+    
+    const adjustedEbitda = baseEbitda + totalAdjustments;
+    
+    // Calculate score based on value drivers
+    const gradeToScore: Record<string, number> = {
+      'A': 5,
+      'B': 4,
+      'C': 3,
+      'D': 2,
+      'F': 1,
+    };
+    
+    const drivers = Object.values(valueDrivers).filter(Boolean) as string[];
+    const avgScore = drivers.length > 0
+      ? drivers.reduce((sum, grade) => sum + (gradeToScore[grade] || 3), 0) / drivers.length
+      : 3;
+    
+    // Calculate multiple based on score
+    let baseMultiple = 3.0;
+    if (avgScore >= 4.5) baseMultiple = 5.0;
+    else if (avgScore >= 4.0) baseMultiple = 4.5;
+    else if (avgScore >= 3.5) baseMultiple = 4.0;
+    else if (avgScore >= 3.0) baseMultiple = 3.5;
+    else if (avgScore >= 2.5) baseMultiple = 3.0;
+    else baseMultiple = 2.5;
+    
+    // Calculate valuation ranges
+    const midEstimate = adjustedEbitda * baseMultiple;
+    const lowEstimate = midEstimate * 0.8;
+    const highEstimate = midEstimate * 1.2;
+    
+    // Determine overall grade
+    let overallScore = 'C';
+    if (avgScore >= 4.5) overallScore = 'A';
+    else if (avgScore >= 4.0) overallScore = 'B';
+    else if (avgScore >= 3.0) overallScore = 'C';
+    else if (avgScore >= 2.0) overallScore = 'D';
+    else overallScore = 'F';
+    
+    // Generate AI-powered summaries if OpenAI is available
+    let narrativeSummary = `Based on the financial analysis, the business has an adjusted EBITDA of $${adjustedEbitda.toLocaleString()} with a valuation range of $${lowEstimate.toLocaleString()} to $${highEstimate.toLocaleString()}.`;
+    let executiveSummary = '';
+    
+    if (openai) {
+      try {
+        const completion = await openai.chat.completions.create({
+          model: "gpt-4",
+          messages: [
+            {
+              role: "system",
+              content: "You are a professional business valuation analyst. Generate concise, insightful summaries for business valuations."
+            },
+            {
+              role: "user",
+              content: `Generate a professional narrative summary and executive summary for a business valuation with the following details:
+                Base EBITDA: $${baseEbitda.toLocaleString()}
+                Adjusted EBITDA: $${adjustedEbitda.toLocaleString()}
+                Valuation Multiple: ${baseMultiple}x
+                Valuation Range: $${lowEstimate.toLocaleString()} - $${highEstimate.toLocaleString()}
+                Mid-point Estimate: $${midEstimate.toLocaleString()}
+                Overall Grade: ${overallScore}
+                
+                Value Drivers:
+                - Financial Performance: ${valueDrivers.financialPerformance}
+                - Customer Concentration: ${valueDrivers.customerConcentration}
+                - Management Team: ${valueDrivers.managementTeam}
+                - Competitive Position: ${valueDrivers.competitivePosition}
+                - Growth Prospects: ${valueDrivers.growthProspects}
+                - Systems & Processes: ${valueDrivers.systemsProcesses}
+                - Asset Quality: ${valueDrivers.assetQuality}
+                - Industry Outlook: ${valueDrivers.industryOutlook}
+                - Risk Factors: ${valueDrivers.riskFactors}
+                - Owner Dependency: ${valueDrivers.ownerDependency}
+                
+                Additional Context: ${followUp.additionalComments || 'None provided'}
+                
+                Please provide:
+                1. A narrative summary (2-3 sentences) that explains the valuation in plain language
+                2. An executive summary (1-2 paragraphs) with key insights and recommendations`
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 800,
+        });
+        
+        const aiResponse = completion.choices[0].message?.content || '';
+        const sections = aiResponse.split(/(?:1\.|Narrative Summary:|Executive Summary:)/i);
+        
+        if (sections.length >= 2) {
+          narrativeSummary = sections[1]?.trim() || narrativeSummary;
+          executiveSummary = sections[2]?.trim() || sections.slice(2).join(' ').trim();
+        }
+      } catch (aiError) {
+        console.error('AI generation error:', aiError);
+        // Fallback to basic summaries if AI fails
+        executiveSummary = `The business demonstrates ${overallScore === 'A' || overallScore === 'B' ? 'strong' : overallScore === 'C' ? 'moderate' : 'improvement opportunities in'} performance across key value drivers. With an adjusted EBITDA of $${adjustedEbitda.toLocaleString()}, the estimated business value is $${midEstimate.toLocaleString()}.`;
+      }
+    }
+    
+    // Save to database
+    const [assessment] = await db.insert(valuationAssessments).values({
+      // Using placeholder contact info since it's not collected in free assessment
+      firstName: 'Guest',
+      lastName: 'User',
+      email: `guest_${Date.now()}@example.com`,
+      company: 'Company',
+      tier: 'free',
+      reportTier: 'free',
+      
+      // Financial data
+      netIncome: parseFloat(ebitda.netIncome) || 0,
+      interest: parseFloat(ebitda.interest) || 0,
+      taxes: parseFloat(ebitda.taxes) || 0,
+      depreciation: parseFloat(ebitda.depreciation) || 0,
+      amortization: parseFloat(ebitda.amortization) || 0,
+      
+      // Adjustments
+      ownerSalary: parseFloat(adjustments.ownerSalary) || 0,
+      personalExpenses: parseFloat(adjustments.personalExpenses) || 0,
+      oneTimeExpenses: parseFloat(adjustments.oneTimeExpenses) || 0,
+      otherAdjustments: parseFloat(adjustments.otherAdjustments) || 0,
+      adjustmentNotes: adjustments.adjustmentNotes || '',
+      
+      // Value drivers
+      financialPerformance: valueDrivers.financialPerformance,
+      customerConcentration: valueDrivers.customerConcentration,
+      managementTeam: valueDrivers.managementTeam,
+      competitivePosition: valueDrivers.competitivePosition,
+      growthProspects: valueDrivers.growthProspects,
+      systemsProcesses: valueDrivers.systemsProcesses,
+      assetQuality: valueDrivers.assetQuality,
+      industryOutlook: valueDrivers.industryOutlook,
+      riskFactors: valueDrivers.riskFactors,
+      ownerDependency: valueDrivers.ownerDependency,
+      
+      // Follow-up
+      followUpIntent: followUp.followUpIntent,
+      additionalComments: followUp.additionalComments || '',
+      
+      // Calculated values
+      baseEbitda,
+      adjustedEbitda,
+      valuationMultiple: baseMultiple,
+      lowEstimate,
+      midEstimate,
+      highEstimate,
+      overallScore,
+      
+      // Generated content
+      narrativeSummary,
+      executiveSummary,
+      isProcessed: true,
+    }).returning();
+    
+    // Return the complete assessment data
+    res.json(assessment);
+  } catch (error) {
+    console.error('Valuation error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to process valuation',
+      error: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 });
