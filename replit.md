@@ -8,16 +8,25 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
+## AppleBites Tiered Assessment System Implementation (Jan 19, 2025)
+- Corrected AppleBites integration to match original three-tier assessment structure
+- **Free Assessment**: Combined financial data entry + value drivers evaluation + business valuation calculator in single flow
+- **Growth Assessment ($795)**: NAICS-dependent industry-specific analysis with professional reporting features  
+- **Capital Assessment ($2,500)**: Comprehensive capital readiness analysis and strategic planning
+- Replaced separate Business Assessment and Value Calculator pages with unified Free Assessment workflow
+- Fixed Material-UI Grid compatibility issues across assessment pages for responsive design
+- Implemented proper step-by-step assessment flow: Financial Info → Owner Adjustments → Value Drivers → Results
+- Added real-time EBITDA calculation with grade-based multipliers (A=7.5x, B=5.7x, C=4.2x, D=3.0x, F=2.0x)
+- Created tier selection interface with feature comparison and upgrade paths
+- Maintained MaterialDashboardLayout design consistency while integrating AppleBites functionality
+- Assessment covers 10 value drivers: Financial Performance, Customer Relations, Leadership, Innovation, Goal Achievement, Systems & Processes, Quality Standards, Industry Knowledge, Risk Management, Independence
+
 ## Complete AppleBites Integration (Jan 18, 2025)
 - Successfully cloned entire AppleBites repository (https://github.com/drobosky-create/apple-bites-v1) into project structure
 - Integrated full business valuation platform while maintaining PerformanceHub's Material-UI design consistency  
 - Extended database schema with valuationAssessments and assessments tables supporting A-F grading system
-- Created comprehensive Business Assessment page with step-by-step evaluation across 10 performance areas
-- Built Business Valuation Calculator with EBITDA-based methodology and owner adjustments
 - Added Advanced Analytics dashboard with tabbed interface: Overview Dashboard, Performance Heatmap, Team Insights
 - Integrated AppleBites API routes for assessments and valuations with full CRUD operations
-- Added new navigation items: Advanced Analytics, Business Assessment, and Value Calculator
-- Performance assessment system mirrors AppleBites value drivers: Financial Performance, Customer Relations, Leadership, Innovation, Goal Achievement, Systems & Processes, Quality Standards, Industry Knowledge, Risk Management, and Independence
 - Seamless integration allows for both performance reviews and business valuations within single platform
 
 ## Enhanced Navigation Integration (Jan 18, 2025)

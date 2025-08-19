@@ -69,15 +69,15 @@ const getNavigationItems = (userId: string) => [
     roles: ['admin', 'manager']
   },
   {
-    text: 'Business Assessment',
+    text: 'Free Assessment',
     icon: <BusinessCenterIcon />,
-    path: '/assessment',
+    path: '/free-assessment',
     roles: ['admin', 'manager', 'team_member']
   },
   {
-    text: 'Value Calculator',
+    text: 'Growth Assessment',
     icon: <CalculateIcon />,
-    path: '/calculator',
+    path: '/growth-assessment',
     roles: ['admin', 'manager', 'team_member']
   },
   {
