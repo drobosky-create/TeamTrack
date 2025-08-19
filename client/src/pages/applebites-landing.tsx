@@ -301,7 +301,7 @@ export default function AppleBitesLanding() {
                 fullWidth
                 variant="contained"
                 component={Link}
-                href="/consumer-signup"
+                href="/applebites-checkout"
                 sx={{
                   backgroundColor: '#007bff',
                   color: 'white',
@@ -362,15 +362,21 @@ export default function AppleBitesLanding() {
               <Button
                 fullWidth
                 variant="contained"
+                disabled
                 sx={{
-                  backgroundColor: '#17a2b8',
-                  color: 'white',
+                  backgroundColor: '#cccccc',
+                  color: '#666666',
                   py: 1.5,
                   textTransform: 'uppercase',
                   fontWeight: 600,
                   fontSize: '0.875rem',
+                  cursor: 'not-allowed',
                   '&:hover': {
-                    backgroundColor: '#138496'
+                    backgroundColor: '#cccccc'
+                  },
+                  '&.Mui-disabled': {
+                    backgroundColor: '#cccccc',
+                    color: '#666666'
                   }
                 }}
               >

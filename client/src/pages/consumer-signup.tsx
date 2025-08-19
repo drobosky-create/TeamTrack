@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,12 +6,13 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
-import { Link, useLocation } from 'wouter';
-import { ArrowLeft, Building2, Mail, Phone, User } from 'lucide-react';
+import { Link, useLocation, useSearch } from 'wouter';
+import { ArrowLeft, Building2, Mail, Phone, User, CheckCircle } from 'lucide-react';
 
 export default function ConsumerSignup() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const searchParams = useSearch();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -21,6 +22,40 @@ export default function ConsumerSignup() {
     password: '',
     confirmPassword: '',
   });
+  const [isPaidPlan, setIsPaidPlan] = useState(false);
+
+  // Check for payment success and prefill data
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    const paymentStatus = params.get('payment');
+    const plan = params.get('plan');
+    
+    if (paymentStatus === 'success' && plan === 'growth') {
+      setIsPaidPlan(true);
+      
+      // Get stored purchase data from session storage
+      const purchaseData = sessionStorage.getItem('applebites_purchase');
+      if (purchaseData) {
+        const data = JSON.parse(purchaseData);
+        const [firstName, ...lastNameParts] = (data.name || '').split(' ');
+        setFormData(prev => ({
+          ...prev,
+          email: data.email || '',
+          firstName: firstName || '',
+          lastName: lastNameParts.join(' ') || '',
+        }));
+        
+        // Clear the session storage after using it
+        sessionStorage.removeItem('applebites_purchase');
+      }
+      
+      toast({
+        title: "Payment Successful!",
+        description: "Complete your registration to access AppleBites Growth & Exit features.",
+        duration: 5000,
+      });
+    }
+  }, [searchParams, toast]);
 
   const signupMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
@@ -92,7 +127,14 @@ export default function ConsumerSignup() {
           <CardHeader>
             <CardTitle>Create Your AppleBites Account</CardTitle>
             <CardDescription>
-              Sign up to access your free business valuation assessment
+              {isPaidPlan ? (
+                <div className="flex items-center gap-2 text-green-600">
+                  <CheckCircle className="h-5 w-5" />
+                  Growth & Exit Plan Purchased - Complete registration to access
+                </div>
+              ) : (
+                'Sign up to access your free business valuation assessment'
+              )}
             </CardDescription>
           </CardHeader>
           <CardContent>

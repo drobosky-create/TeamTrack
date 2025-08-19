@@ -157,7 +157,7 @@ export default function AppleBitesCheckoutPage() {
 
   useEffect(() => {
     // Create PaymentIntent for AppleBites Growth plan
-    apiRequest("POST", "/api/create-payment-intent", { 
+    apiRequest("POST", "/api/payments/create-payment-intent", { 
       amount: 795,
       metadata: {
         product: 'applebites_growth',

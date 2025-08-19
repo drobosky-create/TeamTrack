@@ -44,6 +44,7 @@ import SubscriptionSuccessPage from "@/pages/subscription-success";
 import PaymentDemoPage from "@/pages/payment-demo";
 import NavigationTestPage from "@/pages/navigation-test";
 import ThemeManager from "@/components/admin/ThemeManager";
+import AppleBitesCheckoutPage from "@/pages/applebites-checkout";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 import { AdminAuthProvider, useAdminAuth } from './hooks/use-admin-auth';
 
@@ -74,6 +75,7 @@ function Router() {
     <Switch>
       {/* Public Routes - Landing Pages */}
       <Route path="/applebites" component={AppleBitesLanding} />
+      <Route path="/applebites-checkout" component={AppleBitesCheckoutPage} />
       <Route path="/performance-hub" component={PerformanceHubLanding} />
       <Route path="/consumer-auth" component={ConsumerAuth} />
       <Route path="/consumer-signup" component={ConsumerSignup} />
