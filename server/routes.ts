@@ -475,6 +475,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // UI Tokens routes
+  app.get('/api/ui-tokens', async (req, res) => {
+    try {
+      const tokens = await db.select().from(schema.uiTokens);
+      
+      // Convert to key-value object for easier frontend consumption
+      const tokenMap = tokens.reduce((acc, token) => {
+        acc[token.key] = token.value;
+        return acc;
+      }, {} as Record<string, string>);
+      
+      res.json(tokenMap);
+    } catch (error) {
+      console.error("Error fetching UI tokens:", error);
+      res.status(500).json({ message: "Failed to fetch UI tokens" });
+    }
+  });
+
+  app.put('/api/ui-tokens/:key', isAuthenticated, async (req: any, res) => {
+    try {
+      const currentUser = await storage.getUser(req.user.claims.sub);
+      if (!currentUser || currentUser.role !== 'admin') {
+        return res.status(403).json({ message: "Admin access required" });
+      }
+
+      const { key } = req.params;
+      const { value } = req.body;
+
+      if (!value) {
+        return res.status(400).json({ message: "Value is required" });
+      }
+
+      await db
+        .insert(schema.uiTokens)
+        .values({ key, value })
+        .onConflictDoUpdate({
+          target: schema.uiTokens.key,
+          set: { value, updatedAt: new Date() }
+        });
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error updating UI token:", error);
+      res.status(500).json({ message: "Failed to update UI token" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

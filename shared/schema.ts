@@ -27,6 +27,14 @@ export const sessions = pgTable(
   (table) => [index("IDX_session_expire").on(table.expire)],
 );
 
+// UI Tokens table for centralized theme management
+export const uiTokens = pgTable("ui_tokens", {
+  id: serial("id").primaryKey(),
+  key: text("key").unique().notNull(),
+  value: text("value").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 // Enums
 export const userRoleEnum = pgEnum('user_role', ['admin', 'manager', 'team_member']);
 export const reviewTypeEnum = pgEnum('review_type', ['monthly', 'quarterly', 'annual']);
@@ -460,6 +468,17 @@ export const insertNotificationSchema = createInsertSchema(notifications);
 
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
+
+// UI Tokens schemas
+export const insertUiTokenSchema = createInsertSchema(uiTokens).omit({
+  id: true,
+  updatedAt: true,
+});
+export const updateUiTokenSchema = insertUiTokenSchema.partial();
+
+export type UiToken = typeof uiTokens.$inferSelect;
+export type InsertUiToken = z.infer<typeof insertUiTokenSchema>;
+export type UpdateUiToken = z.infer<typeof updateUiTokenSchema>;
 
 // Organization branding schemas
 export const insertOrganizationBrandingSchema = createInsertSchema(organizationBranding).omit({
