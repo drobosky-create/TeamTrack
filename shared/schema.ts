@@ -57,6 +57,13 @@ export const brandingElementEnum = pgEnum('branding_element', ['logo', 'favicon'
 export const assessmentTierEnum = pgEnum('assessment_tier', ['free', 'growth', 'capital']);
 export const gradeEnum = pgEnum('grade', ['A', 'B', 'C', 'D', 'F']);
 
+// Deal pipeline enums
+export const dealStageEnum = pgEnum('deal_stage', ['lead', 'qualified', 'assessment', 'negotiation', 'closed_won', 'closed_lost']);
+export const dealPriorityEnum = pgEnum('deal_priority', ['low', 'medium', 'high', 'urgent']);
+
+// Audit log enums
+export const auditActionEnum = pgEnum('audit_action', ['create', 'update', 'delete', 'view', 'export', 'login', 'logout', 'approval', 'rejection']);
+
 // Users table (required for Replit Auth)
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -255,6 +262,78 @@ export const assessments = pgTable("assessments", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Team Directory table for organizational hierarchy
+export const teamDirectory = pgTable("team_directory", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull().unique(),
+  title: varchar("title").notNull(),
+  department: varchar("department").notNull(),
+  location: varchar("location"),
+  phoneExtension: varchar("phone_extension"),
+  mobilePhone: varchar("mobile_phone"),
+  officeLocation: varchar("office_location"),
+  skills: jsonb("skills"), // Array of skills
+  certifications: jsonb("certifications"), // Array of certifications
+  bio: text("bio"),
+  startDate: timestamp("start_date"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Audit Logs table for tracking all system activities
+export const auditLogs = pgTable("audit_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  action: auditActionEnum("action").notNull(),
+  entityType: varchar("entity_type").notNull(), // 'user', 'review', 'assessment', etc.
+  entityId: varchar("entity_id"),
+  changes: jsonb("changes"), // Before/after values for updates
+  metadata: jsonb("metadata"), // Additional context (IP, user agent, etc.)
+  reason: text("reason"), // For approvals/rejections
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Deal Pipeline table for managing sales/assessment pipeline
+export const dealPipeline = pgTable("deal_pipeline", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  clientName: varchar("client_name").notNull(),
+  companyName: varchar("company_name").notNull(),
+  contactEmail: varchar("contact_email").notNull(),
+  contactPhone: varchar("contact_phone"),
+  stage: dealStageEnum("stage").default('lead').notNull(),
+  priority: dealPriorityEnum("priority").default('medium').notNull(),
+  dealValue: decimal("deal_value", { precision: 15, scale: 2 }),
+  assessmentType: assessmentTierEnum("assessment_type"),
+  assignedTo: varchar("assigned_to").references(() => users.id),
+  managerId: varchar("manager_id").references(() => users.id),
+  notes: text("notes"),
+  nextAction: text("next_action"),
+  nextActionDate: timestamp("next_action_date"),
+  closedDate: timestamp("closed_date"),
+  closedReason: text("closed_reason"),
+  createdBy: varchar("created_by").references(() => users.id).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Approvals table for manager approval workflows
+export const approvals = pgTable("approvals", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  requestType: varchar("request_type").notNull(), // 'review_edit', 'assessment_change', 'data_export'
+  entityType: varchar("entity_type").notNull(),
+  entityId: varchar("entity_id").notNull(),
+  requestedBy: varchar("requested_by").references(() => users.id).notNull(),
+  approvedBy: varchar("approved_by").references(() => users.id),
+  status: varchar("status").default('pending').notNull(), // 'pending', 'approved', 'rejected'
+  requestData: jsonb("request_data"), // Original data
+  proposedChanges: jsonb("proposed_changes"), // Proposed changes
+  approvalNotes: text("approval_notes"),
+  rejectionReason: text("rejection_reason"),
+  requestedAt: timestamp("requested_at").defaultNow(),
+  resolvedAt: timestamp("resolved_at"),
+});
+
 // AppleBites Valuation Assessment Table for business valuation integration
 export const valuationAssessments = pgTable("valuation_assessments", {
   id: serial("id").primaryKey(),
@@ -445,6 +524,33 @@ export const consumerSignupSchema = z.object({
   phone: z.string().optional(),
 });
 
+// Team Directory schemas
+export const insertTeamDirectorySchema = createInsertSchema(teamDirectory).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Audit Log schemas
+export const insertAuditLogSchema = createInsertSchema(auditLogs).omit({
+  id: true,
+  createdAt: true,
+});
+
+// Deal Pipeline schemas
+export const insertDealPipelineSchema = createInsertSchema(dealPipeline).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Approvals schemas
+export const insertApprovalSchema = createInsertSchema(approvals).omit({
+  id: true,
+  requestedAt: true,
+  resolvedAt: true,
+});
+
 export const upsertUserSchema = createInsertSchema(users).pick({
   id: true,
   email: true,
@@ -564,3 +670,22 @@ export type InsertValuationAssessment = z.infer<typeof insertValuationAssessment
 
 // Assessment Tier types
 export type AssessmentTier = 'free' | 'growth' | 'capital';
+
+// Team Directory types
+export type TeamDirectory = typeof teamDirectory.$inferSelect;
+export type InsertTeamDirectory = z.infer<typeof insertTeamDirectorySchema>;
+
+// Audit Log types
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type InsertAuditLog = z.infer<typeof insertAuditLogSchema>;
+export type AuditAction = 'create' | 'update' | 'delete' | 'view' | 'export' | 'login' | 'logout' | 'approval' | 'rejection';
+
+// Deal Pipeline types
+export type DealPipeline = typeof dealPipeline.$inferSelect;
+export type InsertDealPipeline = z.infer<typeof insertDealPipelineSchema>;
+export type DealStage = 'lead' | 'qualified' | 'assessment' | 'negotiation' | 'closed_won' | 'closed_lost';
+export type DealPriority = 'low' | 'medium' | 'high' | 'urgent';
+
+// Approvals types
+export type Approval = typeof approvals.$inferSelect;
+export type InsertApproval = z.infer<typeof insertApprovalSchema>;
