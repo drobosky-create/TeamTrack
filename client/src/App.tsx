@@ -23,6 +23,10 @@ import BrandingPage from "@/pages/branding";
 import AnalyticsPage from "@/pages/analytics";
 import FreeAssessmentPage from "@/pages/free-assessment";
 import GrowthAssessmentPage from "@/pages/growth-assessment";
+import ClientManagementPage from "@/pages/clients";
+import AdminClientRecordsPage from "@/pages/admin/clients";
+import AssessmentResultsPage from "@/pages/results";
+import FollowUpOptionsPage from "@/pages/follow-up";
 
 const theme = createTheme({
   palette: {
@@ -58,6 +62,10 @@ function Router() {
             <Route path="/analytics" component={AnalyticsPage} />
             <Route path="/free-assessment" component={FreeAssessmentPage} />
             <Route path="/growth-assessment" component={GrowthAssessmentPage} />
+            <Route path="/clients" component={ClientManagementPage} />
+            <Route path="/admin/clients" component={AdminClientRecordsPage} />
+            <Route path="/results/:id" component={AssessmentResultsPage} />
+            <Route path="/follow-up" component={FollowUpOptionsPage} />
             <Route path="/settings" component={Settings} />
             <Route path="/profile" component={Profile} />
             <Route path="/notifications" component={Notifications} />

@@ -1,0 +1,103 @@
+here’s a scaffolding breakdown for Consumer, Team Member, and Admin access in the Apple Bites / CRM platform. This structure keeps each role cleanly separated but with logical overlaps where needed:
+
+1. Consumers (External Users / Clients)
+
+🔎 Assessment Tools
+
+Free valuation (EBITDA × NAICS multiples)
+
+Premium valuation (adjusted multiples + value drivers scoring)
+
+📊 Results Dashboard
+
+High-level valuation summary
+
+Letter grade (A–F) scoring with narrative insights
+
+Benchmark multiples by NAICS (low / median / high)
+
+📄 Deliverables
+
+Downloadable valuation PDF (summary or detailed)
+
+Suggested “next steps” based on results
+
+📞 Follow-Up Options
+
+Book consultation / call request
+
+Opt into nurture funnel
+
+2. Team Members (Internal Ops / Analysts)
+
+🗂 Client Management
+
+View and manage assigned clients
+
+Track assessments completed and in progress
+
+Access to client profiles & valuation history
+
+📝 Assessment Input
+
+Assist in entering or validating client financial data
+
+Add notes / context to valuations
+
+📊 Analytics (Limited)
+
+See performance of their own client set
+
+Track KPIs: # assessments, lead conversions, revenue generated
+
+⚙️ Tasks & Workflow
+
+Internal task lists tied to each client (e.g., onboarding, review, follow-up)
+
+Notifications for client activity
+
+3. Admins (Leadership / Superusers)
+
+🛠 Full System Access
+
+Manage all client records
+
+Create, edit, and delete assessments
+
+Override valuations if necessary
+
+👥 User & Role Management
+
+Add/remove team members
+
+Assign permissions (consumer, team, admin)
+
+📊 Advanced Analytics
+
+Global KPIs (MRR, ARR, revenue per client, EBITDA impact)
+
+Funnel analytics (conversion, drop-off, premium upgrades)
+
+📂 Content & Data Control
+
+Update NAICS multiples repository
+
+Manage survey questions, scoring logic, and weighting
+
+Configure deliverables (PDF templates, email sequences)
+
+💳 Billing & Integrations
+
+Manage Stripe payments & subscriptions
+
+Control GoHighLevel (GHL) sync
+
+Oversee integrations (CRM, email, reporting tools)
+
+👉 This scaffolding ensures:
+
+Consumers only see their own valuation results + next steps.
+
+Team Members can support and manage clients but don’t control global settings.
+
+Admins have master-level control over the system, users, data, and billing.
