@@ -21,7 +21,7 @@ import SetupWizard from "@/pages/setup-wizard";
 import BrandingPage from "@/pages/branding";
 import AnalyticsPage from "@/pages/analytics";
 import FreeAssessment from "@/modules/applebites/pages/free-assessment";
-import GrowthAssessment from "@/pages/assessments/GrowthAssessment";
+import GrowthAssessment from "@/modules/applebites/pages/growth-assessment";
 import ConsumerSignup from "@/pages/consumer-signup";
 import ConsumerLogin from "@/pages/consumer-login";
 import AdminLoginPage from "@/pages/admin-login";
