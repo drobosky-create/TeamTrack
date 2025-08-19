@@ -10,8 +10,10 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
 - Fixed horizontal scrolling issues in sidebar with proper overflow handling and text truncation
 - Created comprehensive AdminDashboard with role testing functionality and admin-specific features
 - Established consistent Material-UI gradient styling across all dashboard interfaces
-- Restored AppleBites landing page at `/applebites` route with professional pricing cards and proper branding
-- Fixed AppleBites logo display and corrected "Heritage Partners" to "Meritage Partners" in navigation
+- Fully restored AppleBites landing page at `/applebites` route with three pricing tiers (Free, Growth & Exit, Capital)
+- Fixed AppleBites logo display by copying from `applebites/public/` to main `public/` directory
+- Changed navigation button from "Meritage Partners" to "PerformanceHub" linking back to main application
+- Reduced footer vertical size for more compact, professional appearance
 - Clarified architecture: `/applebites` directory contains standalone app, while `client/src/pages/applebites-landing.tsx` serves the landing page
 
 # User Preferences
