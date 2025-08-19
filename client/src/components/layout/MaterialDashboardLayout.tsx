@@ -117,7 +117,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
               <MenuIcon />
             </IconButton>
             
-            <Typography variant="h6" component="div" className="text-[#2a2c37]" sx={{ flexGrow: 1, color: 'hsl(var(--foreground))' }}>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#2a2c37' }}>
               Welcome back, {currentUser?.firstName || currentUser?.email?.split('@')[0]}
               {adminUser && <Typography component="span" sx={{ ml: 1, opacity: 0.7, fontSize: '0.85em' }}>(Admin)</Typography>}
             </Typography>

@@ -111,7 +111,10 @@ export const UnifiedSidebar: React.FC<UnifiedSidebarProps> = ({
                   primary={item.text}
                   primaryTypographyProps={{
                     fontSize: '0.875rem',
-                    fontWeight: isActive ? 600 : 400
+                    fontWeight: isActive ? 600 : 400,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
                   }}
                 />
               </ListItem>
@@ -146,7 +149,10 @@ export const UnifiedSidebar: React.FC<UnifiedSidebarProps> = ({
             primary="Logout"
             primaryTypographyProps={{
               fontSize: '0.875rem',
-              fontWeight: 400
+              fontWeight: 400,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
             }}
           />
         </ListItem>

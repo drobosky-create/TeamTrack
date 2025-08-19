@@ -136,8 +136,8 @@ export default function AdminDashboard() {
       </Card>
 
       {/* Role Information */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={6}>
+      <Box sx={{ display: 'flex', gap: 3, mb: 4, flexWrap: 'wrap' }}>
+        <Box sx={{ flex: '1 1 300px', minWidth: 0 }}>
           <Paper 
             sx={{ 
               p: 3, 
@@ -162,9 +162,9 @@ export default function AdminDashboard() {
               ))}
             </Box>
           </Paper>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} md={6}>
+        <Box sx={{ flex: '1 1 300px', minWidth: 0 }}>
           <Paper sx={{ p: 3, height: '100%' }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
               Sidebar Consistency
@@ -202,8 +202,8 @@ export default function AdminDashboard() {
               </Typography>
             </Box>
           </Paper>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* Admin Dashboard Features */}
       <Card sx={{ mt: 4, backgroundColor: theme.palette.info.main + '10' }}>
