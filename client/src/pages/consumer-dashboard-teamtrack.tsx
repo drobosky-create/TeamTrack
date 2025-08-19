@@ -27,7 +27,10 @@ import {
   MessageSquare,
   DollarSign,
   Users,
-  Sparkles
+  Sparkles,
+  LayoutDashboard,
+  CheckSquare,
+  Bell
 } from 'lucide-react';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -371,39 +374,87 @@ export default function ConsumerDashboardTeamTrack() {
         </div>
 
         {/* Navigation */}
-        <div className="flex-1 p-6">
-            <div className="flex flex-col gap-4"> 
-            <Link href="/assessment/free">
+        <div className="flex-1 p-6 overflow-y-auto">
+          <div className="flex flex-col gap-3">
+            {/* My Dashboard */}
+            <Link href="/consumer-dashboard">
               <Button className="w-full justify-start bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white py-3">
-                <FileText className="h-4 w-4 mr-3" />
-                Free Assessment
+                <LayoutDashboard className="h-4 w-4 mr-3" />
+                My Dashboard
               </Button>
             </Link>
             
-            {user.plan === 'free' ? (
-              <Link href="/applebites-checkout">
-                <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
-                  <Crown className="h-4 w-4 mr-3" />
-                  Growth Assessment
-                  <Lock className="h-3 w-3 ml-auto" />
-                </Button>
-              </Link>
-            ) : (
-              <Link href="/assessment/paid">
-                <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
-                  <Crown className="h-4 w-4 mr-3" />
-                  Growth Assessment
-                </Button>
-              </Link>
-            )}
-            
+            {/* My Assessments */}
             <Link href="/past-assessments">
               <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
                 <BarChart3 className="h-4 w-4 mr-3" />
-                Past Assessments
+                My Assessments
               </Button>
             </Link>
             
+            {/* Client View (Limited) */}
+            <Link href="/client-view">
+              <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
+                <Eye className="h-4 w-4 mr-3" />
+                Client View (Limited)
+              </Button>
+            </Link>
+            
+            {/* Free & Growth Assessments Section */}
+            <div className="border-t border-white/10 pt-3 mt-2">
+              <p className="text-xs text-cyan-200 uppercase tracking-wider mb-2 px-2">Assessments</p>
+              <div className="space-y-2">
+                <Link href="/assessment/free">
+                  <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white/90 py-2">
+                    <FileText className="h-4 w-4 mr-3" />
+                    Free Assessment
+                  </Button>
+                </Link>
+                
+                {user.plan === 'free' ? (
+                  <Link href="/applebites-checkout">
+                    <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white/90 py-2">
+                      <Crown className="h-4 w-4 mr-3" />
+                      Growth Assessment
+                      <Lock className="h-3 w-3 ml-auto" />
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link href="/assessment/paid">
+                    <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white/90 py-2">
+                      <Crown className="h-4 w-4 mr-3" />
+                      Growth Assessment
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            </div>
+            
+            {/* Tasks & Feedback */}
+            <Link href="/tasks-feedback">
+              <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
+                <CheckSquare className="h-4 w-4 mr-3" />
+                Tasks & Feedback
+              </Button>
+            </Link>
+            
+            {/* Notifications */}
+            <Link href="/notifications">
+              <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
+                <Bell className="h-4 w-4 mr-3" />
+                Notifications
+              </Button>
+            </Link>
+            
+            {/* Profile Management */}
+            <Link href="/profile">
+              <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
+                <User className="h-4 w-4 mr-3" />
+                Profile Management
+              </Button>
+            </Link>
+            
+            {/* Schedule Consultation */}
             <Button 
               className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3"
               asChild
