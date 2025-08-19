@@ -769,51 +769,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create promotion codes (admin endpoint)
-  app.post("/api/admin/create-promotion-code", async (req, res) => {
-    try {
-      const { code, percentOff, amountOff, maxRedemptions, expiresInDays = 30 } = req.body;
-
-      // Create a coupon first
-      const couponData: any = {
-        duration: 'once', // For one-time payments
-        name: code,
-      };
-
-      if (percentOff) {
-        couponData.percent_off = percentOff;
-      } else if (amountOff) {
-        couponData.amount_off = Math.round(amountOff * 100); // Convert to cents
-        couponData.currency = 'usd';
-      } else {
-        return res.status(400).json({ 
-          message: "Either percentOff or amountOff must be provided" 
-        });
-      }
-
-      const coupon = await stripe.coupons.create(couponData);
-
-      // Create the promotion code
-      const promotionCode = await stripe.promotionCodes.create({
-        coupon: coupon.id,
-        code: code.toUpperCase(),
-        max_redemptions: maxRedemptions,
-        expires_at: Math.floor(Date.now() / 1000) + (expiresInDays * 24 * 60 * 60),
-      });
-
-      res.json({ 
-        success: true,
-        promotionCode: promotionCode.code,
-        couponId: coupon.id,
-        expiresAt: new Date(promotionCode.expires_at! * 1000).toISOString(),
-      });
-    } catch (error: any) {
-      console.error('Promotion code creation error:', error);
-      res.status(500).json({ 
-        message: "Error creating promotion code: " + error.message 
-      });
-    }
-  });
+  // Removed promotion code creation endpoint - all coupons should be created directly in Stripe Dashboard
 
   // Stripe payment routes for one-time payments
   app.post("/api/payments/create-payment-intent", async (req, res) => {

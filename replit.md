@@ -24,7 +24,7 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
   - Checkout flow: AppleBites landing → Checkout preview page → Stripe hosted checkout → Consumer signup (with prefilled data after payment)
   - After successful payment, redirects to signup with payment confirmation
   - Capital plan button disabled with "Coming Soon" status
-  - Admin can create promotion codes via `/admin/promotion-codes` that sync directly to Stripe
+  - All promotion codes and coupons are managed directly in Stripe Dashboard (not in application)
   - Fixed Stripe URL validation by ensuring HTTPS protocol in redirect URLs
   - Implemented both URL-based and sessionId-based redirect methods for maximum compatibility
 
