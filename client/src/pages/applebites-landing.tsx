@@ -10,7 +10,7 @@ import {
   Toolbar,
 } from '@mui/material';
 import { Link } from 'wouter';
-import { CreditCard } from 'lucide-react';
+import { FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover } from 'react-icons/fa';
 
 export default function AppleBitesLanding() {
   return (
@@ -27,20 +27,12 @@ export default function AppleBitesLanding() {
               src="/apple-bites-logo.png"
               alt="AppleBites"
               sx={{ 
-                height: 50,
+                height: 150,
                 width: 'auto',
                 mr: 2,
                 objectFit: 'contain'
               }}
             />
-            <Typography variant="caption" sx={{ 
-              color: '#8b95a7', 
-              fontSize: '0.75rem',
-              letterSpacing: 1,
-              textTransform: 'uppercase'
-            }}>
-              ASSESSMENTS
-            </Typography>
           </Box>
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Button
@@ -258,11 +250,11 @@ export default function AppleBitesLanding() {
               >
                 Access Now
               </Button>
-              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 1 }}>
-                <CreditCard size={20} color="#999" />
-                <CreditCard size={20} color="#999" />
-                <CreditCard size={20} color="#999" />
-                <CreditCard size={20} color="#999" />
+              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 1.5, alignItems: 'center' }}>
+                <FaCcVisa size={28} color="#1A1F71" />
+                <FaCcMastercard size={28} color="#EB001B" />
+                <FaCcAmex size={28} color="#006FCF" />
+                <FaCcDiscover size={28} color="#FF6000" />
               </Box>
             </CardContent>
           </Card>
@@ -324,11 +316,11 @@ export default function AppleBitesLanding() {
               >
                 Access Now
               </Button>
-              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 1 }}>
-                <CreditCard size={20} color="#999" />
-                <CreditCard size={20} color="#999" />
-                <CreditCard size={20} color="#999" />
-                <CreditCard size={20} color="#999" />
+              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 1.5, alignItems: 'center' }}>
+                <FaCcVisa size={28} color="#1A1F71" />
+                <FaCcMastercard size={28} color="#EB001B" />
+                <FaCcAmex size={28} color="#006FCF" />
+                <FaCcDiscover size={28} color="#FF6000" />
               </Box>
             </CardContent>
           </Card>
@@ -384,11 +376,11 @@ export default function AppleBitesLanding() {
               >
                 Coming Soon
               </Button>
-              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 1 }}>
-                <CreditCard size={20} color="#999" />
-                <CreditCard size={20} color="#999" />
-                <CreditCard size={20} color="#999" />
-                <CreditCard size={20} color="#999" />
+              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 1.5, alignItems: 'center' }}>
+                <FaCcVisa size={28} color="#1A1F71" />
+                <FaCcMastercard size={28} color="#EB001B" />
+                <FaCcAmex size={28} color="#006FCF" />
+                <FaCcDiscover size={28} color="#FF6000" />
               </Box>
             </CardContent>
           </Card>
