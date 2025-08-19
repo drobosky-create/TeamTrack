@@ -32,45 +32,45 @@ export default function TestDashboard() {
   const roleDescriptions = {
     admin: {
       title: 'Admin Dashboard',
-      description: 'Full system control with access to all features',
+      description: 'Full system control with audit logs and export center',
       color: theme.palette.error.main,
       features: [
         'Client Records Management',
-        'User & Role Management', 
+        'User & Role Management',
+        'Audit Logs & Activity Tracking',
         'Assessment Management',
         'Advanced Analytics',
-        'Content & Data Control',
+        'Export Center (Lead/Assessment)',
         'NAICS Management',
-        'Billing & Integrations',
-        'Templates & Branding'
+        'Integrations (Stripe, SendGrid, GHL)'
       ]
     },
     manager: {
       title: 'Manager Dashboard',
-      description: 'Team and client management capabilities',
+      description: 'Deal pipeline, team oversight, and approval workflows',
       color: theme.palette.warning.main,
       features: [
+        'Deal Pipeline',
         'Client Management',
-        'Assessment Overview',
-        'Tasks & Workflow',
+        'Assessments in Progress',
         'Team Analytics',
-        'Performance Reports',
-        'Notifications',
-        'Team Collaboration'
+        'Approval Queue',
+        'Export Tools',
+        'Notifications'
       ]
     },
     team_member: {
-      title: 'Team Member Dashboard',
-      description: 'Personal assessment and results tracking',
+      title: 'User Dashboard',
+      description: 'Consumer assessments with collaboration features',
       color: theme.palette.success.main,
       features: [
-        'Assessment Dashboard',
-        'Free Assessment',
-        'Growth Assessment',
-        'Personal Results',
-        'Follow-Up Options',
-        'Profile Management',
-        'Help & Support'
+        'My Dashboard',
+        'My Assessments',
+        'Client View (Limited)',
+        'Free & Growth Assessments',
+        'Tasks & Feedback',
+        'Notifications',
+        'Profile Management'
       ]
     }
   };
@@ -107,13 +107,13 @@ export default function TestDashboard() {
               <ToggleButton value="manager" aria-label="manager role">
                 Manager
               </ToggleButton>
-              <ToggleButton value="team_member" aria-label="team member role">
-                Team Member
+              <ToggleButton value="team_member" aria-label="user role">
+                User
               </ToggleButton>
             </ToggleButtonGroup>
             
             <Typography variant="body2" sx={{ mt: 2 }}>
-              <strong>Current Role:</strong> {selectedRole.replace('_', ' ').toUpperCase()}
+              <strong>Current Role:</strong> {selectedRole === 'team_member' ? 'USER' : selectedRole.toUpperCase()}
             </Typography>
           </CardContent>
         </Card>

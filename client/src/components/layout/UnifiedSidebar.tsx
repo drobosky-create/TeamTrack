@@ -24,7 +24,8 @@ import {
   CardMembership as ReportCardIcon,
   Help as HelpIcon,
   BusinessCenter as BusinessCenterIcon,
-  Calculate as CalculateIcon
+  Calculate as CalculateIcon,
+  Star as StarIcon
 } from '@mui/icons-material';
 import { Link, useLocation } from 'wouter';
 
@@ -156,12 +157,24 @@ export const UnifiedSidebar: React.FC<UnifiedSidebarProps> = ({
 
 // Export commonly used navigation configurations
 export const navigationConfigs = {
-  // Consumer/Client Navigation (team_member role)
-  consumer: [
+  // User Navigation (team_member role) - consumer access with collaboration
+  user: [
     {
-      text: 'Assessment Dashboard',
+      text: 'My Dashboard',
       icon: <DashboardIcon />,
       path: '/',
+      roles: ['team_member']
+    },
+    {
+      text: 'My Assessments',
+      icon: <AssessmentIcon />,
+      path: '/my-assessments',
+      roles: ['team_member']
+    },
+    {
+      text: 'Client View',
+      icon: <PeopleIcon />,
+      path: '/client-view',
       roles: ['team_member']
     },
     {
@@ -177,15 +190,15 @@ export const navigationConfigs = {
       roles: ['team_member']
     },
     {
-      text: 'My Results',
-      icon: <ReportCardIcon />,
-      path: '/results',
+      text: 'Tasks & Feedback',
+      icon: <AssignmentIcon />,
+      path: '/tasks-feedback',
       roles: ['team_member']
     },
     {
-      text: 'Follow-Up Options',
+      text: 'Notifications',
       icon: <NotificationsIcon />,
-      path: '/follow-up',
+      path: '/notifications',
       roles: ['team_member']
     },
     {
@@ -202,12 +215,18 @@ export const navigationConfigs = {
     }
   ],
 
-  // Team Member/Analyst Navigation (manager role)
-  teamMember: [
+  // Manager Navigation - includes deal pipeline and team oversight
+  manager: [
     {
       text: 'Dashboard',
       icon: <DashboardIcon />,
       path: '/',
+      roles: ['manager']
+    },
+    {
+      text: 'Deal Pipeline',
+      icon: <BusinessCenterIcon />,
+      path: '/pipeline',
       roles: ['manager']
     },
     {
@@ -223,39 +242,33 @@ export const navigationConfigs = {
       roles: ['manager']
     },
     {
-      text: 'Tasks & Workflow',
-      icon: <AssignmentIcon />,
-      path: '/tasks',
-      roles: ['manager']
-    },
-    {
-      text: 'My Analytics',
+      text: 'Team Analytics',
       icon: <ReportsIcon />,
-      path: '/my-analytics',
+      path: '/team-analytics',
       roles: ['manager']
     },
     {
-      text: 'Free Assessment',
-      icon: <BusinessCenterIcon />,
-      path: '/free-assessment',
+      text: 'Approvals',
+      icon: <StarIcon />,
+      path: '/approvals',
       roles: ['manager']
     },
     {
-      text: 'Growth Assessment',
-      icon: <CalculateIcon />,
-      path: '/growth-assessment',
-      roles: ['manager']
-    },
-    {
-      text: 'Profile',
-      icon: <PersonIcon />,
-      path: '/profile',
+      text: 'Export Tools',
+      icon: <DocumentsIcon />,
+      path: '/exports',
       roles: ['manager']
     },
     {
       text: 'Notifications',
       icon: <NotificationsIcon />,
       path: '/notifications',
+      roles: ['manager']
+    },
+    {
+      text: 'Profile',
+      icon: <PersonIcon />,
+      path: '/profile',
       roles: ['manager']
     },
     {
@@ -266,7 +279,7 @@ export const navigationConfigs = {
     }
   ],
 
-  // Admin/Leadership Navigation
+  // Admin/Leadership Navigation - includes audit and export tools
   admin: [
     {
       text: 'Admin Dashboard',
@@ -287,6 +300,12 @@ export const navigationConfigs = {
       roles: ['admin']
     },
     {
+      text: 'Audit Logs',
+      icon: <StarIcon />,
+      path: '/admin/audit-logs',
+      roles: ['admin']
+    },
+    {
       text: 'Assessment Management',
       icon: <AssessmentIcon />,
       path: '/admin/assessments',
@@ -299,9 +318,9 @@ export const navigationConfigs = {
       roles: ['admin']
     },
     {
-      text: 'Content & Data Control',
+      text: 'Export Center',
       icon: <DocumentsIcon />,
-      path: '/admin/content',
+      path: '/admin/exports',
       roles: ['admin']
     },
     {
@@ -311,9 +330,9 @@ export const navigationConfigs = {
       roles: ['admin']
     },
     {
-      text: 'Billing & Integrations',
+      text: 'Integrations',
       icon: <CreditCardIcon />,
-      path: '/admin/billing',
+      path: '/admin/integrations',
       roles: ['admin']
     },
     {
@@ -329,15 +348,9 @@ export const navigationConfigs = {
       roles: ['admin']
     },
     {
-      text: 'Free Assessment',
-      icon: <BusinessCenterIcon />,
-      path: '/free-assessment',
-      roles: ['admin']
-    },
-    {
-      text: 'Growth Assessment',
-      icon: <CalculateIcon />,
-      path: '/growth-assessment',
+      text: 'Notifications',
+      icon: <NotificationsIcon />,
+      path: '/notifications',
       roles: ['admin']
     },
     {
@@ -361,14 +374,10 @@ export const getNavigationItemsByRole = (userRole: string, userId?: string): Nav
     case 'admin':
       return navigationConfigs.admin;
     case 'manager':
-      return navigationConfigs.teamMember;
+      return navigationConfigs.manager;
     case 'team_member':
     default:
-      // For team_member, update the results path with the user ID
-      return navigationConfigs.consumer.map(item => 
-        item.text === 'My Results' && userId 
-          ? { ...item, path: `/results/${userId}` }
-          : item
-      );
+      // For team_member (user role), return user navigation
+      return navigationConfigs.user;
   }
 };

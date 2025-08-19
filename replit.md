@@ -34,7 +34,10 @@ Design System: Universal token-based theming - all colors, gradients, spacing, s
 - **Authentication**: Replit-based OpenID Connect using Passport.js.
 - **Authorization**: Three-tier role-based access control (admin, manager, team_member) enforced via middleware on both client and server.
 - **Session Management**: Secure server-side sessions stored in PostgreSQL.
-- **Role Navigation**: Team members see consumer-focused AppleBites navigation (business valuation, assessments), managers see team/analyst tools, admins see full management capabilities.
+- **Role Navigation**: 
+  - **Admin**: Full system control with audit logs, export center, NAICS management, integrations (Stripe, SendGrid, GHL), and activity tracking for dispute resolution
+  - **Manager**: Deal pipeline visibility, team oversight, approval workflows, client management, limited export tools for Meritage Partners reporting
+  - **User** (formerly Team Member): Consumer-focused AppleBites navigation with collaboration features, limited client view access, tasks & feedback from managers, notifications
 
 ## Data Flow Patterns
 - **Client-Server Communication**: REST API with JSON payloads.
