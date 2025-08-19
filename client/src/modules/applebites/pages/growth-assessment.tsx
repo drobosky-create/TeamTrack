@@ -92,6 +92,8 @@ export default function GrowthAssessment() {
   const [selectedNaicsCode, setSelectedNaicsCode] = useState<string>('');
   const [selectedIndustry, setSelectedIndustry] = useState<string>('');
   const [selectedSector, setSelectedSector] = useState<string>('');
+  const [assessmentResults, setAssessmentResults] = useState<any>(null);
+  const [isSubmittingAssessment, setIsSubmittingAssessment] = useState(false);
 
   // Fetch previous assessments to check for existing financial data
   const { data: previousAssessments, isLoading: assessmentsLoading } = useQuery<any[]>({
@@ -630,15 +632,30 @@ export default function GrowthAssessment() {
                 naicsCode: selectedNaicsCode,
                 industry: selectedIndustry
               };
-              await submitAssessment();
-              setCurrentStep('results');
+              // Pass the combined data directly to the API
+              setIsSubmittingAssessment(true);
+              try {
+                const response = await apiRequest('POST', '/api/valuation', combinedData);
+                const result = await response.json();
+                if (result.success) {
+                  setAssessmentResults(result.assessment);
+                  setCurrentStep('results');
+                }
+              } catch (error) {
+                console.error('Error submitting assessment:', error);
+              } finally {
+                setIsSubmittingAssessment(false);
+              }
             }}
             onPrev={prevStep}
             onDataChange={(data) => updateValuationFormData("followUp", data)}
-            isSubmitting={isSubmitting}
+            isSubmitting={isSubmittingAssessment}
           />
         );
       case 'results':
+        if (assessmentResults) {
+          return <StrategicReport results={assessmentResults} />;
+        }
         if (results) {
           return <StrategicReport results={results} />;
         }
