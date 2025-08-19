@@ -38,8 +38,26 @@ import ConsumerAuth from "@/pages/consumer-auth";
 import TestDashboard from "@/pages/test-dashboard";
 import ThemeManager from "@/components/admin/ThemeManager";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
+import { AdminAuthProvider, useAdminAuth } from './hooks/use-admin-auth';
 
+// Admin Dashboard Wrapper Component
+function AdminDashboardWrapper() {
+  const { adminUser, isLoading } = useAdminAuth();
 
+  if (isLoading) {
+    return <div>Loading admin dashboard...</div>;
+  }
+
+  if (!adminUser) {
+    return <AdminLoginPage />;
+  }
+
+  return (
+    <MaterialDashboardLayout>
+      <Dashboard />
+    </MaterialDashboardLayout>
+  );
+}
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -54,6 +72,9 @@ function Router() {
       <Route path="/consumer-login" component={ConsumerLogin} />
       <Route path="/admin-login" component={AdminLoginPage} />
       <Route path="/consumer-dashboard" component={ConsumerDashboard} />
+      
+      {/* Admin Dashboard Route */}
+      <Route path="/dashboard" component={AdminDashboardWrapper} />
       <Route path="/assessment-selection" component={AssessmentSelection} />
       <Route path="/assessments/free" component={FreeAssessment} />
       <Route path="/assessments/growth" component={GrowthAssessment} />
@@ -98,12 +119,14 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeTokenProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ThemeTokenProvider>
+      <AdminAuthProvider>
+        <ThemeTokenProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </ThemeTokenProvider>
+      </AdminAuthProvider>
     </QueryClientProvider>
   );
 }
