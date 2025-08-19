@@ -30,6 +30,7 @@ import AppleBitesLanding from "@/pages/applebites-landing";
 import PerformanceHubLanding from "@/pages/performancehub-landing";
 import ConsumerAuth from "@/pages/consumer-auth";
 import FreeAssessmentDashboard from "@/pages/free-assessment";
+import TestDashboard from "@/pages/test-dashboard";
 import ThemeManager from "@/components/admin/ThemeManager";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 
@@ -70,6 +71,7 @@ function Router() {
             <Route path="/results/:id" component={AssessmentResultsPage} />
             <Route path="/follow-up" component={FollowUpOptionsPage} />
             <Route path="/theme-manager" component={ThemeManager} />
+            <Route path="/test-dashboard" component={TestDashboard} />
             <Route path="/settings" component={Settings} />
             <Route path="/profile" component={Profile} />
             <Route path="/notifications" component={Notifications} />
