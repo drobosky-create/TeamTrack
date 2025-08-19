@@ -64,26 +64,17 @@ export default function PastAssessmentsPage() {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
 
-  // Fetch assessments data
+  // Fetch assessments data - using consumer-specific endpoint
   const { data: assessments = [], isLoading: assessmentsLoading } = useQuery<Assessment[]>({
-    queryKey: ['/api/assessments'],
+    queryKey: ['/api/consumer/assessments'],
   });
 
-  // Filter assessments by the logged-in user
-  const userEmail = (user?.email || '').toLowerCase();
-  
-  // Only this user's assessments
-  const userAssessments = useMemo(
-    () => (assessments || []).filter(a => a.email?.toLowerCase() === userEmail),
-    [assessments, userEmail]
-  );
-
-  // Further filter by search term
+  // No need to filter by email since API only returns user's assessments
   const filteredAssessments = useMemo(() => {
-    if (!userAssessments) return [];
+    if (!assessments) return [];
     
     const searchLower = searchTerm.toLowerCase();
-    return userAssessments.filter(assessment => {
+    return assessments.filter(assessment => {
       if (!searchTerm) return true;
       return (
         assessment.company?.toLowerCase().includes(searchLower) ||
@@ -91,7 +82,7 @@ export default function PastAssessmentsPage() {
         assessment.email?.toLowerCase().includes(searchLower)
       );
     });
-  }, [userAssessments, searchTerm]);
+  }, [assessments, searchTerm]);
 
   // Check authentication
   React.useEffect(() => {

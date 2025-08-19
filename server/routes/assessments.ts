@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import Stripe from 'stripe';
 import { db } from '../db';
 import { valuationAssessments, auditLogs } from '@shared/schema';
-import { eq } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 import OpenAI from 'openai';
 
 const router = Router();
@@ -419,6 +419,36 @@ router.post('/api/assessments/growth', async (req: Request, res: Response) => {
   }
 });
 
+// Get consumer user's assessments
+router.get('/api/consumer/assessments', async (req: Request, res: Response) => {
+  try {
+    // Get the consumer user from session
+    const consumerUserId = (req.session as any)?.consumerUser?.id;
+    
+    if (!consumerUserId) {
+      return res.status(401).json({ 
+        success: false, 
+        message: 'Please login to view your assessments' 
+      });
+    }
+
+    // Fetch all assessments for this consumer user
+    const assessments = await db
+      .select()
+      .from(valuationAssessments)
+      .where(eq(valuationAssessments.userId, consumerUserId))
+      .orderBy(desc(valuationAssessments.createdAt));
+
+    res.json(assessments);
+  } catch (error) {
+    console.error('Get consumer assessments error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to retrieve assessments' 
+    });
+  }
+});
+
 // Get assessment results
 router.get('/api/assessments/:id', async (req: Request, res: Response) => {
   try {
@@ -454,6 +484,9 @@ router.get('/api/assessments/:id', async (req: Request, res: Response) => {
 router.post('/api/valuation', async (req: Request, res: Response) => {
   try {
     const formData = req.body;
+    
+    // Get the consumer user from session if logged in
+    const consumerUserId = (req.session as any)?.consumerUser?.id || null;
     
     // Extract data from nested form structure
     const { ebitda, adjustments, valueDrivers, followUp } = formData;
@@ -573,10 +606,12 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
     
     // Save to database
     const [assessment] = await db.insert(valuationAssessments).values({
+      // Link to consumer user if logged in
+      userId: consumerUserId,
       // Using placeholder contact info since it's not collected in free assessment
       firstName: 'Guest',
       lastName: 'User',
-      email: `guest_${Date.now()}@example.com`,
+      email: consumerUserId ? `user_${consumerUserId}@assessment.com` : `guest_${Date.now()}@example.com`,
       phone: '000-000-0000',  // Required field - placeholder for free assessments
       company: 'Company',
       tier: 'free',
