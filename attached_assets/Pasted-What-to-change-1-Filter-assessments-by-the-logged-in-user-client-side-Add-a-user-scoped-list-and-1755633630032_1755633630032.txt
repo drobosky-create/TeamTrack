@@ -1,0 +1,97 @@
+What to change
+1) Filter assessments by the logged‑in user (client‑side)
+
+Add a user‑scoped list and compute metrics from that list.
+
+// inside ConsumerDashboardTeamTrack, after `if (!user) return null;`
+const userEmail = (user.email || '').toLowerCase();
+
+// Only this user's assessments
+const userAssessments = useMemo(
+  () => (assessments || []).filter(a => a.email?.toLowerCase() === userEmail),
+  [assessments, userEmail]
+);
+
+// Metrics based ONLY on this user's data
+const totalAssessments = userAssessments.length;
+
+const latestAssessment = userAssessments.length
+  ? [...userAssessments].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )[0]
+  : null;
+
+const latestValuation =
+  latestAssessment?.midEstimate && !Number.isNaN(Number(latestAssessment.midEstimate))
+    ? Number(latestAssessment.midEstimate)
+    : null;
+
+
+Then update the tiles to remove the hardcoded fallbacks:
+
+{/* Completed Assessments */}
+<h3 className="text-2xl font-bold text-gray-800">{totalAssessments}</h3>
+
+{/* Estimated Value */}
+<h3 className="text-2xl font-bold text-gray-800">
+  {latestValuation != null ? formatCurrency(latestValuation) : '—'}
+</h3>
+
+2) Scope the “Recent Assessments” to the user
+
+Pass the user’s email into PastAssessmentsSection and filter there too.
+
+a) Pass prop
+<PastAssessmentsSection userEmail={user.email!} />
+
+b) Update component
+function PastAssessmentsSection({ userEmail }: { userEmail: string }) {
+  const { data: assessments, isLoading } = useQuery<Assessment[]>({
+    queryKey: ['/api/assessments'],
+  });
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredAssessments = useMemo(() => {
+    if (!assessments) return [];
+    const emailLower = (userEmail || '').toLowerCase();
+    const base = assessments.filter(a => a.email?.toLowerCase() === emailLower);
+
+    const searchLower = searchTerm.toLowerCase();
+    return base.filter(assessment => {
+      if (!searchTerm) return true;
+      return (
+        assessment.company?.toLowerCase().includes(searchLower) ||
+        `${assessment.firstName} ${assessment.lastName}`.toLowerCase().includes(searchLower) ||
+        assessment.email?.toLowerCase().includes(searchLower)
+      );
+    });
+  }, [assessments, userEmail, searchTerm]);
+
+  // ...rest unchanged
+}
+
+Optional (server‑side filter instead)
+
+If your API supports it, filter at the source and avoid client‑side filtering:
+
+// PastAssessmentsSection
+const { data: assessments, isLoading } = useQuery<Assessment[]>({
+  queryKey: ['/api/assessments', userEmail],
+  queryFn: async () => {
+    const res = await apiRequest('GET', `/api/assessments?email=${encodeURIComponent(userEmail)}`);
+    return res.json();
+  },
+  enabled: !!userEmail,
+});
+
+
+Repeat similarly in the dashboard (or reuse the same query with select).
+
+Tiny cleanups while you’re here
+
+Don’t mutate the original array when sorting (use the spread like above).
+
+Keep currency parsing consistent (Number() over parseFloat is fine here).
+
+Consider showing a friendly hint when userAssessments.length === 0 instead of an empty stat

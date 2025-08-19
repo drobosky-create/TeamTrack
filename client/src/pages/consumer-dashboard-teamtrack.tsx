@@ -61,7 +61,7 @@ interface Assessment {
 }
 
 // Past Assessments Component
-function PastAssessmentsSection() {
+function PastAssessmentsSection({ userEmail }: { userEmail: string }) {
   const { data: assessments, isLoading } = useQuery<Assessment[]>({
     queryKey: ['/api/assessments'],
   });
@@ -70,17 +70,19 @@ function PastAssessmentsSection() {
 
   const filteredAssessments = useMemo(() => {
     if (!assessments) return [];
-    
-    return assessments.filter(assessment => {
-      const searchLower = searchTerm.toLowerCase();
-      const matchesSearch = !searchTerm || 
+    const emailLower = (userEmail || '').toLowerCase();
+    const base = assessments.filter(a => a.email?.toLowerCase() === emailLower);
+
+    const searchLower = searchTerm.toLowerCase();
+    return base.filter(assessment => {
+      if (!searchTerm) return true;
+      return (
         assessment.company?.toLowerCase().includes(searchLower) ||
         `${assessment.firstName} ${assessment.lastName}`.toLowerCase().includes(searchLower) ||
-        assessment.email?.toLowerCase().includes(searchLower);
-      
-      return matchesSearch;
+        assessment.email?.toLowerCase().includes(searchLower)
+      );
     });
-  }, [assessments, searchTerm]);
+  }, [assessments, userEmail, searchTerm]);
 
   const formatCurrency = (value: string | null) => {
     if (!value) return "$0";
@@ -228,6 +230,29 @@ export default function ConsumerDashboardTeamTrack() {
     queryKey: ['/api/assessments'],
   });
 
+  // Filter assessments by the logged-in user (must be before conditional returns)
+  const userEmail = (user?.email || '').toLowerCase();
+  
+  // Only this user's assessments
+  const userAssessments = useMemo(
+    () => (assessments || []).filter(a => a.email?.toLowerCase() === userEmail),
+    [assessments, userEmail]
+  );
+
+  // Metrics based ONLY on this user's data
+  const totalAssessments = userAssessments.length;
+
+  const latestAssessment = userAssessments.length
+    ? [...userAssessments].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )[0]
+    : null;
+
+  const latestValuation =
+    latestAssessment?.midEstimate && !Number.isNaN(Number(latestAssessment.midEstimate))
+      ? Number(latestAssessment.midEstimate)
+      : null;
+
   // Check authentication
   React.useEffect(() => {
     checkAuth();
@@ -295,15 +320,6 @@ export default function ConsumerDashboardTeamTrack() {
     }
   };
 
-  // Calculate dashboard metrics
-  const totalAssessments = assessments.length;
-  const latestAssessment = assessments.length > 0 ? 
-    assessments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0] : 
-    null;
-  
-  const latestValuation = latestAssessment?.midEstimate ? 
-    parseFloat(latestAssessment.midEstimate) : 0;
-
   const formatCurrency = (value: number) => {
     if (value >= 1000000) {
       return new Intl.NumberFormat('en-US', {
@@ -356,7 +372,7 @@ export default function ConsumerDashboardTeamTrack() {
 
         {/* Navigation */}
         <div className="flex-1 p-6">
-          <div className="space-y-4">
+            <div className="flex flex-col gap-4"> 
             <Link href="/assessment/free">
               <Button className="w-full justify-start bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white py-3">
                 <FileText className="h-4 w-4 mr-3" />
@@ -458,7 +474,7 @@ export default function ConsumerDashboardTeamTrack() {
             {/* Completed Assessments */}
             <div className="bg-white border rounded-lg p-4 flex items-center justify-between">
               <div>
-                <h3 className="text-2xl font-bold text-gray-800">{totalAssessments || 51}</h3>
+                <h3 className="text-2xl font-bold text-gray-800">{totalAssessments}</h3>
                 <p className="text-sm text-gray-600 mt-1">Completed Assessments</p>
               </div>
               <FileText className="h-8 w-8 text-[#1976d2]" />
@@ -468,7 +484,7 @@ export default function ConsumerDashboardTeamTrack() {
             <div className="bg-white border rounded-lg p-4 flex items-center justify-between">
               <div>
                 <h3 className="text-2xl font-bold text-gray-800">
-                  {latestValuation > 0 ? formatCurrency(latestValuation) : '$14.5M'}
+                  {latestValuation != null ? formatCurrency(latestValuation) : '—'}
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">Estimated Value</p>
               </div>
@@ -540,7 +556,7 @@ export default function ConsumerDashboardTeamTrack() {
                   </Button>
                 </Link>
               </div>
-              <PastAssessmentsSection />
+              <PastAssessmentsSection userEmail={user.email!} />
             </div>
           </div>
         </div>
