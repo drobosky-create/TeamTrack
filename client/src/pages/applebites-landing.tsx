@@ -33,6 +33,14 @@ export default function AppleBitesLanding() {
                 objectFit: 'contain'
               }}
             />
+            <Typography variant="caption" sx={{ 
+              color: '#8b95a7', 
+              fontSize: '0.75rem',
+              letterSpacing: 1,
+              textTransform: 'uppercase'
+            }}>
+              ASSESSMENTS
+            </Typography>
           </Box>
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Button
