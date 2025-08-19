@@ -60,24 +60,52 @@ export const UnifiedSidebar: React.FC<UnifiedSidebarProps> = ({
   );
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ 
+      height: '100%', 
+      display: 'flex', 
+      flexDirection: 'column',
+      width: '280px',
+      minWidth: 0,
+      overflow: 'hidden'
+    }}>
       {/* Header with gradient */}
       <Box sx={(theme: any) => ({ 
-        p: 3, 
+        p: 2, 
         background: theme.gradients?.primary?.main || theme.tokens?.gradient?.brandBlue || 'linear-gradient(195deg, #42424a, #191919)',
         color: 'white',
-        textAlign: 'center'
+        textAlign: 'center',
+        overflow: 'hidden'
       })}>
-        <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h6" component="div" sx={{ 
+          fontWeight: 'bold',
+          fontSize: '1rem',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
+        }}>
           {title}
         </Typography>
-        <Typography variant="body2" sx={{ opacity: 0.8, mt: 1 }}>
+        <Typography variant="body2" sx={{ 
+          opacity: 0.8, 
+          mt: 0.5,
+          fontSize: '0.75rem',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
+        }}>
           {subtitle}
         </Typography>
       </Box>
       
       {/* Navigation Items */}
-      <List sx={{ pt: 0, flex: 1, overflowY: 'auto' }}>
+      <List sx={{ 
+        pt: 0, 
+        flex: 1, 
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        width: '100%',
+        px: 1
+      }}>
         {filteredItems.map((item) => {
           const isActive = location === item.path;
           
@@ -86,9 +114,10 @@ export const UnifiedSidebar: React.FC<UnifiedSidebarProps> = ({
               <ListItem 
                 component="div"
                 sx={{
-                  mx: 2,
-                  my: 0.5,
-                  borderRadius: 2,
+                  mx: 1,
+                  my: 0.25,
+                  px: 1,
+                  borderRadius: 1.5,
                   backgroundColor: isActive 
                     ? 'rgba(255, 255, 255, 0.2)' 
                     : 'transparent',
@@ -98,23 +127,33 @@ export const UnifiedSidebar: React.FC<UnifiedSidebarProps> = ({
                   cursor: 'pointer',
                   color: isActive ? 'white' : 'rgba(255, 255, 255, 0.8)',
                   transition: 'all 0.3s ease',
+                  minWidth: 0,
+                  width: '100%',
+                  overflow: 'hidden'
                 }}
                 data-testid={`nav-item-${item.text.toLowerCase().replace(/\s+/g, '-')}`}
               >
                 <ListItemIcon sx={{ 
                   color: 'inherit',
-                  minWidth: 40 
+                  minWidth: 32,
+                  mr: 1.5
                 }}>
                   {item.icon}
                 </ListItemIcon>
                 <ListItemText 
                   primary={item.text}
+                  sx={{ 
+                    margin: 0,
+                    minWidth: 0,
+                    overflow: 'hidden'
+                  }}
                   primaryTypographyProps={{
-                    fontSize: '0.875rem',
+                    fontSize: '0.8rem',
                     fontWeight: isActive ? 600 : 400,
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
-                    textOverflow: 'ellipsis'
+                    textOverflow: 'ellipsis',
+                    lineHeight: 1.2
                   }}
                 />
               </ListItem>
@@ -124,35 +163,50 @@ export const UnifiedSidebar: React.FC<UnifiedSidebarProps> = ({
       </List>
       
       {/* Logout Button */}
-      <Box sx={{ mt: 'auto', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+      <Box sx={{ 
+        mt: 'auto', 
+        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+        px: 1
+      }}>
         <ListItem 
           onClick={onLogout}
           sx={{
-            mx: 2,
-            my: 2,
-            borderRadius: 2,
+            mx: 1,
+            my: 1,
+            px: 1,
+            borderRadius: 1.5,
             '&:hover': {
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
             },
             cursor: 'pointer',
             color: 'rgba(255, 255, 255, 0.8)',
+            minWidth: 0,
+            width: '100%',
+            overflow: 'hidden'
           }}
           data-testid="nav-item-logout"
         >
           <ListItemIcon sx={{ 
             color: 'inherit',
-            minWidth: 40 
+            minWidth: 32,
+            mr: 1.5
           }}>
             <LogoutIcon />
           </ListItemIcon>
           <ListItemText 
             primary="Logout"
+            sx={{ 
+              margin: 0,
+              minWidth: 0,
+              overflow: 'hidden'
+            }}
             primaryTypographyProps={{
-              fontSize: '0.875rem',
+              fontSize: '0.8rem',
               fontWeight: 400,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
-              textOverflow: 'ellipsis'
+              textOverflow: 'ellipsis',
+              lineHeight: 1.2
             }}
           />
         </ListItem>

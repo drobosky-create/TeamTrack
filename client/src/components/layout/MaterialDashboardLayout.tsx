@@ -57,6 +57,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
             background: 'var(--gradient-primary, linear-gradient(195deg, #66bb6a, #43a047))',
             border: 'none',
             color: 'hsl(var(--primary-foreground))',
+            overflow: 'hidden',
           },
         }}
         open
@@ -79,6 +80,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
             width: drawerWidth,
             background: 'var(--gradient-primary, linear-gradient(195deg, #66bb6a, #43a047))',
             color: 'hsl(var(--primary-foreground))',
+            overflow: 'hidden',
           },
         }}
       >
