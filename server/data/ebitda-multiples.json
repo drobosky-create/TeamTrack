@@ -1,0 +1,107 @@
+{
+  "238160": {
+    "industry": "Roofing Contractors",
+    "base_range": {
+      "min": 5.9,
+      "max": 8.4
+    },
+    "premium_range": {
+      "min": 8.5,
+      "max": 11.0
+    },
+    "notes": "Premium applies to firms with strong margins, recurring revenue, and defined systems."
+  },
+  "238220": {
+    "industry": "Plumbing, Heating, and Air-Conditioning Contractors",
+    "base_range": {
+      "min": 6.0,
+      "max": 8.0
+    },
+    "premium_range": {
+      "min": 8.5,
+      "max": 11.0
+    },
+    "notes": "Premium range reflects firms with strong service agreements or recurring maintenance contracts."
+  },
+  "238210": {
+    "industry": "Electrical Contractors and Other Wiring Installation Contractors",
+    "base_range": {
+      "min": 6.1,
+      "max": 8.7
+    },
+    "premium_range": {
+      "min": 8.8,
+      "max": 11.5
+    },
+    "notes": "Includes value of government and commercial contracts."
+  },
+  "238310": {
+    "industry": "Drywall and Insulation Contractors",
+    "base_range": {
+      "min": 5.5,
+      "max": 7.5
+    },
+    "premium_range": {
+      "min": 7.6,
+      "max": 9.8
+    },
+    "notes": "Premium reflects firms with integrated service offerings or strong regional positioning."
+  },
+  "238320": {
+    "industry": "Painting and Wall Covering Contractors",
+    "base_range": {
+      "min": 5.0,
+      "max": 6.5
+    },
+    "premium_range": {
+      "min": 6.6,
+      "max": 8.5
+    },
+    "notes": "Premium applies to commercial firms with brand presence or recurring contracts."
+  },
+  "238910": {
+    "industry": "Site Preparation Contractors",
+    "base_range": {
+      "min": 5.8,
+      "max": 7.8
+    },
+    "premium_range": {
+      "min": 8.0,
+      "max": 10.2
+    },
+    "notes": "Includes excavation, grading, and demolition contractors."
+  },
+  "236220": {
+    "industry": "Commercial and Institutional Building Construction",
+    "base_range": {
+      "min": 6.5,
+      "max": 9.0
+    },
+    "premium_range": {
+      "min": 9.1,
+      "max": 11.5
+    },
+    "notes": "Premium reflects backlog, bonding capacity, and GC relationships."
+  },
+  "general_construction": {
+    "industry": "General Construction (Aggregated Private Market)",
+    "base_range": {
+      "min": 4.0,
+      "max": 6.5
+    },
+    "premium_range": {
+      "min": 7.0,
+      "max": 9.5
+    },
+    "notes": "Applicable to small and mid-sized construction businesses across multiple sectors."
+  },
+  "public_comps": {
+    "industry": "Public Comparables - Construction & Engineering",
+    "base_range": {
+      "min": 11.5,
+      "max": 12.5
+    },
+    "premium_range": null,
+    "notes": "Reference from Equidam TRBC industry classification for public market comps."
+  }
+}

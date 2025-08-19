@@ -4,6 +4,8 @@ import { db } from '../db';
 import { valuationAssessments, auditLogs, consumerUsers } from '@shared/schema';
 import { eq, desc } from 'drizzle-orm';
 import OpenAI from 'openai';
+import * as ebitdaMultiples from '../data/ebitda-multiples.json';
+import * as naicsCodes from '../data/naics-codes.json';
 
 const router = Router();
 
@@ -66,77 +68,64 @@ async function createGHLContact(contact: GHLContact) {
 }
 
 // Get industry multiplier based on NAICS code or industry description
-function getIndustryMultiplier(naicsCodeOrIndustry?: string): number {
+function getIndustryMultiplier(naicsCodeOrIndustry?: string, avgScore?: number): number {
   if (!naicsCodeOrIndustry) return 1.0;
   
-  // NAICS-based industry multipliers (simplified - in production use full NAICS database)
-  const naicsMultipliers: Record<string, number> = {
+  // First check if we have exact EBITDA multiples from the JSON data
+  const ebitdaData = (ebitdaMultiples as any)[naicsCodeOrIndustry];
+  if (ebitdaData) {
+    // Use premium range if score is high, otherwise use base range
+    const isPremium = avgScore && avgScore >= 4.0;
+    const range = isPremium && ebitdaData.premium_range ? ebitdaData.premium_range : ebitdaData.base_range;
+    
+    // Return midpoint of the range
+    return (range.min + range.max) / 2;
+  }
+  
+  // Check 4-digit NAICS prefix
+  const naics4Digit = naicsCodeOrIndustry.substring(0, 4);
+  const ebitda4Digit = (ebitdaMultiples as any)[naics4Digit];
+  if (ebitda4Digit) {
+    const isPremium = avgScore && avgScore >= 4.0;
+    const range = isPremium && ebitda4Digit.premium_range ? ebitda4Digit.premium_range : ebitda4Digit.base_range;
+    return (range.min + range.max) / 2;
+  }
+  
+  // Fallback to general construction if it's a construction code (23xxxx)
+  if (naicsCodeOrIndustry.startsWith('23')) {
+    const generalConstruction = (ebitdaMultiples as any)['general_construction'];
+    if (generalConstruction) {
+      const isPremium = avgScore && avgScore >= 4.0;
+      const range = isPremium && generalConstruction.premium_range ? generalConstruction.premium_range : generalConstruction.base_range;
+      return (range.min + range.max) / 2;
+    }
+  }
+  
+  // Fallback to simplified multipliers for other industries
+  const simplifiedMultipliers: Record<string, number> = {
     // Technology & Software
     '5112': 1.4,  // Software Publishers
     '5415': 1.35, // Computer Systems Design
     '5182': 1.3,  // Data Processing & Hosting
+    '5416': 1.05, // Management Consulting (from NAICS data)
     
-    // Healthcare & Life Sciences
+    // Healthcare
     '6211': 1.25, // Offices of Physicians
     '6216': 1.2,  // Home Health Care Services
-    '3254': 1.3,  // Pharmaceutical Manufacturing
     
-    // Manufacturing
-    '3361': 0.9,  // Motor Vehicle Manufacturing
-    '3331': 0.85, // Agriculture Machinery Manufacturing
-    '3344': 1.1,  // Semiconductor Manufacturing
+    // Retail & Food Service
+    '4411': 0.85, // Auto Dealers (from NAICS data)
+    '7225': 0.75, // Restaurants (from NAICS data)
     
-    // Retail & E-commerce
-    '4541': 1.15, // Electronic Shopping
-    '4451': 0.8,  // Grocery Stores
-    '4481': 0.75, // Clothing Stores
+    // Education
+    '6113': 1.1,  // Colleges & Universities
     
-    // Professional Services
-    '5411': 1.1,  // Legal Services
-    '5413': 1.0,  // Architectural & Engineering
-    '5416': 1.05, // Management Consulting
-    
-    // Financial Services
-    '5223': 1.2,  // Financial Activities
-    '5242': 1.15, // Insurance Agencies
-    
-    // Construction & Real Estate
-    '2361': 0.85, // Residential Building Construction
-    '5311': 0.95, // Real Estate Lessors
+    // Default
+    'default': 1.0
   };
   
-  // Check if it's a NAICS code
-  const naicsCode = naicsCodeOrIndustry.substring(0, 4);
-  if (naicsMultipliers[naicsCode]) {
-    return naicsMultipliers[naicsCode];
-  }
-  
-  // Fallback to industry keywords
-  const industryKeywords: Record<string, number> = {
-    'technology': 1.3,
-    'software': 1.35,
-    'saas': 1.4,
-    'healthcare': 1.2,
-    'medical': 1.2,
-    'pharmaceutical': 1.3,
-    'manufacturing': 0.9,
-    'retail': 0.8,
-    'ecommerce': 1.15,
-    'consulting': 1.05,
-    'financial': 1.15,
-    'construction': 0.85,
-    'real estate': 0.95,
-    'services': 1.0,
-  };
-  
-  const lowerIndustry = naicsCodeOrIndustry.toLowerCase();
-  for (const [keyword, multiplier] of Object.entries(industryKeywords)) {
-    if (lowerIndustry.includes(keyword)) {
-      return multiplier;
-    }
-  }
-  
-  return 1.0; // Default multiplier
+  const naics4 = naicsCodeOrIndustry.substring(0, 4);
+  return simplifiedMultipliers[naics4] || 1.0;
 }
 
 // Calculate EBITDA and valuation
@@ -618,23 +607,9 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
         : 3;
     }
     
-    // Calculate base multiple based on weighted score
-    let baseMultiple = 3.0;
-    if (avgScore >= 4.8) baseMultiple = 9.0;  // Exceptional (almost all highest answers)
-    else if (avgScore >= 4.5) baseMultiple = 8.0;  // Outstanding
-    else if (avgScore >= 4.2) baseMultiple = 7.0;  // Excellent
-    else if (avgScore >= 4.0) baseMultiple = 6.5;  // Very Good
-    else if (avgScore >= 3.8) baseMultiple = 6.0;  // Good
-    else if (avgScore >= 3.5) baseMultiple = 5.5;  // Above Average
-    else if (avgScore >= 3.2) baseMultiple = 5.0;  // Slightly Above Average
-    else if (avgScore >= 3.0) baseMultiple = 4.5;  // Average
-    else if (avgScore >= 2.5) baseMultiple = 4.0;  // Below Average
-    else if (avgScore >= 2.0) baseMultiple = 3.5;  // Poor
-    else baseMultiple = 3.0;  // Very Poor
-    
-    // Apply industry multiplier based on NAICS code if provided
-    const industryMultiplier = getIndustryMultiplier(formData.naicsCode || formData.industry);
-    const finalMultiple = baseMultiple * industryMultiplier;
+    // Get industry-specific multiple based on NAICS code and performance
+    // The getIndustryMultiplier function returns the actual EBITDA multiple to use
+    const finalMultiple = getIndustryMultiplier(formData.naicsCode || formData.industry, avgScore) || 5.0;
     
     // Calculate valuation ranges using the industry-adjusted multiple
     const midEstimate = adjustedEbitda * finalMultiple;

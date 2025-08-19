@@ -17,6 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import type { ValuationAssessment } from "@shared/schema";
 import appleBitesQuestionsData from "../data/full_apple_bites_questions_1751898553174.json";
+import naicsCodesData from "../data/naics-codes.json";
 import { 
   FileText, 
   Calculator,
@@ -404,31 +405,93 @@ export default function GrowthAssessment() {
               <Select
                 value={selectedNaicsCode}
                 onChange={(e) => {
-                  setSelectedNaicsCode(e.target.value);
-                  setSelectedIndustry(e.target.value);
+                  const code = e.target.value;
+                  setSelectedNaicsCode(code);
+                  // Find the industry name from the NAICS data
+                  let industryName = '';
+                  Object.values(naicsCodesData).forEach((industries: any) => {
+                    const found = industries.find((ind: any) => ind.code === code);
+                    if (found) industryName = found.label;
+                  });
+                  setSelectedIndustry(industryName);
                 }}
                 sx={{ width: '100%', mb: 3 }}
               >
                 <MenuItem value="">Select an industry...</MenuItem>
-                <MenuItem value="5112">Software Publishers</MenuItem>
-                <MenuItem value="5415">Computer Systems Design</MenuItem>
-                <MenuItem value="5182">Data Processing & Hosting</MenuItem>
-                <MenuItem value="6211">Offices of Physicians</MenuItem>
-                <MenuItem value="6216">Home Health Care Services</MenuItem>
-                <MenuItem value="3254">Pharmaceutical Manufacturing</MenuItem>
-                <MenuItem value="3361">Motor Vehicle Manufacturing</MenuItem>
-                <MenuItem value="3331">Agriculture Machinery</MenuItem>
-                <MenuItem value="3344">Semiconductor Manufacturing</MenuItem>
-                <MenuItem value="4541">Electronic Shopping</MenuItem>
-                <MenuItem value="4451">Grocery Stores</MenuItem>
-                <MenuItem value="4481">Clothing Stores</MenuItem>
-                <MenuItem value="5411">Legal Services</MenuItem>
-                <MenuItem value="5413">Architectural & Engineering</MenuItem>
-                <MenuItem value="5416">Management Consulting</MenuItem>
-                <MenuItem value="5223">Financial Activities</MenuItem>
-                <MenuItem value="5242">Insurance Agencies</MenuItem>
-                <MenuItem value="2361">Residential Building Construction</MenuItem>
-                <MenuItem value="5311">Real Estate Lessors</MenuItem>
+                {/* Construction Sector */}
+                <MenuItem disabled sx={{ fontSize: '12px', fontWeight: 600, color: '#64748b' }}>
+                  — CONSTRUCTION —
+                </MenuItem>
+                {(naicsCodesData as any).construction?.map((item: any) => (
+                  <MenuItem key={item.code} value={item.code}>
+                    {item.label} (NAICS: {item.code})
+                  </MenuItem>
+                ))}
+                
+                {/* Professional Services */}
+                <MenuItem disabled sx={{ fontSize: '12px', fontWeight: 600, color: '#64748b', mt: 1 }}>
+                  — PROFESSIONAL SERVICES —
+                </MenuItem>
+                {(naicsCodesData as any).professional?.map((item: any) => (
+                  <MenuItem key={item.code} value={item.code}>
+                    {item.label} (NAICS: {item.code})
+                  </MenuItem>
+                ))}
+                
+                {/* Manufacturing */}
+                <MenuItem disabled sx={{ fontSize: '12px', fontWeight: 600, color: '#64748b', mt: 1 }}>
+                  — MANUFACTURING —
+                </MenuItem>
+                {(naicsCodesData as any).manufacturing?.map((item: any) => (
+                  <MenuItem key={item.code} value={item.code}>
+                    {item.label} (NAICS: {item.code})
+                  </MenuItem>
+                ))}
+                
+                {/* Retail Trade */}
+                <MenuItem disabled sx={{ fontSize: '12px', fontWeight: 600, color: '#64748b', mt: 1 }}>
+                  — RETAIL TRADE —
+                </MenuItem>
+                {(naicsCodesData as any).retail?.map((item: any) => (
+                  <MenuItem key={item.code} value={item.code}>
+                    {item.label} (NAICS: {item.code})
+                  </MenuItem>
+                ))}
+                
+                {/* Hospitality */}
+                <MenuItem disabled sx={{ fontSize: '12px', fontWeight: 600, color: '#64748b', mt: 1 }}>
+                  — HOSPITALITY & FOOD SERVICE —
+                </MenuItem>
+                {(naicsCodesData as any).hospitality?.map((item: any) => (
+                  <MenuItem key={item.code} value={item.code}>
+                    {item.label} (NAICS: {item.code})
+                  </MenuItem>
+                ))}
+                
+                {/* Other Sectors */}
+                <MenuItem disabled sx={{ fontSize: '12px', fontWeight: 600, color: '#64748b', mt: 1 }}>
+                  — OTHER SECTORS —
+                </MenuItem>
+                {(naicsCodesData as any).education?.map((item: any) => (
+                  <MenuItem key={item.code} value={item.code}>
+                    {item.label} (NAICS: {item.code})
+                  </MenuItem>
+                ))}
+                {(naicsCodesData as any).wholesale?.map((item: any) => (
+                  <MenuItem key={item.code} value={item.code}>
+                    {item.label} (NAICS: {item.code})
+                  </MenuItem>
+                ))}
+                {(naicsCodesData as any).agriculture?.map((item: any) => (
+                  <MenuItem key={item.code} value={item.code}>
+                    {item.label} (NAICS: {item.code})
+                  </MenuItem>
+                ))}
+                {(naicsCodesData as any).mining?.map((item: any) => (
+                  <MenuItem key={item.code} value={item.code}>
+                    {item.label} (NAICS: {item.code})
+                  </MenuItem>
+                ))}
               </Select>
             </MDBox>
 

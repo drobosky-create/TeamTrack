@@ -1,0 +1,96 @@
+{
+  "construction": [
+    {
+      "code": "236110",
+      "label": "Residential Building Construction"
+    },
+    {
+      "code": "236220", 
+      "label": "Commercial and Institutional Building Construction"
+    },
+    {
+      "code": "237210",
+      "label": "Land Subdivision"
+    },
+    {
+      "code": "238160",
+      "label": "Roofing Contractors"
+    },
+    {
+      "code": "238210",
+      "label": "Electrical Contractors"
+    },
+    {
+      "code": "238220",
+      "label": "Plumbing, Heating, and Air-Conditioning Contractors"
+    },
+    {
+      "code": "238310",
+      "label": "Drywall and Insulation Contractors"
+    },
+    {
+      "code": "238320",
+      "label": "Painting and Wall Covering Contractors"
+    },
+    {
+      "code": "238910",
+      "label": "Site Preparation Contractors"
+    }
+  ],
+  "manufacturing": [
+    {
+      "code": "311810",
+      "label": "Bread and Bakery Product Manufacturing"
+    }
+  ],
+  "wholesale": [
+    {
+      "code": "423610",
+      "label": "Electrical Apparatus and Equipment Merchant Wholesalers"
+    }
+  ],
+  "retail": [
+    {
+      "code": "441110",
+      "label": "New Car Dealers"
+    }
+  ],
+  "professional": [
+    {
+      "code": "541611",
+      "label": "Administrative Management and General Management Consulting Services"
+    }
+  ],
+  "education": [
+    {
+      "code": "611310",
+      "label": "Colleges, Universities, and Professional Schools"
+    }
+  ],
+  "hospitality": [
+    {
+      "code": "722511",
+      "label": "Full-Service Restaurants"
+    }
+  ],
+  "agriculture": [
+    {
+      "code": "111110",
+      "label": "Soybean Farming"
+    },
+    {
+      "code": "111120",
+      "label": "Oilseed (except Soybean) Farming"
+    }
+  ],
+  "mining": [
+    {
+      "code": "211120",
+      "label": "Crude Petroleum Extraction"
+    },
+    {
+      "code": "212110",
+      "label": "Coal Mining"
+    }
+  ]
+}

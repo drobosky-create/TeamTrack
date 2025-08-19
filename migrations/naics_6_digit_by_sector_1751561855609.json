@@ -1,0 +1,68 @@
+{
+  "11": [
+    {
+      "code": "111110",
+      "label": "Soybean Farming"
+    },
+    {
+      "code": "111120",
+      "label": "Oilseed (except Soybean) Farming"
+    }
+  ],
+  "21": [
+    {
+      "code": "211120",
+      "label": "Crude Petroleum Extraction"
+    },
+    {
+      "code": "212110",
+      "label": "Coal Mining"
+    }
+  ],
+  "23": [
+    {
+      "code": "236110",
+      "label": "Residential Building Construction"
+    },
+    {
+      "code": "237210",
+      "label": "Land Subdivision"
+    }
+  ],
+  "31": [
+    {
+      "code": "311810",
+      "label": "Bread and Bakery Product Manufacturing"
+    }
+  ],
+  "42": [
+    {
+      "code": "423610",
+      "label": "Electrical Apparatus and Equipment Merchant Wholesalers"
+    }
+  ],
+  "44": [
+    {
+      "code": "441110",
+      "label": "New Car Dealers"
+    }
+  ],
+  "54": [
+    {
+      "code": "541611",
+      "label": "Administrative Management and General Management Consulting Services"
+    }
+  ],
+  "61": [
+    {
+      "code": "611310",
+      "label": "Colleges, Universities, and Professional Schools"
+    }
+  ],
+  "72": [
+    {
+      "code": "722511",
+      "label": "Full-Service Restaurants"
+    }
+  ]
+}
