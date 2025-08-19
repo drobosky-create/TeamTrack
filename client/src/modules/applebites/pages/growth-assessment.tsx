@@ -450,10 +450,26 @@ export default function GrowthAssessment() {
                     sx={{ width: '100%' }}
                     MenuProps={{
                       PaperProps: {
-                        style: {
+                        sx: {
                           maxHeight: 400,
-                        },
+                          overflow: 'auto',
+                          mt: 1,
+                          '& .MuiMenuItem-root': {
+                            whiteSpace: 'normal',
+                            wordBreak: 'break-word',
+                            py: 1
+                          }
+                        }
                       },
+                      anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      },
+                      transformOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                      },
+                      getContentAnchorEl: null,
                     }}
                     displayEmpty
                   >
@@ -492,7 +508,17 @@ export default function GrowthAssessment() {
                                 — {subsector.title} —
                               </MenuItem>
                               {subsectorCodes.map((item: any) => (
-                                <MenuItem key={item.code} value={item.code} sx={{ pl: 4 }}>
+                                <MenuItem 
+                                  key={item.code} 
+                                  value={item.code} 
+                                  sx={{ 
+                                    pl: 4,
+                                    py: 1,
+                                    '&:hover': {
+                                      backgroundColor: '#f5f5f5',
+                                    }
+                                  }}
+                                >
                                   {item.title} ({item.code})
                                 </MenuItem>
                               ))}
@@ -502,7 +528,16 @@ export default function GrowthAssessment() {
                       } else {
                         // If there's only one subsector or none, show all industries directly
                         return sixDigitCodes.map((item: any) => (
-                          <MenuItem key={item.code} value={item.code}>
+                          <MenuItem 
+                            key={item.code} 
+                            value={item.code}
+                            sx={{
+                              py: 1,
+                              '&:hover': {
+                                backgroundColor: '#f5f5f5',
+                              }
+                            }}
+                          >
                             {item.title} ({item.code})
                           </MenuItem>
                         ));
