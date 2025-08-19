@@ -392,14 +392,6 @@ export default function ConsumerDashboardTeamTrack() {
               </Button>
             </Link>
             
-            {/* Client View (Limited) */}
-            <Link href="/client-view">
-              <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3">
-                <Eye className="h-4 w-4 mr-3" />
-                Client View (Limited)
-              </Button>
-            </Link>
-            
             {/* Free & Growth Assessments Section */}
             <div className="border-t border-white/10 pt-3 mt-2">
               <p className="text-xs text-cyan-200 uppercase tracking-wider mb-2 px-2">Assessments</p>

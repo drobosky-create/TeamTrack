@@ -71,7 +71,6 @@ export default function TestDashboard() {
       features: [
         'My Dashboard',
         'My Assessments',
-        'Client View (Limited)',
         'Free & Growth Assessments',
         'Tasks & Feedback',
         'Notifications',
