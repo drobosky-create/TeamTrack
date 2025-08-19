@@ -46,6 +46,7 @@ function Router() {
       <Route path="/performance-hub" component={PerformanceHubLanding} />
       <Route path="/consumer-auth" component={ConsumerAuth} />
       <Route path="/free-assessment" component={FreeAssessmentDashboard} />
+      <Route path="/test-dashboard" component={TestDashboard} />
       
       {/* Root redirect to PerformanceHub by default */}
       {isLoading || !isAuthenticated ? (
@@ -71,7 +72,6 @@ function Router() {
             <Route path="/results/:id" component={AssessmentResultsPage} />
             <Route path="/follow-up" component={FollowUpOptionsPage} />
             <Route path="/theme-manager" component={ThemeManager} />
-            <Route path="/test-dashboard" component={TestDashboard} />
             <Route path="/settings" component={Settings} />
             <Route path="/profile" component={Profile} />
             <Route path="/notifications" component={Notifications} />
