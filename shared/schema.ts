@@ -73,6 +73,21 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Consumer users table (for AppleBites client accounts)
+export const consumerUsers = pgTable("consumer_users", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: varchar("email").unique().notNull(),
+  firstName: varchar("first_name").notNull(),
+  lastName: varchar("last_name").notNull(),
+  companyName: varchar("company_name").notNull(),
+  phone: varchar("phone"),
+  passwordHash: varchar("password_hash").notNull(),
+  isActive: boolean("is_active").default(true),
+  lastLoginAt: timestamp("last_login_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Review templates
 export const reviewTemplates = pgTable("review_templates", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -408,6 +423,26 @@ export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+});
+
+export const insertConsumerUserSchema = createInsertSchema(consumerUsers).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const consumerLoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
+export const consumerSignupSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  companyName: z.string().min(1),
+  phone: z.string().optional(),
 });
 
 export const upsertUserSchema = createInsertSchema(users).pick({

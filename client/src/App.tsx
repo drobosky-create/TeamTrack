@@ -30,6 +30,7 @@ import FollowUpOptionsPage from "@/pages/follow-up";
 import AppleBitesLanding from "@/pages/applebites-landing";
 import PerformanceHubLanding from "@/pages/performancehub-landing";
 import ConsumerAuth from "@/pages/consumer-auth";
+import FreeAssessmentDashboard from "@/pages/free-assessment";
 import ThemeManager from "@/components/admin/ThemeManager";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 
@@ -55,7 +56,8 @@ function Router() {
       {/* Public Routes - Landing Pages */}
       <Route path="/applebites" component={AppleBitesLanding} />
       <Route path="/performance-hub" component={PerformanceHubLanding} />
-      <Route path="/consumer-login" component={ConsumerAuth} />
+      <Route path="/consumer-auth" component={ConsumerAuth} />
+      <Route path="/free-assessment" component={FreeAssessmentDashboard} />
       
       {/* Root redirect to PerformanceHub by default */}
       {isLoading || !isAuthenticated ? (

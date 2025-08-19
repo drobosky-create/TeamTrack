@@ -11,6 +11,7 @@ import {
   Tab,
   Alert,
   Link as MuiLink,
+  CircularProgress,
 } from '@mui/material';
 import { 
   Assessment as AssessmentIcon,
@@ -19,7 +20,9 @@ import {
   Email as EmailIcon,
   Lock as LockIcon,
 } from '@mui/icons-material';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
+import { useMutation } from '@tanstack/react-query';
+import { useToast } from '@/hooks/use-toast';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -42,6 +45,8 @@ function TabPanel(props: TabPanelProps) {
 
 export default function ConsumerAuth() {
   const [tabValue, setTabValue] = useState(0);
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -51,27 +56,141 @@ export default function ConsumerAuth() {
     lastName: '',
     phone: ''
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
+    setErrors({});
   };
 
   const handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [field]: event.target.value });
+    if (errors[field]) {
+      setErrors({ ...errors, [field]: '' });
+    }
   };
 
-  const handleLogin = () => {
-    // In real app, this would authenticate and redirect to dashboard
-    alert('Login functionality would authenticate and redirect to assessment dashboard');
+  const loginMutation = useMutation({
+    mutationFn: async (loginData: { email: string; password: string }) => {
+      const response = await fetch('/api/consumer/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginData),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Login failed');
+      }
+      
+      return response.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Login Successful",
+        description: `Welcome back, ${data.user.firstName}!`,
+      });
+      // Store user session and redirect to assessment dashboard
+      localStorage.setItem('consumerUser', JSON.stringify(data.user));
+      setLocation('/free-assessment');
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Login Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const signupMutation = useMutation({
+    mutationFn: async (signupData: { 
+      email: string; 
+      password: string; 
+      firstName: string; 
+      lastName: string; 
+      companyName: string; 
+      phone?: string; 
+    }) => {
+      const response = await fetch('/api/consumer/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(signupData),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Signup failed');
+      }
+      
+      return response.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Account Created",
+        description: `Welcome ${data.user.firstName}! Your account has been created successfully.`,
+      });
+      // Store user session and redirect to assessment dashboard
+      localStorage.setItem('consumerUser', JSON.stringify(data.user));
+      setLocation('/free-assessment');
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Signup Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!formData.email) newErrors.email = 'Email is required';
+    if (!formData.password) newErrors.password = 'Password is required';
+    
+    if (tabValue === 1) { // Signup validation
+      if (!formData.firstName) newErrors.firstName = 'First name is required';
+      if (!formData.lastName) newErrors.lastName = 'Last name is required';
+      if (!formData.companyName) newErrors.companyName = 'Company name is required';
+      if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = 'Passwords do not match';
+      }
+      if (formData.password.length < 6) {
+        newErrors.password = 'Password must be at least 6 characters';
+      }
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleSignup = () => {
-    // In real app, this would create account with team_member role
-    alert('Signup functionality would create consumer account and redirect to assessment dashboard');
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    
+    loginMutation.mutate({
+      email: formData.email,
+      password: formData.password,
+    });
+  };
+
+  const handleSignup = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    
+    signupMutation.mutate({
+      email: formData.email,
+      password: formData.password,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      companyName: formData.companyName,
+      phone: formData.phone,
+    });
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#f8fafc', py: 6 }}>
+    <Box sx={{ minHeight: '100vh', backgroundColor: 'hsl(var(--background))', py: 6 }}>
       <Container maxWidth="sm">
         {/* Header */}
         <Box sx={{ textAlign: 'center', mb: 4 }}>
@@ -117,18 +236,21 @@ export default function ConsumerAuth() {
 
             {/* Login Tab */}
             <TabPanel value={tabValue} index={0}>
-              <Box component="form" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+              <Box component="form" onSubmit={handleLogin}>
                 <TextField
                   fullWidth
                   label="Email Address"
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange('email')}
+                  error={!!errors.email}
+                  helperText={errors.email}
                   InputProps={{
                     startAdornment: <EmailIcon sx={{ color: '#667eea', mr: 1 }} />
                   }}
                   sx={{ mb: 3 }}
                   required
+                  data-testid="input-login-email"
                 />
                 
                 <TextField
@@ -137,11 +259,14 @@ export default function ConsumerAuth() {
                   type="password"
                   value={formData.password}
                   onChange={handleInputChange('password')}
+                  error={!!errors.password}
+                  helperText={errors.password}
                   InputProps={{
                     startAdornment: <LockIcon sx={{ color: '#667eea', mr: 1 }} />
                   }}
                   sx={{ mb: 3 }}
                   required
+                  data-testid="input-login-password"
                 />
 
                 <Button
@@ -149,13 +274,15 @@ export default function ConsumerAuth() {
                   variant="contained"
                   type="submit"
                   size="large"
+                  disabled={loginMutation.isPending}
                   sx={{
                     background: 'linear-gradient(45deg, #667eea 30%, #764ba2 90%)',
                     py: 1.5,
                     mb: 2
                   }}
+                  data-testid="button-login"
                 >
-                  Sign In to Dashboard
+                  {loginMutation.isPending ? <CircularProgress size={24} color="inherit" /> : 'Sign In to Dashboard'}
                 </Button>
 
                 <Box sx={{ textAlign: 'center' }}>
@@ -173,21 +300,33 @@ export default function ConsumerAuth() {
 
             {/* Signup Tab */}
             <TabPanel value={tabValue} index={1}>
-              <Box component="form" onSubmit={(e) => { e.preventDefault(); handleSignup(); }}>
+              <Box component="form" onSubmit={handleSignup}>
                 <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
                   <TextField
                     fullWidth
                     label="First Name"
                     value={formData.firstName}
                     onChange={handleInputChange('firstName')}
+                    error={!!errors.firstName}
+                    helperText={errors.firstName}
+                    InputProps={{
+                      startAdornment: <PersonIcon sx={{ color: '#667eea', mr: 1 }} />
+                    }}
                     required
+                    data-testid="input-signup-firstname"
                   />
                   <TextField
                     fullWidth
                     label="Last Name"
                     value={formData.lastName}
                     onChange={handleInputChange('lastName')}
+                    error={!!errors.lastName}
+                    helperText={errors.lastName}
+                    InputProps={{
+                      startAdornment: <PersonIcon sx={{ color: '#667eea', mr: 1 }} />
+                    }}
                     required
+                    data-testid="input-signup-lastname"
                   />
                 </Box>
 
@@ -196,11 +335,14 @@ export default function ConsumerAuth() {
                   label="Company Name"
                   value={formData.companyName}
                   onChange={handleInputChange('companyName')}
+                  error={!!errors.companyName}
+                  helperText={errors.companyName}
                   InputProps={{
                     startAdornment: <BusinessIcon sx={{ color: '#667eea', mr: 1 }} />
                   }}
                   sx={{ mb: 3 }}
                   required
+                  data-testid="input-signup-company"
                 />
                 
                 <TextField
@@ -209,19 +351,23 @@ export default function ConsumerAuth() {
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange('email')}
+                  error={!!errors.email}
+                  helperText={errors.email}
                   InputProps={{
                     startAdornment: <EmailIcon sx={{ color: '#667eea', mr: 1 }} />
                   }}
                   sx={{ mb: 3 }}
                   required
+                  data-testid="input-signup-email"
                 />
 
                 <TextField
                   fullWidth
-                  label="Phone Number"
+                  label="Phone Number (Optional)"
                   value={formData.phone}
                   onChange={handleInputChange('phone')}
                   sx={{ mb: 3 }}
+                  data-testid="input-signup-phone"
                 />
                 
                 <TextField
@@ -230,11 +376,14 @@ export default function ConsumerAuth() {
                   type="password"
                   value={formData.password}
                   onChange={handleInputChange('password')}
+                  error={!!errors.password}
+                  helperText={errors.password}
                   InputProps={{
                     startAdornment: <LockIcon sx={{ color: '#667eea', mr: 1 }} />
                   }}
                   sx={{ mb: 3 }}
                   required
+                  data-testid="input-signup-password"
                 />
 
                 <TextField
@@ -243,11 +392,14 @@ export default function ConsumerAuth() {
                   type="password"
                   value={formData.confirmPassword}
                   onChange={handleInputChange('confirmPassword')}
+                  error={!!errors.confirmPassword}
+                  helperText={errors.confirmPassword}
                   InputProps={{
                     startAdornment: <LockIcon sx={{ color: '#667eea', mr: 1 }} />
                   }}
                   sx={{ mb: 3 }}
                   required
+                  data-testid="input-signup-confirm-password"
                 />
 
                 <Alert severity="info" sx={{ mb: 3 }}>
@@ -262,13 +414,15 @@ export default function ConsumerAuth() {
                   variant="contained"
                   type="submit"
                   size="large"
+                  disabled={signupMutation.isPending}
                   sx={{
                     background: 'linear-gradient(45deg, #667eea 30%, #764ba2 90%)',
                     py: 1.5,
                     mb: 2
                   }}
+                  data-testid="button-signup"
                 >
-                  Create Account & Start Assessment
+                  {signupMutation.isPending ? <CircularProgress size={24} color="inherit" /> : 'Create Account & Start Assessment'}
                 </Button>
 
                 <Box sx={{ textAlign: 'center' }}>

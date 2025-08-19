@@ -11,12 +11,16 @@ import {
   updateOrganizationBrandingSchema,
   insertAssessmentSchema,
   insertValuationAssessmentSchema,
+  insertConsumerUserSchema,
+  consumerLoginSchema,
+  consumerSignupSchema,
   type UserRole 
 } from "@shared/schema";
 import * as schema from "@shared/schema";
 import { ZodError } from "zod";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
+import bcrypt from "bcryptjs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -519,6 +523,93 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating UI token:", error);
       res.status(500).json({ message: "Failed to update UI token" });
+    }
+  });
+
+  // Consumer Authentication Routes
+  app.post('/api/consumer/signup', async (req, res) => {
+    try {
+      const validatedData = consumerSignupSchema.parse(req.body);
+      
+      // Check if user already exists
+      const existingUser = await db.query.consumerUsers.findFirst({
+        where: eq(schema.consumerUsers.email, validatedData.email)
+      });
+      
+      if (existingUser) {
+        return res.status(400).json({ message: "User already exists with this email" });
+      }
+      
+      // Hash password
+      const saltRounds = 10;
+      const passwordHash = await bcrypt.hash(validatedData.password, saltRounds);
+      
+      // Create user
+      const [newUser] = await db.insert(schema.consumerUsers)
+        .values({
+          email: validatedData.email,
+          firstName: validatedData.firstName,
+          lastName: validatedData.lastName,
+          companyName: validatedData.companyName,
+          phone: validatedData.phone || null,
+          passwordHash,
+        })
+        .returning();
+      
+      // Remove password hash from response
+      const { passwordHash: _, ...userResponse } = newUser;
+      
+      res.status(201).json({ 
+        message: "Account created successfully",
+        user: userResponse 
+      });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ message: "Invalid signup data", errors: error.errors });
+      }
+      console.error('Error creating consumer account:', error);
+      res.status(500).json({ message: 'Failed to create account' });
+    }
+  });
+
+  app.post('/api/consumer/login', async (req, res) => {
+    try {
+      const validatedData = consumerLoginSchema.parse(req.body);
+      
+      // Find user by email
+      const user = await db.query.consumerUsers.findFirst({
+        where: eq(schema.consumerUsers.email, validatedData.email)
+      });
+      
+      if (!user) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      // Check password
+      const isValid = await bcrypt.compare(validatedData.password, user.passwordHash);
+      
+      if (!isValid) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      // Update last login
+      await db.update(schema.consumerUsers)
+        .set({ lastLoginAt: new Date() })
+        .where(eq(schema.consumerUsers.id, user.id));
+      
+      // Remove password hash from response
+      const { passwordHash: _, ...userResponse } = user;
+      
+      res.json({ 
+        message: "Login successful",
+        user: userResponse 
+      });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ message: "Invalid login data", errors: error.errors });
+      }
+      console.error('Error during consumer login:', error);
+      res.status(500).json({ message: 'Login failed' });
     }
   });
 
