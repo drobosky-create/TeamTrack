@@ -26,7 +26,7 @@ import ConsumerSignup from "@/pages/consumer-signup";
 import ConsumerLogin from "@/pages/consumer-login";
 import AdminLoginPage from "@/pages/admin-login";
 import AssessmentSelection from "@/pages/assessment-selection";
-import ConsumerDashboard from "@/pages/consumer-dashboard";
+import ConsumerDashboard from "@/pages/consumer-dashboard-teamtrack";
 import ClientManagementPage from "@/pages/clients";
 import AdminClientRecordsPage from "@/pages/admin/clients";
 import AssessmentResults from "@/pages/AssessmentResultsNew";
