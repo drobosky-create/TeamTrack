@@ -46,6 +46,7 @@ import NavigationTestPage from "@/pages/navigation-test";
 import ThemeManager from "@/components/admin/ThemeManager";
 import AppleBitesCheckoutPage from "@/pages/applebites-checkout";
 import PastAssessmentsPage from "@/modules/applebites/pages/past-assessments";
+import AssessmentResultsPage from "@/pages/assessment-results-page";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 import { AdminAuthProvider, useAdminAuth } from './hooks/use-admin-auth';
 
@@ -85,6 +86,7 @@ function Router() {
       <Route path="/past-assessments" component={PastAssessmentsPage} />
       <Route path="/assessment/free" component={FreeAssessment} />
       <Route path="/assessment/paid" component={GrowthAssessment} />
+      <Route path="/assessment-results/:id" component={AssessmentResultsPage} />
       <Route path="/tasks-feedback" component={NotFound} />
       <Route path="/notifications" component={Notifications} />
       <Route path="/profile" component={Profile} />
