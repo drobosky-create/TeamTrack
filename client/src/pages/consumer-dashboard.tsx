@@ -102,94 +102,162 @@ export default function ConsumerDashboard() {
           </Card>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Get Started Section */}
-          <Card className="shadow-soft-md border-border-soft">
+        {/* Main Content Grid - 3 Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Quick Actions */}
+          <Card>
             <CardHeader>
-              <CardTitle>Get Started with Your Valuation</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Star className="h-5 w-5" />
+                Quick Actions
+              </CardTitle>
               <CardDescription>
-                Our comprehensive assessment analyzes your business across 10 key value drivers
+                Get started with these assessment tasks
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">EBITDA Analysis</p>
-                    <p className="text-xs text-muted-foreground">Calculate adjusted earnings before interest, taxes, depreciation, and amortization</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">Value Drivers Assessment</p>
-                    <p className="text-xs text-muted-foreground">Evaluate 10 critical factors that impact your business value</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium">Business Grade</p>
-                    <p className="text-xs text-muted-foreground">Receive an overall grade (A-F) based on your performance</p>
-                  </div>
-                </div>
-              </div>
-              
+            <CardContent className="space-y-3">
               <Button 
-                className="w-full gap-2"
+                variant="outline" 
+                className="w-full justify-start"
                 onClick={() => setLocation('/assessments/free')}
                 data-testid="button-start-assessment"
               >
+                <Star className="h-4 w-4 mr-2" />
                 Start Free Assessment
-                <ArrowRight className="h-4 w-4" />
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                className="w-full justify-start" 
+                disabled
+              >
+                <TrendingUp className="h-4 w-4 mr-2" />
+                Growth Assessment (Upgrade)
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                className="w-full justify-start"
+                onClick={() => setLocation('/value-improvement-calculator')}
+              >
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Value Improvement Calculator
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                className="w-full justify-start"
+                disabled
+              >
+                <Users className="h-4 w-4 mr-2" />
+                Schedule Consultation
               </Button>
             </CardContent>
           </Card>
 
-          {/* Assessment Progress & History */}
-          <Card className="shadow-soft-md border-border-soft">
+          {/* Recent Activity */}
+          <Card>
             <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                Assessment Progress
-                <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
-                  View All <ArrowRight className="h-3 w-3 ml-1" />
-                </Button>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
+                Recent Activity
               </CardTitle>
-              <CardDescription>Track your assessment journey</CardDescription>
+              <CardDescription>
+                Latest updates on your assessments
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              {assessmentHistory.length === 0 ? (
-                <div className="text-center py-8">
-                  <Clock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">No Assessments Yet</h3>
-                  <p className="text-muted-foreground mb-4 text-sm">
-                    Complete your first assessment to unlock insights about your business value.
-                  </p>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Assessment Progress</span>
-                      <span className="text-muted-foreground">0%</span>
-                    </div>
-                    <Progress value={0} className="h-2" />
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {assessmentHistory.map((assessment, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 rounded-lg border">
-                      <div className="h-2 w-2 rounded-full bg-green-500 mt-2" />
+              {assessmentHistory.length > 0 ? (
+                <div className="space-y-3">
+                  {assessmentHistory.map((activity, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <CheckCircle className="h-4 w-4 mt-0.5 text-green-600" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium">Business Assessment</p>
-                        <p className="text-sm text-muted-foreground">Completed</p>
-                        <p className="text-xs text-muted-foreground">Grade: A | Value: $2.1M</p>
+                        <p className="text-sm font-medium leading-none">
+                          Completed Business Assessment
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          2 hours ago
+                        </p>
                       </div>
-                      <Badge variant="default">Complete</Badge>
                     </div>
                   ))}
                 </div>
+              ) : (
+                <div className="text-center py-4">
+                  <Clock className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">
+                    No recent activity to show
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Complete your first assessment to see activity here
+                  </p>
+                </div>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Next Steps & Recommendations */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Info className="h-5 w-5" />
+                Next Steps
+              </CardTitle>
+              <CardDescription>
+                Recommended actions to maximize value
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium">Complete Free Assessment</p>
+                    <p className="text-xs text-muted-foreground">
+                      Get your business valuation and grade
+                    </p>
+                  </div>
+                  <Badge variant="outline">
+                    Pending
+                  </Badge>
+                </div>
+
+                <div className="flex items-center justify-between opacity-50">
+                  <div>
+                    <p className="text-sm font-medium">Review Results</p>
+                    <p className="text-xs text-muted-foreground">
+                      Understand your business grade
+                    </p>
+                  </div>
+                  <Badge variant="secondary">
+                    Locked
+                  </Badge>
+                </div>
+
+                <div className="flex items-center justify-between opacity-50">
+                  <div>
+                    <p className="text-sm font-medium">Explore Improvements</p>
+                    <p className="text-xs text-muted-foreground">
+                      Use value improvement calculator
+                    </p>
+                  </div>
+                  <Badge variant="secondary">
+                    Locked
+                  </Badge>
+                </div>
+
+                <div className="flex items-center justify-between opacity-50">
+                  <div>
+                    <p className="text-sm font-medium">Consider Growth Assessment</p>
+                    <p className="text-xs text-muted-foreground">
+                      Unlock detailed recommendations
+                    </p>
+                  </div>
+                  <Badge variant="secondary">
+                    $497
+                  </Badge>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
