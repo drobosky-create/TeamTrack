@@ -394,8 +394,7 @@ export default function ConsumerDashboardTeamTrack() {
             
             {/* Free & Growth Assessments Section */}
             <div className="border-t border-white/10 pt-3 mt-2">
-              <p className="text-xs text-cyan-200 uppercase tracking-wider mb-2 px-2">Assessments</p>
-              <div className="space-y-2">
+              <div className="space-y-2"></div>
                 <Link href="/assessment/free">
                   <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white/90 py-2">
                     <FileText className="h-4 w-4 mr-3" />
