@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 import MDBox from "../../../components/MD/MDBox";
 import MDTypography from "../../../components/MD/MDTypography";
 import { 
@@ -21,6 +24,17 @@ interface AssessmentHeaderProps {
 
 export default function AssessmentHeader({ title, subtitle, tier, features }: AssessmentHeaderProps) {
   const isPremium = tier === 'premium';
+  
+  // Fetch Stripe pricing for Growth plan
+  const { data: pricingData } = useQuery({
+    queryKey: ['/api/products/applebites-growth'],
+    enabled: isPremium,
+    staleTime: 1000 * 60 * 60, // Cache for 1 hour
+  });
+  
+  const formattedPrice = pricingData?.price 
+    ? `$${(pricingData.price.unit_amount / 100).toFixed(0)}`
+    : '$795';
   
   return (
     <MDBox sx={{ 
@@ -82,7 +96,7 @@ export default function AssessmentHeader({ title, subtitle, tier, features }: As
                 border: '1px solid #059669'
               }}
             >
-              $795 Premium Tier
+              {formattedPrice} Premium Tier
             </MDBox>
           ) : (
             <MDBox

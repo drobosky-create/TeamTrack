@@ -829,42 +829,26 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   const centerY = 250;
                   const radius = 200;
                   
-                  // Calculate dynamic position based on business performance
+                  // Calculate dynamic position based on actual business valuation
                   const calculateGaugePosition = () => {
-                    // Demo scenarios to show dynamic positioning
-                    // In real implementation, this would come from actual assessment data
+                    // Use actual valuation multiple from assessment results
+                    const companyMultiple = parseFloat(results.valuationMultiple) || 4.0;
                     
-                    // Example scenarios:
-                    const scenarios = [
-                      // Struggling Business - Conservative
-                      { grade: 'D', score: 35, multiple: 3.5, position: 'CONSERVATIVE' },
-                      // Average Business - Baseline 
-                      { grade: 'C', score: 50, multiple: 4.8, position: 'BASELINE' },
-                      // Good Business - Strategic (current example)
-                      { grade: 'B+', score: 75, multiple: 5.8, position: 'STRATEGIC' },
-                      // Strong Business - Growth
-                      { grade: 'A-', score: 85, multiple: 7.2, position: 'GROWTH' },
-                      // Excellent Business - Optimized
-                      { grade: 'A', score: 95, multiple: 9.1, position: 'OPTIMIZED' }
-                    ];
-                    
-                    // Use Growth scenario for current demo (index 3) - change to test different positions
-                    const currentScenario = scenarios[3];
-                    
-                    // Example: Industry range 3x to 9x EBITDA  
+                    // Industry range typically 3x to 9x EBITDA for most industries
+                    // This could be customized based on NAICS code
                     const industryRange = { low: 3.0, high: 9.0 };
-                    
-                    // Example: Company with 4x multiple
-                    const companyMultiple = 4.0;
                     
                     // Calculate percentage within industry range
                     const rangePosition = (companyMultiple - industryRange.low) / (industryRange.high - industryRange.low);
                     const positionPercent = Math.max(0, Math.min(100, rangePosition * 100));
                     
-                    // 4x in a 3x-9x range = (4-3)/(9-3) = 1/6 = 16.7%
-                    // 16.7% falls in CONSERVATIVE range (0-20%)
+                    // Map percentage to segment
+                    // 0-20% = CONSERVATIVE (3.0-4.2x)
+                    // 20-40% = BASELINE (4.2-5.4x)
+                    // 40-60% = STRATEGIC (5.4-6.6x)
+                    // 60-80% = GROWTH (6.6-7.8x)
+                    // 80-100% = OPTIMIZED (7.8-9.0x+)
                     
-                    // Based on your example: 4x multiple in 3x-9x range = 16.7% = CONSERVATIVE
                     if (positionPercent <= 20) return 'CONSERVATIVE';
                     if (positionPercent <= 40) return 'BASELINE';
                     if (positionPercent <= 60) return 'STRATEGIC';

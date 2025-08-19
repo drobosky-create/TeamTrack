@@ -1,0 +1,210 @@
+{/* Strategic Valuation Gauge - Exact Copy from Value Calculator */}
+          <MDBox display="flex" gap={4} alignItems="flex-end" mb={1}>
+            {/* Gauge Container */}
+            <MDBox sx={{ flex: '0 0 600px', textAlign: 'center', transform: 'scale(1.15)' }}>
+              <svg width="100%" height="300" viewBox="0 0 800 150">
+                {/* Material Dashboard Gradient Definitions */}
+                <defs>
+                  {/* Low Range - Red Material Gradient */}
+                  <linearGradient id="redGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ff5722" />
+                    <stop offset="100%" stopColor="#d32f2f" />
+                  </linearGradient>
+                  {/* Conservative Range - Orange Material Gradient */}
+                  <linearGradient id="orangeGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ff9800" />
+                    <stop offset="100%" stopColor="#f57c00" />
+                  </linearGradient>
+                  {/* Strategic Range - Green Material Gradient */}
+                  <linearGradient id="greenGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#4caf50" />
+                    <stop offset="100%" stopColor="#388e3c" />
+                  </linearGradient>
+                  {/* Growth Range - Blue Material Gradient */}
+                  <linearGradient id="blueGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#2196f3" />
+                    <stop offset="100%" stopColor="#1976d2" />
+                  </linearGradient>
+                  {/* Optimized Range - Deep Blue Material Gradient */}
+                  <linearGradient id="darkBlueGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#1976d2" />
+                    <stop offset="100%" stopColor="#0d47a1" />
+                  </linearGradient>
+                  {/* Background with subtle Material gradient */}
+                  <linearGradient id="backgroundGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="100%" stopColor="#f5f5f5" />
+                  </linearGradient>
+                  {/* Needle gradient */}
+                  <linearGradient id="needleGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#37474f" />
+                    <stop offset="50%" stopColor="#546e7a" />
+                    <stop offset="100%" stopColor="#263238" />
+                  </linearGradient>
+                </defs>
+
+                {(() => {
+                  const centerX = 400;
+                  const centerY = 250;
+                  const radius = 200;
+                  
+                  // Calculate dynamic position based on business performance
+                  const calculateGaugePosition = () => {
+                    // Demo scenarios to show dynamic positioning
+                    // In real implementation, this would come from actual assessment data
+                    
+                    // Example scenarios:
+                    const scenarios = [
+                      // Struggling Business - Conservative
+                      { grade: 'D', score: 35, multiple: 3.5, position: 'CONSERVATIVE' },
+                      // Average Business - Baseline 
+                      { grade: 'C', score: 50, multiple: 4.8, position: 'BASELINE' },
+                      // Good Business - Strategic (current example)
+                      { grade: 'B+', score: 75, multiple: 5.8, position: 'STRATEGIC' },
+                      // Strong Business - Growth
+                      { grade: 'A-', score: 85, multiple: 7.2, position: 'GROWTH' },
+                      // Excellent Business - Optimized
+                      { grade: 'A', score: 95, multiple: 9.1, position: 'OPTIMIZED' }
+                    ];
+                    
+                    // Use Growth scenario for current demo (index 3) - change to test different positions
+                    const currentScenario = scenarios[3];
+                    
+                    // Example: Industry range 3x to 9x EBITDA  
+                    const industryRange = { low: 3.0, high: 9.0 };
+                    
+                    // Example: Company with 4x multiple
+                    const companyMultiple = 4.0;
+                    
+                    // Calculate percentage within industry range
+                    const rangePosition = (companyMultiple - industryRange.low) / (industryRange.high - industryRange.low);
+                    const positionPercent = Math.max(0, Math.min(100, rangePosition * 100));
+                    
+                    // 4x in a 3x-9x range = (4-3)/(9-3) = 1/6 = 16.7%
+                    // 16.7% falls in CONSERVATIVE range (0-20%)
+                    
+                    // Based on your example: 4x multiple in 3x-9x range = 16.7% = CONSERVATIVE
+                    if (positionPercent <= 20) return 'CONSERVATIVE';
+                    if (positionPercent <= 40) return 'BASELINE';
+                    if (positionPercent <= 60) return 'STRATEGIC';
+                    if (positionPercent <= 80) return 'GROWTH';
+                    return 'OPTIMIZED';
+                  };
+                  
+                  const activeSegment = calculateGaugePosition();
+                  
+                  // Define valuation segments (0 to 180 degrees for semi-circle)
+                  const segments = [
+                    { label: 'CONSERVATIVE', angle: 0, color: 'redGradientVal' },
+                    { label: 'BASELINE', angle: 36, color: 'orangeGradientVal' },
+                    { label: 'STRATEGIC', angle: 72, color: 'greenGradientVal' },
+                    { label: 'GROWTH', angle: 108, color: 'blueGradientVal' },
+                    { label: 'OPTIMIZED', angle: 144, color: 'darkBlueGradientVal' },
+                  ];
+
+                  // Create arc path function
+                  const createArcPath = (startAngle: number, endAngle: number, radius: number) => {
+                    const startAngleRad = (startAngle + 180) * (Math.PI / 180);
+                    const endAngleRad = (endAngle + 180) * (Math.PI / 180);
+                    
+                    const x1 = centerX + radius * Math.cos(startAngleRad);
+                    const y1 = centerY + radius * Math.sin(startAngleRad);
+                    const x2 = centerX + radius * Math.cos(endAngleRad);
+                    const y2 = centerY + radius * Math.sin(endAngleRad);
+                    
+                    const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+                    
+                    return `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+                  };
+
+                  // Calculate needle position based on active segment
+                  const getSegmentCenterAngle = (segmentLabel: string) => {
+                    const segment = segments.find(s => s.label === segmentLabel);
+                    if (!segment) return 90; // Default to middle
+                    const segmentIndex = segments.indexOf(segment);
+                    return segment.angle + 18; // Center of segment (each segment is 36° wide)
+                  };
+                  
+                  const needleAngle = getSegmentCenterAngle(activeSegment);
+                  const needleAngleRad = (needleAngle + 180) * (Math.PI / 180);
+                  const needleLength = 190;
+                  const needleX = centerX + needleLength * Math.cos(needleAngleRad);
+                  const needleY = centerY + needleLength * Math.sin(needleAngleRad);
+
+                  return (
+                    <>
+                      {/* Background arc */}
+                      <path
+                        d={createArcPath(0, 180, radius)}
+                        fill="url(#backgroundGradientVal)"
+                        stroke="rgb(226, 232, 240)"
+                        strokeWidth="2"
+                      />
+                      
+                      {/* Valuation segments */}
+                      {segments.map((segment, index) => {
+                        const startAngle = segment.angle;
+                        const endAngle = index < segments.length - 1 ? segments[index + 1].angle : 180;
+                        const isActive = segment.label === activeSegment;
+                        
+                        return (
+                          <g key={segment.label}>
+                            <path
+                              d={createArcPath(startAngle, endAngle, radius)}
+                              fill={isActive ? `url(#${segment.color})` : 'rgb(248, 250, 252)'}
+                              stroke="white"
+                              strokeWidth="6"
+                              style={{
+                                filter: isActive ? 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' : 'none',
+                                opacity: isActive ? 1 : 0.3
+                              }}
+                            />
+                            
+                            {/* Segment labels */}
+                            <text
+                              x={centerX + 240 * Math.cos((segment.angle + 18 + 180) * (Math.PI / 180))}
+                              y={centerY + 240 * Math.sin((segment.angle + 18 + 180) * (Math.PI / 180))}
+                              textAnchor="middle"
+                              dominantBaseline="middle"
+                              style={{
+                                fontSize: '16px',
+                                fontWeight: '900',
+                                fill: isActive ? '#1A202C' : '#6b7280',
+                                textShadow: isActive ? '1px 1px 2px rgba(255,255,255,0.8)' : 'none'
+                              }}
+                            >
+                              {segment.label}
+                            </text>
+                          </g>
+                        );
+                      })}
+                      
+                      {/* Needle */}
+                      <line
+                        x1={centerX}
+                        y1={centerY}
+                        x2={needleX}
+                        y2={needleY}
+                        stroke="url(#needleGradientVal)"
+                        strokeWidth="8"
+                        strokeLinecap="round"
+                        style={{
+                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
+                        }}
+                      />
+                      
+                      {/* Needle center dot */}
+                      <circle
+                        cx={centerX}
+                        cy={centerY}
+                        r="20"
+                        fill="url(#needleGradientVal)"
+                        style={{
+                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
+                        }}
+                      />
+                    </>
+                  );
+                })()}
+              </svg>
+            </MDBox>
