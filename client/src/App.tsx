@@ -52,11 +52,8 @@ function AdminDashboardWrapper() {
     return <AdminLoginPage />;
   }
 
-  return (
-    <MaterialDashboardLayout>
-      <Dashboard />
-    </MaterialDashboardLayout>
-  );
+  // Use TestDashboard for admin users to get the full role-based functionality
+  return <TestDashboard />;
 }
 
 function Router() {
