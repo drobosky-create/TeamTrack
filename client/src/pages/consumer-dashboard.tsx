@@ -4,10 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { ConsumerDashboardLayout } from '@/components/layout/ConsumerDashboardLayout';
 import { 
   Star, 
-  Building2, 
-  User,
   FileText,
   TrendingUp,
   Clock,
@@ -40,44 +39,13 @@ export default function ConsumerDashboard() {
     );
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('consumerUser');
-    setLocation('/applebites');
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="container max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Building2 className="h-8 w-8 text-green-600" />
-              <div>
-                <h1 className="text-xl font-bold">AppleBites Dashboard</h1>
-                <p className="text-sm text-muted-foreground">
-                  Welcome back, {userData.firstName}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="text-right">
-                <p className="text-sm font-medium">{userData.firstName} {userData.lastName}</p>
-                <p className="text-xs text-muted-foreground">{userData.companyName}</p>
-              </div>
-              <Button variant="outline" size="sm" onClick={handleLogout}>
-                Sign Out
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+    <ConsumerDashboardLayout>
+      <div className="max-w-6xl mx-auto">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-2">Your Business Valuation Hub</h2>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold mb-2">Welcome back, {userData.firstName}!</h1>
+          <p className="text-muted-foreground text-lg">
             Get professional insights into your business value and discover improvement opportunities.
           </p>
         </div>
@@ -223,6 +191,6 @@ export default function ConsumerDashboard() {
           </AlertDescription>
         </Alert>
       </div>
-    </div>
+    </ConsumerDashboardLayout>
   );
 }
