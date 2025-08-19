@@ -335,48 +335,128 @@ export default function ConsumerDashboardTeamTrack() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b">
-        <div className="container max-w-7xl mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <Link href="/applebites">
-                <Button variant="ghost" size="sm">
-                  ← Back
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Sidebar */}
+      <div className="hidden md:flex w-[280px] bg-gradient-to-b from-[#0A1F44] to-[#1C2D5A] text-white flex-col fixed h-screen">
+        {/* Logo Section */}
+        <div className="p-6 text-center border-b border-white/10">
+          <img
+            src="/apple-bites-logo.png"
+            alt="AppleBites"
+            className="w-32 mx-auto mb-3"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+          <p className="text-sm text-cyan-200 font-light">Business Valuation Platform</p>
+        </div>
+
+        {/* User Info */}
+        <div className="p-6 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 flex items-center justify-center">
+              <User className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <p className="font-medium">{user.firstName || 'User'}</p>
+              <p className="text-xs text-cyan-200">{getTierLabel(user.plan)} Plan</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div className="flex-1 p-4">
+          <div className="space-y-2">
+            <Link href="/assessment/free">
+              <Button className="w-full justify-start bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white">
+                <FileText className="h-4 w-4 mr-3" />
+                Free Assessment
+              </Button>
+            </Link>
+            
+            {user.plan === 'free' ? (
+              <Link href="/applebites-checkout">
+                <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white">
+                  <Crown className="h-4 w-4 mr-3" />
+                  Growth Assessment
+                  <Lock className="h-3 w-3 ml-auto" />
                 </Button>
               </Link>
-              <div className="h-8 w-px bg-gray-200" />
-              <h1 className="text-xl font-semibold">AppleBites Dashboard</h1>
-            </div>
-            <div className="flex items-center gap-3">
-              <Badge variant={user.plan === 'growth' ? 'default' : 'secondary'} className="px-3 py-1">
-                {getTierIcon(user.plan)}
-                <span className="ml-1">{getTierLabel(user.plan)}</span>
-              </Badge>
+            ) : (
+              <Link href="/assessment/paid">
+                <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white">
+                  <Crown className="h-4 w-4 mr-3" />
+                  Growth Assessment
+                </Button>
+              </Link>
+            )}
+            
+            <Link href="/past-assessments">
+              <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white">
+                <BarChart3 className="h-4 w-4 mr-3" />
+                Past Assessments
+              </Button>
+            </Link>
+            
+            <Button 
+              className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white"
+              asChild
+            >
+              <a href="https://api.leadconnectorhq.com/widget/bookings/applebites" target="_blank" rel="noopener noreferrer">
+                <Calendar className="h-4 w-4 mr-3" />
+                Schedule Consultation
+              </a>
+            </Button>
+          </div>
+        </div>
+
+        {/* Sign Out */}
+        <div className="p-4 border-t border-white/10">
+          <Button 
+            onClick={handleLogout} 
+            className="w-full bg-transparent border border-red-400 text-red-400 hover:bg-red-400/10"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Sign Out
+          </Button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 md:ml-[280px]">
+        {/* Mobile Header */}
+        <div className="md:hidden bg-white border-b">
+          <div className="px-4 py-4">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-4">
+                <Link href="/applebites">
+                  <Button variant="ghost" size="sm">
+                    ← Back
+                  </Button>
+                </Link>
+                <h1 className="text-xl font-semibold">Dashboard</h1>
+              </div>
               <Button onClick={handleLogout} variant="outline" size="sm">
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
+                <LogOut className="h-4 w-4" />
               </Button>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="container max-w-7xl mx-auto px-4 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user.firstName || 'User'}!
-          </h2>
-          <p className="text-lg text-gray-600">
-            Ready to unlock your business potential? Start with a comprehensive valuation assessment.
-          </p>
-        </div>
+        <div className="p-4 md:p-8">
+          {/* Welcome Section */}
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              Welcome back, {user.firstName || 'User'}!
+            </h2>
+            <p className="text-lg text-gray-600">
+              Ready to unlock your business potential? Start with a comprehensive valuation assessment.
+            </p>
+          </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="bg-gradient-to-r from-[#00718d] to-[#0A1F44] text-white">
+          {/* Quick Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <Card className="bg-gradient-to-r from-[#00718d] to-[#0A1F44] text-white">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -413,12 +493,12 @@ export default function ConsumerDashboardTeamTrack() {
               </div>
             </CardContent>
           </Card>
-        </div>
+          </div>
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Action Card */}
-          <div className="lg:col-span-2">
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Action Card */}
+            <div className="lg:col-span-2">
             <Card>
               <CardHeader>
                 <CardTitle>Get Started with Your Valuation</CardTitle>
@@ -469,10 +549,10 @@ export default function ConsumerDashboardTeamTrack() {
               </div>
               <PastAssessmentsSection />
             </div>
-          </div>
+            </div>
 
-          {/* Side Panel */}
-          <div className="space-y-6">
+            {/* Side Panel */}
+            <div className="space-y-6">
             {/* Quick Assessment Card */}
             <Card className="text-center">
               <CardContent className="pt-6">
@@ -525,6 +605,7 @@ export default function ConsumerDashboardTeamTrack() {
               </CardContent>
             </Card>
           </div>
+        </div>
         </div>
       </div>
     </div>
