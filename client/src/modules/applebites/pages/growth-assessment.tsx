@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Box, FormControlLabel, RadioGroup, Radio, FormControl, Alert, AlertTitle, Select, MenuItem } from '@mui/material';
+import { Card, CardContent, Box, FormControlLabel, RadioGroup, Radio, FormControl, Alert, AlertTitle, Select, MenuItem, TextField, InputAdornment } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MDBox from "../components/MD/MDBox";
 import MDButton from "../components/MD/MDButton";
@@ -17,7 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import type { ValuationAssessment } from "@shared/schema";
 import appleBitesQuestionsData from "../data/full_apple_bites_questions_1751898553174.json";
-import naicsCodesData from "../data/naics-codes.json";
+import hierarchicalNaicsData from "../data/hierarchical-naics.json";
 import { 
   FileText, 
   Calculator,
@@ -28,7 +28,8 @@ import {
   CheckCircle,
   RefreshCw,
   Edit3,
-  Lock
+  Lock,
+  Search
 } from "lucide-react";
 
 // Material Dashboard Styled Components
@@ -91,6 +92,7 @@ export default function GrowthAssessment() {
   const [isFieldsLocked, setIsFieldsLocked] = useState(true);
   const [selectedNaicsCode, setSelectedNaicsCode] = useState<string>('');
   const [selectedIndustry, setSelectedIndustry] = useState<string>('');
+  const [naicsSearchTerm, setNaicsSearchTerm] = useState('');
 
   // Fetch previous assessments to check for existing financial data
   const { data: previousAssessments, isLoading: assessmentsLoading } = useQuery<any[]>({
@@ -402,35 +404,95 @@ export default function GrowthAssessment() {
             </MDBox>
 
             <MDBox sx={{ mt: 3 }}>
+              <TextField
+                fullWidth
+                placeholder="Search for your industry (e.g., 'software', 'construction', 'restaurant')..."
+                value={naicsSearchTerm}
+                onChange={(e) => setNaicsSearchTerm(e.target.value)}
+                sx={{ mb: 2 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Search size={20} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              
               <Select
                 value={selectedNaicsCode}
                 onChange={(e) => {
                   const code = e.target.value;
                   setSelectedNaicsCode(code);
-                  // Find the industry name from the NAICS data
-                  let industryName = '';
-                  (naicsCodesData as any).forEach((sector: any) => {
-                    const found = sector.children?.find((ind: any) => ind.code === code);
-                    if (found) industryName = found.title;
-                  });
-                  setSelectedIndustry(industryName);
+                  // Find the industry name from the hierarchical NAICS data
+                  const found = (hierarchicalNaicsData as any).find((item: any) => item.code === code);
+                  if (found) {
+                    setSelectedIndustry(found.title);
+                  }
                 }}
-                sx={{ width: '100%', mb: 3 }}
+                sx={{ width: '100%', mb: 3, maxHeight: '400px' }}
+                MenuProps={{
+                  PaperProps: {
+                    style: {
+                      maxHeight: 400,
+                    },
+                  },
+                }}
               >
                 <MenuItem value="">Select an industry...</MenuItem>
-                {(naicsCodesData as any).map((sector: any) => (
-                  <React.Fragment key={sector.code}>
-                    <MenuItem disabled sx={{ fontSize: '12px', fontWeight: 600, color: '#64748b', mt: 1 }}>
-                      — {sector.title.toUpperCase()} —
-                    </MenuItem>
-                    {sector.children?.map((item: any) => (
-                      <MenuItem key={item.code} value={item.code}>
-                        {item.title} (NAICS: {item.code})
+                {(() => {
+                  // Get all 6-digit codes
+                  const sixDigitCodes = (hierarchicalNaicsData as any).filter((item: any) => item.level === 6);
+                  
+                  // Filter by search term if provided
+                  const filteredCodes = naicsSearchTerm 
+                    ? sixDigitCodes.filter((code: any) => 
+                        code.title.toLowerCase().includes(naicsSearchTerm.toLowerCase()) ||
+                        code.code.includes(naicsSearchTerm)
+                      )
+                    : sixDigitCodes;
+                  
+                  if (filteredCodes.length === 0) {
+                    return (
+                      <MenuItem disabled>
+                        No industries found matching "{naicsSearchTerm}"
                       </MenuItem>
-                    ))}
-                  </React.Fragment>
-                ))}
+                    );
+                  }
+                  
+                  // Group by sector for better organization
+                  const sectors = (hierarchicalNaicsData as any).filter((item: any) => item.level === 2);
+                  
+                  return sectors.map((sector: any) => {
+                    const sectorCodes = filteredCodes.filter((code: any) => 
+                      code.code.startsWith(sector.code)
+                    );
+                    
+                    if (sectorCodes.length === 0) return null;
+                    
+                    return (
+                      <React.Fragment key={sector.code}>
+                        <MenuItem disabled sx={{ fontSize: '12px', fontWeight: 600, color: '#64748b', mt: 1 }}>
+                          — {sector.title.toUpperCase()} ({sectorCodes.length} industries) —
+                        </MenuItem>
+                        {sectorCodes.map((item: any) => (
+                          <MenuItem key={item.code} value={item.code}>
+                            {item.title} ({item.code})
+                          </MenuItem>
+                        ))}
+                      </React.Fragment>
+                    );
+                  }).filter(Boolean);
+                })()}
               </Select>
+              
+              {selectedNaicsCode && (
+                <MDBox sx={{ mt: 2, p: 2, bgcolor: '#f0f9ff', borderRadius: '8px' }}>
+                  <MDTypography variant="body2" sx={{ color: '#0369a1' }}>
+                    Selected: {selectedIndustry} (NAICS: {selectedNaicsCode})
+                  </MDTypography>
+                </MDBox>
+              )}
             </MDBox>
 
             <MDBox sx={{ mt: 4, display: 'flex', gap: 2 }}>
