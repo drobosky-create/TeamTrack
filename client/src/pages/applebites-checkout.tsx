@@ -29,12 +29,35 @@ export default function AppleBitesCheckoutPage() {
       });
       
       const data = await response.json();
+      console.log('Checkout session response:', data);
       
       if (data.url) {
         // Redirect to Stripe Checkout
+        console.log('Redirecting to:', data.url);
         window.location.href = data.url;
+      } else if (data.sessionId) {
+        // If we only have sessionId, we need to redirect manually using Stripe.js
+        console.log('Session ID received:', data.sessionId);
+        toast({
+          title: "Redirecting to Stripe Checkout",
+          description: "Please wait...",
+        });
+        
+        // Import Stripe and redirect
+        const stripe = (await import('@stripe/stripe-js')).loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+        const stripeInstance = await stripe;
+        if (stripeInstance) {
+          const { error } = await stripeInstance.redirectToCheckout({
+            sessionId: data.sessionId
+          });
+          if (error) {
+            throw error;
+          }
+        } else {
+          throw new Error('Failed to load Stripe');
+        }
       } else {
-        throw new Error('No checkout URL received');
+        throw new Error('No checkout URL or session ID received');
       }
     } catch (error: any) {
       console.error("Error creating checkout session:", error);
