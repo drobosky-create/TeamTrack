@@ -436,7 +436,7 @@ export default function GrowthAssessment() {
                   <MDTypography variant="body1" sx={{ color: '#344767', mb: 1, fontWeight: 'medium' }}>
                     Step 2: Select Your Specific Industry
                   </MDTypography>
-                  <Select
+                  <select
                     value={selectedNaicsCode}
                     onChange={(e) => {
                       const code = e.target.value;
@@ -447,33 +447,18 @@ export default function GrowthAssessment() {
                         setSelectedIndustry(found.title);
                       }
                     }}
-                    sx={{ width: '100%' }}
-                    MenuProps={{
-                      PaperProps: {
-                        sx: {
-                          maxHeight: 400,
-                          overflow: 'auto',
-                          mt: 1,
-                          '& .MuiMenuItem-root': {
-                            whiteSpace: 'normal',
-                            wordBreak: 'break-word',
-                            py: 1
-                          }
-                        }
-                      },
-                      anchorOrigin: {
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                      },
-                      transformOrigin: {
-                        vertical: 'top',
-                        horizontal: 'left',
-                      },
-                      getContentAnchorEl: null,
+                    style={{
+                      width: '100%',
+                      padding: '12px',
+                      fontSize: '14px',
+                      borderRadius: '4px',
+                      border: '1px solid rgba(0, 0, 0, 0.23)',
+                      backgroundColor: 'white',
+                      cursor: 'pointer',
+                      fontFamily: 'inherit'
                     }}
-                    displayEmpty
                   >
-                    <MenuItem value="">Select an industry...</MenuItem>
+                    <option value="">Select an industry...</option>
                     {(() => {
                       // Get all 6-digit codes for selected sector
                       const sixDigitCodes = (hierarchicalNaicsData as any)
@@ -482,9 +467,9 @@ export default function GrowthAssessment() {
                       
                       if (sixDigitCodes.length === 0) {
                         return (
-                          <MenuItem disabled>
+                          <option disabled>
                             No industries available for this sector
-                          </MenuItem>
+                          </option>
                         );
                       }
                       
@@ -504,23 +489,17 @@ export default function GrowthAssessment() {
                           
                           return (
                             <React.Fragment key={subsector.code}>
-                              <MenuItem disabled sx={{ fontSize: '12px', fontWeight: 600, color: '#64748b', mt: 1 }}>
+                              <option disabled style={{ fontWeight: 'bold', color: '#64748b' }}>
                                 — {subsector.title} —
-                              </MenuItem>
+                              </option>
                               {subsectorCodes.map((item: any) => (
-                                <MenuItem 
+                                <option 
                                   key={item.code} 
-                                  value={item.code} 
-                                  sx={{ 
-                                    pl: 4,
-                                    py: 1,
-                                    '&:hover': {
-                                      backgroundColor: '#f5f5f5',
-                                    }
-                                  }}
+                                  value={item.code}
+                                  style={{ paddingLeft: '20px' }}
                                 >
                                   {item.title} ({item.code})
-                                </MenuItem>
+                                </option>
                               ))}
                             </React.Fragment>
                           );
@@ -528,22 +507,16 @@ export default function GrowthAssessment() {
                       } else {
                         // If there's only one subsector or none, show all industries directly
                         return sixDigitCodes.map((item: any) => (
-                          <MenuItem 
+                          <option 
                             key={item.code} 
                             value={item.code}
-                            sx={{
-                              py: 1,
-                              '&:hover': {
-                                backgroundColor: '#f5f5f5',
-                              }
-                            }}
                           >
                             {item.title} ({item.code})
-                          </MenuItem>
+                          </option>
                         ));
                       }
                     })()}
-                  </Select>
+                  </select>
                 </MDBox>
               )}
               
