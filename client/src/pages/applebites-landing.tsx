@@ -24,22 +24,16 @@ export default function AppleBitesLanding() {
         <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box
+              component="img"
+              src="/apple-bites-logo.png"
+              alt="AppleBites Logo"
               sx={{ 
                 width: 40, 
                 height: 40, 
                 mr: 2,
-                borderRadius: 1,
-                backgroundColor: '#4CAF50',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '20px',
-                fontWeight: 'bold',
-                color: 'white'
+                borderRadius: 1
               }}
-            >
-              AB
-            </Box>
+            />
             <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white' }}>
               APPLE BITES
             </Typography>
@@ -134,7 +128,7 @@ export default function AppleBitesLanding() {
                 }
               }}
             >
-              HERITAGE PARTNERS
+              MERITAGE PARTNERS
             </Button>
           </Box>
         </Toolbar>
