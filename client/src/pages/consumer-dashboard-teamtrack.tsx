@@ -476,17 +476,19 @@ export default function ConsumerDashboardTeamTrack() {
             </div>
           </div>
 
-          {/* Main Content Grid */}
-          <div className="grid lg:grid-cols-[2fr_1fr] gap-8">
-            {/* Left Column */}
-            <div className="space-y-6">
+          {/* Main Content Area */}
+          <div className="space-y-6">
+            {/* Top Row - Get Started and Quick Assessment Cards */}
+            <div className="grid lg:grid-cols-[2fr_1fr] gap-6">
               {/* Get Started Card */}
-              <Card className="bg-white">
-                <CardContent className="p-6">
-                  <h2 className="text-xl font-semibold mb-3">Get Started with Your Valuation</h2>
-                  <p className="text-gray-600 mb-6">
-                    Our comprehensive assessment analyzes your business across key value drivers to provide accurate valuation estimates and improvement recommendations.
-                  </p>
+              <Card className="bg-white h-full">
+                <CardContent className="p-6 flex flex-col justify-between h-full">
+                  <div>
+                    <h2 className="text-xl font-semibold mb-3">Get Started with Your Valuation</h2>
+                    <p className="text-gray-600 mb-6">
+                      Our comprehensive assessment analyzes your business across key value drivers to provide accurate valuation estimates and improvement recommendations.
+                    </p>
+                  </div>
                   <div className="flex gap-3">
                     <Link href="/assessment/free">
                       <Button className="bg-[#0d6e8c] hover:bg-[#0a5a73] text-white">
@@ -513,35 +515,32 @@ export default function ConsumerDashboardTeamTrack() {
                 </CardContent>
               </Card>
 
-              {/* Recent Assessments Section */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold flex items-center gap-2">
-                    <BarChart3 className="h-5 w-5 text-gray-600" />
-                    Recent Assessments
-                  </h3>
-                  <Link href="/past-assessments">
-                    <Button variant="ghost" size="sm" className="text-[#1976d2] hover:text-[#1565c0]">
-                      <Eye className="h-4 w-4 mr-1" />
-                      View All
-                    </Button>
-                  </Link>
-                </div>
-                <PastAssessmentsSection />
-              </div>
-            </div>
-
-            {/* Right Column - Quick Assessment Card */}
-            <div>
               {/* Quick Assessment Card */}
-              <Card className="bg-white border">
-                <CardContent className="p-6 text-center">
+              <Card className="bg-white border h-full">
+                <CardContent className="p-6 text-center flex flex-col justify-center h-full">
                   <Clock className="h-16 w-16 text-[#1976d2] mx-auto mb-4" />
                   <h3 className="text-xl font-semibold mb-2">Quick Assessment</h3>
                   <p className="text-gray-600 mb-2">Complete in 10-15 minutes</p>
                   <p className="text-sm text-[#1976d2]">Perfect for getting started</p>
                 </CardContent>
               </Card>
+            </div>
+
+            {/* Recent Assessments Section - Full Width */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5 text-gray-600" />
+                  Recent Assessments
+                </h3>
+                <Link href="/past-assessments">
+                  <Button variant="ghost" size="sm" className="text-[#1976d2] hover:text-[#1565c0]">
+                    <Eye className="h-4 w-4 mr-1" />
+                    View All
+                  </Button>
+                </Link>
+              </div>
+              <PastAssessmentsSection />
             </div>
           </div>
         </div>
