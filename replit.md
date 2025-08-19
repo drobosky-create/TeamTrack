@@ -45,6 +45,7 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
 - Implemented proper score calculation: index 4 (highest answer) = 5 points, allowing scores up to 9.0x multiple for exceptional businesses
 - Industry multipliers apply based on NAICS codes (e.g., Software 1.4x, Manufacturing 0.9x) for accurate sector-specific valuations
 - **NAICS Data Update (August 19, 2025)**: Successfully integrated complete NAICS 2022 dataset with all 922 six-digit codes from official CSV, replacing incomplete sample of 27 codes
+- **Industry Selection UI Improvement**: Replaced search bar with intuitive two-level dropdown system - first select business sector, then specific industry from filtered list for easier navigation of 922 NAICS codes
 
 # User Preferences
 

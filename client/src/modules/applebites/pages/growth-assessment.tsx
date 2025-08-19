@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Box, FormControlLabel, RadioGroup, Radio, FormControl, Alert, AlertTitle, Select, MenuItem, TextField, InputAdornment } from '@mui/material';
+import { Card, CardContent, Box, FormControlLabel, RadioGroup, Radio, FormControl, Alert, AlertTitle, Select, MenuItem } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MDBox from "../components/MD/MDBox";
 import MDButton from "../components/MD/MDButton";
@@ -28,8 +28,7 @@ import {
   CheckCircle,
   RefreshCw,
   Edit3,
-  Lock,
-  Search
+  Lock
 } from "lucide-react";
 
 // Material Dashboard Styled Components
@@ -92,7 +91,7 @@ export default function GrowthAssessment() {
   const [isFieldsLocked, setIsFieldsLocked] = useState(true);
   const [selectedNaicsCode, setSelectedNaicsCode] = useState<string>('');
   const [selectedIndustry, setSelectedIndustry] = useState<string>('');
-  const [naicsSearchTerm, setNaicsSearchTerm] = useState('');
+  const [selectedSector, setSelectedSector] = useState<string>('');
 
   // Fetch previous assessments to check for existing financial data
   const { data: previousAssessments, isLoading: assessmentsLoading } = useQuery<any[]>({
@@ -404,92 +403,122 @@ export default function GrowthAssessment() {
             </MDBox>
 
             <MDBox sx={{ mt: 3 }}>
-              <TextField
-                fullWidth
-                placeholder="Search for your industry (e.g., 'software', 'construction', 'restaurant')..."
-                value={naicsSearchTerm}
-                onChange={(e) => setNaicsSearchTerm(e.target.value)}
-                sx={{ mb: 2 }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Search size={20} />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              
-              <Select
-                value={selectedNaicsCode}
-                onChange={(e) => {
-                  const code = e.target.value;
-                  setSelectedNaicsCode(code);
-                  // Find the industry name from the hierarchical NAICS data
-                  const found = (hierarchicalNaicsData as any).find((item: any) => item.code === code);
-                  if (found) {
-                    setSelectedIndustry(found.title);
-                  }
-                }}
-                sx={{ width: '100%', mb: 3, maxHeight: '400px' }}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      maxHeight: 400,
-                    },
-                  },
-                }}
-              >
-                <MenuItem value="">Select an industry...</MenuItem>
-                {(() => {
-                  // Get all 6-digit codes
-                  const sixDigitCodes = (hierarchicalNaicsData as any).filter((item: any) => item.level === 6);
-                  
-                  // Filter by search term if provided
-                  const filteredCodes = naicsSearchTerm 
-                    ? sixDigitCodes.filter((code: any) => 
-                        code.title.toLowerCase().includes(naicsSearchTerm.toLowerCase()) ||
-                        code.code.includes(naicsSearchTerm)
-                      )
-                    : sixDigitCodes;
-                  
-                  if (filteredCodes.length === 0) {
-                    return (
-                      <MenuItem disabled>
-                        No industries found matching "{naicsSearchTerm}"
+              {/* Step 1: Select Sector */}
+              <MDBox sx={{ mb: 3 }}>
+                <MDTypography variant="body1" sx={{ color: '#344767', mb: 1, fontWeight: 'medium' }}>
+                  Step 1: Select Your Business Sector
+                </MDTypography>
+                <Select
+                  value={selectedSector}
+                  onChange={(e) => {
+                    setSelectedSector(e.target.value);
+                    setSelectedNaicsCode(''); // Reset industry selection when sector changes
+                    setSelectedIndustry('');
+                  }}
+                  sx={{ width: '100%' }}
+                  displayEmpty
+                >
+                  <MenuItem value="">Select a sector...</MenuItem>
+                  {(hierarchicalNaicsData as any)
+                    .filter((item: any) => item.level === 2)
+                    .sort((a: any, b: any) => a.title.localeCompare(b.title))
+                    .map((sector: any) => (
+                      <MenuItem key={sector.code} value={sector.code}>
+                        {sector.title}
                       </MenuItem>
-                    );
-                  }
-                  
-                  // Group by sector for better organization
-                  const sectors = (hierarchicalNaicsData as any).filter((item: any) => item.level === 2);
-                  
-                  return sectors.map((sector: any) => {
-                    const sectorCodes = filteredCodes.filter((code: any) => 
-                      code.code.startsWith(sector.code)
-                    );
-                    
-                    if (sectorCodes.length === 0) return null;
-                    
-                    return (
-                      <React.Fragment key={sector.code}>
-                        <MenuItem disabled sx={{ fontSize: '12px', fontWeight: 600, color: '#64748b', mt: 1 }}>
-                          — {sector.title.toUpperCase()} ({sectorCodes.length} industries) —
-                        </MenuItem>
-                        {sectorCodes.map((item: any) => (
+                    ))}
+                </Select>
+              </MDBox>
+
+              {/* Step 2: Select Specific Industry (only show if sector is selected) */}
+              {selectedSector && (
+                <MDBox sx={{ mb: 3 }}>
+                  <MDTypography variant="body1" sx={{ color: '#344767', mb: 1, fontWeight: 'medium' }}>
+                    Step 2: Select Your Specific Industry
+                  </MDTypography>
+                  <Select
+                    value={selectedNaicsCode}
+                    onChange={(e) => {
+                      const code = e.target.value;
+                      setSelectedNaicsCode(code);
+                      // Find the industry name from the hierarchical NAICS data
+                      const found = (hierarchicalNaicsData as any).find((item: any) => item.code === code);
+                      if (found) {
+                        setSelectedIndustry(found.title);
+                      }
+                    }}
+                    sx={{ width: '100%' }}
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          maxHeight: 400,
+                        },
+                      },
+                    }}
+                    displayEmpty
+                  >
+                    <MenuItem value="">Select an industry...</MenuItem>
+                    {(() => {
+                      // Get all 6-digit codes for selected sector
+                      const sixDigitCodes = (hierarchicalNaicsData as any)
+                        .filter((item: any) => item.level === 6 && item.code.startsWith(selectedSector))
+                        .sort((a: any, b: any) => a.title.localeCompare(b.title));
+                      
+                      if (sixDigitCodes.length === 0) {
+                        return (
+                          <MenuItem disabled>
+                            No industries available for this sector
+                          </MenuItem>
+                        );
+                      }
+                      
+                      // Group by subsector (3-digit) for better organization
+                      const subsectors = (hierarchicalNaicsData as any)
+                        .filter((item: any) => item.level === 3 && item.code.startsWith(selectedSector))
+                        .sort((a: any, b: any) => a.code.localeCompare(b.code));
+                      
+                      if (subsectors.length > 1) {
+                        // If there are multiple subsectors, group the industries
+                        return subsectors.map((subsector: any) => {
+                          const subsectorCodes = sixDigitCodes.filter((code: any) => 
+                            code.code.startsWith(subsector.code)
+                          );
+                          
+                          if (subsectorCodes.length === 0) return null;
+                          
+                          return (
+                            <React.Fragment key={subsector.code}>
+                              <MenuItem disabled sx={{ fontSize: '12px', fontWeight: 600, color: '#64748b', mt: 1 }}>
+                                — {subsector.title} —
+                              </MenuItem>
+                              {subsectorCodes.map((item: any) => (
+                                <MenuItem key={item.code} value={item.code} sx={{ pl: 4 }}>
+                                  {item.title} ({item.code})
+                                </MenuItem>
+                              ))}
+                            </React.Fragment>
+                          );
+                        }).filter(Boolean);
+                      } else {
+                        // If there's only one subsector or none, show all industries directly
+                        return sixDigitCodes.map((item: any) => (
                           <MenuItem key={item.code} value={item.code}>
                             {item.title} ({item.code})
                           </MenuItem>
-                        ))}
-                      </React.Fragment>
-                    );
-                  }).filter(Boolean);
-                })()}
-              </Select>
+                        ));
+                      }
+                    })()}
+                  </Select>
+                </MDBox>
+              )}
               
               {selectedNaicsCode && (
                 <MDBox sx={{ mt: 2, p: 2, bgcolor: '#f0f9ff', borderRadius: '8px' }}>
-                  <MDTypography variant="body2" sx={{ color: '#0369a1' }}>
-                    Selected: {selectedIndustry} (NAICS: {selectedNaicsCode})
+                  <MDTypography variant="body2" sx={{ color: '#0369a1', fontWeight: 'medium' }}>
+                    ✓ Selected Industry
+                  </MDTypography>
+                  <MDTypography variant="body2" sx={{ color: '#0369a1', mt: 0.5 }}>
+                    {selectedIndustry} (NAICS: {selectedNaicsCode})
                   </MDTypography>
                 </MDBox>
               )}
