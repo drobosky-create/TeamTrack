@@ -53,6 +53,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Register Stripe product routes
+  registerStripeProductRoutes(app);
   // Setup session middleware first (needed for consumer auth)
   await setupAuth(app);
   
@@ -984,4 +986,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   const httpServer = createServer(app);
   return httpServer;
+}
+
+// Register Stripe product routes
+function registerStripeProductRoutes(app: Express) {
+  // Get product details including pricing
+  app.get("/api/products/applebites-growth", async (req, res) => {
+    try {
+      const productId = process.env.STRIPE_PRODUCT_ID_GROWTH;
+      
+      if (!productId) {
+        // Return default pricing if no product configured
+        return res.json({
+          name: 'AppleBites Growth & Exit Plan',
+          description: 'Complete business valuation assessment with growth strategies and exit planning tools',
+          price: 795,
+          currency: 'usd',
+          configured: false
+        });
+      }
+
+      // Fetch product details
+      const product = await stripe.products.retrieve(productId);
+      
+      // Fetch active prices for this product
+      const prices = await stripe.prices.list({
+        product: productId,
+        active: true,
+        limit: 1,
+        type: 'one_time'
+      });
+
+      if (prices.data.length === 0) {
+        return res.status(404).json({ 
+          message: "No active price found for product" 
+        });
+      }
+
+      const activePrice = prices.data[0];
+      
+      res.json({
+        id: product.id,
+        name: product.name,
+        description: product.description || 'Complete business valuation assessment with growth strategies and exit planning tools',
+        price: activePrice.unit_amount ? activePrice.unit_amount / 100 : 795, // Convert from cents to dollars
+        currency: activePrice.currency,
+        configured: true,
+        priceId: activePrice.id
+      });
+    } catch (error: any) {
+      console.error('Error fetching product details:', error);
+      // Return default pricing on error
+      res.json({
+        name: 'AppleBites Growth & Exit Plan',
+        description: 'Complete business valuation assessment with growth strategies and exit planning tools',
+        price: 795,
+        currency: 'usd',
+        configured: false,
+        error: error.message
+      });
+    }
+  });
 }

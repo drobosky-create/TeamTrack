@@ -5,9 +5,29 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, ArrowLeft, CreditCard, ShieldCheck, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
-import { Box, Typography, Container } from '@mui/material';
+import { Box, Typography, Container, Skeleton } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 
 export default function AppleBitesCheckoutPage() {
+  // Fetch product pricing from Stripe
+  const { data: productData, isLoading: isPriceLoading } = useQuery({
+    queryKey: ['/api/products/applebites-growth'],
+    queryFn: async () => {
+      const response = await fetch('/api/products/applebites-growth');
+      if (!response.ok) throw new Error('Failed to fetch product');
+      return response.json();
+    },
+    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+  });
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: productData?.currency || 'usd',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -85,7 +105,7 @@ export default function AppleBitesCheckoutPage() {
           <CardHeader>
             <CardTitle className="text-2xl">Complete Your Purchase</CardTitle>
             <CardDescription>
-              AppleBites Growth & Exit Plan - One-time payment
+              {isPriceLoading ? 'Loading...' : `${productData?.name || 'AppleBites Growth & Exit Plan'} - One-time payment`}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -122,11 +142,19 @@ export default function AppleBitesCheckoutPage() {
             <div className="bg-blue-50 p-4 rounded-lg">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm font-medium text-gray-600">Plan:</span>
-                <span className="text-lg font-bold text-blue-600">Growth & Exit</span>
+                {isPriceLoading ? (
+                  <Skeleton variant="text" sx={{ width: 120 }} />
+                ) : (
+                  <span className="text-lg font-bold text-blue-600">{productData?.name?.replace('AppleBites ', '').replace(' Plan', '') || 'Growth & Exit'}</span>
+                )}
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-gray-600">Amount:</span>
-                <span className="text-2xl font-bold">$795.00</span>
+                {isPriceLoading ? (
+                  <Skeleton variant="text" sx={{ width: 100, fontSize: '1.5rem' }} />
+                ) : (
+                  <span className="text-2xl font-bold">{formatPrice(productData?.price || 795)}</span>
+                )}
               </div>
               <div className="mt-3 p-3 bg-white rounded border border-blue-200">
                 <p className="text-sm text-gray-600">

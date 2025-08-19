@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -8,11 +8,32 @@ import {
   Container,
   AppBar,
   Toolbar,
+  Skeleton,
 } from '@mui/material';
 import { Link } from 'wouter';
 import { FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover } from 'react-icons/fa';
+import { useQuery } from '@tanstack/react-query';
 
 export default function AppleBitesLanding() {
+  // Fetch product pricing from Stripe
+  const { data: productData, isLoading } = useQuery({
+    queryKey: ['/api/products/applebites-growth'],
+    queryFn: async () => {
+      const response = await fetch('/api/products/applebites-growth');
+      if (!response.ok) throw new Error('Failed to fetch product');
+      return response.json();
+    },
+    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+  });
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: productData?.currency || 'usd',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#f5f7fa' }}>
       {/* Navigation Header */}
@@ -275,11 +296,15 @@ export default function AppleBitesLanding() {
           }}>
             <CardContent sx={{ p: 4 }}>
               <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#1a2332', mb: 3 }}>
-                Growth & Exit
+                {isLoading ? 'Growth & Exit' : (productData?.name?.replace('AppleBites ', '').replace(' Plan', '') || 'Growth & Exit')}
               </Typography>
-              <Typography variant="h2" sx={{ fontWeight: 'bold', color: '#1a2332', mb: 1 }}>
-                $795
-              </Typography>
+              {isLoading ? (
+                <Skeleton variant="text" sx={{ fontSize: '3rem', mb: 1 }} />
+              ) : (
+                <Typography variant="h2" sx={{ fontWeight: 'bold', color: '#1a2332', mb: 1 }}>
+                  {formatPrice(productData?.price || 795)}
+                </Typography>
+              )}
               <Box sx={{ textAlign: 'left', mb: 4, minHeight: 120 }}>
                 <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem', fontStyle: 'italic' }}>
                   Everything in Free
@@ -314,7 +339,7 @@ export default function AppleBitesLanding() {
                   }
                 }}
               >
-                Access Now
+                {isLoading ? 'Loading...' : `Access Now - ${formatPrice(productData?.price || 795)}`}
               </Button>
               <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 1.5, alignItems: 'center' }}>
                 <FaCcVisa size={28} color="#1A1F71" />
