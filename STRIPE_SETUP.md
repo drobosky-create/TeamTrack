@@ -1,11 +1,35 @@
 # Stripe Setup Instructions for AppleBites
 
 ## Overview
-AppleBites uses Stripe Checkout Sessions for payment processing. All coupon/promotion code management is done directly in the Stripe Dashboard.
+AppleBites uses Stripe Checkout Sessions for payment processing. All product, pricing, and coupon/promotion code management is done directly in the Stripe Dashboard.
 
 ## Required Environment Variables
 - `VITE_STRIPE_PUBLIC_KEY` - Your Stripe publishable key (starts with `pk_`)
 - `STRIPE_SECRET_KEY` - Your Stripe secret key (starts with `sk_`)
+- `STRIPE_PRICE_ID_GROWTH` - The price ID for Growth & Exit plan (starts with `price_`)
+
+## Step 1: Create Products in Stripe Dashboard
+
+### Create the AppleBites Growth & Exit Product
+1. Go to https://dashboard.stripe.com/products
+2. Click **"+ Add product"**
+3. Fill in the product details:
+   - **Name**: AppleBites Growth & Exit Plan
+   - **Description**: Complete business valuation assessment with growth strategies and exit planning tools
+   - **Image**: Upload your product image (optional)
+4. In the **Pricing** section:
+   - **Pricing model**: Select "One-time"
+   - **Price**: $795.00
+   - **Currency**: USD
+5. Click **"Save product"**
+6. Copy the **Price ID** (starts with `price_`) - you'll need this for the environment variable
+
+### Set the Price ID Environment Variable
+Add to your environment variables:
+```
+STRIPE_PRICE_ID_GROWTH=price_xxxxxxxxxxxxx
+```
+(Replace with your actual price ID from Stripe)
 
 ## Payment Flow
 1. Customer clicks "Access Now - $795" on AppleBites landing page

@@ -22,8 +22,7 @@ export default function AppleBitesCheckoutPage() {
       
       // Create a Stripe Checkout Session
       const response = await apiRequest("POST", "/api/payments/create-checkout-session", {
-        productName: 'AppleBites Growth & Exit Plan',
-        amount: 795,
+        priceId: import.meta.env.VITE_STRIPE_PRICE_ID_GROWTH, // Use price ID from env if available
         successUrl: `${origin}/consumer-signup?payment=success&plan=growth`,
         cancelUrl: `${origin}/applebites`
       });

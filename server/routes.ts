@@ -723,8 +723,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/payments/create-checkout-session", async (req, res) => {
     try {
       const { 
-        productName = 'AppleBites Growth & Exit Plan',
-        amount = 795,
+        priceId,
         successUrl,
         cancelUrl
       } = req.body;
@@ -736,16 +735,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
+      // Use the price ID from environment variable if not provided
+      const finalPriceId = priceId || process.env.STRIPE_PRICE_ID_GROWTH;
+      
+      if (!finalPriceId) {
+        // Fallback to creating price on the fly if no price ID is configured
+        console.warn('STRIPE_PRICE_ID_GROWTH not configured, creating price dynamically');
+        const session = await stripe.checkout.sessions.create({
+          line_items: [{
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: 'AppleBites Growth & Exit Plan',
+                description: 'Complete business valuation assessment with growth strategies and exit planning tools',
+              },
+              unit_amount: 79500, // $795.00 in cents
+            },
+            quantity: 1,
+          }],
+          mode: 'payment',
+          allow_promotion_codes: true,
+          success_url: successUrl,
+          cancel_url: cancelUrl,
+          metadata: {
+            product: 'applebites_growth',
+          },
+        });
+        
+        res.json({ 
+          sessionId: session.id,
+          url: session.url 
+        });
+        return;
+      }
+
       const session = await stripe.checkout.sessions.create({
         line_items: [{
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: productName,
-              description: 'Complete business valuation assessment with growth strategies and exit planning tools',
-            },
-            unit_amount: Math.round(amount * 100), // Convert to cents
-          },
+          price: finalPriceId, // Use the price ID from Stripe Dashboard
           quantity: 1,
         }],
         mode: 'payment',
