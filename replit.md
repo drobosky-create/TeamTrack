@@ -18,7 +18,8 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
 - Clarified architecture: `/applebites` directory contains standalone app, while `client/src/pages/applebites-landing.tsx` serves the landing page
 - Implemented complete AppleBites payment flow with native Stripe Checkout Sessions:
   - Free plan routes directly to signup page
-  - Growth & Exit plan ($795) uses Stripe Checkout Sessions API
+  - Growth & Exit plan ($795) uses Stripe Checkout Sessions API with Product ID integration
+  - System automatically fetches current price from Stripe Product (prod_xxx)
   - Stripe handles all payment processing and promotion code validation natively
   - Customers enter promotion codes directly on Stripe's hosted checkout page
   - Checkout flow: AppleBites landing → Checkout preview page → Stripe hosted checkout → Consumer signup (with prefilled data after payment)
@@ -27,6 +28,7 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
   - All promotion codes and coupons are managed directly in Stripe Dashboard (not in application)
   - Fixed Stripe URL validation by ensuring HTTPS protocol in redirect URLs
   - Implemented both URL-based and sessionId-based redirect methods for maximum compatibility
+  - Uses STRIPE_PRODUCT_ID_GROWTH to dynamically fetch pricing from Stripe
 
 # User Preferences
 
