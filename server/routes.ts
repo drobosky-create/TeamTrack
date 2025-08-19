@@ -1,4 +1,17 @@
 import type { Express } from "express";
+
+// Extend session type for admin authentication
+declare module 'express-session' {
+  interface SessionData {
+    adminUser?: {
+      id: string;
+      email: string;
+      role: string;
+      firstName?: string;
+      lastName?: string;
+    };
+  }
+}
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import assessmentRoutes from "./routes/assessments";
@@ -26,7 +39,7 @@ import {
 import * as schema from "@shared/schema";
 import { ZodError } from "zod";
 import { db } from "./db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -626,6 +639,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       console.error('Error during consumer login:', error);
       res.status(500).json({ message: 'Login failed' });
+    }
+  });
+
+  // Admin authentication routes
+  app.post('/api/admin/login', async (req, res) => {
+    try {
+      const validatedData = schema.adminLoginSchema.parse(req.body);
+      
+      // Find admin user by email
+      const user = await db.query.users.findFirst({
+        where: and(
+          eq(schema.users.email, validatedData.email),
+          eq(schema.users.role, 'admin')
+        )
+      });
+      
+      if (!user || !user.passwordHash) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      // Check password
+      const isValid = await bcrypt.compare(validatedData.password, user.passwordHash);
+      
+      if (!isValid) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      // Create session - store user info in session
+      req.session.adminUser = {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName
+      };
+      
+      // Remove password hash from response
+      const { passwordHash: _, ...userResponse } = user;
+      
+      res.json({ 
+        message: "Admin login successful",
+        user: userResponse 
+      });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ message: "Invalid login data", errors: error.errors });
+      }
+      console.error('Error during admin login:', error);
+      res.status(500).json({ message: 'Admin login failed' });
+    }
+  });
+
+  app.post('/api/admin/logout', (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Logout failed' });
+      }
+      res.clearCookie('connect.sid');
+      res.json({ message: 'Logout successful' });
+    });
+  });
+
+  app.get('/api/admin/user', (req, res) => {
+    if (req.session.adminUser) {
+      res.json(req.session.adminUser);
+    } else {
+      res.status(401).json({ message: 'Not authenticated' });
     }
   });
 

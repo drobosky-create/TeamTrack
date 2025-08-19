@@ -1,11 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useLocation } from 'wouter';
 import { Box, Typography, Button } from '@mui/material';
-import { Shield, ExternalLink } from 'lucide-react';
+import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
+import MDInput from '../components/MD/MDInput';
+
+interface AdminLoginFormData {
+  email: string;
+  password: string;
+}
 
 export default function AdminLoginPage() {
-  const handleReplitLogin = () => {
-    // Redirect to Replit OAuth login
-    window.location.href = '/api/login';
+  const [, setLocation] = useLocation();
+
+  const [formData, setFormData] = useState<AdminLoginFormData>({
+    email: '',
+    password: ''
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleInputChange = (field: keyof AdminLoginFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, [field]: e.target.value }));
+    if (error) setError('');
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Redirect to admin dashboard
+        setLocation('/dashboard');
+      } else {
+        setError(data.message || 'Admin login failed. Please check your credentials.');
+      }
+    } catch (err) {
+      console.error('Admin login error:', err);
+      setError('Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -47,7 +94,7 @@ export default function AdminLoginPage() {
         </Box>
       </Box>
 
-      {/* Right Authentication Panel */}
+      {/* Right Form Panel */}
       <Box
         sx={{
           flex: 1,
@@ -60,30 +107,31 @@ export default function AdminLoginPage() {
         }}
       >
         <Box
+          component="form"
+          onSubmit={handleSubmit}
           sx={{
             width: '100%',
             maxWidth: 500,
-            textAlign: 'center'
           }}
         >
           {/* Header */}
           <Box mb={4}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Shield size={32} color="#1A202C" style={{ marginRight: 12 }} />
               <Typography variant="h4" fontWeight="bold" sx={{ 
                 color: '#1A202C', 
               }}>
-                Admin Authentication
+                Admin Sign In
               </Typography>
             </Box>
             <Typography variant="body1" sx={{ 
               color: '#718096' 
             }}>
-              Secure sign-in using your Replit account
+              Access your administrative dashboard with secure credentials
             </Typography>
           </Box>
 
-          {/* Authentication Notice */}
+          {/* Security Notice */}
           <Box
             sx={{
               backgroundColor: '#F0F8FF',
@@ -94,44 +142,128 @@ export default function AdminLoginPage() {
             }}
           >
             <Typography variant="body2" sx={{ color: '#1A365D', fontWeight: 'medium', mb: 1 }}>
-              🔒 Secure Authentication Required
+              🔒 Secure Admin Access
             </Typography>
             <Typography variant="body2" sx={{ color: '#2A4A6B', fontSize: 14, mb: 2 }}>
-              This admin portal uses Replit's secure authentication system. You'll be redirected to sign in with your authorized Replit account.
+              This portal is restricted to authorized administrators only. All login attempts are monitored and logged.
             </Typography>
             <Typography variant="body2" sx={{ color: '#2A4A6B', fontSize: 14, fontWeight: 'medium' }}>
-              Current admin user: drobosky@quantifi-partners.com
+              Admin credentials: drobosky@quantifi-partners.com / admin123
             </Typography>
           </Box>
 
-          {/* Sign In Button */}
+          {/* Error Display */}
+          {error && (
+            <Box
+              sx={{
+                backgroundColor: '#FEF2F2',
+                border: '1px solid #FECACA',
+                borderRadius: 2,
+                p: 2,
+                mb: 3
+              }}
+            >
+              <Typography sx={{ color: '#DC2626', fontSize: 14 }}>
+                {error}
+              </Typography>
+            </Box>
+          )}
+
+          {/* Email Field */}
+          <Box mb={3}>
+            <Typography variant="body2" fontWeight="medium" sx={{ 
+              color: '#374151', 
+              mb: 1 
+            }}>
+              Admin Email Address
+            </Typography>
+            <MDInput
+              type="email"
+              placeholder="Enter your admin email"
+              value={formData.email}
+              onChange={handleInputChange('email')}
+              required
+              fullWidth
+              startAdornment={<Mail size={18} color="#9CA3AF" />}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: '#D1D5DB' },
+                  '&:hover fieldset': { borderColor: '#007bff' },
+                  '&.Mui-focused fieldset': { borderColor: '#007bff' }
+                }
+              }}
+            />
+          </Box>
+
+          {/* Password Field */}
+          <Box mb={4}>
+            <Typography variant="body2" fontWeight="medium" sx={{ 
+              color: '#374151', 
+              mb: 1 
+            }}>
+              Admin Password
+            </Typography>
+            <MDInput
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Enter your admin password"
+              value={formData.password}
+              onChange={handleInputChange('password')}
+              required
+              fullWidth
+              endAdornment={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: 0,
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  {showPassword ? <EyeOff size={18} color="#9CA3AF" /> : <Eye size={18} color="#9CA3AF" />}
+                </button>
+              }
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: '#D1D5DB' },
+                  '&:hover fieldset': { borderColor: '#007bff' },
+                  '&.Mui-focused fieldset': { borderColor: '#007bff' }
+                }
+              }}
+            />
+          </Box>
+
+          {/* Submit Button */}
           <Button
-            onClick={handleReplitLogin}
+            type="submit"
+            disabled={isLoading}
             fullWidth
             variant="contained"
             size="large"
             sx={{
-              py: 2,
+              py: 1.5,
               fontWeight: 'bold',
               fontSize: '1.1rem',
               textTransform: 'none',
               background: 'linear-gradient(45deg, #0A1F44, #1B2C4F)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 2,
               '&:hover': {
                 background: 'linear-gradient(45deg, #1B2C4F, #2A3F5F)'
+              },
+              '&:disabled': {
+                background: '#E5E7EB',
+                color: '#9CA3AF'
               },
               mb: 3
             }}
           >
-            Sign in with Replit
-            <ExternalLink size={20} />
+            {isLoading ? 'Verifying Access...' : 'Access Admin Portal'}
           </Button>
 
           {/* Information */}
-          <Box>
+          <Box textAlign="center">
             <Typography variant="body2" sx={{ color: '#718096', mb: 2 }}>
               Only authorized administrators can access this portal.
             </Typography>

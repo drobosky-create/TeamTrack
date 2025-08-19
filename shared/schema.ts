@@ -64,7 +64,7 @@ export const dealPriorityEnum = pgEnum('deal_priority', ['low', 'medium', 'high'
 // Audit log enums
 export const auditActionEnum = pgEnum('audit_action', ['create', 'update', 'delete', 'view', 'export', 'login', 'logout', 'approval', 'rejection']);
 
-// Users table (required for Replit Auth)
+// Users table
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: varchar("email").unique(),
@@ -76,6 +76,7 @@ export const users = pgTable("users", {
   managerId: varchar("manager_id"),
   employmentType: employmentTypeEnum("employment_type").default('employee'),
   reviewCadence: reviewTypeEnum("review_cadence").default('quarterly'),
+  passwordHash: varchar("password_hash"), // For admin authentication
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -513,6 +514,12 @@ export const insertConsumerUserSchema = createInsertSchema(consumerUsers).omit({
 export const consumerLoginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
+});
+
+// Admin login schema
+export const adminLoginSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(1, 'Password is required'),
 });
 
 export const consumerSignupSchema = z.object({
