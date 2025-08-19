@@ -642,7 +642,7 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
               content: `Generate a professional narrative summary and executive summary for a business valuation with the following details:
                 Base EBITDA: $${baseEbitda.toLocaleString()}
                 Adjusted EBITDA: $${adjustedEbitda.toLocaleString()}
-                Valuation Multiple: ${baseMultiple}x
+                Valuation Multiple: ${finalMultiple}x
                 Valuation Range: $${lowEstimate.toLocaleString()} - $${highEstimate.toLocaleString()}
                 Mid-point Estimate: $${midEstimate.toLocaleString()}
                 Overall Grade: ${overallScore}
@@ -740,7 +740,7 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       // Calculated values
       baseEbitda,
       adjustedEbitda,
-      valuationMultiple: baseMultiple,
+      valuationMultiple: finalMultiple,
       lowEstimate,
       midEstimate,
       highEstimate,
@@ -760,7 +760,7 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       valuation: {
         baseEbitda,
         adjustedEbitda,
-        valuationMultiple: baseMultiple,
+        valuationMultiple: finalMultiple,
         lowEstimate,
         midEstimate,
         highEstimate,
