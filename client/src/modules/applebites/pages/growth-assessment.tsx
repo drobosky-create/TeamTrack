@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, Box, FormControlLabel, RadioGroup, Radio, FormControl, Alert, AlertTitle } from '@mui/material';
+import { Card, CardContent, Box, FormControlLabel, RadioGroup, Radio, FormControl, Alert, AlertTitle, Select, MenuItem } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MDBox from "../components/MD/MDBox";
 import MDButton from "../components/MD/MDButton";
@@ -76,18 +76,20 @@ interface AppleBitesQuestionSet {
 }
 
 // Paid Assessment Steps - Updated for Apple Bites workflow
-type PaidAssessmentStep = 'ebitda' | 'adjustments' | 'valueDrivers' | 'followup' | 'results';
+type PaidAssessmentStep = 'industry' | 'ebitda' | 'adjustments' | 'valueDrivers' | 'followup' | 'results';
 
 // Load Apple Bites questions from JSON file
 const appleBitesQuestionSet: AppleBitesQuestionSet = appleBitesQuestionsData[0] as AppleBitesQuestionSet;
 const appleBitesQuestions: AppleBitesQuestion[] = appleBitesQuestionSet.questions;
 
 export default function GrowthAssessment() {
-  const [currentStep, setCurrentStep] = useState<PaidAssessmentStep>('ebitda');
+  const [currentStep, setCurrentStep] = useState<PaidAssessmentStep>('industry');
   const [valueDriverAnswers, setValueDriverAnswers] = useState<{[key: string]: number}>({});
   const [dataPrePopulated, setDataPrePopulated] = useState(false);
   const [showUpdateButton, setShowUpdateButton] = useState(false);
   const [isFieldsLocked, setIsFieldsLocked] = useState(true);
+  const [selectedNaicsCode, setSelectedNaicsCode] = useState<string>('');
+  const [selectedIndustry, setSelectedIndustry] = useState<string>('');
 
   // Fetch previous assessments to check for existing financial data
   const { data: previousAssessments, isLoading: assessmentsLoading } = useQuery<any[]>({
@@ -187,19 +189,21 @@ export default function GrowthAssessment() {
   }, [dataPrePopulated, previousAssessments, updateValuationFormData, forms]);
 
   const getStepIndex = (step: PaidAssessmentStep): number => {
-    const stepMap = { 'ebitda': 0, 'adjustments': 1, 'valueDrivers': 2, 'followup': 3, 'results': 4 };
+    const stepMap = { 'industry': 0, 'ebitda': 1, 'adjustments': 2, 'valueDrivers': 3, 'followup': 4, 'results': 5 };
     return stepMap[step] || 0;
   };
 
   const nextStep = () => {
-    if (currentStep === 'ebitda') setCurrentStep('adjustments');
+    if (currentStep === 'industry') setCurrentStep('ebitda');
+    else if (currentStep === 'ebitda') setCurrentStep('adjustments');
     else if (currentStep === 'adjustments') setCurrentStep('valueDrivers');
     else if (currentStep === 'valueDrivers') setCurrentStep('followup');
     else if (currentStep === 'followup') setCurrentStep('results');
   };
 
   const prevStep = () => {
-    if (currentStep === 'adjustments') setCurrentStep('ebitda');
+    if (currentStep === 'ebitda') setCurrentStep('industry');
+    else if (currentStep === 'adjustments') setCurrentStep('ebitda');
     else if (currentStep === 'valueDrivers') setCurrentStep('adjustments');
     else if (currentStep === 'followup') setCurrentStep('valueDrivers');
     else if (currentStep === 'results') setCurrentStep('followup');
@@ -368,6 +372,89 @@ export default function GrowthAssessment() {
 
   const renderStepComponent = () => {
     switch (currentStep) {
+      case 'industry':
+        return (
+          <MDBox>
+            <MDBox display="flex" alignItems="center" mb={3}>
+              <MDBox
+                sx={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: '12px',
+                  background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mr: 2
+                }}
+              >
+                <TrendingUp size={24} color="white" />
+              </MDBox>
+              <MDBox>
+                <MDTypography variant="h5" fontWeight="bold" sx={{ color: '#1e293b' }}>
+                  Select Your Industry
+                </MDTypography>
+                <MDTypography variant="body2" sx={{ color: '#64748b', mt: 0.5 }}>
+                  Choose the NAICS code that best describes your business for accurate valuation
+                </MDTypography>
+              </MDBox>
+            </MDBox>
+
+            <MDBox sx={{ mt: 3 }}>
+              <Select
+                value={selectedNaicsCode}
+                onChange={(e) => {
+                  setSelectedNaicsCode(e.target.value);
+                  setSelectedIndustry(e.target.value);
+                }}
+                sx={{ width: '100%', mb: 3 }}
+              >
+                <MenuItem value="">Select an industry...</MenuItem>
+                <MenuItem value="5112">Software Publishers</MenuItem>
+                <MenuItem value="5415">Computer Systems Design</MenuItem>
+                <MenuItem value="5182">Data Processing & Hosting</MenuItem>
+                <MenuItem value="6211">Offices of Physicians</MenuItem>
+                <MenuItem value="6216">Home Health Care Services</MenuItem>
+                <MenuItem value="3254">Pharmaceutical Manufacturing</MenuItem>
+                <MenuItem value="3361">Motor Vehicle Manufacturing</MenuItem>
+                <MenuItem value="3331">Agriculture Machinery</MenuItem>
+                <MenuItem value="3344">Semiconductor Manufacturing</MenuItem>
+                <MenuItem value="4541">Electronic Shopping</MenuItem>
+                <MenuItem value="4451">Grocery Stores</MenuItem>
+                <MenuItem value="4481">Clothing Stores</MenuItem>
+                <MenuItem value="5411">Legal Services</MenuItem>
+                <MenuItem value="5413">Architectural & Engineering</MenuItem>
+                <MenuItem value="5416">Management Consulting</MenuItem>
+                <MenuItem value="5223">Financial Activities</MenuItem>
+                <MenuItem value="5242">Insurance Agencies</MenuItem>
+                <MenuItem value="2361">Residential Building Construction</MenuItem>
+                <MenuItem value="5311">Real Estate Lessors</MenuItem>
+              </Select>
+            </MDBox>
+
+            <MDBox sx={{ mt: 4, display: 'flex', gap: 2 }}>
+              <MDButton
+                onClick={nextStep}
+                disabled={!selectedNaicsCode}
+                sx={{
+                  backgroundColor: selectedNaicsCode ? '#10b981' : '#94a3b8',
+                  color: 'white',
+                  px: 4,
+                  py: 1.5,
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  borderRadius: '12px',
+                  textTransform: 'none',
+                  '&:hover': {
+                    backgroundColor: selectedNaicsCode ? '#059669' : '#94a3b8',
+                  }
+                }}
+              >
+                Continue to Financial Data
+              </MDButton>
+            </MDBox>
+          </MDBox>
+        );
       case 'ebitda':
         return (
           <MDBox>
@@ -434,12 +521,14 @@ export default function GrowthAssessment() {
           <FollowUpForm
             form={forms.followUp}
             onSubmit={async () => {
-              // Submit assessment with value driver answers
+              // Submit assessment with value driver answers and NAICS code
               const combinedData = {
                 ...valuationFormData,
                 valueDrivers: valueDriverAnswers,
                 tier: 'growth',
-                reportTier: 'strategic'
+                reportTier: 'strategic',
+                naicsCode: selectedNaicsCode,
+                industry: selectedIndustry
               };
               await submitAssessment();
               setCurrentStep('results');

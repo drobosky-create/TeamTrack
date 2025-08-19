@@ -65,6 +65,80 @@ async function createGHLContact(contact: GHLContact) {
   }
 }
 
+// Get industry multiplier based on NAICS code or industry description
+function getIndustryMultiplier(naicsCodeOrIndustry?: string): number {
+  if (!naicsCodeOrIndustry) return 1.0;
+  
+  // NAICS-based industry multipliers (simplified - in production use full NAICS database)
+  const naicsMultipliers: Record<string, number> = {
+    // Technology & Software
+    '5112': 1.4,  // Software Publishers
+    '5415': 1.35, // Computer Systems Design
+    '5182': 1.3,  // Data Processing & Hosting
+    
+    // Healthcare & Life Sciences
+    '6211': 1.25, // Offices of Physicians
+    '6216': 1.2,  // Home Health Care Services
+    '3254': 1.3,  // Pharmaceutical Manufacturing
+    
+    // Manufacturing
+    '3361': 0.9,  // Motor Vehicle Manufacturing
+    '3331': 0.85, // Agriculture Machinery Manufacturing
+    '3344': 1.1,  // Semiconductor Manufacturing
+    
+    // Retail & E-commerce
+    '4541': 1.15, // Electronic Shopping
+    '4451': 0.8,  // Grocery Stores
+    '4481': 0.75, // Clothing Stores
+    
+    // Professional Services
+    '5411': 1.1,  // Legal Services
+    '5413': 1.0,  // Architectural & Engineering
+    '5416': 1.05, // Management Consulting
+    
+    // Financial Services
+    '5223': 1.2,  // Financial Activities
+    '5242': 1.15, // Insurance Agencies
+    
+    // Construction & Real Estate
+    '2361': 0.85, // Residential Building Construction
+    '5311': 0.95, // Real Estate Lessors
+  };
+  
+  // Check if it's a NAICS code
+  const naicsCode = naicsCodeOrIndustry.substring(0, 4);
+  if (naicsMultipliers[naicsCode]) {
+    return naicsMultipliers[naicsCode];
+  }
+  
+  // Fallback to industry keywords
+  const industryKeywords: Record<string, number> = {
+    'technology': 1.3,
+    'software': 1.35,
+    'saas': 1.4,
+    'healthcare': 1.2,
+    'medical': 1.2,
+    'pharmaceutical': 1.3,
+    'manufacturing': 0.9,
+    'retail': 0.8,
+    'ecommerce': 1.15,
+    'consulting': 1.05,
+    'financial': 1.15,
+    'construction': 0.85,
+    'real estate': 0.95,
+    'services': 1.0,
+  };
+  
+  const lowerIndustry = naicsCodeOrIndustry.toLowerCase();
+  for (const [keyword, multiplier] of Object.entries(industryKeywords)) {
+    if (lowerIndustry.includes(keyword)) {
+      return multiplier;
+    }
+  }
+  
+  return 1.0; // Default multiplier
+}
+
 // Calculate EBITDA and valuation
 function calculateValuation(data: any) {
   // Calculate base EBITDA
@@ -508,55 +582,62 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
     
     const adjustedEbitda = baseEbitda + totalAdjustments;
     
-    // Map index answers to grades (0=F, 1=D, 2=C, 3=B, 4=A)
-    const indexToGrade: Record<number, string> = {
-      0: 'F',
-      1: 'D', 
-      2: 'C',
-      3: 'B',
-      4: 'A',
-    };
+    // Handle both Growth Assessment (weighted scoring) and Free Assessment (A-F grades)
+    let avgScore = 3; // Default to average
     
-    const gradeToScore: Record<string, number> = {
-      'A': 5,
-      'B': 4,
-      'C': 3,
-      'D': 2,
-      'F': 1,
-    };
+    // Check if this is a Growth Assessment with weighted answers
+    const isGrowthAssessment = formData.tier === 'growth' || 
+                               (valueDrivers && typeof Object.values(valueDrivers)[0] === 'number');
     
-    // Convert value driver answers (which are indices) to grades
-    const convertedGrades: string[] = [];
-    for (const [key, value] of Object.entries(valueDrivers)) {
-      if (typeof value === 'number') {
-        // If it's a number (index), convert to grade
-        const grade = indexToGrade[value] || 'C';
-        convertedGrades.push(grade);
-      } else if (typeof value === 'string' && gradeToScore[value]) {
-        // If it's already a grade letter, use it directly
-        convertedGrades.push(value);
+    if (isGrowthAssessment) {
+      // Growth Assessment uses weighted scoring (0-4 index where 4 is best)
+      // Each answer index directly represents the weight/score
+      const scores: number[] = [];
+      for (const [key, value] of Object.entries(valueDrivers)) {
+        if (typeof value === 'number') {
+          // Index 0 = 1 point, Index 1 = 2 points, etc., Index 4 = 5 points
+          scores.push(value + 1);
+        }
       }
+      avgScore = scores.length > 0 
+        ? scores.reduce((sum, score) => sum + score, 0) / scores.length
+        : 3;
+    } else {
+      // Free Assessment uses A-F grades
+      const gradeToScore: Record<string, number> = {
+        'A': 5,
+        'B': 4,
+        'C': 3,
+        'D': 2,
+        'F': 1,
+      };
+      
+      const drivers = Object.values(valueDrivers).filter(Boolean) as string[];
+      avgScore = drivers.length > 0
+        ? drivers.reduce((sum, grade) => sum + (gradeToScore[grade] || 3), 0) / drivers.length
+        : 3;
     }
     
-    const avgScore = convertedGrades.length > 0
-      ? convertedGrades.reduce((sum, grade) => sum + (gradeToScore[grade] || 3), 0) / convertedGrades.length
-      : 3;
-    
-    // Calculate multiple based on score with better granularity
+    // Calculate base multiple based on weighted score
     let baseMultiple = 3.0;
-    if (avgScore >= 4.8) baseMultiple = 8.0;  // Almost all A's
-    else if (avgScore >= 4.5) baseMultiple = 7.0;  // Mostly A's
-    else if (avgScore >= 4.2) baseMultiple = 6.0;  // Mix of A's and B's
-    else if (avgScore >= 4.0) baseMultiple = 5.5;  // Mostly B's
-    else if (avgScore >= 3.8) baseMultiple = 5.0;  // Strong B's
-    else if (avgScore >= 3.5) baseMultiple = 4.5;  // Mix of B's and C's
-    else if (avgScore >= 3.2) baseMultiple = 4.0;  // Above average
-    else if (avgScore >= 3.0) baseMultiple = 3.5;  // Average
-    else if (avgScore >= 2.5) baseMultiple = 3.0;  // Below average
-    else baseMultiple = 2.5;  // Poor performance
+    if (avgScore >= 4.8) baseMultiple = 9.0;  // Exceptional (almost all highest answers)
+    else if (avgScore >= 4.5) baseMultiple = 8.0;  // Outstanding
+    else if (avgScore >= 4.2) baseMultiple = 7.0;  // Excellent
+    else if (avgScore >= 4.0) baseMultiple = 6.5;  // Very Good
+    else if (avgScore >= 3.8) baseMultiple = 6.0;  // Good
+    else if (avgScore >= 3.5) baseMultiple = 5.5;  // Above Average
+    else if (avgScore >= 3.2) baseMultiple = 5.0;  // Slightly Above Average
+    else if (avgScore >= 3.0) baseMultiple = 4.5;  // Average
+    else if (avgScore >= 2.5) baseMultiple = 4.0;  // Below Average
+    else if (avgScore >= 2.0) baseMultiple = 3.5;  // Poor
+    else baseMultiple = 3.0;  // Very Poor
     
-    // Calculate valuation ranges
-    const midEstimate = adjustedEbitda * baseMultiple;
+    // Apply industry multiplier based on NAICS code if provided
+    const industryMultiplier = getIndustryMultiplier(formData.naicsCode || formData.industry);
+    const finalMultiple = baseMultiple * industryMultiplier;
+    
+    // Calculate valuation ranges using the industry-adjusted multiple
+    const midEstimate = adjustedEbitda * finalMultiple;
     const lowEstimate = midEstimate * 0.8;
     const highEstimate = midEstimate * 1.2;
     

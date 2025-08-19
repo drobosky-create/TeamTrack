@@ -40,6 +40,10 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
 - Growth Assessment pre-populates financial data from previous assessments for returning users
 - AssessmentHeader now dynamically fetches Stripe pricing ($1995) via API for premium tier display
 - Fixed valuation gauge needle positioning to use actual assessment multiple (4.0x) within industry range (3.0x-9.0x)
+- **Critical Fix**: Growth Assessment now uses weighted scoring (0-4 indices) instead of A-F grades, properly differentiating from Free Assessment
+- Added NAICS code industry selection as first step in Growth Assessment flow for industry-specific valuation multipliers
+- Implemented proper score calculation: index 4 (highest answer) = 5 points, allowing scores up to 9.0x multiple for exceptional businesses
+- Industry multipliers apply based on NAICS codes (e.g., Software 1.4x, Manufacturing 0.9x) for accurate sector-specific valuations
 
 # User Preferences
 
