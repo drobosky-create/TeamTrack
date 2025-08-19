@@ -451,6 +451,7 @@ export default function FreeAssessment() {
                 variant="outline"
                 onClick={handleBack}
                 disabled={step === 1}
+                className="border-gray-400 text-gray-700 hover:bg-gray-100 disabled:opacity-50"
                 data-testid="button-back"
               >
                 Back
@@ -458,6 +459,8 @@ export default function FreeAssessment() {
               <Button
                 onClick={handleNext}
                 disabled={submitAssessment.isPending}
+                className="bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                style={{ backgroundColor: '#2563eb', color: '#ffffff' }}
                 data-testid="button-next"
               >
                 {step === totalSteps ? (

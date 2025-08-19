@@ -618,6 +618,7 @@ function GrowthAssessmentForm() {
                 variant="outline"
                 onClick={handleBack}
                 disabled={step === 1}
+                className="border-gray-400 text-gray-700 hover:bg-gray-100 disabled:opacity-50"
                 data-testid="button-back"
               >
                 Back
@@ -625,6 +626,8 @@ function GrowthAssessmentForm() {
               <Button
                 onClick={handleNext}
                 disabled={submitAssessment.isPending || (step === totalSteps && !stripe)}
+                className="bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                style={{ backgroundColor: '#2563eb', color: '#ffffff' }}
                 data-testid="button-next"
               >
                 {step === totalSteps ? (
