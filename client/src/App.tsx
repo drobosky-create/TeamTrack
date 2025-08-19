@@ -42,6 +42,7 @@ import SubscriptionPage from "@/pages/subscription";
 import PaymentSuccessPage from "@/pages/payment-success";
 import SubscriptionSuccessPage from "@/pages/subscription-success";
 import PaymentDemoPage from "@/pages/payment-demo";
+import NavigationTestPage from "@/pages/navigation-test";
 import ThemeManager from "@/components/admin/ThemeManager";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 import { AdminAuthProvider, useAdminAuth } from './hooks/use-admin-auth';
@@ -112,6 +113,7 @@ function Router() {
             <Route path="/follow-up" component={FollowUpOptionsPage} />
             <Route path="/theme-manager" component={ThemeManager} />
             <Route path="/payment-demo" component={PaymentDemoPage} />
+            <Route path="/navigation-test" component={NavigationTestPage} />
             <Route path="/checkout" component={CheckoutPage} />
             <Route path="/subscription" component={SubscriptionPage} />
             <Route path="/payment-success" component={PaymentSuccessPage} />

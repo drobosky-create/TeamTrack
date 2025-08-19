@@ -121,12 +121,13 @@ export interface CheckoutPageProps {
   onSuccess?: () => void;
 }
 
-export default function CheckoutPage({ 
-  amount = 10.00, 
-  description,
-  metadata,
-  onSuccess 
-}: CheckoutPageProps) {
+export default function CheckoutPage(props: any) {
+  const { 
+    amount = 10.00, 
+    description,
+    metadata,
+    onSuccess 
+  } = props;
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();

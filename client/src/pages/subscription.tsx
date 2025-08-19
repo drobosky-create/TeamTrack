@@ -181,7 +181,8 @@ interface SubscriptionPageProps {
   onSuccess?: () => void;
 }
 
-export default function SubscriptionPage({ selectedPlanId, onSuccess }: SubscriptionPageProps) {
+export default function SubscriptionPage(props: any) {
+  const { selectedPlanId, onSuccess } = props;
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -198,8 +199,8 @@ export default function SubscriptionPage({ selectedPlanId, onSuccess }: Subscrip
   });
 
   // Type guard for subscription status
-  const hasActiveSubscription = subscriptionStatus?.hasActiveSubscription || false;
-  const subscription = subscriptionStatus?.subscription;
+  const hasActiveSubscription = (subscriptionStatus as any)?.hasActiveSubscription || false;
+  const subscription = (subscriptionStatus as any)?.subscription;
 
   // Mutation to create subscription
   const createSubscriptionMutation = useMutation({
