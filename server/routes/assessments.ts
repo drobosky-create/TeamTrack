@@ -101,31 +101,59 @@ function getIndustryMultiplier(naicsCodeOrIndustry?: string, avgScore?: number):
     }
   }
   
-  // Fallback to simplified multipliers for other industries
-  const simplifiedMultipliers: Record<string, number> = {
-    // Technology & Software
-    '5112': 1.4,  // Software Publishers
-    '5415': 1.35, // Computer Systems Design
-    '5182': 1.3,  // Data Processing & Hosting
-    '5416': 1.05, // Management Consulting (from NAICS data)
+  // Fallback to sector-based multipliers with performance adjustment
+  const sectorMultipliers: Record<string, number> = {
+    // High-value sectors
+    '51': 6.5,  // Information (includes software, tech)
+    '54': 6.0,  // Professional, Scientific, Technical Services
+    '52': 5.5,  // Finance and Insurance
+    '62': 5.0,  // Healthcare and Social Assistance
     
-    // Healthcare
-    '6211': 1.25, // Offices of Physicians
-    '6216': 1.2,  // Home Health Care Services
+    // Medium-value sectors
+    '48': 4.5,  // Transportation and Warehousing
+    '49': 4.5,  // Transportation and Warehousing
+    '56': 4.0,  // Administrative and Support Services
+    '61': 4.0,  // Educational Services
+    '53': 4.0,  // Real Estate and Rental
     
-    // Retail & Food Service
-    '4411': 0.85, // Auto Dealers (from NAICS data)
-    '7225': 0.75, // Restaurants (from NAICS data)
+    // Standard-value sectors
+    '31': 3.5,  // Manufacturing
+    '32': 3.5,  // Manufacturing
+    '33': 3.5,  // Manufacturing
+    '42': 3.5,  // Wholesale Trade
+    '81': 3.5,  // Other Services
     
-    // Education
-    '6113': 1.1,  // Colleges & Universities
+    // Lower-value sectors
+    '23': 3.0,  // Construction
+    '44': 3.0,  // Retail Trade
+    '45': 3.0,  // Retail Trade
+    '72': 2.5,  // Accommodation and Food Services
+    '71': 2.5,  // Arts, Entertainment, Recreation
     
-    // Default
-    'default': 1.0
+    // Agriculture/Mining
+    '11': 2.5,  // Agriculture, Forestry, Fishing
+    '21': 3.0,  // Mining, Quarrying, Oil & Gas
   };
   
-  const naics4 = naicsCodeOrIndustry.substring(0, 4);
-  return simplifiedMultipliers[naics4] || 1.0;
+  // Get base multiplier from sector (first 2 digits)
+  const sectorCode = naicsCodeOrIndustry.substring(0, 2);
+  let baseMultiplier = sectorMultipliers[sectorCode] || 4.0;
+  
+  // Adjust multiplier based on performance score
+  // avgScore ranges from 1-5, where 5 is best
+  if (avgScore) {
+    if (avgScore >= 4.5) {
+      baseMultiplier *= 1.5;  // 50% premium for excellent businesses
+    } else if (avgScore >= 4.0) {
+      baseMultiplier *= 1.3;  // 30% premium for very good businesses
+    } else if (avgScore >= 3.5) {
+      baseMultiplier *= 1.1;  // 10% premium for good businesses
+    } else if (avgScore < 2.5) {
+      baseMultiplier *= 0.8;  // 20% discount for poor performers
+    }
+  }
+  
+  return baseMultiplier;
 }
 
 // Calculate EBITDA and valuation
@@ -607,9 +635,21 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
         : 3;
     }
     
+    // Debug logging to track what's being passed
+    console.log('Growth Assessment Debug:', {
+      naicsCode: formData.naicsCode,
+      industry: formData.industry,
+      avgScore,
+      isGrowthAssessment,
+      valueDrivers,
+      tier: formData.tier
+    });
+    
     // Get industry-specific multiple based on NAICS code and performance
     // The getIndustryMultiplier function returns the actual EBITDA multiple to use
     const finalMultiple = getIndustryMultiplier(formData.naicsCode || formData.industry, avgScore) || 5.0;
+    
+    console.log('Calculated Multiple:', finalMultiple);
     
     // Calculate valuation ranges using the industry-adjusted multiple
     const midEstimate = adjustedEbitda * finalMultiple;
@@ -704,8 +744,10 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       email: consumerUserData?.email || `guest_${Date.now()}@example.com`,
       phone: consumerUserData?.phone || '000-000-0000',  // Required field - placeholder for free assessments
       company: consumerUserData?.companyName || 'Company',
-      tier: 'free',
-      reportTier: 'free',
+      tier: formData.tier || 'free',
+      reportTier: formData.reportTier || 'free',
+      naicsCode: formData.naicsCode || null,
+      industryDescription: formData.industry || null,
       
       // Financial data
       netIncome: parseFloat(ebitda.netIncome) || 0,
