@@ -80,6 +80,7 @@ function Router() {
       <Route path="/consumer-auth" component={ConsumerAuth} />
       <Route path="/consumer-signup" component={ConsumerSignup} />
       <Route path="/consumer-login" component={ConsumerLogin} />
+      <Route path="/consumer-dashboard" component={ConsumerDashboard} />
       <Route path="/admin-login" component={AdminLoginPage} />
       <Route path="/consumer-dashboard" component={ConsumerDashboard} />
       

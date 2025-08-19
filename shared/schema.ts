@@ -92,6 +92,8 @@ export const consumerUsers = pgTable("consumer_users", {
   companyName: varchar("company_name").notNull(),
   phone: varchar("phone"),
   passwordHash: varchar("password_hash").notNull(),
+  plan: assessmentTierEnum("plan").default('free').notNull(), // Track which plan they have
+  stripeSessionId: varchar("stripe_session_id"), // Track the Stripe checkout session
   isActive: boolean("is_active").default(true),
   lastLoginAt: timestamp("last_login_at"),
   createdAt: timestamp("created_at").defaultNow(),

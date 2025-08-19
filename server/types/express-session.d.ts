@@ -8,6 +8,7 @@ declare module 'express-session' {
       lastName: string;
       email: string;
       companyName: string;
+      plan?: 'free' | 'growth' | 'capital';
     };
   }
 }

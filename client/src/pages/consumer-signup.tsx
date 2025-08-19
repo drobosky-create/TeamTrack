@@ -23,43 +23,74 @@ export default function ConsumerSignup() {
     confirmPassword: '',
   });
   const [isPaidPlan, setIsPaidPlan] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
   // Check for payment success and prefill data
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
     const paymentStatus = params.get('payment');
     const plan = params.get('plan');
+    const checkoutSessionId = params.get('session_id');
     
-    if (paymentStatus === 'success' && plan === 'growth') {
-      setIsPaidPlan(true);
-      
-      // Get stored purchase data from session storage
-      const purchaseData = sessionStorage.getItem('applebites_purchase');
-      if (purchaseData) {
-        const data = JSON.parse(purchaseData);
-        const [firstName, ...lastNameParts] = (data.name || '').split(' ');
-        setFormData(prev => ({
-          ...prev,
-          email: data.email || '',
-          firstName: firstName || '',
-          lastName: lastNameParts.join(' ') || '',
-        }));
-        
-        // Clear the session storage after using it
-        sessionStorage.removeItem('applebites_purchase');
-      }
-      
-      toast({
-        title: "Payment Successful!",
-        description: "Complete your registration to access AppleBites Growth & Exit features.",
-        duration: 5000,
-      });
+    if (paymentStatus === 'success' && checkoutSessionId) {
+      // Verify the payment session with backend
+      fetch(`/api/payments/verify-session/${checkoutSessionId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setIsPaidPlan(data.plan === 'growth');
+            setSessionId(checkoutSessionId);
+            
+            // Prefill form with customer data from Stripe
+            if (data.customerName) {
+              const [firstName, ...lastNameParts] = data.customerName.split(' ');
+              setFormData(prev => ({
+                ...prev,
+                email: data.customerEmail || prev.email,
+                firstName: firstName || prev.firstName,
+                lastName: lastNameParts.join(' ') || prev.lastName,
+              }));
+            }
+            
+            // Also check session storage for additional data
+            const purchaseData = sessionStorage.getItem('applebites_purchase');
+            if (purchaseData) {
+              const storedData = JSON.parse(purchaseData);
+              setFormData(prev => ({
+                ...prev,
+                email: prev.email || storedData.email || '',
+                firstName: prev.firstName || storedData.firstName || '',
+                lastName: prev.lastName || storedData.lastName || '',
+              }));
+              sessionStorage.removeItem('applebites_purchase');
+            }
+            
+            toast({
+              title: "Payment Successful!",
+              description: `Complete your registration to access AppleBites ${data.plan === 'growth' ? 'Growth & Exit' : ''} features.`,
+              duration: 5000,
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error verifying session:', error);
+          // Fall back to URL params
+          if (plan === 'growth') {
+            setIsPaidPlan(true);
+          }
+        });
     }
   }, [searchParams, toast]);
 
   const signupMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
-      const response = await apiRequest('POST', '/api/auth/consumer-signup', data);
+      // Include plan information if user paid
+      const signupData = {
+        ...data,
+        plan: isPaidPlan ? 'growth' : 'free',
+        stripeSessionId: sessionId,
+      };
+      const response = await apiRequest('POST', '/api/auth/consumer-signup', signupData);
       return response.json();
     },
     onSuccess: (data) => {

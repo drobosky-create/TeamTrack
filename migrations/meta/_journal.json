@@ -29,6 +29,13 @@
       "when": 1755618397387,
       "tag": "0003_bright_ego",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1755630987155,
+      "tag": "0004_chemical_frightful_four",
+      "breakpoints": true
     }
   ]
 }

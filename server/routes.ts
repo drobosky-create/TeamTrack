@@ -721,6 +721,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Verify Stripe Checkout Session and get customer info
+  app.get("/api/payments/verify-session/:sessionId", async (req, res) => {
+    try {
+      const { sessionId } = req.params;
+      
+      if (!sessionId) {
+        return res.status(400).json({ message: "Session ID is required" });
+      }
+      
+      // Retrieve the checkout session from Stripe
+      const session = await stripe.checkout.sessions.retrieve(sessionId, {
+        expand: ['customer', 'line_items']
+      });
+      
+      // Check if payment was successful
+      if (session.payment_status !== 'paid') {
+        return res.status(400).json({ 
+          message: "Payment not completed",
+          status: session.payment_status 
+        });
+      }
+      
+      // Extract customer information
+      const customerEmail = session.customer_details?.email || session.customer_email;
+      const customerName = session.customer_details?.name;
+      
+      // Determine the plan based on the product purchased
+      let plan = 'free';
+      if (session.line_items?.data?.[0]) {
+        const lineItem = session.line_items.data[0];
+        // Check if it's the Growth plan product
+        if (lineItem.price?.product === process.env.STRIPE_PRODUCT_ID_GROWTH) {
+          plan = 'growth';
+        }
+      }
+      
+      res.json({
+        success: true,
+        customerEmail,
+        customerName,
+        plan,
+        sessionId: session.id,
+        paymentStatus: session.payment_status,
+        amountTotal: session.amount_total ? session.amount_total / 100 : 0
+      });
+    } catch (error: any) {
+      console.error('Error verifying checkout session:', error);
+      res.status(500).json({ 
+        message: "Error verifying payment session",
+        error: error.message 
+      });
+    }
+  });
+
   // Create Stripe Checkout Session for AppleBites
   app.post("/api/payments/create-checkout-session", async (req, res) => {
     try {

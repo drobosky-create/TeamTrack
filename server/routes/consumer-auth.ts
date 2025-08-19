@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 
 export async function handleConsumerSignup(req: Request, res: Response) {
   try {
-    const { firstName, lastName, email, phone, companyName, password } = req.body;
+    const { firstName, lastName, email, phone, companyName, password, plan, stripeSessionId } = req.body;
 
     // Check if user already exists
     const existingUser = await db
@@ -22,7 +22,7 @@ export async function handleConsumerSignup(req: Request, res: Response) {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
+    // Create new user with plan information
     const [newUser] = await db
       .insert(consumerUsers)
       .values({
@@ -32,16 +32,19 @@ export async function handleConsumerSignup(req: Request, res: Response) {
         phone,
         companyName,
         passwordHash: hashedPassword,
+        plan: plan || 'free', // Default to free if no plan specified
+        stripeSessionId: stripeSessionId || null, // Store session ID if provided
       })
       .returning();
 
-    // Store user in session
+    // Store user in session with plan information
     req.session.consumerUser = {
       id: newUser.id,
       firstName: newUser.firstName,
       lastName: newUser.lastName,
       email: newUser.email,
       companyName: newUser.companyName,
+      plan: newUser.plan,
     };
 
     res.json({
@@ -53,6 +56,7 @@ export async function handleConsumerSignup(req: Request, res: Response) {
         email: newUser.email,
         companyName: newUser.companyName,
         phone: newUser.phone,
+        plan: newUser.plan,
       },
     });
   } catch (error) {
@@ -82,13 +86,14 @@ export async function handleConsumerLogin(req: Request, res: Response) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Store user in session
+    // Store user in session with plan information
     req.session.consumerUser = {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       companyName: user.companyName,
+      plan: user.plan,
     };
 
     res.json({
@@ -100,6 +105,7 @@ export async function handleConsumerLogin(req: Request, res: Response) {
         email: user.email,
         companyName: user.companyName,
         phone: user.phone,
+        plan: user.plan,
       },
     });
   } catch (error) {
