@@ -355,10 +355,10 @@ export default function ConsumerDashboardTeamTrack() {
         </div>
 
         {/* Navigation */}
-        <div className="flex-1 p-4">
-          <div className="space-y-2">
+        <div className="flex-1 p-6">
+          <div className="space-y-4">
             <Link href="/assessment/free">
-              <Button className="w-full justify-start bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white">
+              <Button className="w-full justify-start bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white py-3">
                 <FileText className="h-4 w-4 mr-3" />
                 Free Assessment
               </Button>
@@ -366,7 +366,7 @@ export default function ConsumerDashboardTeamTrack() {
             
             {user.plan === 'free' ? (
               <Link href="/applebites-checkout">
-                <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white">
+                <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
                   <Crown className="h-4 w-4 mr-3" />
                   Growth Assessment
                   <Lock className="h-3 w-3 ml-auto" />
@@ -374,7 +374,7 @@ export default function ConsumerDashboardTeamTrack() {
               </Link>
             ) : (
               <Link href="/assessment/paid">
-                <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white">
+                <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
                   <Crown className="h-4 w-4 mr-3" />
                   Growth Assessment
                 </Button>
@@ -382,14 +382,14 @@ export default function ConsumerDashboardTeamTrack() {
             )}
             
             <Link href="/past-assessments">
-              <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white">
+              <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
                 <BarChart3 className="h-4 w-4 mr-3" />
                 Past Assessments
               </Button>
             </Link>
             
             <Button 
-              className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white"
+              className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3"
               asChild
             >
               <a href="https://api.leadconnectorhq.com/widget/bookings/applebites" target="_blank" rel="noopener noreferrer">
@@ -401,10 +401,10 @@ export default function ConsumerDashboardTeamTrack() {
         </div>
 
         {/* Sign Out */}
-        <div className="p-4 border-t border-white/10">
+        <div className="p-6 border-t border-white/10">
           <Button 
             onClick={handleLogout} 
-            className="w-full bg-transparent border border-red-400 text-red-400 hover:bg-red-400/10"
+            className="w-full bg-transparent border border-red-400 text-red-400 hover:bg-red-400/10 py-3"
           >
             <LogOut className="h-4 w-4 mr-2" />
             Sign Out
