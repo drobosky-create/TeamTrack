@@ -679,6 +679,58 @@ export const insertValuationAssessmentSchema = createInsertSchema(valuationAsses
 export type ValuationAssessment = typeof valuationAssessments.$inferSelect;
 export type InsertValuationAssessment = z.infer<typeof insertValuationAssessmentSchema>;
 
+// Form data schemas for validation
+export const contactInfoSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Valid email is required"),
+  phone: z.string().optional(),
+  company: z.string().min(1, "Company name is required"),
+  jobTitle: z.string().optional(),
+});
+
+export const ebitdaSchema = z.object({
+  netIncome: z.string(),
+  interest: z.string(),
+  taxes: z.string(),
+  depreciation: z.string(),
+  amortization: z.string(),
+  adjustmentNotes: z.string().optional(),
+});
+
+export const adjustmentsSchema = z.object({
+  ownerSalary: z.string().optional(),
+  personalExpenses: z.string().optional(),
+  oneTimeExpenses: z.string().optional(),
+  otherAdjustments: z.string().optional(),
+  adjustmentNotes: z.string().optional(),
+});
+
+export const valueDriversSchema = z.object({
+  financialPerformance: z.enum(["A", "B", "C", "D", "F"]),
+  customerConcentration: z.enum(["A", "B", "C", "D", "F"]),
+  managementTeam: z.enum(["A", "B", "C", "D", "F"]),
+  competitivePosition: z.enum(["A", "B", "C", "D", "F"]),
+  growthProspects: z.enum(["A", "B", "C", "D", "F"]),
+  systemsProcesses: z.enum(["A", "B", "C", "D", "F"]),
+  assetQuality: z.enum(["A", "B", "C", "D", "F"]),
+  industryOutlook: z.enum(["A", "B", "C", "D", "F"]),
+  riskFactors: z.enum(["A", "B", "C", "D", "F"]),
+  ownerDependency: z.enum(["A", "B", "C", "D", "F"]),
+});
+
+export const followUpSchema = z.object({
+  followUpIntent: z.enum(["yes", "maybe", "no"]),
+  additionalComments: z.string().optional(),
+});
+
+// Type exports
+export type ContactInfo = z.infer<typeof contactInfoSchema>;
+export type EbitdaData = z.infer<typeof ebitdaSchema>;
+export type AdjustmentsData = z.infer<typeof adjustmentsSchema>;
+export type ValueDriversData = z.infer<typeof valueDriversSchema>;
+export type FollowUpData = z.infer<typeof followUpSchema>;
+
 // Assessment Tier types
 export type AssessmentTier = 'free' | 'growth' | 'capital';
 

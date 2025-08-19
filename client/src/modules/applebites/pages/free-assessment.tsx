@@ -1,4 +1,4 @@
-import { useValuationForm, type FormStep } from "../../../hooks/use-valuation-form";
+import { useValuationForm, type FormStep } from "../hooks/use-valuation-form";
 import { useEffect } from "react";
 import ProgressIndicator from "../../../components/progress-indicator";
 

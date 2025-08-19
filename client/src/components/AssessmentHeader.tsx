@@ -14,7 +14,7 @@ interface AssessmentHeaderProps {
   subtitle: string;
   tier: 'free' | 'premium';
   features: Array<{
-    icon: React.ComponentType<{ size: number; color: string }>;
+    icon: any;
     label: string;
   }>;
 }

@@ -20,7 +20,7 @@ import Billing from "@/pages/billing";
 import SetupWizard from "@/pages/setup-wizard";
 import BrandingPage from "@/pages/branding";
 import AnalyticsPage from "@/pages/analytics";
-import FreeAssessment from "@/pages/assessments/FreeAssessmentNew";
+import FreeAssessment from "@/modules/applebites/pages/free-assessment";
 import GrowthAssessment from "@/pages/assessments/GrowthAssessment";
 import ConsumerSignup from "@/pages/consumer-signup";
 import ConsumerLogin from "@/pages/consumer-login";
