@@ -723,7 +723,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/payments/create-checkout-session", async (req, res) => {
     try {
       const { 
-        priceId,
+        productId,
         successUrl,
         cancelUrl
       } = req.body;
@@ -735,14 +735,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Use the price ID from environment variable if not provided
-      const finalPriceId = priceId || process.env.STRIPE_PRICE_ID_GROWTH;
+      // Use the product ID from environment variable if not provided
+      const finalProductId = productId || process.env.STRIPE_PRODUCT_ID_GROWTH;
       
-      if (!finalPriceId) {
-        // Fallback to creating price on the fly if no price ID is configured
-        console.warn('STRIPE_PRICE_ID_GROWTH not configured, creating price dynamically');
-        const session = await stripe.checkout.sessions.create({
-          line_items: [{
+      let lineItems;
+      
+      if (finalProductId) {
+        // Fetch the default price for the product
+        try {
+          const prices = await stripe.prices.list({
+            product: finalProductId,
+            active: true,
+            limit: 1,
+            type: 'one_time'
+          });
+          
+          if (prices.data.length > 0) {
+            // Use the first active price for the product
+            lineItems = [{
+              price: prices.data[0].id,
+              quantity: 1,
+            }];
+          } else {
+            return res.status(500).json({ 
+              message: "No active price found for the product. Please configure pricing in Stripe Dashboard." 
+            });
+          }
+        } catch (error: any) {
+          console.error('Error fetching product price:', error);
+          // Fallback to dynamic pricing if product not found
+          lineItems = [{
             price_data: {
               currency: 'usd',
               product_data: {
@@ -752,28 +774,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
               unit_amount: 79500, // $795.00 in cents
             },
             quantity: 1,
-          }],
-          mode: 'payment',
-          allow_promotion_codes: true,
-          success_url: successUrl,
-          cancel_url: cancelUrl,
-          metadata: {
-            product: 'applebites_growth',
+          }];
+        }
+      } else {
+        // Fallback to creating price on the fly if no product ID is configured
+        console.warn('STRIPE_PRODUCT_ID_GROWTH not configured, creating price dynamically');
+        lineItems = [{
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'AppleBites Growth & Exit Plan',
+              description: 'Complete business valuation assessment with growth strategies and exit planning tools',
+            },
+            unit_amount: 79500, // $795.00 in cents
           },
-        });
-        
-        res.json({ 
-          sessionId: session.id,
-          url: session.url 
-        });
-        return;
+          quantity: 1,
+        }];
       }
 
       const session = await stripe.checkout.sessions.create({
-        line_items: [{
-          price: finalPriceId, // Use the price ID from Stripe Dashboard
-          quantity: 1,
-        }],
+        line_items: lineItems,
         mode: 'payment',
         allow_promotion_codes: true, // Enable native Stripe promotion codes
         success_url: successUrl,

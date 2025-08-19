@@ -6,7 +6,7 @@ AppleBites uses Stripe Checkout Sessions for payment processing. All product, pr
 ## Required Environment Variables
 - `VITE_STRIPE_PUBLIC_KEY` - Your Stripe publishable key (starts with `pk_`)
 - `STRIPE_SECRET_KEY` - Your Stripe secret key (starts with `sk_`)
-- `STRIPE_PRICE_ID_GROWTH` - The price ID for Growth & Exit plan (starts with `price_`)
+- `STRIPE_PRODUCT_ID_GROWTH` - The product ID for Growth & Exit plan (starts with `prod_`) - Optional
 
 ## Step 1: Create Products in Stripe Dashboard
 
@@ -22,14 +22,18 @@ AppleBites uses Stripe Checkout Sessions for payment processing. All product, pr
    - **Price**: $795.00
    - **Currency**: USD
 5. Click **"Save product"**
-6. Copy the **Price ID** (starts with `price_`) - you'll need this for the environment variable
+6. After saving, you'll see the product details:
+   - Copy the **Product ID** (starts with `prod_`) - visible at the top of the product page
+   - The system will automatically use the active price for this product
 
-### Set the Price ID Environment Variable
-Add to your environment variables:
+### Set the Product ID Environment Variable (Optional)
+Add to your environment variables if you want to use Stripe-managed products:
 ```
-STRIPE_PRICE_ID_GROWTH=price_xxxxxxxxxxxxx
+STRIPE_PRODUCT_ID_GROWTH=prod_xxxxxxxxxxxxx
 ```
-(Replace with your actual price ID from Stripe)
+(Replace with your actual product ID from Stripe)
+
+Note: The application will automatically fetch the current price for this product. If no product ID is set, it will create prices dynamically at $795.
 
 ## Payment Flow
 1. Customer clicks "Access Now - $795" on AppleBites landing page
