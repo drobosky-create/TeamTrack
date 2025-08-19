@@ -27,20 +27,13 @@ export default function AppleBitesLanding() {
               src="/apple-bites-logo.png"
               alt="AppleBites"
               sx={{ 
-                height: 40,
+                height: 50,
+                width: 'auto',
                 mr: 2,
+                objectFit: 'contain'
               }}
             />
-            <Typography variant="caption" sx={{ 
-              color: '#8b95a7', 
-              fontSize: '0.75rem',
-              letterSpacing: 1,
-              textTransform: 'uppercase'
-            }}>
-              ASSESSMENTS
-            </Typography>
           </Box>
-          
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Button
               variant="text"
@@ -110,7 +103,7 @@ export default function AppleBitesLanding() {
               variant="contained"
               size="small"
               component={Link}
-              href="/performance-hub"
+              href="/"
               sx={{ 
                 backgroundColor: '#4CAF50',
                 color: 'white',
@@ -123,7 +116,7 @@ export default function AppleBitesLanding() {
                 }
               }}
             >
-              Meritage Partners
+              PerformanceHub
             </Button>
           </Box>
         </Toolbar>
@@ -393,26 +386,35 @@ export default function AppleBitesLanding() {
           </Card>
         </Box>
 
-        {/* Footer Links */}
-        <Box sx={{ textAlign: 'center', pt: 6, borderTop: '1px solid #e0e0e0' }}>
-          <Typography variant="body2" sx={{ color: '#666666', mb: 2, fontWeight: 600 }}>
-            Links
-          </Typography>
-          <Button
-            component={Link}
-            href="https://privacypolicy.com"
-            sx={{ color: '#007bff', textTransform: 'none', fontSize: '0.875rem' }}
-          >
-            Privacy Policy
-          </Button>
-        </Box>
-
-        {/* Footer Address */}
-        <Box sx={{ textAlign: 'center', mt: 4 }}>
-          <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontWeight: 600 }}>
-            Address:
-          </Typography>
-          <Typography variant="body2" sx={{ color: '#888888' }}>
+        {/* Compact Footer */}
+        <Box sx={{ 
+          textAlign: 'center', 
+          pt: 4, 
+          pb: 2,
+          borderTop: '1px solid #e0e0e0',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 1
+        }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, alignItems: 'center' }}>
+            <Typography variant="caption" sx={{ color: '#666666', fontWeight: 600 }}>
+              Links:
+            </Typography>
+            <Button
+              component={Link}
+              href="https://privacypolicy.com"
+              sx={{ 
+                color: '#007bff', 
+                textTransform: 'none', 
+                fontSize: '0.75rem',
+                minWidth: 'auto',
+                p: 0.5
+              }}
+            >
+              Privacy Policy
+            </Button>
+          </Box>
+          <Typography variant="caption" sx={{ color: '#888888', fontSize: '0.75rem' }}>
             2801 West Coast Highway Suite 200, Newport Beach, California 92663
           </Typography>
         </Box>
