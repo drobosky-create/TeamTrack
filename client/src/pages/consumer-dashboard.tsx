@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
-import { ConsumerDashboardLayout } from '@/components/layout/ConsumerDashboardLayout';
+import { Dashboard as DashboardIcon } from '@mui/icons-material';
 import { 
   Star, 
   FileText,
   TrendingUp,
   Clock,
-  ArrowRight,
   CheckCircle,
   Info,
   DollarSign,
@@ -44,8 +43,78 @@ export default function ConsumerDashboard() {
     );
   }
 
+  // AppleBites Consumer Layout
+  const ConsumerLayout = ({ children }: { children: React.ReactNode }) => {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {/* AppleBites Sidebar */}
+        <div className="fixed inset-y-0 left-0 w-64 bg-gradient-to-b from-blue-900 to-blue-800 text-white">
+          <div className="p-6">
+            <div className="flex items-center space-x-3 mb-8">
+              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                <Star className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold">AppleBites</h1>
+                <p className="text-xs text-blue-200">Business Valuation Platform</p>
+              </div>
+            </div>
+            
+            {/* Navigation */}
+            <nav className="space-y-2">
+              <a href="/consumer-dashboard" className="flex items-center px-3 py-2 rounded-lg bg-blue-700 text-white">
+                <DashboardIcon className="h-5 w-5 mr-3" />
+                Dashboard
+              </a>
+              <a href="/assessments/free" className="flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                <Star className="h-5 w-5 mr-3" />
+                Free Assessment
+              </a>
+              <a href="#" className="flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors opacity-50">
+                <TrendingUp className="h-5 w-5 mr-3" />
+                Growth Assessment
+              </a>
+              <a href="/value-improvement-calculator" className="flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                <BarChart3 className="h-5 w-5 mr-3" />
+                Value Calculator
+              </a>
+              <a href="#" className="flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors opacity-50">
+                <Users className="h-5 w-5 mr-3" />
+                Consultation
+              </a>
+            </nav>
+          </div>
+          
+          {/* User Info */}
+          <div className="absolute bottom-6 left-6 right-6">
+            <div className="bg-blue-700 rounded-lg p-3">
+              <p className="text-sm font-medium">{userData.firstName} {userData.lastName}</p>
+              <p className="text-xs text-blue-200">{userData.email}</p>
+              <button 
+                onClick={() => {
+                  localStorage.removeItem('consumerUser');
+                  setLocation('/consumer-login');
+                }}
+                className="text-xs text-blue-200 hover:text-white mt-1"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        {/* Main Content */}
+        <div className="ml-64">
+          <div className="p-8">
+            {children}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <ConsumerDashboardLayout>
+    <ConsumerLayout>
       <div className="space-y-6">
         {/* Welcome Section */}
         <div className="mb-6">
@@ -91,331 +160,89 @@ export default function ConsumerDashboard() {
           </Card>
         </div>
 
-        {/* Main Content Grid - 3 Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Star className="h-5 w-5" />
-                Quick Actions
-              </CardTitle>
-              <CardDescription>
-                Get started with these assessment tasks
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
+        {/* Get Started Section */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Star className="h-5 w-5 text-yellow-500" />
+              Get Started with Your Valuation
+            </CardTitle>
+            <CardDescription>
+              Our comprehensive assessment analyzes your business across 10 key value drivers
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col sm:flex-row gap-4">
               <Button 
-                variant="outline" 
-                className="w-full justify-start"
+                className="flex-1"
                 onClick={() => setLocation('/assessments/free')}
                 data-testid="button-start-assessment"
               >
                 <Star className="h-4 w-4 mr-2" />
                 Start Free Assessment
               </Button>
-              
               <Button 
                 variant="outline" 
-                className="w-full justify-start" 
+                className="flex-1" 
                 disabled
               >
                 <TrendingUp className="h-4 w-4 mr-2" />
-                Growth Assessment (Upgrade)
+                Upgrade to Growth ($497)
               </Button>
-              
-              <Button 
-                variant="outline" 
-                className="w-full justify-start"
-                onClick={() => setLocation('/value-improvement-calculator')}
-              >
-                <BarChart3 className="h-4 w-4 mr-2" />
-                Value Improvement Calculator
-              </Button>
-              
-              <Button 
-                variant="outline" 
-                className="w-full justify-start"
-                disabled
-              >
-                <Users className="h-4 w-4 mr-2" />
-                Schedule Consultation
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Recent Activity */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5" />
-                Recent Activity
-              </CardTitle>
-              <CardDescription>
-                Latest updates on your assessments
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {assessmentHistory.length > 0 ? (
-                <div className="space-y-3">
-                  {assessmentHistory.map((activity, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle className="h-4 w-4 mt-0.5 text-green-600" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium leading-none">
-                          Completed Business Assessment
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          2 hours ago
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-4">
-                  <Clock className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">
-                    No recent activity to show
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Complete your first assessment to see activity here
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Next Steps & Recommendations */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Info className="h-5 w-5" />
-                Next Steps
-              </CardTitle>
-              <CardDescription>
-                Recommended actions to maximize value
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium">Complete Free Assessment</p>
-                    <p className="text-xs text-muted-foreground">
-                      Get your business valuation and grade
-                    </p>
-                  </div>
-                  <Badge variant="outline">
-                    Pending
-                  </Badge>
-                </div>
-
-                <div className="flex items-center justify-between opacity-50">
-                  <div>
-                    <p className="text-sm font-medium">Review Results</p>
-                    <p className="text-xs text-muted-foreground">
-                      Understand your business grade
-                    </p>
-                  </div>
-                  <Badge variant="secondary">
-                    Locked
-                  </Badge>
-                </div>
-
-                <div className="flex items-center justify-between opacity-50">
-                  <div>
-                    <p className="text-sm font-medium">Explore Improvements</p>
-                    <p className="text-xs text-muted-foreground">
-                      Use value improvement calculator
-                    </p>
-                  </div>
-                  <Badge variant="secondary">
-                    Locked
-                  </Badge>
-                </div>
-
-                <div className="flex items-center justify-between opacity-50">
-                  <div>
-                    <p className="text-sm font-medium">Consider Growth Assessment</p>
-                    <p className="text-xs text-muted-foreground">
-                      Unlock detailed recommendations
-                    </p>
-                  </div>
-                  <Badge variant="secondary">
-                    $497
-                  </Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Upgrade Options Section */}
-        <div className="grid md:grid-cols-2 gap-6 mt-6">
-          {/* Free Assessment */}
-          <Card className="border-2 hover:border-green-500 transition-all hover:shadow-lg">
-            <CardHeader>
-              <div className="flex items-center justify-between mb-2">
-                <Star className="h-8 w-8 text-yellow-500" />
-                <Badge variant="secondary">Available</Badge>
-              </div>
-              <CardTitle>Free Business Assessment</CardTitle>
-              <CardDescription>
-                Get an instant valuation of your business with our comprehensive analysis
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="text-2xl font-bold text-green-600">$0</div>
-                
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
-                    <span>EBITDA calculation and adjustments</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
-                    <span>10 business value drivers analysis</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
-                    <span>Valuation range estimate</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
-                    <span>Overall business grade (A-F)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
-                    <span>Value improvement calculator</span>
-                  </li>
-                </ul>
-
-                <Button 
-                  className="w-full gap-2"
-                  onClick={() => setLocation('/assessments/free')}
-                  data-testid="button-start-assessment"
-                >
-                  Start Free Assessment
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Growth Assessment - Upgrade Option */}
-          <Card className="opacity-75 border-2 border-dashed">
-            <CardHeader>
-              <div className="flex items-center justify-between mb-2">
-                <TrendingUp className="h-8 w-8 text-blue-500" />
-                <Badge variant="outline">Upgrade</Badge>
-              </div>
-              <CardTitle>Growth Assessment</CardTitle>
-              <CardDescription>
-                Unlock detailed insights and personalized recommendations
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="text-2xl font-bold text-blue-600">$497</div>
-                
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-gray-400 mt-0.5" />
-                    <span>Everything in Free Assessment</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-gray-400 mt-0.5" />
-                    <span>Industry-specific multipliers</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-gray-400 mt-0.5" />
-                    <span>30-minute consultation call</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-gray-400 mt-0.5" />
-                    <span>AI coaching recommendations</span>
-                  </li>
-                </ul>
-
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  disabled
-                >
-                  Available After Free Assessment
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Additional Resources */}
-        <Card className="shadow-soft-md border-border-soft">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Info className="h-5 w-5" />
-              What You'll Get
-            </CardTitle>
-            <CardDescription>
-              Comprehensive insights to maximize your business value
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <div className="h-2 w-2 rounded-full bg-green-500 mt-2" />
-                  <div>
-                    <p className="text-sm font-medium">Valuation Range</p>
-                    <p className="text-xs text-muted-foreground">Industry-standard multiple-based estimation</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="h-2 w-2 rounded-full bg-green-500 mt-2" />
-                  <div>
-                    <p className="text-sm font-medium">Performance Grade</p>
-                    <p className="text-xs text-muted-foreground">Overall business score from A to F</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="h-2 w-2 rounded-full bg-green-500 mt-2" />
-                  <div>
-                    <p className="text-sm font-medium">EBITDA Analysis</p>
-                    <p className="text-xs text-muted-foreground">Detailed earnings calculation with adjustments</p>
-                  </div>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <div className="h-2 w-2 rounded-full bg-green-500 mt-2" />
-                  <div>
-                    <p className="text-sm font-medium">Value Drivers</p>
-                    <p className="text-xs text-muted-foreground">Assessment of 10 key business factors</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="h-2 w-2 rounded-full bg-green-500 mt-2" />
-                  <div>
-                    <p className="text-sm font-medium">Improvement Calculator</p>
-                    <p className="text-xs text-muted-foreground">See how upgrades impact your valuation</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="h-2 w-2 rounded-full bg-green-500 mt-2" />
-                  <div>
-                    <p className="text-sm font-medium">Action Insights</p>
-                    <p className="text-xs text-muted-foreground">Specific recommendations for improvement</p>
-                  </div>
-                </div>
-              </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Help Section */}
-        <Alert className="mt-8">
+        {/* Recent Assessments */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
+                Recent Assessments
+              </span>
+              <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
+                View All (0)
+              </Button>
+            </CardTitle>
+            <CardDescription>Track your assessment journey</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {assessmentHistory.length === 0 ? (
+              <div className="text-center py-8">
+                <Clock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">No Assessments Yet</h3>
+                <p className="text-muted-foreground mb-4 text-sm">
+                  Complete your first assessment to unlock insights about your business value.
+                </p>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Assessment Progress</span>
+                    <span className="text-muted-foreground">0%</span>
+                  </div>
+                  <Progress value={0} className="h-2" />
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {assessmentHistory.map((assessment, index) => (
+                  <div key={index} className="flex items-start gap-3 p-3 rounded-lg border">
+                    <div className="h-2 w-2 rounded-full bg-green-500 mt-2" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium">Business Assessment</p>
+                      <p className="text-sm text-muted-foreground">Completed</p>
+                      <p className="text-xs text-muted-foreground">Grade: A | Value: $2.1M</p>
+                    </div>
+                    <Badge variant="default">Complete</Badge>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Help & Tips */}
+        <Alert>
           <Info className="h-4 w-4" />
           <AlertDescription>
             <strong>Need help?</strong> Our free assessment takes about 10-15 minutes to complete. 
@@ -423,6 +250,6 @@ export default function ConsumerDashboard() {
           </AlertDescription>
         </Alert>
       </div>
-    </ConsumerDashboardLayout>
+    </ConsumerLayout>
   );
 }
