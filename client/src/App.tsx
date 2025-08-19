@@ -45,6 +45,7 @@ import PaymentDemoPage from "@/pages/payment-demo";
 import NavigationTestPage from "@/pages/navigation-test";
 import ThemeManager from "@/components/admin/ThemeManager";
 import AppleBitesCheckoutPage from "@/pages/applebites-checkout";
+import PastAssessmentsPage from "@/modules/applebites/pages/past-assessments";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 import { AdminAuthProvider, useAdminAuth } from './hooks/use-admin-auth';
 
@@ -81,6 +82,12 @@ function Router() {
       <Route path="/consumer-signup" component={ConsumerSignup} />
       <Route path="/consumer-login" component={ConsumerLogin} />
       <Route path="/consumer-dashboard" component={ConsumerDashboard} />
+      <Route path="/past-assessments" component={PastAssessmentsPage} />
+      <Route path="/assessment/free" component={FreeAssessment} />
+      <Route path="/assessment/paid" component={GrowthAssessment} />
+      <Route path="/tasks-feedback" component={NotFound} />
+      <Route path="/notifications" component={Notifications} />
+      <Route path="/profile" component={Profile} />
       <Route path="/admin-login" component={AdminLoginPage} />
       
       {/* Admin Dashboard Route */}
