@@ -30,6 +30,8 @@ import FollowUpOptionsPage from "@/pages/follow-up";
 import AppleBitesLanding from "@/pages/applebites-landing";
 import PerformanceHubLanding from "@/pages/performancehub-landing";
 import ConsumerAuth from "@/pages/consumer-auth";
+import ThemeManager from "@/components/admin/ThemeManager";
+import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 
 const theme = createTheme({
   palette: {
@@ -78,6 +80,7 @@ function Router() {
             <Route path="/admin/clients" component={AdminClientRecordsPage} />
             <Route path="/results/:id" component={AssessmentResultsPage} />
             <Route path="/follow-up" component={FollowUpOptionsPage} />
+            <Route path="/theme-manager" component={ThemeManager} />
             <Route path="/settings" component={Settings} />
             <Route path="/profile" component={Profile} />
             <Route path="/notifications" component={Notifications} />
@@ -93,13 +96,15 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ThemeProvider>
+      <ThemeTokenProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </ThemeProvider>
+      </ThemeTokenProvider>
     </QueryClientProvider>
   );
 }

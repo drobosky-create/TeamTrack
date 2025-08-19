@@ -9,7 +9,8 @@ import {
   FileText, 
   Settings, 
   TrendingUp,
-  LogOut 
+  LogOut,
+  Palette
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,6 +27,7 @@ export default function Sidebar() {
     { name: 'Team Directory', href: '/team', icon: Users, allowedRoles: ['admin', 'manager'] },
     { name: 'Reviews', href: '/reviews', icon: ClipboardList, allowedRoles: ['admin', 'manager', 'team_member'] },
     { name: 'Templates', href: '/templates', icon: FileText, allowedRoles: ['admin'] },
+    { name: 'Theme Manager', href: '/theme-manager', icon: Palette, allowedRoles: ['admin'] },
     { name: 'Settings', href: '/settings', icon: Settings, allowedRoles: ['admin', 'manager', 'team_member'] },
   ];
 
