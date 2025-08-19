@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import Stripe from "stripe";
 
 // Extend session type for admin authentication
 declare module 'express-session' {
@@ -41,6 +42,15 @@ import { ZodError } from "zod";
 import { db } from "./db";
 import { eq, desc, and } from "drizzle-orm";
 import bcrypt from "bcryptjs";
+import express from "express";
+
+// Initialize Stripe
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
+}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2024-11-20.acacia",
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup session middleware first (needed for consumer auth)
@@ -669,10 +679,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Create session - store user info in session
       req.session.adminUser = {
         id: user.id,
-        email: user.email,
+        email: user.email || '',
         role: user.role,
-        firstName: user.firstName,
-        lastName: user.lastName
+        firstName: user.firstName || undefined,
+        lastName: user.lastName || undefined
       };
       
       // Remove password hash from response
@@ -706,6 +716,171 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(req.session.adminUser);
     } else {
       res.status(401).json({ message: 'Not authenticated' });
+    }
+  });
+
+  // Stripe payment routes for one-time payments
+  app.post("/api/payments/create-payment-intent", async (req, res) => {
+    try {
+      const { amount, currency = 'usd', metadata = {} } = req.body;
+      
+      if (!amount || amount < 50) { // Minimum 50 cents
+        return res.status(400).json({ 
+          message: "Invalid amount. Minimum amount is $0.50" 
+        });
+      }
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(amount * 100), // Convert to cents
+        currency,
+        metadata,
+        automatic_payment_methods: {
+          enabled: true,
+        },
+      });
+
+      res.json({ 
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id,
+      });
+    } catch (error: any) {
+      console.error('Payment intent creation error:', error);
+      res.status(500).json({ 
+        message: "Error creating payment intent: " + error.message 
+      });
+    }
+  });
+
+  // Stripe subscription routes
+  app.post('/api/payments/create-subscription', async (req, res) => {
+    try {
+      const { priceId, customerEmail, customerName, userId } = req.body;
+
+      if (!priceId) {
+        return res.status(400).json({ message: "Price ID is required" });
+      }
+
+      let customer;
+      let user = null;
+
+      // If userId provided, get user and check for existing Stripe customer
+      if (userId) {
+        user = await db.query.users.findFirst({
+          where: eq(schema.users.id, userId)
+        });
+
+        if (user?.stripeCustomerId) {
+          customer = await stripe.customers.retrieve(user.stripeCustomerId);
+        }
+      }
+
+      // Create new customer if none exists
+      if (!customer) {
+        customer = await stripe.customers.create({
+          email: customerEmail,
+          name: customerName,
+        });
+
+        // Update user with Stripe customer ID if user exists
+        if (user) {
+          await db.update(schema.users)
+            .set({ stripeCustomerId: customer.id })
+            .where(eq(schema.users.id, userId));
+        }
+      }
+
+      const subscription = await stripe.subscriptions.create({
+        customer: customer.id,
+        items: [{ price: priceId }],
+        payment_behavior: 'default_incomplete',
+        payment_settings: { save_default_payment_method: 'on_subscription' },
+        expand: ['latest_invoice.payment_intent'],
+      });
+
+      // Update user with subscription ID if user exists
+      if (user) {
+        await db.update(schema.users)
+          .set({ stripeSubscriptionId: subscription.id })
+          .where(eq(schema.users.id, userId));
+      }
+
+      const invoice = subscription.latest_invoice as Stripe.Invoice;
+      const paymentIntent = invoice.payment_intent as Stripe.PaymentIntent;
+
+      res.json({
+        subscriptionId: subscription.id,
+        clientSecret: paymentIntent.client_secret,
+      });
+    } catch (error: any) {
+      console.error('Subscription creation error:', error);
+      res.status(500).json({ 
+        message: "Error creating subscription: " + error.message 
+      });
+    }
+  });
+
+  // Cancel subscription
+  app.post('/api/payments/cancel-subscription', async (req, res) => {
+    try {
+      const { subscriptionId, userId } = req.body;
+
+      if (!subscriptionId) {
+        return res.status(400).json({ message: "Subscription ID is required" });
+      }
+
+      const subscription = await stripe.subscriptions.cancel(subscriptionId);
+
+      // Clear subscription ID from user if provided
+      if (userId) {
+        await db.update(schema.users)
+          .set({ stripeSubscriptionId: null })
+          .where(eq(schema.users.id, userId));
+      }
+
+      res.json({ 
+        message: "Subscription cancelled successfully",
+        subscription 
+      });
+    } catch (error: any) {
+      console.error('Subscription cancellation error:', error);
+      res.status(500).json({ 
+        message: "Error cancelling subscription: " + error.message 
+      });
+    }
+  });
+
+  // Get subscription status
+  app.get('/api/payments/subscription-status/:userId', async (req, res) => {
+    try {
+      const { userId } = req.params;
+
+      const user = await db.query.users.findFirst({
+        where: eq(schema.users.id, userId)
+      });
+
+      if (!user || !user.stripeSubscriptionId) {
+        return res.json({ 
+          hasActiveSubscription: false,
+          subscription: null 
+        });
+      }
+
+      const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
+
+      res.json({
+        hasActiveSubscription: ['active', 'trialing'].includes(subscription.status),
+        subscription: {
+          id: subscription.id,
+          status: subscription.status,
+          current_period_end: subscription.current_period_end,
+          cancel_at_period_end: subscription.cancel_at_period_end,
+        }
+      });
+    } catch (error: any) {
+      console.error('Subscription status error:', error);
+      res.status(500).json({ 
+        message: "Error fetching subscription status: " + error.message 
+      });
     }
   });
 

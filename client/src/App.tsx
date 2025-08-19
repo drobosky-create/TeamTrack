@@ -37,6 +37,11 @@ import PerformanceHubLanding from "@/pages/performancehub-landing";
 import ConsumerAuth from "@/pages/consumer-auth";
 import TestDashboard from "@/pages/test-dashboard";
 import AdminDashboard from "@/pages/admin-dashboard";
+import CheckoutPage from "@/pages/checkout";
+import SubscriptionPage from "@/pages/subscription";
+import PaymentSuccessPage from "@/pages/payment-success";
+import SubscriptionSuccessPage from "@/pages/subscription-success";
+import PaymentDemoPage from "@/pages/payment-demo";
 import ThemeManager from "@/components/admin/ThemeManager";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 import { AdminAuthProvider, useAdminAuth } from './hooks/use-admin-auth';
@@ -106,6 +111,11 @@ function Router() {
             <Route path="/results/:id" component={AssessmentResults} />
             <Route path="/follow-up" component={FollowUpOptionsPage} />
             <Route path="/theme-manager" component={ThemeManager} />
+            <Route path="/payment-demo" component={PaymentDemoPage} />
+            <Route path="/checkout" component={CheckoutPage} />
+            <Route path="/subscription" component={SubscriptionPage} />
+            <Route path="/payment-success" component={PaymentSuccessPage} />
+            <Route path="/subscription-success" component={SubscriptionSuccessPage} />
             <Route path="/settings" component={Settings} />
             <Route path="/profile" component={Profile} />
             <Route path="/notifications" component={Notifications} />

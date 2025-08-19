@@ -73,6 +73,8 @@ export const users = pgTable("users", {
   profileImageUrl: varchar("profile_image_url"),
   role: userRoleEnum("role").default('team_member').notNull(),
   department: varchar("department"),
+  stripeCustomerId: varchar("stripe_customer_id"),
+  stripeSubscriptionId: varchar("stripe_subscription_id"),
   managerId: varchar("manager_id"),
   employmentType: employmentTypeEnum("employment_type").default('employee'),
   reviewCadence: reviewTypeEnum("review_cadence").default('quarterly'),
