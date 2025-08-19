@@ -8,6 +8,17 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
+## Dual Landing Pages & Clean File Organization (Jan 19, 2025)
+- Created separate branded landing pages for AppleBites and PerformanceHub applications
+- **AppleBites Landing**: Consumer-focused business valuation platform with assessment tiers, pricing, and client signup flow
+- **PerformanceHub Landing**: Team management platform showcasing performance reviews, analytics, and organizational tools
+- Built dedicated consumer authentication page with signup/login tabs for AppleBites clients
+- Implemented clean routing structure: `/applebites` for business valuation, `/performance-hub` for team management
+- Root path defaults to PerformanceHub with cross-navigation between applications
+- Consumer authentication flow (`/consumer-login`) separates client access from internal team portal
+- File organization clearly distinguishes AppleBites vs PerformanceHub components while maintaining clean tree structure
+- Both applications maintain independent branding while sharing underlying authentication and user management systems
+
 ## Role-Based Access Scaffolding Implementation (Jan 19, 2025)
 - Successfully implemented comprehensive role-based access control scaffolding based on AppleBites documentation structure
 - **Consumer Access (team_member role)**: Assessment dashboard, Free/Growth assessments, personal results, follow-up options, profile management

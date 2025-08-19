@@ -27,6 +27,9 @@ import ClientManagementPage from "@/pages/clients";
 import AdminClientRecordsPage from "@/pages/admin/clients";
 import AssessmentResultsPage from "@/pages/results";
 import FollowUpOptionsPage from "@/pages/follow-up";
+import AppleBitesLanding from "@/pages/applebites-landing";
+import PerformanceHubLanding from "@/pages/performancehub-landing";
+import ConsumerAuth from "@/pages/consumer-auth";
 
 const theme = createTheme({
   palette: {
@@ -47,8 +50,17 @@ function Router() {
 
   return (
     <Switch>
+      {/* Public Routes - Landing Pages */}
+      <Route path="/applebites" component={AppleBitesLanding} />
+      <Route path="/performance-hub" component={PerformanceHubLanding} />
+      <Route path="/consumer-login" component={ConsumerAuth} />
+      
+      {/* Root redirect to PerformanceHub by default */}
       {isLoading || !isAuthenticated ? (
-        <Route path="/" component={Landing} />
+        <>
+          <Route path="/" component={PerformanceHubLanding} />
+          <Route component={NotFound} />
+        </>
       ) : (
         <MaterialDashboardLayout>
           <Switch>
