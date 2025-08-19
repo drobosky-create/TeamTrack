@@ -4,7 +4,7 @@ PerformanceHub is a comprehensive performance tracking web application designed 
 
 The platform also integrates AppleBites, a consumer-facing business valuation platform requiring account creation before assessment access. The customer journey follows: Account Creation → Assessment Selection → 4-Step Assessment (Financials → Adjustments → Value Drivers → Follow-up) → Valuation Report → Value Improvement Calculator → AI Coaching Recommendations upsell. This dual functionality serves both internal team performance management and external business valuation needs within a single, cohesive platform.
 
-## Recent Updates (August 19, 2025)
+## Recent Updates (August 19, 2025 - Latest)
 - Successfully integrated MaterialDashboardLayout from TeamTrack with unified sidebar design for admin dashboard
 - Implemented dual authentication system supporting both regular users and admin sessions
 - Fixed horizontal scrolling issues in sidebar with proper overflow handling and text truncation
@@ -18,12 +18,15 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
 - Clarified architecture: `/applebites` directory contains standalone app, while `client/src/pages/applebites-landing.tsx` serves the landing page
 - Implemented complete AppleBites payment flow with native Stripe Checkout Sessions:
   - Free plan routes directly to signup page
-  - Growth & Exit plan ($795) uses Stripe Checkout with native promotion code support
-  - Stripe handles all payment processing and coupon validation
+  - Growth & Exit plan ($795) uses Stripe Checkout Sessions API
+  - Stripe handles all payment processing and promotion code validation natively
   - Customers enter promotion codes directly on Stripe's hosted checkout page
-  - After successful payment, redirects to signup with prefilled customer data
+  - Checkout flow: AppleBites landing → Checkout preview page → Stripe hosted checkout → Consumer signup (with prefilled data after payment)
+  - After successful payment, redirects to signup with payment confirmation
   - Capital plan button disabled with "Coming Soon" status
-  - Admin can create promotion codes via admin portal that sync directly to Stripe
+  - Admin can create promotion codes via `/admin/promotion-codes` that sync directly to Stripe
+  - Fixed Stripe URL validation by ensuring HTTPS protocol in redirect URLs
+  - Implemented both URL-based and sessionId-based redirect methods for maximum compatibility
 
 # User Preferences
 
