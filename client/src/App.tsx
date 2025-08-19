@@ -78,6 +78,7 @@ function Router() {
       {/* Public Routes - Landing Pages */}
       <Route path="/applebites" component={AppleBitesLanding} />
       <Route path="/applebites-checkout" component={AppleBitesCheckoutPage} />
+      <Route path="/applebites/growth-assessment" component={GrowthAssessment} />
       <Route path="/performance-hub" component={PerformanceHubLanding} />
       <Route path="/consumer-auth" component={ConsumerAuth} />
       <Route path="/consumer-signup" component={ConsumerSignup} />
