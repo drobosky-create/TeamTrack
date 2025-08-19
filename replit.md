@@ -11,7 +11,8 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
 - Created comprehensive AdminDashboard with role testing functionality and admin-specific features
 - Established consistent Material-UI gradient styling across all dashboard interfaces
 - Fully restored AppleBites landing page at `/applebites` route with three pricing tiers (Free, Growth & Exit, Capital)
-- Fixed AppleBites logo display by copying from `applebites/public/` to main `public/` directory
+- Fixed AppleBites logo display by moving to `client/public/` directory for proper Vite static asset serving
+- Added authentic payment card icons (Visa, MasterCard, American Express, Discover) with official brand colors
 - Changed navigation button from "Meritage Partners" to "PerformanceHub" linking back to main application
 - Reduced footer vertical size for more compact, professional appearance
 - Clarified architecture: `/applebites` directory contains standalone app, while `client/src/pages/applebites-landing.tsx` serves the landing page
