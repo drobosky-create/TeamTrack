@@ -8,63 +8,122 @@ import {
   Container,
   AppBar,
   Toolbar,
-  IconButton,
 } from '@mui/material';
-import { 
-  Assessment as AssessmentIcon,
-  TrendingUp as TrendingUpIcon,
-  BusinessCenter as BusinessIcon,
-  Login as LoginIcon,
-  PersonAdd as PersonAddIcon,
-  Calculate as CalculateIcon,
-  Star as StarIcon,
-  CheckCircle as CheckIcon,
-} from '@mui/icons-material';
 import { Link } from 'wouter';
 
 export default function AppleBitesLanding() {
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: 'hsl(var(--background))' }}>
+    <Box sx={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
       {/* Navigation Header */}
       <AppBar position="static" sx={{ 
-        background: 'var(--gradient-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%))',
-        boxShadow: 'var(--shadow, 0 4px 20px rgba(102, 126, 234, 0.3))'
+        background: '#1e3a5f',
+        boxShadow: 'none',
+        borderBottom: '1px solid #e0e0e0'
       }}>
-        <Toolbar>
-          <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-            <AssessmentIcon sx={{ mr: 2, fontSize: 32 }} />
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-              AppleBites
+        <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box
+              component="img"
+              src="/api/placeholder/40/40"
+              alt="AppleBites Logo"
+              sx={{ 
+                width: 40, 
+                height: 40, 
+                mr: 2,
+                borderRadius: 1,
+                backgroundColor: '#4CAF50'
+              }}
+            />
+            <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white' }}>
+              APPLE BITES
             </Typography>
-            <Typography variant="body2" sx={{ ml: 2, opacity: 0.9 }}>
-              Business Valuation Platform
+            <Typography variant="caption" sx={{ ml: 1, color: '#b0c4de', fontSize: '0.75rem' }}>
+              ASSESSMENTS
             </Typography>
           </Box>
           
-          <Box sx={{ display: 'flex', gap: 2 }}>
+          <Box sx={{ display: 'flex', gap: 1 }}>
             <Button
-              color="inherit"
-              startIcon={<LoginIcon />}
+              variant="outlined"
+              size="small"
+              component={Link}
+              href="/admin-login"
+              sx={{ 
+                borderColor: '#4CAF50',
+                color: '#4CAF50',
+                fontSize: '0.75rem',
+                px: 2,
+                '&:hover': { 
+                  borderColor: '#45a049',
+                  backgroundColor: 'rgba(76, 175, 80, 0.1)'
+                }
+              }}
+            >
+              Admin
+            </Button>
+            <Button
+              variant="outlined"
+              size="small"
               component={Link}
               href="/consumer-login"
               sx={{ 
-                borderRadius: 2,
-                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' }
+                borderColor: 'white',
+                color: 'white',
+                fontSize: '0.75rem',
+                px: 2,
+                '&:hover': { 
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                }
               }}
             >
-              Client Login
+              Sign In
             </Button>
             <Button
-              color="inherit"
-              startIcon={<PersonAddIcon />}
+              variant="outlined"
+              size="small"
+              sx={{ 
+                borderColor: 'white',
+                color: 'white',
+                fontSize: '0.75rem',
+                px: 2,
+                '&:hover': { 
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                }
+              }}
+            >
+              Pricing
+            </Button>
+            <Button
+              variant="outlined"
+              size="small"
+              sx={{ 
+                borderColor: 'white',
+                color: 'white',
+                fontSize: '0.75rem',
+                px: 2,
+                '&:hover': { 
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                }
+              }}
+            >
+              About
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
               component={Link}
               href="/performance-hub"
               sx={{ 
-                borderRadius: 2,
-                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' }
+                backgroundColor: '#4CAF50',
+                color: 'white',
+                fontSize: '0.75rem',
+                px: 2,
+                '&:hover': { 
+                  backgroundColor: '#45a049'
+                }
               }}
             >
-              Team Portal
+              HERITAGE PARTNERS
             </Button>
           </Box>
         </Toolbar>
