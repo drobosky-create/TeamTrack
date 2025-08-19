@@ -392,34 +392,31 @@ export default function ConsumerDashboardTeamTrack() {
               </Button>
             </Link>
             
-            {/* Free & Growth Assessments Section */}
-            <div className="border-t border-white/10 pt-3 mt-2">
-              <div className="space-y-2"></div>
-                <Link href="/assessment/free">
-                  <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white/90 py-2">
-                    <FileText className="h-4 w-4 mr-3" />
-                    Free Assessment
-                  </Button>
-                </Link>
-                
-                {user.plan === 'free' ? (
-                  <Link href="/applebites-checkout">
-                    <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white/90 py-2">
-                      <Crown className="h-4 w-4 mr-3" />
-                      Growth Assessment
-                      <Lock className="h-3 w-3 ml-auto" />
-                    </Button>
-                  </Link>
-                ) : (
-                  <Link href="/assessment/paid">
-                    <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white/90 py-2">
-                      <Crown className="h-4 w-4 mr-3" />
-                      Growth Assessment
-                    </Button>
-                  </Link>
-                )}
-              </div>
-            </div>
+            {/* Free Assessment */}
+            <Link href="/assessment/free">
+              <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3">
+                <FileText className="h-4 w-4 mr-3" />
+                Free Assessment
+              </Button>
+            </Link>
+            
+            {/* Growth Assessment */}
+            {user.plan === 'free' ? (
+              <Link href="/applebites-checkout">
+                <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3">
+                  <Crown className="h-4 w-4 mr-3" />
+                  Growth Assessment
+                  <Lock className="h-3 w-3 ml-auto" />
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/assessment/paid">
+                <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3">
+                  <Crown className="h-4 w-4 mr-3" />
+                  Growth Assessment
+                </Button>
+              </Link>
+            )}
             
             {/* Tasks & Feedback */}
             <Link href="/tasks-feedback">
