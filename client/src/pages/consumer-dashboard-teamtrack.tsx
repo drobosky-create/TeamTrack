@@ -386,7 +386,7 @@ export default function ConsumerDashboardTeamTrack() {
             
             {/* My Assessments */}
             <Link href="/past-assessments">
-              <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
+              <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3">
                 <BarChart3 className="h-4 w-4 mr-3" />
                 My Assessments
               </Button>
@@ -394,7 +394,7 @@ export default function ConsumerDashboardTeamTrack() {
             
             {/* Client View (Limited) */}
             <Link href="/client-view">
-              <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
+              <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3">
                 <Eye className="h-4 w-4 mr-3" />
                 Client View (Limited)
               </Button>
@@ -432,7 +432,7 @@ export default function ConsumerDashboardTeamTrack() {
             
             {/* Tasks & Feedback */}
             <Link href="/tasks-feedback">
-              <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
+              <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3">
                 <CheckSquare className="h-4 w-4 mr-3" />
                 Tasks & Feedback
               </Button>
@@ -440,7 +440,7 @@ export default function ConsumerDashboardTeamTrack() {
             
             {/* Notifications */}
             <Link href="/notifications">
-              <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
+              <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3">
                 <Bell className="h-4 w-4 mr-3" />
                 Notifications
               </Button>
@@ -448,7 +448,7 @@ export default function ConsumerDashboardTeamTrack() {
             
             {/* Profile Management */}
             <Link href="/profile">
-              <Button className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3">
+              <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3">
                 <User className="h-4 w-4 mr-3" />
                 Profile Management
               </Button>
@@ -456,7 +456,7 @@ export default function ConsumerDashboardTeamTrack() {
             
             {/* Schedule Consultation */}
             <Button 
-              className="w-full justify-start bg-transparent border border-white/30 hover:bg-white/10 text-white py-3"
+              className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3"
               asChild
             >
               <a href="https://api.leadconnectorhq.com/widget/bookings/applebites" target="_blank" rel="noopener noreferrer">
