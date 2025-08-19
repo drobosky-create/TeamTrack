@@ -30,6 +30,9 @@ import { eq, desc } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Setup session middleware first (needed for consumer auth)
+  await setupAuth(app);
+  
   // Register assessment routes (public endpoints for consumer assessments)
   app.use(assessmentRoutes);
   
@@ -38,9 +41,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/auth/consumer-login', handleConsumerLogin);
   app.post('/api/auth/consumer-logout', handleConsumerLogout);
   app.get('/api/auth/consumer-user', getConsumerUser);
-  
-  // Auth middleware
-  await setupAuth(app);
 
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
