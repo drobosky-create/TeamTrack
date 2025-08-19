@@ -16,12 +16,14 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
 - Changed navigation button from "Meritage Partners" to "PerformanceHub" linking back to main application
 - Reduced footer vertical size for more compact, professional appearance
 - Clarified architecture: `/applebites` directory contains standalone app, while `client/src/pages/applebites-landing.tsx` serves the landing page
-- Implemented complete AppleBites payment flow with Stripe integration:
+- Implemented complete AppleBites payment flow with native Stripe Checkout Sessions:
   - Free plan routes directly to signup page
-  - Growth & Exit plan ($795) routes through Stripe checkout with coupon/discount code support
-  - Available coupon codes: SAVE20 (20% off), EARLY50 (50% off), PARTNER15 (15% off), LAUNCH100 (100% off), BETA25 (25% off)
+  - Growth & Exit plan ($795) uses Stripe Checkout with native promotion code support
+  - Stripe handles all payment processing and coupon validation
+  - Customers enter promotion codes directly on Stripe's hosted checkout page
   - After successful payment, redirects to signup with prefilled customer data
   - Capital plan button disabled with "Coming Soon" status
+  - Admin can create promotion codes via admin portal that sync directly to Stripe
 
 # User Preferences
 

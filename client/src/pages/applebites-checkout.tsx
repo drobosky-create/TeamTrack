@@ -15,12 +15,17 @@ export default function AppleBitesCheckoutPage() {
     setLoading(true);
     
     try {
+      // Get the proper URL with protocol
+      const origin = window.location.origin.startsWith('http') 
+        ? window.location.origin 
+        : `https://${window.location.host}`;
+      
       // Create a Stripe Checkout Session
       const response = await apiRequest("POST", "/api/payments/create-checkout-session", {
         productName: 'AppleBites Growth & Exit Plan',
         amount: 795,
-        successUrl: `${window.location.origin}/consumer-signup?payment=success&plan=growth`,
-        cancelUrl: `${window.location.origin}/applebites`
+        successUrl: `${origin}/consumer-signup?payment=success&plan=growth`,
+        cancelUrl: `${origin}/applebites`
       });
       
       const data = await response.json();

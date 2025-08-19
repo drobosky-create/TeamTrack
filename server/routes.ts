@@ -725,9 +725,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { 
         productName = 'AppleBites Growth & Exit Plan',
         amount = 795,
-        successUrl = `${process.env.REPLIT_DEV_DOMAIN || 'http://localhost:5000'}/consumer-signup?payment=success&plan=growth`,
-        cancelUrl = `${process.env.REPLIT_DEV_DOMAIN || 'http://localhost:5000'}/applebites`
+        successUrl,
+        cancelUrl
       } = req.body;
+      
+      // Ensure URLs are provided from client with proper protocol
+      if (!successUrl || !cancelUrl) {
+        return res.status(400).json({ 
+          message: "Success and cancel URLs are required" 
+        });
+      }
 
       const session = await stripe.checkout.sessions.create({
         line_items: [{
