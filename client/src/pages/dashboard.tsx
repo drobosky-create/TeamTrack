@@ -61,13 +61,13 @@ const MaterialDashboardCard: React.FC<{
 }> = ({ title, count, icon, color, percentage }) => {
   const getGradientByColor = (colorName: string) => {
     switch (colorName) {
-      case 'primary': return 'linear-gradient(195deg, #42424a, #191919)';
-      case 'success': return 'linear-gradient(195deg, #66bb6a, #43a047)';
-      case 'info': return 'linear-gradient(195deg, #49a3f1, #1a73e8)';
-      case 'warning': return 'linear-gradient(195deg, #ffa726, #fb8c00)';
-      case 'error': return 'linear-gradient(195deg, #ef5350, #e53935)';
-      case 'dark': return 'linear-gradient(195deg, #42424a, #191919)';
-      default: return 'linear-gradient(195deg, #66bb6a, #43a047)';
+      case 'primary': return 'var(--gradient-primary, linear-gradient(195deg, #42424a, #191919))';
+      case 'success': return 'linear-gradient(195deg, hsl(var(--success)), hsl(var(--success) / 0.8))';
+      case 'info': return 'var(--gradient-primary, linear-gradient(195deg, #49a3f1, #1a73e8))';
+      case 'warning': return 'linear-gradient(195deg, hsl(var(--warning)), hsl(var(--warning) / 0.8))';
+      case 'error': return 'linear-gradient(195deg, hsl(var(--destructive)), hsl(var(--destructive) / 0.8))';
+      case 'dark': return 'var(--gradient-primary, linear-gradient(195deg, #42424a, #191919))';
+      default: return 'var(--gradient-secondary, linear-gradient(195deg, #66bb6a, #43a047))';
     }
   };
 
@@ -84,13 +84,22 @@ const MaterialDashboardCard: React.FC<{
   };
 
   return (
-    <Card sx={{ height: '100%', position: 'relative', overflow: 'visible' }}>
+    <Card sx={{ 
+      height: '100%', 
+      position: 'relative', 
+      overflow: 'visible',
+      backgroundColor: 'hsl(var(--card))',
+      color: 'hsl(var(--card-foreground))',
+      border: '1px solid hsl(var(--border))',
+      borderRadius: 'var(--radius, 12px)',
+      boxShadow: 'var(--shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1))'
+    }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 1, px: 2 }}>
         <Box
           sx={{
             background: getGradientByColor(color),
             color: 'white',
-            borderRadius: '0.75rem',
+            borderRadius: 'var(--radius, 0.75rem)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -121,7 +130,7 @@ const MaterialDashboardCard: React.FC<{
             variant="h4" 
             sx={{ 
               fontWeight: 600, 
-              color: '#344767',
+              color: 'hsl(var(--foreground))',
               fontSize: '1.625rem',
               lineHeight: 1.25
             }}
@@ -440,10 +449,10 @@ export default function Dashboard() {
                 alignItems: 'center', 
                 justifyContent: 'center', 
                 height: 300,
-                color: 'text.secondary',
-                backgroundColor: '#f8f9fa',
-                borderRadius: 2,
-                border: '2px dashed #e9ecef'
+                color: 'hsl(var(--muted-foreground))',
+                backgroundColor: 'hsl(var(--muted))',
+                borderRadius: 'var(--radius, 8px)',
+                border: '2px dashed hsl(var(--border))'
               }}>
                 <Typography variant="body1" sx={{ fontSize: '1rem', fontWeight: 500 }}>
                   Performance charts will be displayed here

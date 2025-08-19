@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  /* Base theme colors - will be overridden by dynamic UI tokens */
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(20, 14.3%, 4.1%);
   --muted: hsl(60, 4.8%, 95.9%);
@@ -15,14 +16,39 @@
   --input: hsl(20, 5.9%, 90%);
   --primary: hsl(207, 90%, 54%);
   --primary-foreground: hsl(211, 100%, 99%);
+  --primary-light: hsl(207, 90%, 70%);
   --secondary: hsl(60, 4.8%, 95.9%);
   --secondary-foreground: hsl(24, 9.8%, 10%);
   --accent: hsl(60, 4.8%, 95.9%);
   --accent-foreground: hsl(24, 9.8%, 10%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --success: hsl(142, 70%, 45%);
+  --success-foreground: hsl(0, 0%, 100%);
+  --warning: hsl(38, 90%, 55%);
+  --warning-foreground: hsl(0, 0%, 100%);
   --ring: hsl(20, 14.3%, 4.1%);
   --radius: 0.5rem;
+  
+  /* Typography variables */
+  --font-primary: 'Inter', system-ui, sans-serif;
+  --font-secondary: 'Inter', system-ui, sans-serif;
+  
+  /* Spacing and effects */
+  --spacing-unit: 1rem;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
+  --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--accent)));
+  
+  /* Sidebar theme integration */
+  --sidebar-background: hsl(var(--background));
+  --sidebar-foreground: hsl(var(--foreground));
+  --sidebar-primary: hsl(var(--primary));
+  --sidebar-primary-foreground: hsl(var(--primary-foreground));
+  --sidebar-accent: hsl(var(--accent));
+  --sidebar-accent-foreground: hsl(var(--accent-foreground));
+  --sidebar-border: hsl(var(--border));
+  --sidebar-ring: hsl(var(--ring));
 }
 
 .dark {
@@ -54,6 +80,43 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply antialiased bg-background text-foreground;
+    font-family: var(--font-primary, 'Inter', system-ui, sans-serif);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  
+  /* Universal theme application */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+  }
+  
+  .surface {
+    @apply bg-card text-card-foreground border border-border;
+  }
+  
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .gradient-secondary {
+    background: var(--gradient-secondary);
+  }
+  
+  /* Typography classes */
+  .text-primary-brand {
+    color: hsl(var(--primary));
+  }
+  
+  .text-secondary-brand {
+    color: hsl(var(--secondary));
+  }
+  
+  /* Enhanced shadow utilities */
+  .shadow-brand {
+    box-shadow: var(--shadow);
   }
 }

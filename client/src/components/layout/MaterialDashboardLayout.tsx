@@ -253,8 +253,8 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
     <Box>
       <Box sx={{ 
         p: 3, 
-        background: 'linear-gradient(195deg, #42424a, #191919)',
-        color: 'white',
+        background: 'var(--gradient-primary, linear-gradient(195deg, #42424a, #191919))',
+        color: 'hsl(var(--primary-foreground))',
         textAlign: 'center'
       }}>
         <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
@@ -279,9 +279,9 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
                   mx: 2,
                   my: 0.5,
                   borderRadius: 2,
-                  backgroundColor: isActive ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
+                  backgroundColor: isActive ? 'hsl(var(--primary) / 0.2)' : 'transparent',
                   '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    backgroundColor: 'hsl(var(--primary) / 0.1)',
                   },
                   cursor: 'pointer',
                   color: isActive ? 'white' : 'rgba(255, 255, 255, 0.8)',
@@ -351,8 +351,9 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-            background: 'linear-gradient(195deg, #66bb6a, #43a047)',
+            background: 'var(--gradient-primary, linear-gradient(195deg, #66bb6a, #43a047))',
             border: 'none',
+            color: 'hsl(var(--primary-foreground))',
           },
         }}
         open
@@ -373,7 +374,8 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
             width: drawerWidth,
-            background: 'linear-gradient(195deg, #66bb6a, #43a047)',
+            background: 'var(--gradient-primary, linear-gradient(195deg, #66bb6a, #43a047))',
+            color: 'hsl(var(--primary-foreground))',
           },
         }}
       >
@@ -386,7 +388,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
         sx={{
           flexGrow: 1,
           width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` },
-          backgroundColor: '#f8f9fa',
+          backgroundColor: 'hsl(var(--background))',
           minHeight: '100vh',
         }}
       >
@@ -395,9 +397,10 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
           position="sticky"
           sx={{
             backgroundColor: 'transparent',
-            boxShadow: 'none',
+            boxShadow: 'var(--shadow, none)',
             backdropFilter: 'blur(10px)',
-            borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+            borderBottom: '1px solid hsl(var(--border))',
+            background: 'linear-gradient(135deg, transparent, rgba(var(--primary-light), 0.1))',
           }}
         >
           <Toolbar>
@@ -411,7 +414,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
               <MenuIcon />
             </IconButton>
             
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#344767' }}>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'hsl(var(--foreground))' }}>
               Welcome back, {user?.firstName || user?.email?.split('@')[0]}
             </Typography>
           </Toolbar>

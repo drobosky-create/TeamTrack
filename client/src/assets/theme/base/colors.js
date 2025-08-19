@@ -1,27 +1,11 @@
 /**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-/**
- * The base colors for the Material Dashboard 2 React.
- * You can add new color using this file.
- * You can customized the colors for the entire Material Dashboard 2 React using thie file.
+ * The base colors for the Material Dashboard 2
  */
 
 const colors = {
   background: {
     default: "#f0f2f5",
+    paper: "#ffffff",
   },
 
   text: {
@@ -30,7 +14,7 @@ const colors = {
   },
 
   transparent: {
-    main: "transparent",
+    main: "rgba(0, 0, 0, 0)",
   },
 
   white: {
@@ -45,33 +29,33 @@ const colors = {
   },
 
   primary: {
-    main: "#e91e63",
-    focus: "#e91e63",
+    main: "#5e72e4",
+    focus: "#5e72e4",
   },
 
   secondary: {
-    main: "#7b809a",
-    focus: "#8f93a9",
+    main: "#8392ab",
+    focus: "#8392ab",
   },
 
   info: {
-    main: "#1A73E8",
-    focus: "#1662C4",
+    main: "#1a73e8",
+    focus: "#1662c4",
   },
 
   success: {
-    main: "#4CAF50",
-    focus: "#67bb6a",
+    main: "#4caf50",
+    focus: "#4caf50",
   },
 
   warning: {
     main: "#fb8c00",
-    focus: "#fc9d26",
+    focus: "#fc9700",
   },
 
   error: {
-    main: "#F44335",
-    focus: "#f65f53",
+    main: "#f44335",
+    focus: "#f44335",
   },
 
   light: {
@@ -81,7 +65,7 @@ const colors = {
 
   dark: {
     main: "#344767",
-    focus: "#2c3c58",
+    focus: "#344767",
   },
 
   grey: {
@@ -98,8 +82,8 @@ const colors = {
 
   gradients: {
     primary: {
-      main: "#EC407A",
-      state: "#D81B60",
+      main: "#5e72e4",
+      state: "#4c63d2",
     },
 
     secondary: {
@@ -113,18 +97,18 @@ const colors = {
     },
 
     success: {
-      main: "#66BB6A",
-      state: "#43A047",
+      main: "#66bb6a",
+      state: "#43a047",
     },
 
     warning: {
-      main: "#FFA726",
-      state: "#FB8C00",
+      main: "#ffa726",
+      state: "#fb8c00",
     },
 
     error: {
-      main: "#EF5350",
-      state: "#E53935",
+      main: "#ef5350",
+      state: "#e53935",
     },
 
     light: {
@@ -202,38 +186,38 @@ const colors = {
 
   badgeColors: {
     primary: {
-      background: "#f8b3ca",
-      text: "#cc084b",
+      background: "#f8f9fa",
+      text: "#5e72e4",
     },
 
     secondary: {
-      background: "#d7d9e1",
+      background: "#f8f9fa",
       text: "#6c757d",
     },
 
     info: {
-      background: "#aecef7",
-      text: "#095bc6",
+      background: "#ebf7ff",
+      text: "#1a73e8",
     },
 
     success: {
-      background: "#bce2be",
-      text: "#339537",
+      background: "#ecf9ec",
+      text: "#4caf50",
     },
 
     warning: {
-      background: "#ffd59f",
-      text: "#c87000",
+      background: "#fff8e1",
+      text: "#fb8c00",
     },
 
     error: {
-      background: "#fcd3d0",
-      text: "#f61200",
+      background: "#fce4ec",
+      text: "#f44336",
     },
 
     light: {
       background: "#ffffff",
-      text: "#c7d3de",
+      text: "#c7d2dc",
     },
 
     dark: {
@@ -245,7 +229,7 @@ const colors = {
   coloredShadows: {
     primary: "#e91e62",
     secondary: "#110e0e",
-    info: "#00bbd4",
+    info: "#00bcd4",
     success: "#4caf4f",
     warning: "#ff9900",
     error: "#f44336",

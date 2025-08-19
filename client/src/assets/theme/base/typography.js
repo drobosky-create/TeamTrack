@@ -1,31 +1,9 @@
 /**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-/**
- * The base typography styles for the Material Dashboard 2 React.
- * You can add new typography style using this file.
- * You can customized the typography styles for the entire Material Dashboard 2 React using thie file.
+ * The base typography for the Material Dashboard 2
  */
 
-// Material Dashboard 2 React Base Styles
-import colors from "assets/theme/base/colors";
-
-// Material Dashboard 2 React Helper Functions
-import pxToRem from "assets/theme/functions/pxToRem";
-
-const { dark } = colors;
+// Material Dashboard 2 helper functions
+import pxToRem from "../functions/pxToRem";
 
 const baseProperties = {
   fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -46,13 +24,13 @@ const baseProperties = {
 
 const baseHeadingProperties = {
   fontFamily: baseProperties.fontFamily,
-  color: dark.main,
+  color: "#344767",
   fontWeight: baseProperties.fontWeightBold,
 };
 
 const baseDisplayProperties = {
   fontFamily: baseProperties.fontFamily,
-  color: dark.main,
+  color: "#344767",
   fontWeight: baseProperties.fontWeightLight,
   lineHeight: 1.2,
 };
@@ -117,30 +95,30 @@ const typography = {
 
   body1: {
     fontFamily: baseProperties.fontFamily,
-    fontSize: baseProperties.fontSizeXL,
+    fontSize: baseProperties.fontSizeSM,
     fontWeight: baseProperties.fontWeightRegular,
     lineHeight: 1.625,
   },
 
   body2: {
     fontFamily: baseProperties.fontFamily,
-    fontSize: baseProperties.fontSizeMD,
+    fontSize: baseProperties.fontSizeSM,
     fontWeight: baseProperties.fontWeightLight,
     lineHeight: 1.6,
   },
 
   button: {
     fontFamily: baseProperties.fontFamily,
-    fontSize: baseProperties.fontSizeSM,
-    fontWeight: baseProperties.fontWeightLight,
+    fontSize: baseProperties.fontSizeXS,
+    fontWeight: baseProperties.fontWeightBold,
     lineHeight: 1.5,
     textTransform: "uppercase",
   },
 
   caption: {
     fontFamily: baseProperties.fontFamily,
-    fontSize: baseProperties.fontSizeXS,
-    fontWeight: baseProperties.fontWeightLight,
+    fontSize: baseProperties.fontSizeXXS,
+    fontWeight: baseProperties.fontWeightRegular,
     lineHeight: 1.25,
   },
 

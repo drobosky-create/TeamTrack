@@ -24,11 +24,11 @@ import { Link } from 'wouter';
 
 export default function AppleBitesLanding() {
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#f8fafc' }}>
+    <Box sx={{ minHeight: '100vh', backgroundColor: 'hsl(var(--background))' }}>
       {/* Navigation Header */}
       <AppBar position="static" sx={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)'
+        background: 'var(--gradient-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%))',
+        boxShadow: 'var(--shadow, 0 4px 20px rgba(102, 126, 234, 0.3))'
       }}>
         <Toolbar>
           <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
