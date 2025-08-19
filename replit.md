@@ -10,6 +10,9 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
 - Fixed horizontal scrolling issues in sidebar with proper overflow handling and text truncation
 - Created comprehensive AdminDashboard with role testing functionality and admin-specific features
 - Established consistent Material-UI gradient styling across all dashboard interfaces
+- Restored AppleBites landing page at `/applebites` route with professional pricing cards and proper branding
+- Fixed AppleBites logo display and corrected "Heritage Partners" to "Meritage Partners" in navigation
+- Clarified architecture: `/applebites` directory contains standalone app, while `client/src/pages/applebites-landing.tsx` serves the landing page
 
 # User Preferences
 
