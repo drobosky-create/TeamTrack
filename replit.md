@@ -8,6 +8,14 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
+## AppleBites Module Consolidation & Cleanup (Jan 19, 2025)
+- Moved remaining AppleBites files from `applebites/client/src` into `client/src/modules/applebites/` for better organization
+- Cleaned up duplicate App.tsx and main.tsx files to avoid conflicts with main application
+- Removed `applebites/client` directory completely to eliminate redundancy
+- AppleBites functionality fully integrated into main application through dedicated pages and routing
+- Archived original components in modules directory for reference while maintaining clean application structure
+- Dual-application architecture now fully consolidated with clear separation between AppleBites and PerformanceHub
+
 ## Centralized UI Token Management System Integration (Jan 19, 2025)
 - Successfully integrated database-driven UI tokens with existing static theme files (tokens.json, cssVars.tsx, muiTheme.ts, gradients.ts)
 - Created comprehensive ThemeManager component for admin-controlled brand customization with live preview functionality
