@@ -55,49 +55,38 @@ export default function ConsumerDashboard() {
           </p>
         </div>
 
-        {/* Quick Stats Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <Card className="shadow-soft border-border-soft">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Free Assessment</CardTitle>
-              <Star className="h-4 w-4 text-yellow-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">Available</div>
-              <p className="text-xs text-success">Get instant valuation</p>
+        {/* Top Metrics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          {/* Free Assessment Card */}
+          <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold mb-1">Free</h3>
+                  <p className="text-blue-100 text-sm">Assessment</p>
+                </div>
+                <div className="text-right">
+                  <Star className="h-6 w-6 mb-2" />
+                </div>
+              </div>
             </CardContent>
           </Card>
 
-          <Card className="shadow-soft border-border-soft">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Assessments Taken</CardTitle>
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">{assessmentHistory.length}</div>
-              <p className="text-xs text-muted-foreground">Completed</p>
+          {/* Assessment Count */}
+          <Card className="border border-gray-200">
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-gray-900">{assessmentHistory.length}</div>
+              <p className="text-gray-600 text-sm mt-1">Assessments</p>
+              <FileText className="h-5 w-5 text-gray-400 mx-auto mt-2" />
             </CardContent>
           </Card>
 
-          <Card className="shadow-soft border-border-soft">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Business Grade</CardTitle>
-              <Award className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">--</div>
-              <p className="text-xs text-muted-foreground">Complete assessment</p>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-soft border-border-soft">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Estimated Value</CardTitle>
-              <DollarSign className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">--</div>
-              <p className="text-xs text-muted-foreground">Start assessment</p>
+          {/* Business Value */}
+          <Card className="border border-gray-200">
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-gray-900">--</div>
+              <p className="text-gray-600 text-sm mt-1">Est. Value</p>
+              <TrendingUp className="h-5 w-5 text-gray-400 mx-auto mt-2" />
             </CardContent>
           </Card>
         </div>
