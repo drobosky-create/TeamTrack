@@ -100,7 +100,7 @@ export default function AppleBitesLanding() {
               size="large"
               startIcon={<AssessmentIcon />}
               component={Link}
-              href="/free-assessment"
+              href="/assessments/free"
               sx={{
                 background: 'linear-gradient(45deg, #667eea 30%, #764ba2 90%)',
                 px: 4,
@@ -183,7 +183,7 @@ export default function AppleBitesLanding() {
                 fullWidth
                 variant="contained"
                 component={Link}
-                href="/free-assessment"
+                href="/assessments/free"
                 sx={{
                   background: 'linear-gradient(45deg, #10b981 30%, #059669 90%)',
                   py: 1.5
@@ -253,7 +253,7 @@ export default function AppleBitesLanding() {
                 fullWidth
                 variant="contained"
                 component={Link}
-                href="/growth-assessment"
+                href="/assessments/growth"
                 sx={{
                   background: 'linear-gradient(45deg, #667eea 30%, #764ba2 90%)',
                   py: 1.5
@@ -373,7 +373,7 @@ export default function AppleBitesLanding() {
             size="large"
             startIcon={<AssessmentIcon />}
             component={Link}
-            href="/free-assessment"
+            href="/assessments/free"
             sx={{
               backgroundColor: 'white',
               color: '#667eea',

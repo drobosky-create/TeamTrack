@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import assessmentRoutes from "./routes/assessments";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { 
   insertUserSchema, 
@@ -23,6 +24,9 @@ import { eq, desc } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Register assessment routes (public endpoints for consumer assessments)
+  app.use(assessmentRoutes);
+  
   // Auth middleware
   await setupAuth(app);
 

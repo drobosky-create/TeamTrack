@@ -20,16 +20,15 @@ import Billing from "@/pages/billing";
 import SetupWizard from "@/pages/setup-wizard";
 import BrandingPage from "@/pages/branding";
 import AnalyticsPage from "@/pages/analytics";
-import FreeAssessmentPage from "@/pages/free-assessment";
-import GrowthAssessmentPage from "@/pages/growth-assessment";
+import FreeAssessment from "@/pages/assessments/FreeAssessment";
+import GrowthAssessment from "@/pages/assessments/GrowthAssessment";
 import ClientManagementPage from "@/pages/clients";
 import AdminClientRecordsPage from "@/pages/admin/clients";
-import AssessmentResultsPage from "@/pages/results";
+import AssessmentResults from "@/pages/AssessmentResults";
 import FollowUpOptionsPage from "@/pages/follow-up";
 import AppleBitesLanding from "@/pages/applebites-landing";
 import PerformanceHubLanding from "@/pages/performancehub-landing";
 import ConsumerAuth from "@/pages/consumer-auth";
-import FreeAssessmentDashboard from "@/pages/free-assessment";
 import TestDashboard from "@/pages/test-dashboard";
 import ThemeManager from "@/components/admin/ThemeManager";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
@@ -45,7 +44,9 @@ function Router() {
       <Route path="/applebites" component={AppleBitesLanding} />
       <Route path="/performance-hub" component={PerformanceHubLanding} />
       <Route path="/consumer-auth" component={ConsumerAuth} />
-      <Route path="/free-assessment" component={FreeAssessmentDashboard} />
+      <Route path="/assessments/free" component={FreeAssessment} />
+      <Route path="/assessments/growth" component={GrowthAssessment} />
+      <Route path="/assessment-results/:id" component={AssessmentResults} />
       <Route path="/test-dashboard" component={TestDashboard} />
       
       {/* Root redirect to PerformanceHub by default */}
@@ -65,11 +66,9 @@ function Router() {
             <Route path="/templates" component={Templates} />
             <Route path="/branding" component={BrandingPage} />
             <Route path="/analytics" component={AnalyticsPage} />
-            <Route path="/free-assessment" component={FreeAssessmentPage} />
-            <Route path="/growth-assessment" component={GrowthAssessmentPage} />
             <Route path="/clients" component={ClientManagementPage} />
             <Route path="/admin/clients" component={AdminClientRecordsPage} />
-            <Route path="/results/:id" component={AssessmentResultsPage} />
+            <Route path="/results/:id" component={AssessmentResults} />
             <Route path="/follow-up" component={FollowUpOptionsPage} />
             <Route path="/theme-manager" component={ThemeManager} />
             <Route path="/settings" component={Settings} />
