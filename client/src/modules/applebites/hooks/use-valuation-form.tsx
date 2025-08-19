@@ -113,10 +113,17 @@ export function useValuationForm() {
       const response = await apiRequest("POST", "/api/valuation", data);
       return response.json();
     },
-    onSuccess: (data: ValuationAssessment) => {
+    onSuccess: (data: any) => {
       setIsGeneratingReport(false);
-      setResults(data);
-      setCurrentStep("results");
+      // Handle the response structure from /api/valuation endpoint
+      if (data.success && data.assessment) {
+        setResults(data.assessment);
+        setCurrentStep("results");
+      } else if (data.id) {
+        // If we just have the assessment directly
+        setResults(data);
+        setCurrentStep("results");
+      }
     },
     onError: () => {
       setIsGeneratingReport(false);

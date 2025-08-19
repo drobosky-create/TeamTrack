@@ -577,6 +577,7 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       firstName: 'Guest',
       lastName: 'User',
       email: `guest_${Date.now()}@example.com`,
+      phone: '000-000-0000',  // Required field - placeholder for free assessments
       company: 'Company',
       tier: 'free',
       reportTier: 'free',
@@ -626,8 +627,21 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       isProcessed: true,
     }).returning();
     
-    // Return the complete assessment data
-    res.json(assessment);
+    // Return the complete assessment data with success flag
+    res.json({ 
+      success: true,
+      id: assessment.id,
+      assessment,
+      valuation: {
+        baseEbitda,
+        adjustedEbitda,
+        valuationMultiple: baseMultiple,
+        lowEstimate,
+        midEstimate,
+        highEstimate,
+        overallScore
+      }
+    });
   } catch (error) {
     console.error('Valuation error:', error);
     res.status(500).json({ 
