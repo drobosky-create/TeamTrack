@@ -5,6 +5,7 @@ PerformanceHub is a comprehensive performance tracking web application designed 
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
+Design System: Universal token-based theming - all colors, gradients, spacing, shadows, and typography must reference tokens, never hardcoded values.
 
 # System Architecture
 
@@ -14,7 +15,7 @@ Preferred communication style: Simple, everyday language.
 - **Routing**: Wouter for client-side routing with role-based access.
 - **State Management**: TanStack Query for server state management and caching.
 - **UI Components**: Shadcn/ui built on Radix UI primitives, integrated with Material Dashboard React components for a sophisticated visual design.
-- **Styling**: Tailwind CSS with CSS variables for theming and responsive design. Universal theme integration with database-driven UI tokens allows for real-time, admin-controlled brand customization.
+- **Styling**: Tailwind CSS with universal token-based theming system. All styling properties (colors, gradients, spacing, shadows, typography) are defined in tokens.json as the single source of truth. Material-UI themes are dynamically generated from these tokens. Components reference theme.tokens or theme.gradients for all visual properties - no hardcoded values allowed.
 - **Form Handling**: React Hook Form with Zod validation.
 
 ## Backend Architecture
