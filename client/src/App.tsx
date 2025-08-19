@@ -27,7 +27,7 @@ import ConsumerLogin from "@/pages/consumer-login";
 import AssessmentSelection from "@/pages/assessment-selection";
 import ClientManagementPage from "@/pages/clients";
 import AdminClientRecordsPage from "@/pages/admin/clients";
-import AssessmentResults from "@/pages/AssessmentResults";
+import AssessmentResults from "@/pages/AssessmentResultsNew";
 import ValueImprovementCalculator from "@/pages/ValueImprovementCalculator";
 import FollowUpOptionsPage from "@/pages/follow-up";
 import AppleBitesLanding from "@/pages/applebites-landing";

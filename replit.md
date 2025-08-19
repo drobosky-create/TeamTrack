@@ -1,6 +1,8 @@
 # Overview
 
-PerformanceHub is a comprehensive performance tracking web application designed for team-based organizations. It provides role-based dashboards for admins, managers, and team members to conduct and track performance reviews across monthly, quarterly, and annual cycles. The system combines self-assessments with manager evaluations, uses customizable scoring templates, and supports file attachments for comprehensive performance documentation. The platform also integrates a business valuation module (AppleBites) for consumer-focused business assessment, offering tiered valuations and industry-specific analysis. This dual functionality aims to serve both internal team performance management and external business valuation needs within a single, cohesive platform.
+PerformanceHub is a comprehensive performance tracking web application designed for team-based organizations. It provides role-based dashboards for admins, managers, and team members to conduct and track performance reviews across monthly, quarterly, and annual cycles. The system combines self-assessments with manager evaluations, uses customizable scoring templates, and supports file attachments for comprehensive performance documentation. 
+
+The platform also integrates AppleBites, a consumer-facing business valuation platform requiring account creation before assessment access. The customer journey follows: Account Creation → Assessment Selection → 4-Step Assessment (Financials → Adjustments → Value Drivers → Follow-up) → Valuation Report → Value Improvement Calculator → AI Coaching Recommendations upsell. This dual functionality serves both internal team performance management and external business valuation needs within a single, cohesive platform.
 
 # User Preferences
 
@@ -50,7 +52,8 @@ Design System: Universal token-based theming - all colors, gradients, spacing, s
 - **Performance Review System**: Supports monthly, quarterly, annual review cycles with self-assessments and manager evaluations.
 - **Customizable Templates**: Allows companies to create structured review templates with custom core values and competencies.
 - **Setup Wizard**: Guides users through initial system configuration, including template selection, team setup, and member invitation.
-- **AppleBites Integration**: Full business valuation platform with Free, Growth, and Capital assessment tiers, featuring financial data entry, value driver evaluation, and NAICS-dependent analysis.
+- **AppleBites Consumer Flow**: Authentication-first approach requiring account creation before assessment access. 4-step assessment structure (Financials → Adjustments → Value Drivers → Follow-up) with user data from signup populating contact fields. Includes Value Improvement Calculator and AI coaching upsell path.
+- **Consumer Authentication**: Separate consumer user system with bcrypt password hashing, session management, and PostgreSQL storage.
 - **UI/UX Decisions**: Utilizes Material Dashboard React for a professional, modern aesthetic with a green gradient sidebar. Incorporates a centralized UI Token Management System for dynamic theme customization. Dual branded landing pages for PerformanceHub and AppleBites with distinct routing and consumer authentication.
 
 # External Dependencies

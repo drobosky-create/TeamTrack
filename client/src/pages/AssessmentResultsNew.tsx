@@ -235,7 +235,7 @@ export default function AssessmentResults() {
                       variant="outline"
                       className={`${getGradeColor(grade as string)} px-3 py-1`}
                     >
-                      {grade}
+                      {grade as string}
                     </Badge>
                   </div>
                 );
