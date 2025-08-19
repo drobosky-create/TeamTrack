@@ -29,8 +29,8 @@ export default function ConsumerLogin() {
       });
       // Store user data in session
       localStorage.setItem('consumerUser', JSON.stringify(data.user));
-      // Redirect to assessment selection
-      setLocation('/assessment-selection');
+      // Redirect to consumer dashboard
+      setLocation('/consumer-dashboard');
     },
     onError: (error: any) => {
       toast({
