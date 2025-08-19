@@ -4,7 +4,7 @@ import { Box, Typography, Button, Container } from '@mui/material';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
 import MDInput from '../components/MD/MDInput';
 
-const appleBitesLogo = '/apple-bites-logo.png';
+// No specific branding needed for admin portal
 
 interface AdminLoginFormData {
   email: string;
@@ -81,27 +81,16 @@ export default function AdminLoginPage() {
         }}
       >
         <Box sx={{ textAlign: 'center', zIndex: 1, px: 4 }}>
-          <Link href="/">
-            <Box
-              component="img"
-              src={appleBitesLogo}
-              alt="Apple Bites"
-              sx={{
-                height: 320,
-                width: 'auto',
-                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
-                mb: 4,
-                cursor: 'pointer'
-              }}
-            />
-          </Link>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 3 }}>
-            <Shield size={48} color="white" style={{ marginRight: 16 }} />
-            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 4 }}>
+            <Shield size={80} color="white" style={{ marginRight: 24 }} />
+            <Typography variant="h2" sx={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>
               Admin Portal
             </Typography>
           </Box>
-          <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.8)', maxWidth: 400, mx: 'auto', textAlign: 'center' }}>
+          <Typography variant="h5" sx={{ color: 'rgba(255,255,255,0.9)', maxWidth: 500, mx: 'auto', textAlign: 'center', mb: 2 }}>
+            Performance Hub & Business Intelligence
+          </Typography>
+          <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.7)', maxWidth: 400, mx: 'auto', textAlign: 'center' }}>
             Secure access to system administration and business management tools
           </Typography>
         </Box>

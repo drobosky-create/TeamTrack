@@ -24,6 +24,7 @@ import FreeAssessment from "@/pages/assessments/FreeAssessmentNew";
 import GrowthAssessment from "@/pages/assessments/GrowthAssessment";
 import ConsumerSignup from "@/pages/consumer-signup";
 import ConsumerLogin from "@/pages/consumer-login";
+import AdminLoginPage from "@/pages/admin-login";
 import AssessmentSelection from "@/pages/assessment-selection";
 import ConsumerDashboard from "@/pages/consumer-dashboard";
 import ClientManagementPage from "@/pages/clients";
@@ -51,6 +52,7 @@ function Router() {
       <Route path="/consumer-auth" component={ConsumerAuth} />
       <Route path="/consumer-signup" component={ConsumerSignup} />
       <Route path="/consumer-login" component={ConsumerLogin} />
+      <Route path="/admin-login" component={AdminLoginPage} />
       <Route path="/consumer-dashboard" component={ConsumerDashboard} />
       <Route path="/assessment-selection" component={AssessmentSelection} />
       <Route path="/assessments/free" component={FreeAssessment} />
