@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import Stripe from 'stripe';
 import { db } from '../db';
-import { valuationAssessments, auditLogs, consumerUsers } from '@shared/schema';
+import { valuationAssessments, auditLogs, consumerUsers } from '../../shared/schema';
 import { eq, desc } from 'drizzle-orm';
 import OpenAI from 'openai';
 import * as ebitdaMultiples from '../data/ebitda-multiples.json';

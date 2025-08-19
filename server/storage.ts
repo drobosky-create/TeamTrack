@@ -19,7 +19,7 @@ import {
   type UpdateOrganizationBranding,
   type UserRole,
   type ReviewStatus,
-} from "@shared/schema";
+} from "../shared/schema";
 import { db } from "./db";
 import { eq, and, or, desc, asc, count, avg, sql } from "drizzle-orm";
 

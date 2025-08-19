@@ -1,0 +1,659 @@
+[
+  {
+    "code": "23",
+    "title": "Construction",
+    "level": 2
+  },
+  {
+    "code": "236",
+    "title": "Construction of Buildings",
+    "level": 3,
+    "parentCode": "23"
+  },
+  {
+    "code": "2361",
+    "title": "Residential Building Construction",
+    "level": 4,
+    "parentCode": "236"
+  },
+  {
+    "code": "23611",
+    "title": "Residential Building Construction",
+    "level": 5,
+    "parentCode": "2361"
+  },
+  {
+    "code": "236110",
+    "title": "Residential Building Construction",
+    "level": 6,
+    "parentCode": "23611",
+    "multiplier": 3.5
+  },
+  {
+    "code": "2362",
+    "title": "Nonresidential Building Construction",
+    "level": 4,
+    "parentCode": "236"
+  },
+  {
+    "code": "23621",
+    "title": "Industrial Building Construction",
+    "level": 5,
+    "parentCode": "2362"
+  },
+  {
+    "code": "236210",
+    "title": "Industrial Building Construction",
+    "level": 6,
+    "parentCode": "23621",
+    "multiplier": 3.2
+  },
+  {
+    "code": "23622",
+    "title": "Commercial and Institutional Building Construction",
+    "level": 5,
+    "parentCode": "2362"
+  },
+  {
+    "code": "236220",
+    "title": "Commercial and Institutional Building Construction",
+    "level": 6,
+    "parentCode": "23622",
+    "multiplier": 3.4
+  },
+  {
+    "code": "11",
+    "title": "Agriculture, Forestry, Fishing and Hunting",
+    "level": 2
+  },
+  {
+    "code": "111",
+    "title": "Crop Production",
+    "level": 3,
+    "parentCode": "11"
+  },
+  {
+    "code": "1111",
+    "title": "Oilseed and Grain Farming",
+    "level": 4,
+    "parentCode": "111"
+  },
+  {
+    "code": "11111",
+    "title": "Soybean Farming",
+    "level": 5,
+    "parentCode": "1111"
+  },
+  {
+    "code": "111110",
+    "title": "Soybean Farming",
+    "level": 6,
+    "parentCode": "11111",
+    "multiplier": 2.8
+  },
+  {
+    "code": "11112",
+    "title": "Oilseed (except Soybean) Farming",
+    "level": 5,
+    "parentCode": "1111"
+  },
+  {
+    "code": "111120",
+    "title": "Oilseed (except Soybean) Farming",
+    "level": 6,
+    "parentCode": "11112",
+    "multiplier": 2.6
+  },
+  {
+    "code": "11113",
+    "title": "Dry Pea and Bean Farming",
+    "level": 5,
+    "parentCode": "1111"
+  },
+  {
+    "code": "111130",
+    "title": "Dry Pea and Bean Farming",
+    "level": 6,
+    "parentCode": "11113",
+    "multiplier": 2.4
+  },
+  {
+    "code": "11114",
+    "title": "Wheat Farming",
+    "level": 5,
+    "parentCode": "1111"
+  },
+  {
+    "code": "111140",
+    "title": "Wheat Farming",
+    "level": 6,
+    "parentCode": "11114",
+    "multiplier": 2.2
+  },
+  {
+    "code": "11115",
+    "title": "Corn Farming",
+    "level": 5,
+    "parentCode": "1111"
+  },
+  {
+    "code": "111150",
+    "title": "Corn Farming",
+    "level": 6,
+    "parentCode": "11115",
+    "multiplier": 2.5
+  },
+  {
+    "code": "11116",
+    "title": "Rice Farming",
+    "level": 5,
+    "parentCode": "1111"
+  },
+  {
+    "code": "111160",
+    "title": "Rice Farming",
+    "level": 6,
+    "parentCode": "11116",
+    "multiplier": 2.3
+  },
+  {
+    "code": "11119",
+    "title": "Other Grain Farming",
+    "level": 5,
+    "parentCode": "1111"
+  },
+  {
+    "code": "111191",
+    "title": "Oilseed and Grain Combination Farming",
+    "level": 6,
+    "parentCode": "11119",
+    "multiplier": 2.4
+  },
+  {
+    "code": "111199",
+    "title": "All Other Grain Farming",
+    "level": 6,
+    "parentCode": "11119",
+    "multiplier": 2.2
+  },
+  {
+    "code": "21",
+    "title": "Mining, Quarrying, and Oil and Gas Extraction",
+    "level": 2
+  },
+  {
+    "code": "211",
+    "title": "Mining, Quarrying, and Oil and Gas Extraction Subsector",
+    "level": 3,
+    "parentCode": "21"
+  },
+  {
+    "code": "2111",
+    "title": "Mining, Quarrying, and Oil and Gas Extraction Industry Group",
+    "level": 4,
+    "parentCode": "211"
+  },
+  {
+    "code": "21111",
+    "title": "Mining, Quarrying, and Oil and Gas Extraction Industry",
+    "level": 5,
+    "parentCode": "2111"
+  },
+  {
+    "code": "211110",
+    "title": "Mining, Quarrying, and Oil and Gas Extraction National Industry",
+    "level": 6,
+    "parentCode": "21111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "22",
+    "title": "Utilities",
+    "level": 2
+  },
+  {
+    "code": "221",
+    "title": "Utilities Subsector",
+    "level": 3,
+    "parentCode": "22"
+  },
+  {
+    "code": "2211",
+    "title": "Utilities Industry Group",
+    "level": 4,
+    "parentCode": "221"
+  },
+  {
+    "code": "22111",
+    "title": "Utilities Industry",
+    "level": 5,
+    "parentCode": "2211"
+  },
+  {
+    "code": "221110",
+    "title": "Utilities National Industry",
+    "level": 6,
+    "parentCode": "22111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "42",
+    "title": "Wholesale Trade",
+    "level": 2
+  },
+  {
+    "code": "421",
+    "title": "Wholesale Trade Subsector",
+    "level": 3,
+    "parentCode": "42"
+  },
+  {
+    "code": "4211",
+    "title": "Wholesale Trade Industry Group",
+    "level": 4,
+    "parentCode": "421"
+  },
+  {
+    "code": "42111",
+    "title": "Wholesale Trade Industry",
+    "level": 5,
+    "parentCode": "4211"
+  },
+  {
+    "code": "421110",
+    "title": "Wholesale Trade National Industry",
+    "level": 6,
+    "parentCode": "42111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "44",
+    "title": "Retail Trade",
+    "level": 2
+  },
+  {
+    "code": "441",
+    "title": "Retail Trade Subsector",
+    "level": 3,
+    "parentCode": "44"
+  },
+  {
+    "code": "4411",
+    "title": "Retail Trade Industry Group",
+    "level": 4,
+    "parentCode": "441"
+  },
+  {
+    "code": "44111",
+    "title": "Retail Trade Industry",
+    "level": 5,
+    "parentCode": "4411"
+  },
+  {
+    "code": "441110",
+    "title": "Retail Trade National Industry",
+    "level": 6,
+    "parentCode": "44111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "48",
+    "title": "Transportation and Warehousing",
+    "level": 2
+  },
+  {
+    "code": "481",
+    "title": "Transportation and Warehousing Subsector",
+    "level": 3,
+    "parentCode": "48"
+  },
+  {
+    "code": "4811",
+    "title": "Transportation and Warehousing Industry Group",
+    "level": 4,
+    "parentCode": "481"
+  },
+  {
+    "code": "48111",
+    "title": "Transportation and Warehousing Industry",
+    "level": 5,
+    "parentCode": "4811"
+  },
+  {
+    "code": "481110",
+    "title": "Transportation and Warehousing National Industry",
+    "level": 6,
+    "parentCode": "48111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "51",
+    "title": "Information",
+    "level": 2
+  },
+  {
+    "code": "511",
+    "title": "Information Subsector",
+    "level": 3,
+    "parentCode": "51"
+  },
+  {
+    "code": "5111",
+    "title": "Information Industry Group",
+    "level": 4,
+    "parentCode": "511"
+  },
+  {
+    "code": "51111",
+    "title": "Information Industry",
+    "level": 5,
+    "parentCode": "5111"
+  },
+  {
+    "code": "511110",
+    "title": "Information National Industry",
+    "level": 6,
+    "parentCode": "51111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "52",
+    "title": "Finance and Insurance",
+    "level": 2
+  },
+  {
+    "code": "521",
+    "title": "Finance and Insurance Subsector",
+    "level": 3,
+    "parentCode": "52"
+  },
+  {
+    "code": "5211",
+    "title": "Finance and Insurance Industry Group",
+    "level": 4,
+    "parentCode": "521"
+  },
+  {
+    "code": "52111",
+    "title": "Finance and Insurance Industry",
+    "level": 5,
+    "parentCode": "5211"
+  },
+  {
+    "code": "521110",
+    "title": "Finance and Insurance National Industry",
+    "level": 6,
+    "parentCode": "52111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "53",
+    "title": "Real Estate and Rental and Leasing",
+    "level": 2
+  },
+  {
+    "code": "531",
+    "title": "Real Estate and Rental and Leasing Subsector",
+    "level": 3,
+    "parentCode": "53"
+  },
+  {
+    "code": "5311",
+    "title": "Real Estate and Rental and Leasing Industry Group",
+    "level": 4,
+    "parentCode": "531"
+  },
+  {
+    "code": "53111",
+    "title": "Real Estate and Rental and Leasing Industry",
+    "level": 5,
+    "parentCode": "5311"
+  },
+  {
+    "code": "531110",
+    "title": "Real Estate and Rental and Leasing National Industry",
+    "level": 6,
+    "parentCode": "53111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "55",
+    "title": "Management of Companies and Enterprises",
+    "level": 2
+  },
+  {
+    "code": "551",
+    "title": "Management of Companies and Enterprises Subsector",
+    "level": 3,
+    "parentCode": "55"
+  },
+  {
+    "code": "5511",
+    "title": "Management of Companies and Enterprises Industry Group",
+    "level": 4,
+    "parentCode": "551"
+  },
+  {
+    "code": "55111",
+    "title": "Management of Companies and Enterprises Industry",
+    "level": 5,
+    "parentCode": "5511"
+  },
+  {
+    "code": "551110",
+    "title": "Management of Companies and Enterprises National Industry",
+    "level": 6,
+    "parentCode": "55111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "56",
+    "title": "Administrative and Support and Waste Management and Remediation Services",
+    "level": 2
+  },
+  {
+    "code": "561",
+    "title": "Administrative and Support and Waste Management and Remediation Services Subsector",
+    "level": 3,
+    "parentCode": "56"
+  },
+  {
+    "code": "5611",
+    "title": "Administrative and Support and Waste Management and Remediation Services Industry Group",
+    "level": 4,
+    "parentCode": "561"
+  },
+  {
+    "code": "56111",
+    "title": "Administrative and Support and Waste Management and Remediation Services Industry",
+    "level": 5,
+    "parentCode": "5611"
+  },
+  {
+    "code": "561110",
+    "title": "Administrative and Support and Waste Management and Remediation Services National Industry",
+    "level": 6,
+    "parentCode": "56111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "61",
+    "title": "Educational Services",
+    "level": 2
+  },
+  {
+    "code": "611",
+    "title": "Educational Services Subsector",
+    "level": 3,
+    "parentCode": "61"
+  },
+  {
+    "code": "6111",
+    "title": "Educational Services Industry Group",
+    "level": 4,
+    "parentCode": "611"
+  },
+  {
+    "code": "61111",
+    "title": "Educational Services Industry",
+    "level": 5,
+    "parentCode": "6111"
+  },
+  {
+    "code": "611110",
+    "title": "Educational Services National Industry",
+    "level": 6,
+    "parentCode": "61111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "62",
+    "title": "Health Care and Social Assistance",
+    "level": 2
+  },
+  {
+    "code": "621",
+    "title": "Health Care and Social Assistance Subsector",
+    "level": 3,
+    "parentCode": "62"
+  },
+  {
+    "code": "6211",
+    "title": "Health Care and Social Assistance Industry Group",
+    "level": 4,
+    "parentCode": "621"
+  },
+  {
+    "code": "62111",
+    "title": "Health Care and Social Assistance Industry",
+    "level": 5,
+    "parentCode": "6211"
+  },
+  {
+    "code": "621110",
+    "title": "Health Care and Social Assistance National Industry",
+    "level": 6,
+    "parentCode": "62111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "71",
+    "title": "Arts, Entertainment, and Recreation",
+    "level": 2
+  },
+  {
+    "code": "711",
+    "title": "Arts, Entertainment, and Recreation Subsector",
+    "level": 3,
+    "parentCode": "71"
+  },
+  {
+    "code": "7111",
+    "title": "Arts, Entertainment, and Recreation Industry Group",
+    "level": 4,
+    "parentCode": "711"
+  },
+  {
+    "code": "71111",
+    "title": "Arts, Entertainment, and Recreation Industry",
+    "level": 5,
+    "parentCode": "7111"
+  },
+  {
+    "code": "711110",
+    "title": "Arts, Entertainment, and Recreation National Industry",
+    "level": 6,
+    "parentCode": "71111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "72",
+    "title": "Accommodation and Food Services",
+    "level": 2
+  },
+  {
+    "code": "721",
+    "title": "Accommodation and Food Services Subsector",
+    "level": 3,
+    "parentCode": "72"
+  },
+  {
+    "code": "7211",
+    "title": "Accommodation and Food Services Industry Group",
+    "level": 4,
+    "parentCode": "721"
+  },
+  {
+    "code": "72111",
+    "title": "Accommodation and Food Services Industry",
+    "level": 5,
+    "parentCode": "7211"
+  },
+  {
+    "code": "721110",
+    "title": "Accommodation and Food Services National Industry",
+    "level": 6,
+    "parentCode": "72111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "81",
+    "title": "Other Services (except Public Administration)",
+    "level": 2
+  },
+  {
+    "code": "811",
+    "title": "Other Services (except Public Administration) Subsector",
+    "level": 3,
+    "parentCode": "81"
+  },
+  {
+    "code": "8111",
+    "title": "Other Services (except Public Administration) Industry Group",
+    "level": 4,
+    "parentCode": "811"
+  },
+  {
+    "code": "81111",
+    "title": "Other Services (except Public Administration) Industry",
+    "level": 5,
+    "parentCode": "8111"
+  },
+  {
+    "code": "811110",
+    "title": "Other Services (except Public Administration) National Industry",
+    "level": 6,
+    "parentCode": "81111",
+    "multiplier": 3.0
+  },
+  {
+    "code": "92",
+    "title": "Public Administration",
+    "level": 2
+  },
+  {
+    "code": "921",
+    "title": "Public Administration Subsector",
+    "level": 3,
+    "parentCode": "92"
+  },
+  {
+    "code": "9211",
+    "title": "Public Administration Industry Group",
+    "level": 4,
+    "parentCode": "921"
+  },
+  {
+    "code": "92111",
+    "title": "Public Administration Industry",
+    "level": 5,
+    "parentCode": "9211"
+  },
+  {
+    "code": "921110",
+    "title": "Public Administration National Industry",
+    "level": 6,
+    "parentCode": "92111",
+    "multiplier": 3.0
+  }
+]

@@ -36,8 +36,8 @@ import {
   consumerLoginSchema,
   consumerSignupSchema,
   type UserRole 
-} from "@shared/schema";
-import * as schema from "@shared/schema";
+} from "../shared/schema";
+import * as schema from "../shared/schema";
 import { ZodError } from "zod";
 import { db } from "./db";
 import { eq, desc, and } from "drizzle-orm";

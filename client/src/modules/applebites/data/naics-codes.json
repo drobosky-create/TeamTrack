@@ -1,96 +1,199 @@
-{
-  "construction": [
-    {
-      "code": "236110",
-      "label": "Residential Building Construction"
-    },
-    {
-      "code": "236220", 
-      "label": "Commercial and Institutional Building Construction"
-    },
-    {
-      "code": "237210",
-      "label": "Land Subdivision"
-    },
-    {
-      "code": "238160",
-      "label": "Roofing Contractors"
-    },
-    {
-      "code": "238210",
-      "label": "Electrical Contractors"
-    },
-    {
-      "code": "238220",
-      "label": "Plumbing, Heating, and Air-Conditioning Contractors"
-    },
-    {
-      "code": "238310",
-      "label": "Drywall and Insulation Contractors"
-    },
-    {
-      "code": "238320",
-      "label": "Painting and Wall Covering Contractors"
-    },
-    {
-      "code": "238910",
-      "label": "Site Preparation Contractors"
-    }
-  ],
-  "manufacturing": [
-    {
-      "code": "311810",
-      "label": "Bread and Bakery Product Manufacturing"
-    }
-  ],
-  "wholesale": [
-    {
-      "code": "423610",
-      "label": "Electrical Apparatus and Equipment Merchant Wholesalers"
-    }
-  ],
-  "retail": [
-    {
-      "code": "441110",
-      "label": "New Car Dealers"
-    }
-  ],
-  "professional": [
-    {
-      "code": "541611",
-      "label": "Administrative Management and General Management Consulting Services"
-    }
-  ],
-  "education": [
-    {
-      "code": "611310",
-      "label": "Colleges, Universities, and Professional Schools"
-    }
-  ],
-  "hospitality": [
-    {
-      "code": "722511",
-      "label": "Full-Service Restaurants"
-    }
-  ],
-  "agriculture": [
-    {
-      "code": "111110",
-      "label": "Soybean Farming"
-    },
-    {
-      "code": "111120",
-      "label": "Oilseed (except Soybean) Farming"
-    }
-  ],
-  "mining": [
-    {
-      "code": "211120",
-      "label": "Crude Petroleum Extraction"
-    },
-    {
-      "code": "212110",
-      "label": "Coal Mining"
-    }
-  ]
-}
+[
+  {
+    "code": "23",
+    "title": "Construction",
+    "level": 2,
+    "children": [
+      {
+        "code": "236110",
+        "title": "Residential Building Construction",
+        "multiplier": 3.5
+      },
+      {
+        "code": "236220",
+        "title": "Commercial and Institutional Building Construction",
+        "multiplier": 3.4
+      },
+      {
+        "code": "238160",
+        "title": "Roofing Contractors"
+      },
+      {
+        "code": "238210",
+        "title": "Electrical Contractors"
+      },
+      {
+        "code": "238220",
+        "title": "Plumbing, Heating, and Air-Conditioning Contractors"
+      },
+      {
+        "code": "238310",
+        "title": "Drywall and Insulation Contractors"
+      },
+      {
+        "code": "238320",
+        "title": "Painting and Wall Covering Contractors"
+      },
+      {
+        "code": "238910",
+        "title": "Site Preparation Contractors"
+      }
+    ]
+  },
+  {
+    "code": "11",
+    "title": "Agriculture, Forestry, Fishing and Hunting",
+    "level": 2,
+    "children": [
+      {
+        "code": "111110",
+        "title": "Soybean Farming",
+        "multiplier": 2.8
+      },
+      {
+        "code": "111120",
+        "title": "Oilseed (except Soybean) Farming",
+        "multiplier": 2.6
+      },
+      {
+        "code": "111130",
+        "title": "Dry Pea and Bean Farming",
+        "multiplier": 2.4
+      },
+      {
+        "code": "111140",
+        "title": "Wheat Farming",
+        "multiplier": 2.2
+      },
+      {
+        "code": "111150",
+        "title": "Corn Farming",
+        "multiplier": 2.5
+      },
+      {
+        "code": "111160",
+        "title": "Rice Farming",
+        "multiplier": 2.3
+      }
+    ]
+  },
+  {
+    "code": "31",
+    "title": "Manufacturing",
+    "level": 2,
+    "children": [
+      {
+        "code": "311810",
+        "title": "Bread and Bakery Product Manufacturing"
+      }
+    ]
+  },
+  {
+    "code": "44",
+    "title": "Retail Trade",
+    "level": 2,
+    "children": [
+      {
+        "code": "441110",
+        "title": "New Car Dealers",
+        "multiplier": 3.0
+      }
+    ]
+  },
+  {
+    "code": "54",
+    "title": "Professional, Scientific, and Technical Services",
+    "level": 2,
+    "children": [
+      {
+        "code": "541611",
+        "title": "Administrative Management and General Management Consulting Services"
+      },
+      {
+        "code": "541511",
+        "title": "Custom Computer Programming Services",
+        "multiplier": 7.5
+      },
+      {
+        "code": "541512",
+        "title": "Computer Systems Design Services",
+        "multiplier": 6.8
+      },
+      {
+        "code": "541519",
+        "title": "Other Computer Related Services",
+        "multiplier": 5.2
+      }
+    ]
+  },
+  {
+    "code": "61",
+    "title": "Educational Services",
+    "level": 2,
+    "children": [
+      {
+        "code": "611310",
+        "title": "Colleges, Universities, and Professional Schools"
+      }
+    ]
+  },
+  {
+    "code": "62",
+    "title": "Health Care and Social Assistance",
+    "level": 2,
+    "children": [
+      {
+        "code": "621111",
+        "title": "Offices of Physicians (except Mental Health Specialists)",
+        "multiplier": 5.0
+      },
+      {
+        "code": "621112",
+        "title": "Offices of Physicians, Mental Health Specialists",
+        "multiplier": 4.5
+      },
+      {
+        "code": "621210",
+        "title": "Offices of Dentists",
+        "multiplier": 4.8
+      },
+      {
+        "code": "621310",
+        "title": "Offices of Chiropractors",
+        "multiplier": 3.2
+      },
+      {
+        "code": "621320",
+        "title": "Offices of Optometrists",
+        "multiplier": 3.5
+      }
+    ]
+  },
+  {
+    "code": "72",
+    "title": "Accommodation and Food Services",
+    "level": 2,
+    "children": [
+      {
+        "code": "722511",
+        "title": "Full-Service Restaurants",
+        "multiplier": 2.5
+      },
+      {
+        "code": "722513",
+        "title": "Limited-Service Restaurants",
+        "multiplier": 2.8
+      },
+      {
+        "code": "722514",
+        "title": "Cafeterias, Grill Buffets, and Buffets",
+        "multiplier": 2.2
+      },
+      {
+        "code": "722515",
+        "title": "Snack and Nonalcoholic Beverage Bars",
+        "multiplier": 3.0
+      }
+    ]
+  }
+]
