@@ -3,6 +3,7 @@ import { Box, AppBar, Toolbar, Drawer, Typography, IconButton, useTheme } from '
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
+import { useAdminAuth } from '@/hooks/use-admin-auth';
 import { UnifiedSidebar, getNavigationItemsByRole } from './UnifiedSidebar';
 
 interface MaterialDashboardLayoutProps {
@@ -13,6 +14,7 @@ const drawerWidth = 280;
 
 export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
+  const { adminUser } = useAdminAuth();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -20,19 +22,23 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
     setMobileOpen(!mobileOpen);
   };
 
-  if (!isAuthenticated) {
+  // Use admin user if available, fallback to regular user
+  const currentUser = adminUser || user;
+  const isUserAuthenticated = isAuthenticated || !!adminUser;
+
+  if (!isUserAuthenticated) {
     return <>{children}</>;
   }
 
   // Get navigation items based on user role
-  const navigationItems = getNavigationItemsByRole(user?.role || 'team_member', user?.id);
+  const navigationItems = getNavigationItemsByRole(currentUser?.role || 'team_member', currentUser?.id);
 
   const drawer = (
     <UnifiedSidebar
-      title="PerformanceHub"
-      subtitle="Performance Management"
+      title={adminUser ? "Admin Portal" : "PerformanceHub"}
+      subtitle={adminUser ? "System Administration" : "Performance Management"}
       navigationItems={navigationItems}
-      userRole={user?.role}
+      userRole={currentUser?.role}
     />
   );
 
@@ -112,7 +118,8 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
             </IconButton>
             
             <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'hsl(var(--foreground))' }}>
-              Welcome back, {user?.firstName || user?.email?.split('@')[0]}
+              Welcome back, {currentUser?.firstName || currentUser?.email?.split('@')[0]}
+              {adminUser && <Typography component="span" sx={{ ml: 1, opacity: 0.7, fontSize: '0.85em' }}>(Admin)</Typography>}
             </Typography>
           </Toolbar>
         </AppBar>

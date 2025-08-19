@@ -36,6 +36,7 @@ import AppleBitesLanding from "@/pages/applebites-landing";
 import PerformanceHubLanding from "@/pages/performancehub-landing";
 import ConsumerAuth from "@/pages/consumer-auth";
 import TestDashboard from "@/pages/test-dashboard";
+import AdminDashboard from "@/pages/admin-dashboard";
 import ThemeManager from "@/components/admin/ThemeManager";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 import { AdminAuthProvider, useAdminAuth } from './hooks/use-admin-auth';
@@ -52,8 +53,12 @@ function AdminDashboardWrapper() {
     return <AdminLoginPage />;
   }
 
-  // Use TestDashboard for admin users to get the full role-based functionality
-  return <TestDashboard />;
+  // Use the MaterialDashboardLayout with AdminDashboard for admin users
+  return (
+    <MaterialDashboardLayout>
+      <AdminDashboard />
+    </MaterialDashboardLayout>
+  );
 }
 
 function Router() {
