@@ -719,7 +719,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Validate coupon code
+  // Validate coupon code using Stripe
   app.post("/api/payments/validate-coupon", async (req, res) => {
     try {
       const { couponCode, amount } = req.body;
@@ -731,35 +731,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Define available coupon codes and their discounts
-      const coupons: Record<string, number> = {
-        'SAVE20': 20,      // 20% off
-        'EARLY50': 50,     // 50% off
-        'PARTNER15': 15,   // 15% off
-        'LAUNCH100': 100,  // 100% off (free)
-        'BETA25': 25,      // 25% off
-      };
+      // Try to retrieve the coupon from Stripe
+      try {
+        const coupon = await stripe.coupons.retrieve(couponCode.toUpperCase());
+        
+        // Check if coupon is valid
+        if (!coupon.valid) {
+          return res.json({ 
+            valid: false,
+            message: "This coupon has expired or is no longer valid" 
+          });
+        }
 
-      const upperCoupon = couponCode.toUpperCase();
-      const discountPercent = coupons[upperCoupon];
+        // Calculate discount based on coupon type
+        let discountAmount = 0;
+        let discountPercent = 0;
+        
+        if (coupon.percent_off) {
+          discountPercent = coupon.percent_off;
+          discountAmount = (amount * coupon.percent_off) / 100;
+        } else if (coupon.amount_off) {
+          discountAmount = coupon.amount_off / 100; // Convert from cents
+          discountPercent = Math.round((discountAmount / amount) * 100);
+        }
 
-      if (!discountPercent) {
+        const finalAmount = Math.max(0, amount - discountAmount);
+
+        res.json({ 
+          valid: true,
+          couponId: coupon.id,
+          discountPercent,
+          discountAmount,
+          finalAmount,
+          message: coupon.percent_off 
+            ? `${coupon.percent_off}% discount applied successfully`
+            : `$${(coupon.amount_off! / 100).toFixed(2)} discount applied successfully`
+        });
+      } catch (stripeError: any) {
+        // Coupon doesn't exist in Stripe
         return res.json({ 
           valid: false,
           message: "Invalid or expired coupon code" 
         });
       }
-
-      const discountAmount = (amount * discountPercent) / 100;
-      const finalAmount = Math.max(0, amount - discountAmount);
-
-      res.json({ 
-        valid: true,
-        discountPercent,
-        discountAmount,
-        finalAmount,
-        message: `${discountPercent}% discount applied successfully`
-      });
     } catch (error: any) {
       console.error('Coupon validation error:', error);
       res.status(500).json({ 
