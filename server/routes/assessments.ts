@@ -508,7 +508,15 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
     
     const adjustedEbitda = baseEbitda + totalAdjustments;
     
-    // Calculate score based on value drivers
+    // Map index answers to grades (0=F, 1=D, 2=C, 3=B, 4=A)
+    const indexToGrade: Record<number, string> = {
+      0: 'F',
+      1: 'D', 
+      2: 'C',
+      3: 'B',
+      4: 'A',
+    };
+    
     const gradeToScore: Record<string, number> = {
       'A': 5,
       'B': 4,
@@ -517,19 +525,35 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       'F': 1,
     };
     
-    const drivers = Object.values(valueDrivers).filter(Boolean) as string[];
-    const avgScore = drivers.length > 0
-      ? drivers.reduce((sum, grade) => sum + (gradeToScore[grade] || 3), 0) / drivers.length
+    // Convert value driver answers (which are indices) to grades
+    const convertedGrades: string[] = [];
+    for (const [key, value] of Object.entries(valueDrivers)) {
+      if (typeof value === 'number') {
+        // If it's a number (index), convert to grade
+        const grade = indexToGrade[value] || 'C';
+        convertedGrades.push(grade);
+      } else if (typeof value === 'string' && gradeToScore[value]) {
+        // If it's already a grade letter, use it directly
+        convertedGrades.push(value);
+      }
+    }
+    
+    const avgScore = convertedGrades.length > 0
+      ? convertedGrades.reduce((sum, grade) => sum + (gradeToScore[grade] || 3), 0) / convertedGrades.length
       : 3;
     
-    // Calculate multiple based on score
+    // Calculate multiple based on score with better granularity
     let baseMultiple = 3.0;
-    if (avgScore >= 4.5) baseMultiple = 5.0;
-    else if (avgScore >= 4.0) baseMultiple = 4.5;
-    else if (avgScore >= 3.5) baseMultiple = 4.0;
-    else if (avgScore >= 3.0) baseMultiple = 3.5;
-    else if (avgScore >= 2.5) baseMultiple = 3.0;
-    else baseMultiple = 2.5;
+    if (avgScore >= 4.8) baseMultiple = 8.0;  // Almost all A's
+    else if (avgScore >= 4.5) baseMultiple = 7.0;  // Mostly A's
+    else if (avgScore >= 4.2) baseMultiple = 6.0;  // Mix of A's and B's
+    else if (avgScore >= 4.0) baseMultiple = 5.5;  // Mostly B's
+    else if (avgScore >= 3.8) baseMultiple = 5.0;  // Strong B's
+    else if (avgScore >= 3.5) baseMultiple = 4.5;  // Mix of B's and C's
+    else if (avgScore >= 3.2) baseMultiple = 4.0;  // Above average
+    else if (avgScore >= 3.0) baseMultiple = 3.5;  // Average
+    else if (avgScore >= 2.5) baseMultiple = 3.0;  // Below average
+    else baseMultiple = 2.5;  // Poor performance
     
     // Calculate valuation ranges
     const midEstimate = adjustedEbitda * baseMultiple;
