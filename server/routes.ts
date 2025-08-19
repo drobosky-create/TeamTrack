@@ -719,66 +719,91 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Validate coupon code using Stripe
-  app.post("/api/payments/validate-coupon", async (req, res) => {
+  // Create Stripe Checkout Session for AppleBites
+  app.post("/api/payments/create-checkout-session", async (req, res) => {
     try {
-      const { couponCode, amount } = req.body;
-      
-      if (!couponCode || !amount) {
-        return res.status(400).json({ 
-          valid: false,
-          message: "Coupon code and amount are required" 
-        });
-      }
+      const { 
+        productName = 'AppleBites Growth & Exit Plan',
+        amount = 795,
+        successUrl = `${process.env.REPLIT_DEV_DOMAIN || 'http://localhost:5000'}/consumer-signup?payment=success&plan=growth`,
+        cancelUrl = `${process.env.REPLIT_DEV_DOMAIN || 'http://localhost:5000'}/applebites`
+      } = req.body;
 
-      // Try to retrieve the coupon from Stripe
-      try {
-        const coupon = await stripe.coupons.retrieve(couponCode.toUpperCase());
-        
-        // Check if coupon is valid
-        if (!coupon.valid) {
-          return res.json({ 
-            valid: false,
-            message: "This coupon has expired or is no longer valid" 
-          });
-        }
+      const session = await stripe.checkout.sessions.create({
+        line_items: [{
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: productName,
+              description: 'Complete business valuation assessment with growth strategies and exit planning tools',
+            },
+            unit_amount: Math.round(amount * 100), // Convert to cents
+          },
+          quantity: 1,
+        }],
+        mode: 'payment',
+        allow_promotion_codes: true, // Enable native Stripe promotion codes
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+        metadata: {
+          product: 'applebites_growth',
+        },
+      });
 
-        // Calculate discount based on coupon type
-        let discountAmount = 0;
-        let discountPercent = 0;
-        
-        if (coupon.percent_off) {
-          discountPercent = coupon.percent_off;
-          discountAmount = (amount * coupon.percent_off) / 100;
-        } else if (coupon.amount_off) {
-          discountAmount = coupon.amount_off / 100; // Convert from cents
-          discountPercent = Math.round((discountAmount / amount) * 100);
-        }
-
-        const finalAmount = Math.max(0, amount - discountAmount);
-
-        res.json({ 
-          valid: true,
-          couponId: coupon.id,
-          discountPercent,
-          discountAmount,
-          finalAmount,
-          message: coupon.percent_off 
-            ? `${coupon.percent_off}% discount applied successfully`
-            : `$${(coupon.amount_off! / 100).toFixed(2)} discount applied successfully`
-        });
-      } catch (stripeError: any) {
-        // Coupon doesn't exist in Stripe
-        return res.json({ 
-          valid: false,
-          message: "Invalid or expired coupon code" 
-        });
-      }
+      res.json({ 
+        sessionId: session.id,
+        url: session.url 
+      });
     } catch (error: any) {
-      console.error('Coupon validation error:', error);
+      console.error('Checkout session creation error:', error);
       res.status(500).json({ 
-        valid: false,
-        message: "Error validating coupon: " + error.message 
+        message: "Error creating checkout session: " + error.message 
+      });
+    }
+  });
+
+  // Create promotion codes (admin endpoint)
+  app.post("/api/admin/create-promotion-code", async (req, res) => {
+    try {
+      const { code, percentOff, amountOff, maxRedemptions, expiresInDays = 30 } = req.body;
+
+      // Create a coupon first
+      const couponData: any = {
+        duration: 'once', // For one-time payments
+        name: code,
+      };
+
+      if (percentOff) {
+        couponData.percent_off = percentOff;
+      } else if (amountOff) {
+        couponData.amount_off = Math.round(amountOff * 100); // Convert to cents
+        couponData.currency = 'usd';
+      } else {
+        return res.status(400).json({ 
+          message: "Either percentOff or amountOff must be provided" 
+        });
+      }
+
+      const coupon = await stripe.coupons.create(couponData);
+
+      // Create the promotion code
+      const promotionCode = await stripe.promotionCodes.create({
+        coupon: coupon.id,
+        code: code.toUpperCase(),
+        max_redemptions: maxRedemptions,
+        expires_at: Math.floor(Date.now() / 1000) + (expiresInDays * 24 * 60 * 60),
+      });
+
+      res.json({ 
+        success: true,
+        promotionCode: promotionCode.code,
+        couponId: coupon.id,
+        expiresAt: new Date(promotionCode.expires_at! * 1000).toISOString(),
+      });
+    } catch (error: any) {
+      console.error('Promotion code creation error:', error);
+      res.status(500).json({ 
+        message: "Error creating promotion code: " + error.message 
       });
     }
   });
