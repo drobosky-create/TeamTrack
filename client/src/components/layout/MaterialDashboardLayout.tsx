@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, AppBar, Toolbar, Drawer, Typography, IconButton, useTheme } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
+import { useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
 import { UnifiedSidebar, getNavigationItemsByRole } from './UnifiedSidebar';
 
@@ -26,102 +27,100 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
   // Get navigation items based on user role
   const navigationItems = getNavigationItemsByRole(user?.role || 'team_member', user?.id);
 
+  const drawer = (
+    <UnifiedSidebar
+      title="PerformanceHub"
+      subtitle="Performance Management"
+      navigationItems={navigationItems}
+      userRole={user?.role}
+    />
+  );
+
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-      {/* AppBar for mobile */}
-      <AppBar
-        position="fixed"
+      {/* Desktop Sidebar */}
+      <Drawer
+        variant="permanent"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          backgroundColor: theme.palette.background.paper,
-          color: theme.palette.text.primary,
-          boxShadow: theme.shadows[1],
+          display: { xs: 'none', md: 'block' },
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+            background: 'var(--gradient-primary, linear-gradient(195deg, #66bb6a, #43a047))',
+            border: 'none',
+            color: 'hsl(var(--primary-foreground))',
+          },
+        }}
+        open
+      >
+        {drawer}
+      </Drawer>
+
+      {/* Mobile Sidebar */}
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true,
+        }}
+        sx={{
+          display: { xs: 'block', md: 'none' },
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: drawerWidth,
+            background: 'var(--gradient-primary, linear-gradient(195deg, #66bb6a, #43a047))',
+            color: 'hsl(var(--primary-foreground))',
+          },
         }}
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {user?.role === 'admin' ? 'Admin Dashboard' : 
-             user?.role === 'manager' ? 'Team Dashboard' : 
-             'Assessment Dashboard'}
-          </Typography>
-        </Toolbar>
-      </AppBar>
+        {drawer}
+      </Drawer>
 
-      {/* Sidebar Drawer */}
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      >
-        {/* Mobile drawer */}
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
-              width: drawerWidth,
-              backgroundColor: theme.palette.background.default,
-            },
-          }}
-        >
-          <UnifiedSidebar
-            title="PerformanceHub"
-            subtitle="Performance Management"
-            navigationItems={navigationItems}
-            userRole={user?.role}
-          />
-        </Drawer>
-        
-        {/* Desktop drawer */}
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
-              width: drawerWidth,
-              backgroundColor: theme.palette.background.default,
-              borderRight: `1px solid ${theme.palette.divider}`,
-            },
-          }}
-          open
-        >
-          <UnifiedSidebar
-            title="PerformanceHub"
-            subtitle="Performance Management"
-            navigationItems={navigationItems}
-            userRole={user?.role}
-          />
-        </Drawer>
-      </Box>
-
-      {/* Main content */}
+      {/* Main Content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          backgroundColor: theme.palette.background.default,
+          width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` },
+          backgroundColor: 'hsl(var(--background))',
+          minHeight: '100vh',
         }}
       >
-        <Toolbar sx={{ display: { xs: 'block', sm: 'none' } }} />
-        {children}
+        {/* Top Navigation */}
+        <AppBar
+          position="sticky"
+          sx={{
+            backgroundColor: 'transparent',
+            boxShadow: 'var(--shadow, none)',
+            backdropFilter: 'blur(10px)',
+            borderBottom: '1px solid hsl(var(--border))',
+            background: 'linear-gradient(135deg, transparent, rgba(var(--primary-light), 0.1))',
+          }}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { md: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'hsl(var(--foreground))' }}>
+              Welcome back, {user?.firstName || user?.email?.split('@')[0]}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+
+        {/* Page Content */}
+        <Box sx={{ p: 4, ml: 2 }}>
+          {children}
+        </Box>
       </Box>
     </Box>
   );
