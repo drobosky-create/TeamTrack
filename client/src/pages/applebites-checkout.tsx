@@ -5,7 +5,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, CheckCircle } from "lucide-react";
 import { useLocation, Link } from "wouter";
 import { Box, Typography, Container } from '@mui/material';
 
@@ -15,7 +15,11 @@ if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
 }
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
-const AppleBitesCheckoutForm: React.FC = () => {
+const AppleBitesCheckoutForm: React.FC<{ originalAmount: number; finalAmount: number; couponApplied: string }> = ({ 
+  originalAmount, 
+  finalAmount, 
+  couponApplied 
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const { toast } = useToast();
@@ -122,9 +126,21 @@ const AppleBitesCheckoutForm: React.FC = () => {
             <span className="text-sm font-medium text-gray-600">Plan:</span>
             <span className="text-lg font-bold text-blue-600">Growth & Exit</span>
           </div>
+          {couponApplied && originalAmount !== finalAmount && (
+            <>
+              <div className="flex justify-between items-center text-gray-500 line-through">
+                <span className="text-sm">Original Price:</span>
+                <span className="text-lg">${originalAmount.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between items-center text-green-600 mb-1">
+                <span className="text-sm font-medium">Discount ({couponApplied}):</span>
+                <span className="text-lg">-${(originalAmount - finalAmount).toFixed(2)}</span>
+              </div>
+            </>
+          )}
           <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-gray-600">Amount:</span>
-            <span className="text-2xl font-bold">$795.00</span>
+            <span className="text-sm font-medium text-gray-600">Total Amount:</span>
+            <span className="text-2xl font-bold">${finalAmount.toFixed(2)}</span>
           </div>
         </div>
       </div>
@@ -143,7 +159,7 @@ const AppleBitesCheckoutForm: React.FC = () => {
             Processing Payment...
           </>
         ) : (
-          'Complete Purchase - $795.00'
+          `Complete Purchase - $${finalAmount.toFixed(2)}`
         )}
       </Button>
     </form>
@@ -153,12 +169,108 @@ const AppleBitesCheckoutForm: React.FC = () => {
 export default function AppleBitesCheckoutPage() {
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(true);
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState("");
+  const [originalAmount] = useState(795);
+  const [finalAmount, setFinalAmount] = useState(795);
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
   const { toast } = useToast();
 
+  const applyCoupon = async () => {
+    if (!couponCode.trim()) {
+      toast({
+        title: "Invalid Coupon",
+        description: "Please enter a coupon code.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setApplyingCoupon(true);
+    
+    // Validate coupon code
+    try {
+      const response = await apiRequest("POST", "/api/payments/validate-coupon", {
+        couponCode: couponCode.toUpperCase(),
+        amount: originalAmount,
+      });
+      const data = await response.json();
+
+      if (data.valid) {
+        const discountedAmount = data.finalAmount;
+        setFinalAmount(discountedAmount);
+        setAppliedCoupon(couponCode.toUpperCase());
+        
+        // Create new payment intent with discounted amount
+        const paymentResponse = await apiRequest("POST", "/api/payments/create-payment-intent", { 
+          amount: discountedAmount,
+          metadata: {
+            product: 'applebites_growth',
+            description: 'AppleBites Growth & Exit Plan',
+            coupon: couponCode.toUpperCase(),
+            originalAmount: originalAmount,
+          }
+        });
+        const paymentData = await paymentResponse.json();
+        
+        setClientSecret(paymentData.clientSecret);
+        
+        toast({
+          title: "Coupon Applied!",
+          description: `${data.discountPercent}% discount applied. New total: $${discountedAmount.toFixed(2)}`,
+        });
+      } else {
+        toast({
+          title: "Invalid Coupon",
+          description: data.message || "This coupon code is not valid.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to apply coupon. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setApplyingCoupon(false);
+    }
+  };
+
+  const removeCoupon = async () => {
+    setFinalAmount(originalAmount);
+    setAppliedCoupon("");
+    setCouponCode("");
+    
+    // Create new payment intent with original amount
+    try {
+      const response = await apiRequest("POST", "/api/payments/create-payment-intent", { 
+        amount: originalAmount,
+        metadata: {
+          product: 'applebites_growth',
+          description: 'AppleBites Growth & Exit Plan'
+        }
+      });
+      const data = await response.json();
+      setClientSecret(data.clientSecret);
+      
+      toast({
+        title: "Coupon Removed",
+        description: "Original price restored.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to remove coupon. Please refresh and try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   useEffect(() => {
-    // Create PaymentIntent for AppleBites Growth plan
+    // Create initial PaymentIntent for AppleBites Growth plan
     apiRequest("POST", "/api/payments/create-payment-intent", { 
-      amount: 795,
+      amount: originalAmount,
       metadata: {
         product: 'applebites_growth',
         description: 'AppleBites Growth & Exit Plan'
@@ -178,7 +290,7 @@ export default function AppleBitesCheckoutPage() {
         });
         setLoading(false);
       });
-  }, [toast]);
+  }, [toast, originalAmount]);
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#f5f5f5' }}>
@@ -231,17 +343,74 @@ export default function AppleBitesCheckoutPage() {
                 <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
               </div>
             ) : clientSecret ? (
-              <Elements stripe={stripePromise} options={{ 
-                clientSecret,
-                appearance: {
-                  theme: 'stripe',
-                  variables: {
-                    colorPrimary: '#2563eb',
+              <>
+                {/* Coupon Code Section */}
+                <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                  <Typography variant="subtitle2" className="font-semibold mb-2">
+                    Have a discount code?
+                  </Typography>
+                  {!appliedCoupon ? (
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                        placeholder="Enter coupon code"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        disabled={applyingCoupon}
+                        data-testid="input-coupon-code"
+                      />
+                      <Button 
+                        onClick={applyCoupon}
+                        disabled={applyingCoupon || !couponCode.trim()}
+                        variant="outline"
+                        className="min-w-[100px]"
+                        data-testid="button-apply-coupon"
+                      >
+                        {applyingCoupon ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          'Apply'
+                        )}
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-md">
+                      <div className="flex items-center gap-2 text-green-700">
+                        <CheckCircle className="h-5 w-5" />
+                        <span className="font-medium">
+                          {appliedCoupon} applied - ${(originalAmount - finalAmount).toFixed(2)} off
+                        </span>
+                      </div>
+                      <Button
+                        onClick={removeCoupon}
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-600 hover:text-red-700"
+                        data-testid="button-remove-coupon"
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  )}
+                </div>
+
+                <Elements stripe={stripePromise} options={{ 
+                  clientSecret,
+                  appearance: {
+                    theme: 'stripe',
+                    variables: {
+                      colorPrimary: '#2563eb',
+                    },
                   },
-                },
-              }}>
-                <AppleBitesCheckoutForm />
-              </Elements>
+                }}>
+                  <AppleBitesCheckoutForm 
+                    originalAmount={originalAmount}
+                    finalAmount={finalAmount}
+                    couponApplied={appliedCoupon}
+                  />
+                </Elements>
+              </>
             ) : (
               <div className="text-center py-8 text-red-600">
                 Unable to initialize payment. Please refresh and try again.

@@ -719,12 +719,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Validate coupon code
+  app.post("/api/payments/validate-coupon", async (req, res) => {
+    try {
+      const { couponCode, amount } = req.body;
+      
+      if (!couponCode || !amount) {
+        return res.status(400).json({ 
+          valid: false,
+          message: "Coupon code and amount are required" 
+        });
+      }
+
+      // Define available coupon codes and their discounts
+      const coupons: Record<string, number> = {
+        'SAVE20': 20,      // 20% off
+        'EARLY50': 50,     // 50% off
+        'PARTNER15': 15,   // 15% off
+        'LAUNCH100': 100,  // 100% off (free)
+        'BETA25': 25,      // 25% off
+      };
+
+      const upperCoupon = couponCode.toUpperCase();
+      const discountPercent = coupons[upperCoupon];
+
+      if (!discountPercent) {
+        return res.json({ 
+          valid: false,
+          message: "Invalid or expired coupon code" 
+        });
+      }
+
+      const discountAmount = (amount * discountPercent) / 100;
+      const finalAmount = Math.max(0, amount - discountAmount);
+
+      res.json({ 
+        valid: true,
+        discountPercent,
+        discountAmount,
+        finalAmount,
+        message: `${discountPercent}% discount applied successfully`
+      });
+    } catch (error: any) {
+      console.error('Coupon validation error:', error);
+      res.status(500).json({ 
+        valid: false,
+        message: "Error validating coupon: " + error.message 
+      });
+    }
+  });
+
   // Stripe payment routes for one-time payments
   app.post("/api/payments/create-payment-intent", async (req, res) => {
     try {
       const { amount, currency = 'usd', metadata = {} } = req.body;
       
-      if (!amount || amount < 50) { // Minimum 50 cents
+      if (!amount || amount < 0.50) { // Minimum 50 cents
         return res.status(400).json({ 
           message: "Invalid amount. Minimum amount is $0.50" 
         });
