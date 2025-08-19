@@ -18,7 +18,7 @@ import {
   Refresh as RefreshIcon,
 } from '@mui/icons-material';
 import { useUITokens, useUpdateUIToken, type UITokens } from '@/hooks/useUITokens';
-import { gradients, glassStyles } from '../../../../src/theme/gradients';
+import { gradients, glassStyles } from '@/theme/gradients';
 
 export default function ThemeManager() {
   const { data: tokens, isLoading, refetch } = useUITokens();

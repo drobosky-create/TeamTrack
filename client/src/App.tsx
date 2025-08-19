@@ -3,8 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+
 import { useAuth } from "@/hooks/useAuth";
 import { MaterialDashboardLayout } from "@/components/layout/MaterialDashboardLayout";
 import NotFound from "@/pages/not-found";
@@ -34,19 +33,7 @@ import FreeAssessmentDashboard from "@/pages/free-assessment";
 import ThemeManager from "@/components/admin/ThemeManager";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#66bb6a',
-    },
-    secondary: {
-      main: '#42a5f5',
-    },
-  },
-  typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-  },
-});
+
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -99,13 +86,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeTokenProvider>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-          </TooltipProvider>
-        </ThemeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
       </ThemeTokenProvider>
     </QueryClientProvider>
   );

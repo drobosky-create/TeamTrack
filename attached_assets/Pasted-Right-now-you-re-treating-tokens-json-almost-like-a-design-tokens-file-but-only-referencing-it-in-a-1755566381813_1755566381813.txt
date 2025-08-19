@@ -1,5 +1,61 @@
+Right now you’re treating tokens.json almost like a design tokens file, but only referencing it in a few places (like palette.primary and your button override).
+
+If you want everything in tokens.json to drive the theme universally (colors, spacing, typography, radii, shadows, gradients, etc.), here’s how you can wire it up properly:
+
+1. Expand your tokens.json
+
+Instead of only color, give it a design-system structure:
+
+{
+  "color": {
+    "primary": "#5e72e4",
+    "primaryLight": "#7d8df0",
+    "primaryGradientStart": "#667eea",
+    "primaryGradientEnd": "#764ba2",
+    "secondary": "#8392ab",
+    "info": "#1a73e8",
+    "success": "#4caf50",
+    "warning": "#fb8c00",
+    "error": "#f44335",
+    "textOnBrand": "#ffffff",
+    "backgroundLight": "#f0f2f5",
+    "backgroundDark": "#0E1626",
+    "slate": "#7b809a"
+  },
+  "radius": {
+    "sm": 8,
+    "md": 14,
+    "lg": 20
+  },
+  "shadow": {
+    "sm": "0px 1px 3px rgba(0,0,0,0.1)",
+    "md": "0px 4px 6px rgba(0,0,0,0.1)",
+    "lg": "0px 10px 15px rgba(0,0,0,0.1)"
+  },
+  "font": {
+    "family": "'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
+    "size": {
+      "sm": "0.875rem",
+      "md": "1rem",
+      "lg": "1.25rem",
+      "xl": "1.5rem"
+    }
+  },
+  "spacing": {
+    "xs": 4,
+    "sm": 8,
+    "md": 16,
+    "lg": 24,
+    "xl": 32
+  }
+}
+
+2. Map tokens → theme
+
+In muiTheme.ts, import tokens once and pipe them everywhere:
+
 import { createTheme } from "@mui/material/styles";
-import tokens from "../../client/src/theme/tokens.json";
+import tokens from "./tokens.json";
 
 // Augment the theme to add tokens if you want TypeScript autocompletion
 declare module "@mui/material/styles" {
@@ -91,3 +147,27 @@ export const darkTheme = createTheme({
     error:   { main: tokens.color.error }
   }
 });
+
+3. Consume tokens anywhere
+
+Now you can pull from theme.tokens or theme.gradients in sx or styled:
+
+<Box sx={(theme) => ({
+  borderRadius: theme.tokens.radius.lg,
+  boxShadow: theme.tokens.shadow.md,
+  padding: theme.tokens.spacing.md,
+  background: theme.gradients.primary,
+  color: theme.palette.primary.contrastText
+})}>
+  Universal tokens in action
+</Box>
+
+✅ Result
+
+All primitives (colors, gradients, radii, shadows, fonts, spacing) live in tokens.json.
+
+Both lightTheme and darkTheme pipe directly from tokens.
+
+In components, you can always use theme.tokens and know it’s the single source of truth.
+
+Changing tokens.json updates the entire app everywhere — buttons, boxes, papers, etc.

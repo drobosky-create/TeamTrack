@@ -17,8 +17,8 @@ export const CssVars: React.FC = () => (
       --ab-grad-glasswhite: ${tokens.gradient.glasswhite};
       --ab-grad-growth: ${tokens.gradient.growth};
 
-      --ab-radius-md: ${tokens.radius.md};
-      --ab-radius-lg: ${tokens.radius.lg};
+      --ab-radius-md: ${tokens.radius.md}px;
+      --ab-radius-lg: ${tokens.radius.lg}px;
       --ab-blur-glass: ${tokens.blur.glass};
     }
 

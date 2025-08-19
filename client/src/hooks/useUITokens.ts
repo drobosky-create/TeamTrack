@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import tokens from '../../../src/theme/tokens.json';
+import tokens from '@/theme/tokens.json';
 
 export interface UITokens {
   'color.primary': string;
@@ -35,8 +35,8 @@ const defaultTokens: UITokens = {
   'gradient.brandBlue': tokens.gradient.brandBlue,
   'gradient.glasswhite': tokens.gradient.glasswhite,
   'gradient.growth': tokens.gradient.growth,
-  'radius.md': tokens.radius.md,
-  'radius.lg': tokens.radius.lg,
+  'radius.md': `${tokens.radius.md}px`,
+  'radius.lg': `${tokens.radius.lg}px`,
   'blur.glass': tokens.blur.glass,
 };
 
