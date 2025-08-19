@@ -8,69 +8,65 @@ import {
   Container,
   AppBar,
   Toolbar,
-  Divider,
 } from '@mui/material';
 import { Link } from 'wouter';
+import { CreditCard } from 'lucide-react';
 
 export default function AppleBitesLanding() {
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
+    <Box sx={{ minHeight: '100vh', backgroundColor: '#f5f7fa' }}>
       {/* Navigation Header */}
       <AppBar position="static" sx={{ 
-        background: '#1e3a5f',
-        boxShadow: 'none',
-        borderBottom: '1px solid #e0e0e0'
+        background: '#1a2332',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
       }}>
         <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box
               component="img"
               src="/apple-bites-logo.png"
-              alt="AppleBites Logo"
+              alt="AppleBites"
               sx={{ 
-                width: 40, 
-                height: 40, 
+                height: 40,
                 mr: 2,
-                borderRadius: 1
               }}
             />
-            <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white' }}>
-              APPLE BITES
-            </Typography>
-            <Typography variant="caption" sx={{ ml: 1, color: '#b0c4de', fontSize: '0.75rem' }}>
+            <Typography variant="caption" sx={{ 
+              color: '#8b95a7', 
+              fontSize: '0.75rem',
+              letterSpacing: 1,
+              textTransform: 'uppercase'
+            }}>
               ASSESSMENTS
             </Typography>
           </Box>
           
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Button
-              variant="outlined"
+              variant="text"
               size="small"
               component={Link}
               href="/admin-login"
               sx={{ 
-                borderColor: '#4CAF50',
-                color: '#4CAF50',
-                fontSize: '0.75rem',
+                color: 'white',
+                fontSize: '0.875rem',
                 px: 2,
                 textTransform: 'none',
                 '&:hover': { 
-                  borderColor: '#45a049',
-                  backgroundColor: 'rgba(76, 175, 80, 0.1)'
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
                 }
               }}
             >
               Admin
             </Button>
             <Button
-              variant="outlined"
+              variant="text"
               size="small"
               component={Link}
               href="/consumer-login"
               sx={{ 
-                borderColor: 'white',
                 color: 'white',
-                fontSize: '0.75rem',
+                fontSize: '0.875rem',
                 px: 2,
                 textTransform: 'none',
                 '&:hover': { 
@@ -81,12 +77,11 @@ export default function AppleBitesLanding() {
               Sign In
             </Button>
             <Button
-              variant="outlined"
+              variant="text"
               size="small"
               sx={{ 
-                borderColor: 'white',
                 color: 'white',
-                fontSize: '0.75rem',
+                fontSize: '0.875rem',
                 px: 2,
                 textTransform: 'none',
                 '&:hover': { 
@@ -97,12 +92,11 @@ export default function AppleBitesLanding() {
               Pricing
             </Button>
             <Button
-              variant="outlined"
+              variant="text"
               size="small"
               sx={{ 
-                borderColor: 'white',
                 color: 'white',
-                fontSize: '0.75rem',
+                fontSize: '0.875rem',
                 px: 2,
                 textTransform: 'none',
                 '&:hover': { 
@@ -120,15 +114,16 @@ export default function AppleBitesLanding() {
               sx={{ 
                 backgroundColor: '#4CAF50',
                 color: 'white',
-                fontSize: '0.75rem',
+                fontSize: '0.875rem',
                 px: 2,
-                textTransform: 'none',
+                textTransform: 'uppercase',
+                fontWeight: 600,
                 '&:hover': { 
                   backgroundColor: '#45a049'
                 }
               }}
             >
-              MERITAGE PARTNERS
+              Meritage Partners
             </Button>
           </Box>
         </Toolbar>
@@ -142,7 +137,7 @@ export default function AppleBitesLanding() {
             variant="h3" 
             sx={{ 
               fontWeight: 'bold', 
-              color: '#333333', 
+              color: '#1a2332', 
               mb: 2,
               fontSize: { xs: '2rem', md: '3rem' }
             }}
@@ -177,13 +172,14 @@ export default function AppleBitesLanding() {
         {/* Pricing Section */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography 
-            variant="h5" 
+            variant="h6" 
             sx={{ 
-              fontWeight: 'bold', 
-              color: '#333333', 
+              fontWeight: 600, 
+              color: '#666666', 
               mb: 1,
               textTransform: 'uppercase',
-              letterSpacing: 2
+              letterSpacing: 2,
+              fontSize: '0.875rem'
             }}
           >
             PRICING
@@ -192,7 +188,7 @@ export default function AppleBitesLanding() {
             variant="h4" 
             sx={{ 
               fontWeight: 'bold', 
-              color: '#333333', 
+              color: '#1a2332', 
               mb: 6
             }}
           >
@@ -215,73 +211,31 @@ export default function AppleBitesLanding() {
             textAlign: 'center',
             border: '1px solid #e0e0e0',
             borderRadius: 2,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
             '&:hover': { 
               boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
             },
             transition: 'all 0.3s ease'
           }}>
             <CardContent sx={{ p: 4 }}>
-              <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#333333', mb: 3 }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#1a2332', mb: 3 }}>
                 Free Plan
               </Typography>
-              <Typography variant="h2" sx={{ fontWeight: 'bold', color: '#333333', mb: 4 }}>
+              <Typography variant="h2" sx={{ fontWeight: 'bold', color: '#1a2332', mb: 1 }}>
                 $0
               </Typography>
-              <Box sx={{ textAlign: 'left', mb: 4 }}>
-                <Typography variant="body2" sx={{ color: '#666666', mb: 1 }}>
+              <Box sx={{ textAlign: 'left', mb: 4, minHeight: 120 }}>
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem' }}>
                   General EBITDA Multipliers
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#666666', mb: 1 }}>
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem' }}>
                   Value Driver Assessment
                 </Typography>
-              </Box>
-              <Button
-                fullWidth
-                variant="outlined"
-                component={Link}
-                href="/consumer-signup"
-                sx={{
-                  borderColor: '#1e3a5f',
-                  color: '#1e3a5f',
-                  py: 1.5,
-                  textTransform: 'none',
-                  '&:hover': {
-                    backgroundColor: '#1e3a5f',
-                    color: 'white'
-                  }
-                }}
-              >
-                Get Started
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Growth & Exit Plan */}
-          <Card sx={{ 
-            minWidth: 280, 
-            maxWidth: 320,
-            textAlign: 'center',
-            border: '2px solid #1e3a5f',
-            borderRadius: 2,
-            position: 'relative',
-            '&:hover': { 
-              boxShadow: '0 4px 20px rgba(30,58,95,0.2)'
-            },
-            transition: 'all 0.3s ease'
-          }}>
-            <CardContent sx={{ p: 4 }}>
-              <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#333333', mb: 3 }}>
-                Growth & Exit
-              </Typography>
-              <Typography variant="h2" sx={{ fontWeight: 'bold', color: '#333333', mb: 4 }}>
-                $795
-              </Typography>
-              <Box sx={{ textAlign: 'left', mb: 4 }}>
-                <Typography variant="body2" sx={{ color: '#666666', mb: 1 }}>
-                  Everything in Free
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem' }}>
+                  Basic PDF Report
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#666666', mb: 1 }}>
-                  60-Min Prep Dive Call
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem' }}>
+                  Email Delivery
                 </Typography>
               </Box>
               <Button
@@ -290,17 +244,91 @@ export default function AppleBitesLanding() {
                 component={Link}
                 href="/consumer-signup"
                 sx={{
-                  backgroundColor: '#1e3a5f',
+                  backgroundColor: '#28a745',
                   color: 'white',
                   py: 1.5,
-                  textTransform: 'none',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  fontSize: '0.875rem',
                   '&:hover': {
-                    backgroundColor: '#163048'
+                    backgroundColor: '#218838'
                   }
                 }}
               >
-                Get Started
+                Access Now
               </Button>
+              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 1 }}>
+                <CreditCard size={20} color="#999" />
+                <CreditCard size={20} color="#999" />
+                <CreditCard size={20} color="#999" />
+                <CreditCard size={20} color="#999" />
+              </Box>
+            </CardContent>
+          </Card>
+
+          {/* Growth & Exit Plan */}
+          <Card sx={{ 
+            minWidth: 280, 
+            maxWidth: 320,
+            textAlign: 'center',
+            border: '2px solid #007bff',
+            borderRadius: 2,
+            position: 'relative',
+            boxShadow: '0 2px 8px rgba(0,123,255,0.1)',
+            '&:hover': { 
+              boxShadow: '0 4px 20px rgba(0,123,255,0.2)'
+            },
+            transition: 'all 0.3s ease'
+          }}>
+            <CardContent sx={{ p: 4 }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#1a2332', mb: 3 }}>
+                Growth & Exit
+              </Typography>
+              <Typography variant="h2" sx={{ fontWeight: 'bold', color: '#1a2332', mb: 1 }}>
+                $795
+              </Typography>
+              <Box sx={{ textAlign: 'left', mb: 4, minHeight: 120 }}>
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem', fontStyle: 'italic' }}>
+                  Everything in Free
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem' }}>
+                  60-Min Deep Dive Call
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem' }}>
+                  Private Equity Scorecard
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem' }}>
+                  Opinion of Valuation
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem' }}>
+                  Enterprise Value Estimator
+                </Typography>
+              </Box>
+              <Button
+                fullWidth
+                variant="contained"
+                component={Link}
+                href="/consumer-signup"
+                sx={{
+                  backgroundColor: '#007bff',
+                  color: 'white',
+                  py: 1.5,
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  fontSize: '0.875rem',
+                  '&:hover': {
+                    backgroundColor: '#0056b3'
+                  }
+                }}
+              >
+                Access Now
+              </Button>
+              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 1 }}>
+                <CreditCard size={20} color="#999" />
+                <CreditCard size={20} color="#999" />
+                <CreditCard size={20} color="#999" />
+                <CreditCard size={20} color="#999" />
+              </Box>
             </CardContent>
           </Card>
 
@@ -311,44 +339,82 @@ export default function AppleBitesLanding() {
             textAlign: 'center',
             border: '1px solid #e0e0e0',
             borderRadius: 2,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
             '&:hover': { 
               boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
             },
             transition: 'all 0.3s ease'
           }}>
             <CardContent sx={{ p: 4 }}>
-              <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#333333', mb: 3 }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#1a2332', mb: 3 }}>
                 Capital
               </Typography>
-              <Typography variant="h2" sx={{ fontWeight: 'bold', color: '#333333', mb: 4 }}>
+              <Typography variant="h2" sx={{ fontWeight: 'bold', color: '#1a2332', mb: 1 }}>
                 $2,500
               </Typography>
-              <Box sx={{ textAlign: 'left', mb: 4 }}>
-                <Typography variant="body2" sx={{ color: '#666666', mb: 1 }}>
+              <Box sx={{ textAlign: 'left', mb: 4, minHeight: 120 }}>
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem', fontStyle: 'italic' }}>
                   Everything in Growth & Exit
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#666666', mb: 1 }}>
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem' }}>
                   Capital Readiness Assessment
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem' }}>
+                  Investment Banking Referral
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontSize: '0.875rem' }}>
+                  Valuation Report
                 </Typography>
               </Box>
               <Button
                 fullWidth
-                variant="outlined"
+                variant="contained"
                 sx={{
-                  borderColor: '#1e3a5f',
-                  color: '#1e3a5f',
+                  backgroundColor: '#17a2b8',
+                  color: 'white',
                   py: 1.5,
-                  textTransform: 'none',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  fontSize: '0.875rem',
                   '&:hover': {
-                    backgroundColor: '#1e3a5f',
-                    color: 'white'
+                    backgroundColor: '#138496'
                   }
                 }}
               >
-                Contact Us
+                Coming Soon
               </Button>
+              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 1 }}>
+                <CreditCard size={20} color="#999" />
+                <CreditCard size={20} color="#999" />
+                <CreditCard size={20} color="#999" />
+                <CreditCard size={20} color="#999" />
+              </Box>
             </CardContent>
           </Card>
+        </Box>
+
+        {/* Footer Links */}
+        <Box sx={{ textAlign: 'center', pt: 6, borderTop: '1px solid #e0e0e0' }}>
+          <Typography variant="body2" sx={{ color: '#666666', mb: 2, fontWeight: 600 }}>
+            Links
+          </Typography>
+          <Button
+            component={Link}
+            href="https://privacypolicy.com"
+            sx={{ color: '#007bff', textTransform: 'none', fontSize: '0.875rem' }}
+          >
+            Privacy Policy
+          </Button>
+        </Box>
+
+        {/* Footer Address */}
+        <Box sx={{ textAlign: 'center', mt: 4 }}>
+          <Typography variant="body2" sx={{ color: '#666666', mb: 1, fontWeight: 600 }}>
+            Address:
+          </Typography>
+          <Typography variant="body2" sx={{ color: '#888888' }}>
+            2801 West Coast Highway Suite 200, Newport Beach, California 92663
+          </Typography>
         </Box>
       </Container>
     </Box>
