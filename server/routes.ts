@@ -2,6 +2,12 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import assessmentRoutes from "./routes/assessments";
+import { 
+  handleConsumerSignup, 
+  handleConsumerLogin, 
+  handleConsumerLogout,
+  getConsumerUser 
+} from "./routes/consumer-auth";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { 
   insertUserSchema, 
@@ -26,6 +32,12 @@ import bcrypt from "bcryptjs";
 export async function registerRoutes(app: Express): Promise<Server> {
   // Register assessment routes (public endpoints for consumer assessments)
   app.use(assessmentRoutes);
+  
+  // Consumer authentication routes
+  app.post('/api/auth/consumer-signup', handleConsumerSignup);
+  app.post('/api/auth/consumer-login', handleConsumerLogin);
+  app.post('/api/auth/consumer-logout', handleConsumerLogout);
+  app.get('/api/auth/consumer-user', getConsumerUser);
   
   // Auth middleware
   await setupAuth(app);

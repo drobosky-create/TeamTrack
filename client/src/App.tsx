@@ -20,11 +20,15 @@ import Billing from "@/pages/billing";
 import SetupWizard from "@/pages/setup-wizard";
 import BrandingPage from "@/pages/branding";
 import AnalyticsPage from "@/pages/analytics";
-import FreeAssessment from "@/pages/assessments/FreeAssessment";
+import FreeAssessment from "@/pages/assessments/FreeAssessmentNew";
 import GrowthAssessment from "@/pages/assessments/GrowthAssessment";
+import ConsumerSignup from "@/pages/consumer-signup";
+import ConsumerLogin from "@/pages/consumer-login";
+import AssessmentSelection from "@/pages/assessment-selection";
 import ClientManagementPage from "@/pages/clients";
 import AdminClientRecordsPage from "@/pages/admin/clients";
 import AssessmentResults from "@/pages/AssessmentResults";
+import ValueImprovementCalculator from "@/pages/ValueImprovementCalculator";
 import FollowUpOptionsPage from "@/pages/follow-up";
 import AppleBitesLanding from "@/pages/applebites-landing";
 import PerformanceHubLanding from "@/pages/performancehub-landing";
@@ -44,9 +48,13 @@ function Router() {
       <Route path="/applebites" component={AppleBitesLanding} />
       <Route path="/performance-hub" component={PerformanceHubLanding} />
       <Route path="/consumer-auth" component={ConsumerAuth} />
+      <Route path="/consumer-signup" component={ConsumerSignup} />
+      <Route path="/consumer-login" component={ConsumerLogin} />
+      <Route path="/assessment-selection" component={AssessmentSelection} />
       <Route path="/assessments/free" component={FreeAssessment} />
       <Route path="/assessments/growth" component={GrowthAssessment} />
       <Route path="/assessment-results/:id" component={AssessmentResults} />
+      <Route path="/value-improvement/:id" component={ValueImprovementCalculator} />
       <Route path="/test-dashboard" component={TestDashboard} />
       
       {/* Root redirect to PerformanceHub by default */}
