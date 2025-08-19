@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import Stripe from 'stripe';
 import { db } from '../db';
-import { valuationAssessments, auditLogs } from '@shared/schema';
+import { valuationAssessments, auditLogs, consumerUsers } from '@shared/schema';
 import { eq, desc } from 'drizzle-orm';
 import OpenAI from 'openai';
 
@@ -423,20 +423,20 @@ router.post('/api/assessments/growth', async (req: Request, res: Response) => {
 router.get('/api/consumer/assessments', async (req: Request, res: Response) => {
   try {
     // Get the consumer user from session
-    const consumerUserId = (req.session as any)?.consumerUser?.id;
+    const consumerUser = (req.session as any)?.consumerUser;
     
-    if (!consumerUserId) {
+    if (!consumerUser || !consumerUser.email) {
       return res.status(401).json({ 
         success: false, 
         message: 'Please login to view your assessments' 
       });
     }
 
-    // Fetch all assessments for this consumer user
+    // Fetch all assessments for this consumer user by email
     const assessments = await db
       .select()
       .from(valuationAssessments)
-      .where(eq(valuationAssessments.userId, consumerUserId))
+      .where(eq(valuationAssessments.email, consumerUser.email))
       .orderBy(desc(valuationAssessments.createdAt));
 
     res.json(assessments);
@@ -604,16 +604,26 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       }
     }
     
+    // Get consumer user details if logged in
+    let consumerUserData = null;
+    if (consumerUserId) {
+      const [consumerUser] = await db
+        .select()
+        .from(consumerUsers)
+        .where(eq(consumerUsers.id, consumerUserId))
+        .limit(1);
+      consumerUserData = consumerUser;
+    }
+    
     // Save to database
     const [assessment] = await db.insert(valuationAssessments).values({
-      // Link to consumer user if logged in
-      userId: consumerUserId,
-      // Using placeholder contact info since it's not collected in free assessment
-      firstName: 'Guest',
-      lastName: 'User',
-      email: consumerUserId ? `user_${consumerUserId}@assessment.com` : `guest_${Date.now()}@example.com`,
-      phone: '000-000-0000',  // Required field - placeholder for free assessments
-      company: 'Company',
+      // Don't link userId since it's for regular users, not consumer users
+      // We'll track by email instead
+      firstName: consumerUserData?.firstName || 'Guest',
+      lastName: consumerUserData?.lastName || 'User',
+      email: consumerUserData?.email || `guest_${Date.now()}@example.com`,
+      phone: consumerUserData?.phone || '000-000-0000',  // Required field - placeholder for free assessments
+      company: consumerUserData?.companyName || 'Company',
       tier: 'free',
       reportTier: 'free',
       
