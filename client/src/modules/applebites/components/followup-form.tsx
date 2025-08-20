@@ -1,7 +1,7 @@
 import { UseFormReturn } from "react-hook-form";
 import { FollowUpData } from "@shared/schema";
 import { Typography, Card, CardContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, TextField } from '@mui/material';
-import { ArrowLeft, Send, MessageSquare } from "lucide-react";
+import { ArrowLeft, Send, MessageSquare, Loader2 } from "lucide-react";
 import MDBox from "../../../components/MD/MDBox";
 import MDTypography from "../../../components/MD/MDTypography";
 import MDButton from "../../../components/MD/MDButton";
@@ -264,7 +264,14 @@ export default function FollowUpForm({ form, onSubmit, onPrev, onDataChange, isS
                 }}
               >
                 {isSubmitting ? (
-                  <>Generating Report...</>
+                  <MDBox display="flex" alignItems="center" justifyContent="center">
+                    <Loader2 
+                      size={18} 
+                      className="animate-spin" 
+                      style={{ marginRight: '8px' }}
+                    />
+                    Generating Report...
+                  </MDBox>
                 ) : (
                   <>
                     Generate Report
