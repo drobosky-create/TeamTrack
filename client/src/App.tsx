@@ -54,7 +54,7 @@ import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 import { AdminAuthProvider, useAdminAuth } from './hooks/use-admin-auth';
 
 // Admin Dashboard Wrapper Component
-function AdminDashboardWrapper() {
+function AdminDashboardWrapper({ children }: { children?: React.ReactNode }) {
   const { adminUser, isLoading } = useAdminAuth();
 
   if (isLoading) {
@@ -65,10 +65,10 @@ function AdminDashboardWrapper() {
     return <AdminLoginPage />;
   }
 
-  // Use the MaterialDashboardLayout with AdminDashboard for admin users
+  // Use the MaterialDashboardLayout with children or AdminDashboard for admin users
   return (
     <MaterialDashboardLayout>
-      <AdminDashboard />
+      {children || <AdminDashboard />}
     </MaterialDashboardLayout>
   );
 }
