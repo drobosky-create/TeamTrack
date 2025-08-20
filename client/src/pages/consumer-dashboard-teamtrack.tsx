@@ -64,7 +64,7 @@ interface Assessment {
 }
 
 // Past Assessments Component
-function PastAssessmentsSection({ userEmail }: { userEmail: string }) {
+function PastAssessmentsSection() {
   const { data: assessments, isLoading } = useQuery<Assessment[]>({
     queryKey: ['/api/consumer/assessments'],
   });
@@ -233,19 +233,10 @@ export default function ConsumerDashboardTeamTrack() {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
 
-  // Fetch assessments data for dashboard metrics
-  const { data: assessments = [] } = useQuery<Assessment[]>({
-    queryKey: ['/api/assessments'],
+  // Fetch assessments data for dashboard metrics - using consumer-specific endpoint
+  const { data: userAssessments = [] } = useQuery<Assessment[]>({
+    queryKey: ['/api/consumer/assessments'],
   });
-
-  // Filter assessments by the logged-in user (must be before conditional returns)
-  const userEmail = (user?.email || '').toLowerCase();
-  
-  // Only this user's assessments
-  const userAssessments = useMemo(
-    () => (assessments || []).filter(a => a.email?.toLowerCase() === userEmail),
-    [assessments, userEmail]
-  );
 
   // Metrics based ONLY on this user's data
   const totalAssessments = userAssessments.length;
@@ -600,7 +591,7 @@ export default function ConsumerDashboardTeamTrack() {
                   </Button>
                 </Link>
               </div>
-              <PastAssessmentsSection userEmail={user.email!} />
+              <PastAssessmentsSection />
             </div>
           </div>
         </div>
