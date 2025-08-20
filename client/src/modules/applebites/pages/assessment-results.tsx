@@ -65,7 +65,12 @@ export default function AssessmentResults() {
 
   // Fetch the specific assessment directly
   const { data: assessmentData, isLoading: assessmentsLoading } = useQuery<{ success: boolean; assessment: ValuationAssessment }>({
-    queryKey: [`/api/assessments/${assessmentId}`],
+    queryKey: ['/api/assessments', assessmentId],
+    queryFn: async () => {
+      const response = await fetch(`/api/assessments/${assessmentId}`, { credentials: 'include' });
+      if (!response.ok) throw new Error('Failed to fetch assessment');
+      return response.json();
+    },
     enabled: !!assessmentId,
   });
 
