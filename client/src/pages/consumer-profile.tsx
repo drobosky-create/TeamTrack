@@ -25,11 +25,14 @@ import {
   Email as EmailIcon,
   Security as SecurityIcon,
   Edit as EditIcon,
-  Close as CloseIcon
+  Close as CloseIcon,
+  ArrowBack as ArrowBackIcon,
+  Dashboard as DashboardIcon
 } from '@mui/icons-material';
 import { useToast } from '@/hooks/use-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
+import { Link } from 'wouter';
 
 function ConsumerProfile() {
   const { data: user } = useQuery({
@@ -120,6 +123,26 @@ function ConsumerProfile() {
       />
       
       <Container maxWidth="lg" sx={{ position: 'relative', mt: -15, pb: 4 }}>
+        {/* Back to Dashboard Button */}
+        <Box sx={{ mb: 3 }}>
+          <Button
+            component={Link}
+            href="/consumer-dashboard"
+            startIcon={<ArrowBackIcon />}
+            sx={{
+              color: 'white',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              }
+            }}
+          >
+            Back to Dashboard
+          </Button>
+        </Box>
+
         {/* Profile Card */}
         <Card
           sx={{
