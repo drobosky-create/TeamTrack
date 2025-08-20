@@ -53,7 +53,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
   };
 
   const handleExploreImprovements = () => {
-    setLocation(`/value-calculator?assessmentId=${results.id}`);
+    setLocation(`/value-improvement/${results.id}`);
   };
 
   return (

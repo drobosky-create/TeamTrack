@@ -26,6 +26,10 @@ export default function StrategicReport({ results }: StrategicReportProps) {
     window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank');
   };
 
+  const handleExploreImprovements = () => {
+    setLocation(`/value-improvement/${results.id}`);
+  };
+
   // Enhanced AI-powered Executive Summary Generation
   const generateIntelligentSummary = () => {
     const naicsCode = results.naicsCode || '';
@@ -1328,6 +1332,26 @@ export default function StrategicReport({ results }: StrategicReportProps) {
               }}
             >
               Schedule Strategic Consultation
+            </MDButton>
+            
+            <MDButton 
+              onClick={handleExploreImprovements}
+              variant="contained"
+              size="large"
+              sx={{ 
+                background: 'linear-gradient(135deg, #00D4AA 0%, #0095B8 100%)', 
+                color: '#FFFFFF',
+                fontWeight: 'bold',
+                px: 4, 
+                py: 1.5,
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #00F5C4 0%, #007BA7 100%)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 25px rgba(0, 212, 170, 0.7)'
+                }
+              }}
+            >
+              Explore Improvements
             </MDButton>
             
             <MDButton 

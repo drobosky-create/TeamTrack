@@ -57,6 +57,12 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
   - Growth and Capital tier assessments now correctly display StrategicReport with valuation gauge
   - Free tier assessments continue to show basic ValuationResults component
   - Both `/assessment-results/:id` route and `/modules/applebites/pages/assessment-results` properly handle tier-based rendering
+- **Value Improvement Calculator Integration (August 20, 2025)**: Added "Explore Improvements" feature to assessment results:
+  - Added "Explore Improvements" button to both ValuationResults and StrategicReport components
+  - Button navigates to `/value-improvement/{assessment-id}` route
+  - Created `/api/consumer/assessments/latest` endpoint for fetching most recent assessment
+  - Updated ValueImprovementCalculator to fetch real assessment data using React Query
+  - Calculator displays grade-based value improvement scenarios showing potential business value at different operational performance levels
 
 # User Preferences
 
