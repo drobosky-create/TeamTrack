@@ -540,6 +540,61 @@ router.get('/api/consumer/assessments', async (req: Request, res: Response) => {
   }
 });
 
+// Delete consumer assessment
+router.delete('/api/consumer/assessments/:id', async (req: Request, res: Response) => {
+  try {
+    // Get the consumer user from session
+    const consumerUser = (req.session as any)?.consumerUser;
+    
+    if (!consumerUser || !consumerUser.email) {
+      return res.status(401).json({ 
+        success: false, 
+        message: 'Please login to delete assessments' 
+      });
+    }
+
+    const assessmentId = parseInt(req.params.id);
+    
+    // First, verify that this assessment belongs to the user
+    const existingAssessment = await db
+      .select()
+      .from(valuationAssessments)
+      .where(eq(valuationAssessments.id, assessmentId))
+      .limit(1);
+    
+    if (!existingAssessment.length) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Assessment not found' 
+      });
+    }
+    
+    // Check if the assessment belongs to the current user
+    if (existingAssessment[0].email !== consumerUser.email) {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'You can only delete your own assessments' 
+      });
+    }
+    
+    // Delete the assessment
+    await db
+      .delete(valuationAssessments)
+      .where(eq(valuationAssessments.id, assessmentId));
+    
+    res.json({ 
+      success: true, 
+      message: 'Assessment deleted successfully' 
+    });
+  } catch (error) {
+    console.error('Delete consumer assessment error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to delete assessment' 
+    });
+  }
+});
+
 // Get assessment results
 router.get('/api/assessments/:id', async (req: Request, res: Response) => {
   try {

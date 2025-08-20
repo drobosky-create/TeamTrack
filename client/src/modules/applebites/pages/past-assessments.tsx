@@ -23,9 +23,10 @@ import {
   Sparkles,
   LayoutDashboard,
   CheckSquare,
-  Bell
+  Bell,
+  Trash2
 } from 'lucide-react';
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
 interface ConsumerUser {
   id: string;
@@ -60,6 +61,8 @@ export default function PastAssessmentsPage() {
   const [user, setUser] = useState<ConsumerUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [assessmentToDelete, setAssessmentToDelete] = useState<Assessment | null>(null);
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
@@ -67,6 +70,34 @@ export default function PastAssessmentsPage() {
   // Fetch assessments data - using consumer-specific endpoint
   const { data: assessments = [], isLoading: assessmentsLoading } = useQuery<Assessment[]>({
     queryKey: ['/api/consumer/assessments'],
+  });
+  
+  // Delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (assessmentId: number) => {
+      const response = await apiRequest('DELETE', `/api/consumer/assessments/${assessmentId}`);
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to delete assessment');
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Assessment deleted successfully",
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/consumer/assessments'] });
+      setDeleteDialogOpen(false);
+      setAssessmentToDelete(null);
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete assessment",
+        variant: "destructive",
+      });
+    },
   });
 
   // No need to filter by email since API only returns user's assessments
@@ -120,6 +151,22 @@ export default function PastAssessmentsPage() {
         variant: "destructive",
       });
     }
+  };
+  
+  const handleDeleteClick = (assessment: Assessment) => {
+    setAssessmentToDelete(assessment);
+    setDeleteDialogOpen(true);
+  };
+  
+  const handleDeleteConfirm = () => {
+    if (assessmentToDelete) {
+      deleteMutation.mutate(assessmentToDelete.id);
+    }
+  };
+  
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setAssessmentToDelete(null);
   };
 
   const formatCurrency = (value: string | null) => {
@@ -389,10 +436,10 @@ export default function PastAssessmentsPage() {
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {filteredAssessments.map((assessment) => (
-                <Card key={assessment.id} className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardContent className="p-5" onClick={() => setLocation(`/assessment-results/${assessment.id}`)}>
+                <Card key={assessment.id} className="hover:shadow-lg transition-shadow">
+                  <CardContent className="p-5">
                     <div className="flex justify-between items-start mb-3">
-                      <div>
+                      <div className="cursor-pointer" onClick={() => setLocation(`/assessment-results/${assessment.id}`)}>
                         <h3 className="font-semibold text-gray-800 text-lg">{assessment.company}</h3>
                         <p className="text-sm text-gray-600">
                           {assessment.firstName} {assessment.lastName}
@@ -406,7 +453,7 @@ export default function PastAssessmentsPage() {
                       </Badge>
                     </div>
                     
-                    <div className="space-y-2 mb-3">
+                    <div className="space-y-2 mb-3 cursor-pointer" onClick={() => setLocation(`/assessment-results/${assessment.id}`)}>
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-600">Valuation:</span>
                         <span className="font-semibold text-gray-800">
@@ -431,16 +478,66 @@ export default function PastAssessmentsPage() {
                       <span className="text-xs text-gray-500">
                         {formatDate(assessment.createdAt)}
                       </span>
-                      <Button size="sm" variant="ghost" className="text-[#1976d2]">
-                        <Eye className="h-4 w-4 mr-1" />
-                        View Details
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          size="sm" 
+                          variant="ghost" 
+                          className="text-[#1976d2]"
+                          onClick={() => setLocation(`/assessment-results/${assessment.id}`)}
+                        >
+                          <Eye className="h-4 w-4 mr-1" />
+                          View
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="ghost" 
+                          className="text-red-600 hover:text-red-700"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteClick(assessment);
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           )}
+        </div>
+      </div>
+      
+      {/* Delete Confirmation Dialog */}
+      <div
+        className={`fixed inset-0 flex items-center justify-center z-50 ${
+          deleteDialogOpen ? '' : 'hidden'
+        }`}
+      >
+        <div className="fixed inset-0 bg-black bg-opacity-50" onClick={handleDeleteCancel}></div>
+        <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 relative z-10">
+          <h2 className="text-xl font-semibold mb-4">Delete Assessment</h2>
+          <p className="text-gray-600 mb-6">
+            Are you sure you want to delete the assessment for{' '}
+            <strong>{assessmentToDelete?.company}</strong>? This action cannot be undone.
+          </p>
+          <div className="flex justify-end gap-3">
+            <Button
+              variant="outline"
+              onClick={handleDeleteCancel}
+              disabled={deleteMutation.isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-red-600 hover:bg-red-700 text-white"
+              onClick={handleDeleteConfirm}
+              disabled={deleteMutation.isPending}
+            >
+              {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
