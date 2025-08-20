@@ -1,0 +1,84 @@
+queryClient.ts:32 
+ GET https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.replit.dev/api/auth/user 401 (Unauthorized)
+(anonymous)	@	queryClient.ts:32
+
+chunk-RPCDYKBN.js?v=41866761:521 Warning: React does not recognize the `mdProps` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `mdprops` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+    at h4
+    at https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…ner/workspace/node_modules/.vite/deps/chunk-P3HWRIKI.js?v=41866761:1660:45
+    at Typography2 (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…unner/workspace/node_modules/.vite/deps/@mui_material.js?v=41866761:5450:7)
+    at https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…ner/workspace/node_modules/.vite/deps/chunk-P3HWRIKI.js?v=41866761:1660:45
+    at _c2 (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.replit.dev/src/components/MD/MDTypography.tsx:49:12)
+    at div
+    at https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…ner/workspace/node_modules/.vite/deps/chunk-P3HWRIKI.js?v=41866761:1660:45
+    at Box3 (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…ner/workspace/node_modules/.vite/deps/chunk-P3HWRIKI.js?v=41866761:4693:19)
+    at https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…ner/workspace/node_modules/.vite/deps/chunk-P3HWRIKI.js?v=41866761:1660:45
+    at _c2 (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.replit.dev/src/components/MD/MDBox.tsx:83:12)
+    at div
+    at https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…ner/workspace/node_modules/.vite/deps/chunk-P3HWRIKI.js?v=41866761:1660:45
+    at Box3 (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…ner/workspace/node_modules/.vite/deps/chunk-P3HWRIKI.js?v=41866761:4693:19)
+    at https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…ner/workspace/node_modules/.vite/deps/chunk-P3HWRIKI.js?v=41866761:1660:45
+    at _c2 (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.replit.dev/src/components/MD/MDBox.tsx:83:12)
+    at ValuationResults (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.replit.dev/src/modules/applebites/components/valuation-results.tsx:25:44)
+    at div
+    at div
+    at AssessmentResultsPage (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.replit.dev/src/pages/assessment-results-page.tsx:27:18)
+    at Route (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=41866761:323:16)
+    at Switch (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=41866761:379:17)
+    at Router (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.replit.dev/src/App.tsx?v=i9MB-lUAfnMBUUkZaL7h8:100:42)
+    at Provider (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…unner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=41866761:38:15)
+    at TooltipProvider (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…rkspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=41866761:62:5)
+    at ThemeTokenProvider (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.replit.dev/src/components/ThemeTokenProvider.tsx:21:38)
+    at AdminAuthProvider (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.replit.dev/src/hooks/use-admin-auth.tsx:21:37)
+    at QueryClientProvider (https://6315473f-1724-4a5a-bbb5-aff2c4bb066a-00-20s0ul2xttjee.janeway.repli…rkspace/node_modules/.vite/deps/@tanstack_react-query.js?v=41866761:2805:3)
+    at App
+printWarning	@	chunk-RPCDYKBN.js?v=41866761:521
+error	@	chunk-RPCDYKBN.js?v=41866761:505
+validateProperty$1	@	chunk-RPCDYKBN.js?v=41866761:3427
+warnUnknownProperties	@	chunk-RPCDYKBN.js?v=41866761:3459
+validateProperties$2	@	chunk-RPCDYKBN.js?v=41866761:3478
+validatePropertiesInDevelopment	@	chunk-RPCDYKBN.js?v=41866761:7346
+setInitialProperties	@	chunk-RPCDYKBN.js?v=41866761:7535
+finalizeInitialChildren	@	chunk-RPCDYKBN.js?v=41866761:8345
+completeWork	@	chunk-RPCDYKBN.js?v=41866761:16293
+completeUnitOfWork	@	chunk-RPCDYKBN.js?v=41866761:19224
+performUnitOfWork	@	chunk-RPCDYKBN.js?v=41866761:19206
+workLoopSync	@	chunk-RPCDYKBN.js?v=41866761:19137
+renderRootSync	@	chunk-RPCDYKBN.js?v=41866761:19116
+performSyncWorkOnRoot	@	chunk-RPCDYKBN.js?v=41866761:18874
+flushSyncCallbacks	@	chunk-RPCDYKBN.js?v=41866761:9119
+(anonymous)	@	chunk-RPCDYKBN.js?v=41866761:18627
+setTimeout		
+scheduleFn	@	@tanstack_react-query.js?v=41866761:555
+flush	@	@tanstack_react-query.js?v=41866761:569
+batch	@	@tanstack_react-query.js?v=41866761:587
+dispatch_fn	@	@tanstack_react-query.js?v=41866761:996
+setData	@	@tanstack_react-query.js?v=41866761:696
+onSuccess	@	@tanstack_react-query.js?v=41866761:897
+resolve	@	@tanstack_react-query.js?v=41866761:456
+Promise.then		
+run	@	@tanstack_react-query.js?v=41866761:498
+start	@	@tanstack_react-query.js?v=41866761:536
+fetch	@	@tanstack_react-query.js?v=41866761:926
+executeFetch_fn	@	@tanstack_react-query.js?v=41866761:2211
+onSubscribe	@	@tanstack_react-query.js?v=41866761:1898
+subscribe	@	@tanstack_react-query.js?v=41866761:24
+(anonymous)	@	@tanstack_react-query.js?v=41866761:3022
+subscribeToStore	@	chunk-RPCDYKBN.js?v=41866761:11984
+commitHookEffectListMount	@	chunk-RPCDYKBN.js?v=41866761:16915
+commitPassiveMountOnFiber	@	chunk-RPCDYKBN.js?v=41866761:18156
+commitPassiveMountEffects_complete	@	chunk-RPCDYKBN.js?v=41866761:18129
+commitPassiveMountEffects_begin	@	chunk-RPCDYKBN.js?v=41866761:18119
+commitPassiveMountEffects	@	chunk-RPCDYKBN.js?v=41866761:18109
+flushPassiveEffectsImpl	@	chunk-RPCDYKBN.js?v=41866761:19490
+flushPassiveEffects	@	chunk-RPCDYKBN.js?v=41866761:19447
+performSyncWorkOnRoot	@	chunk-RPCDYKBN.js?v=41866761:18868
+flushSyncCallbacks	@	chunk-RPCDYKBN.js?v=41866761:9119
+commitRootImpl	@	chunk-RPCDYKBN.js?v=41866761:19432
+commitRoot	@	chunk-RPCDYKBN.js?v=41866761:19277
+finishConcurrentRender	@	chunk-RPCDYKBN.js?v=41866761:18805
+performConcurrentWorkOnRoot	@	chunk-RPCDYKBN.js?v=41866761:18718
+workLoop	@	chunk-RPCDYKBN.js?v=41866761:197
+flushWork	@	chunk-RPCDYKBN.js?v=41866761:176
+performWorkUntilDeadline	@	chunk-RPCDYKBN.js?v=41866761:384
+﻿
+

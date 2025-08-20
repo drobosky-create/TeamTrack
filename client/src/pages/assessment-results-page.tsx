@@ -3,6 +3,7 @@ import { useParams, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import ValuationResults from '@/modules/applebites/components/valuation-results';
+import StrategicReport from '@/modules/applebites/components/strategic-report';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Link } from 'wouter';
@@ -91,9 +92,13 @@ export default function AssessmentResultsPage() {
         </div>
       </div>
 
-      {/* Results Component */}
+      {/* Results Component - Show Strategic Report for paid tiers */}
       <div className="py-8">
-        <ValuationResults results={assessment} />
+        {assessment?.tier === 'growth' || assessment?.tier === 'capital' ? (
+          <StrategicReport results={assessment} />
+        ) : (
+          <ValuationResults results={assessment} />
+        )}
       </div>
     </div>
   );
