@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'wouter';
+import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -13,7 +14,8 @@ import {
   DollarSign,
   ArrowUp,
   ArrowDown,
-  Sparkles
+  Sparkles,
+  Loader2
 } from 'lucide-react';
 
 interface GradeImpact {
@@ -25,22 +27,49 @@ interface GradeImpact {
   color: string;
 }
 
+interface Assessment {
+  id: number;
+  adjustedEbitda: string;
+  valueDrivers?: any;
+  finalMultiple: string;
+  businessValue: string;
+  tier?: string;
+}
+
 export default function ValueImprovementCalculator() {
   const { id } = useParams();
   const [, setLocation] = useLocation();
-  const [assessmentData, setAssessmentData] = useState<any>(null);
   const [selectedGrade, setSelectedGrade] = useState<string>('C');
   
-  // Mock data - replace with actual API call
-  useEffect(() => {
-    // In production, fetch assessment data from API
-    setAssessmentData({
-      adjustedEbitda: 4500000,
-      currentGrade: 'C',
-      currentMultiple: 4.2,
-      currentValue: 18900000,
-    });
-  }, [id]);
+  // Fetch latest assessment data or specific assessment by ID
+  const { data: assessment, isLoading } = useQuery<Assessment>({
+    queryKey: id === 'latest' ? ['/api/consumer/assessments/latest'] : [`/api/assessments/${id}`],
+  });
+  
+  // Calculate average grade from value drivers
+  const calculateAverageGrade = (valueDrivers: any) => {
+    if (!valueDrivers) return 'C';
+    
+    const grades = ['financialPerformance', 'marketPosition', 'operationalExcellence', 
+                   'growthPotential', 'riskProfile', 'strategicAssets']
+      .map(key => valueDrivers[key])
+      .filter(Boolean);
+    
+    if (grades.length === 0) return 'C';
+    
+    const gradeValues: Record<string, number> = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1 };
+    const valueToGrade: Record<number, string> = { 5: 'A', 4: 'B', 3: 'C', 2: 'D', 1: 'F' };
+    
+    const avgValue = grades.reduce((sum, grade) => sum + (gradeValues[grade] || 3), 0) / grades.length;
+    return valueToGrade[Math.round(avgValue)] || 'C';
+  };
+  
+  const assessmentData = assessment ? {
+    adjustedEbitda: parseFloat(assessment.adjustedEbitda),
+    currentGrade: calculateAverageGrade(assessment.valueDrivers),
+    currentMultiple: parseFloat(assessment.finalMultiple),
+    currentValue: parseFloat(assessment.businessValue),
+  } : null;
 
   const gradeImpacts: GradeImpact[] = [
     { 
@@ -88,10 +117,36 @@ export default function ValueImprovementCalculator() {
   const currentGradeData = gradeImpacts.find(g => g.grade === assessmentData?.currentGrade);
   const selectedGradeData = gradeImpacts.find(g => g.grade === selectedGrade);
 
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Loading assessment data...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!assessmentData) {
     return (
       <div className="h-screen flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+        <Card className="max-w-md w-full mx-4">
+          <CardHeader>
+            <CardTitle>No Assessment Found</CardTitle>
+            <CardDescription>
+              You need to complete an assessment first to explore value improvements.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button 
+              onClick={() => setLocation('/assessment/free')}
+              className="w-full"
+            >
+              Start Free Assessment
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }

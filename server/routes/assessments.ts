@@ -540,6 +540,53 @@ router.get('/api/consumer/assessments', async (req: Request, res: Response) => {
   }
 });
 
+// Get latest assessment for consumer user (for Value Improvement Calculator)
+router.get('/api/consumer/assessments/latest', async (req: Request, res: Response) => {
+  try {
+    // Get the consumer user from session
+    const consumerUser = (req.session as any)?.consumerUser;
+    
+    if (!consumerUser || !consumerUser.email) {
+      return res.status(401).json({ 
+        success: false, 
+        message: 'Please login to view your assessments' 
+      });
+    }
+
+    // Get the most recent assessment for this user
+    const [latestAssessment] = await db
+      .select()
+      .from(valuationAssessments)
+      .where(eq(valuationAssessments.email, consumerUser.email))
+      .orderBy(desc(valuationAssessments.createdAt))
+      .limit(1);
+    
+    if (!latestAssessment) {
+      return res.status(404).json({ success: false, message: 'No assessment found' });
+    }
+    
+    // Return the assessment data with correct field names for Value Improvement Calculator
+    res.json({
+      id: latestAssessment.id,
+      adjustedEbitda: latestAssessment.adjustedEbitda,
+      valueDrivers: {
+        financialPerformance: latestAssessment.financialPerformance,
+        marketPosition: latestAssessment.customerConcentration,
+        operationalExcellence: latestAssessment.systemsProcesses,
+        growthPotential: latestAssessment.growthProspects,
+        riskProfile: latestAssessment.riskFactors,
+        strategicAssets: latestAssessment.assetQuality
+      },
+      finalMultiple: latestAssessment.valuationMultiple,
+      businessValue: latestAssessment.midEstimate,
+      tier: latestAssessment.tier
+    });
+  } catch (error) {
+    console.error('Error fetching latest consumer assessment:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch latest assessment' });
+  }
+});
+
 // Delete consumer assessment
 router.delete('/api/consumer/assessments/:id', async (req: Request, res: Response) => {
   try {

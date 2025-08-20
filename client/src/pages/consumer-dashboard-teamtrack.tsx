@@ -388,6 +388,14 @@ export default function ConsumerDashboardTeamTrack() {
               </Button>
             </Link>
             
+            {/* Explore Improvements */}
+            <Link href="/value-improvement/latest">
+              <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3">
+                <TrendingUp className="h-4 w-4 mr-3" />
+                Explore Improvements
+              </Button>
+            </Link>
+            
             {/* Free Assessment */}
             <Link href="/assessment/free">
               <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3">
