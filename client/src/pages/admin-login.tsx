@@ -3,6 +3,7 @@ import { useLocation } from 'wouter';
 import { Box, Typography, Button } from '@mui/material';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
 import MDInput from '../components/MD/MDInput';
+import { queryClient } from '../lib/queryClient';
 
 interface AdminLoginFormData {
   email: string;
@@ -42,6 +43,8 @@ export default function AdminLoginPage() {
       const data = await response.json();
 
       if (response.ok) {
+        // Invalidate admin user query to refetch user data
+        queryClient.invalidateQueries({ queryKey: ['/api/admin/user'] });
         // Redirect to admin dashboard
         setLocation('/dashboard');
       } else {

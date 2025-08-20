@@ -22,7 +22,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
     data: adminUser,
     error,
     isLoading,
-  } = useQuery<AdminUser | undefined, Error>({
+  } = useQuery<AdminUser | null, Error>({
     queryKey: ["/api/admin/user"],
     queryFn: async () => {
       const response = await fetch("/api/admin/user", {
@@ -30,14 +30,15 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
       });
       
       if (response.status === 401) {
-        return undefined; // Not authenticated
+        return null; // Not authenticated
       }
       
       if (!response.ok) {
         throw new Error('Failed to fetch admin user');
       }
       
-      return response.json();
+      const data = await response.json();
+      return data || null;
     },
     retry: false,
   });
@@ -45,7 +46,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   return (
     <AdminAuthContext.Provider
       value={{
-        adminUser: adminUser ?? null,
+        adminUser: adminUser || null,
         isLoading,
         error,
       }}
