@@ -109,7 +109,7 @@ export default function WinTheStormLanding() {
             boxShadow: '0 20px 40px rgba(0,0,0,0.5)'
           }}>
             <img 
-              src="/WTS__M&A_Lounge_Speakers_1755705427114.png" 
+              src="/WTS  M&A Lounge Speakers_1755705427114.png" 
               alt="M&A Lounge Speakers" 
               style={{ 
                 maxWidth: '100%', 
@@ -119,26 +119,10 @@ export default function WinTheStormLanding() {
             />
           </Box>
 
-          <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', maxWidth: 800, mx: 'auto', mb: 4 }}>
-            Join industry leaders at the M&A Lounge and gain exclusive access to AppleBites Growth platform - 
-            normally $795, completely free for event attendees.
+          <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', maxWidth: 800, mx: 'auto', mb: 6 }}>
+            Join industry leaders and gain exclusive access to AppleBites Growth platform - 
+            normally ${priceData?.price || 1995}, completely free for event attendees.
           </Typography>
-
-          {/* Event Details */}
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, mb: 6, flexWrap: 'wrap' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', color: 'white' }}>
-              <Calendar size={20} style={{ marginRight: 8 }} />
-              <Typography variant="body1">February 2025</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', color: 'white' }}>
-              <MapPin size={20} style={{ marginRight: 8 }} />
-              <Typography variant="body1">M&A Lounge</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', color: 'white' }}>
-              <Award size={20} style={{ marginRight: 8 }} />
-              <Typography variant="body1">Exclusive Access</Typography>
-            </Box>
-          </Box>
         </Box>
 
         {/* Two Column Layout */}
