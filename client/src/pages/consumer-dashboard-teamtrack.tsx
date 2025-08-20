@@ -30,7 +30,13 @@ import {
   Sparkles,
   LayoutDashboard,
   CheckSquare,
-  Bell
+  Bell,
+  Menu,
+  Home,
+  History,
+  Calculator,
+  UserCircle,
+  Settings
 } from 'lucide-react';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -229,6 +235,7 @@ function PastAssessmentsSection() {
 export default function ConsumerDashboardTeamTrack() {
   const [user, setUser] = useState<ConsumerUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
@@ -478,11 +485,13 @@ export default function ConsumerDashboardTeamTrack() {
           <div className="px-4 py-4">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-4">
-                <Link href="/applebites">
-                  <Button variant="ghost" size="sm">
-                    ← Back
-                  </Button>
-                </Link>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => setMobileMenuOpen(true)}
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
                 <h1 className="text-xl font-semibold">Dashboard</h1>
               </div>
               <Button onClick={handleLogout} variant="outline" size="sm">
@@ -491,6 +500,123 @@ export default function ConsumerDashboardTeamTrack() {
             </div>
           </div>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            {/* Backdrop */}
+            <div 
+              className="fixed inset-0 bg-black/50" 
+              onClick={() => setMobileMenuOpen(false)}
+            />
+            
+            {/* Slide-out Menu */}
+            <div className="fixed left-0 top-0 h-full w-80 bg-white shadow-lg transform transition-transform duration-300">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-[#42424a] to-[#191919] text-white p-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-lg font-semibold">AppleBites</h2>
+                    <p className="text-sm opacity-90">Business Valuation</p>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-white hover:bg-white/10"
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Navigation Menu */}
+              <div className="p-4 space-y-2">
+                <Link href="/consumer-dashboard">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Home className="h-4 w-4 mr-3" />
+                    Dashboard
+                  </Button>
+                </Link>
+                
+                <Link href="/assessment/free">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <FileText className="h-4 w-4 mr-3" />
+                    Free Assessment
+                  </Button>
+                </Link>
+
+                {user?.plan !== 'free' && (
+                  <Link href="/assessment/paid">
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start text-left"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Crown className="h-4 w-4 mr-3" />
+                      Growth Assessment
+                    </Button>
+                  </Link>
+                )}
+
+                <Link href="/past-assessments">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <History className="h-4 w-4 mr-3" />
+                    Past Assessments
+                  </Button>
+                </Link>
+
+                <Link href="/value-improvement">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Calculator className="h-4 w-4 mr-3" />
+                    Value Calculator
+                  </Button>
+                </Link>
+
+                {user?.plan === 'free' && (
+                  <Link href="/applebites-checkout">
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start text-left text-green-600 hover:bg-green-50"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Crown className="h-4 w-4 mr-3" />
+                      Upgrade to Growth
+                    </Button>
+                  </Link>
+                )}
+
+                <div className="pt-4 border-t">
+                  <Link href="/applebites">
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start text-left"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      ← Back to Landing
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="p-4 md:p-8">
           {/* Welcome Section */}
