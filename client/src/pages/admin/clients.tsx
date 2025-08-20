@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import {
   Box,
   Typography,
@@ -44,9 +45,9 @@ interface AdminClient {
   companyName: string;
   contactName: string;
   email: string;
-  phone: string;
-  industry: string;
-  naicsCode: string;
+  phone?: string;
+  industry?: string;
+  naicsCode?: string;
   status: 'active' | 'pending' | 'completed' | 'archived';
   assessmentType: 'free' | 'growth' | 'capital';
   valuation?: number;
@@ -57,6 +58,8 @@ interface AdminClient {
   lastActivity: string;
   followUpStatus: 'interested' | 'not_interested' | 'consultation_booked' | 'pending';
   paidTier: boolean;
+  plan: string;
+  stripeSessionId?: string;
 }
 
 // Sample comprehensive client data for admin view
@@ -121,18 +124,57 @@ const adminClients: AdminClient[] = [
 ];
 
 export default function AdminClientRecordsPage() {
-  const [clients] = useState<AdminClient[]>(adminClients);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterAssessmentType, setFilterAssessmentType] = useState('all');
   const [selectedClient, setSelectedClient] = useState<AdminClient | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  // Fetch real consumer signups from API
+  const { data: consumersData, isLoading, error } = useQuery({
+    queryKey: ['/api/admin/consumer-signups'],
+    queryFn: async () => {
+      const response = await fetch('/api/admin/consumer-signups', {
+        credentials: 'include'
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch consumer signups');
+      }
+      return response.json();
+    }
+  });
+
+  // Transform consumer data to AdminClient format
+  const clients: AdminClient[] = consumersData?.signups?.map((signup: any) => ({
+    id: signup.id,
+    companyName: signup.companyName || 'N/A',
+    contactName: `${signup.firstName || ''} ${signup.lastName || ''}`.trim() || 'N/A',
+    email: signup.email,
+    phone: signup.phone || 'N/A',
+    industry: 'Unknown', // TODO: Get from assessments
+    naicsCode: 'Unknown', // TODO: Get from assessments
+    status: 'active' as const,
+    assessmentType: signup.plan as 'free' | 'growth' | 'capital',
+    valuation: undefined, // TODO: Get from latest assessment
+    revenue: undefined, // TODO: Get from latest assessment
+    ebitda: undefined, // TODO: Get from latest assessment
+    assignedTo: 'Unassigned',
+    createdDate: new Date(signup.createdAt).toLocaleDateString(),
+    lastActivity: new Date(signup.createdAt).toLocaleDateString(),
+    followUpStatus: 'pending' as const,
+    paidTier: signup.plan !== 'free',
+    plan: signup.plan,
+    stripeSessionId: signup.stripeSessionId
+  })) || [];
+
   const filteredClients = clients.filter(client => {
-    const matchesSearch = client.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         client.contactName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         client.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         client.assignedTo.toLowerCase().includes(searchTerm.toLowerCase());
+    const searchLower = searchTerm.toLowerCase();
+    const matchesSearch = !searchTerm || 
+                         client.companyName?.toLowerCase().includes(searchLower) ||
+                         client.contactName?.toLowerCase().includes(searchLower) ||
+                         client.email?.toLowerCase().includes(searchLower) ||
+                         client.industry?.toLowerCase().includes(searchLower) ||
+                         client.assignedTo?.toLowerCase().includes(searchLower);
     
     const matchesStatus = filterStatus === 'all' || client.status === filterStatus;
     const matchesAssessment = filterAssessmentType === 'all' || client.assessmentType === filterAssessmentType;
@@ -181,6 +223,26 @@ export default function AdminClientRecordsPage() {
     alert(`Override valuation for client ${clientId} - Admin override capability`);
   };
 
+  // Show loading state
+  if (isLoading) {
+    return (
+      <Box sx={{ p: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+        <Typography variant="h6">Loading client records...</Typography>
+      </Box>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Alert severity="error" sx={{ mb: 3 }}>
+          Failed to load client records. Please try refreshing the page.
+        </Alert>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#1F2937', mb: 3 }}>
@@ -188,7 +250,7 @@ export default function AdminClientRecordsPage() {
       </Typography>
 
       <Typography variant="body1" sx={{ mb: 4, color: '#6B7280' }}>
-        Complete administrative control over all client records, assessments, and system data.
+        Live consumer signups and assessments from AppleBites platform. Total records: {clients.length}
       </Typography>
 
       {/* Admin Summary Metrics */}
