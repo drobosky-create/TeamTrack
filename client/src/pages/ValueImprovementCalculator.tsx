@@ -42,22 +42,22 @@ import MDButton from '@/components/MD/MDButton';
 // Styled Components
 const PageContainer = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
-  backgroundColor: '#f8f9fa',
+  backgroundColor: '#f0f2f5',
   padding: theme.spacing(3)
 }));
 
 const MainCard = styled(Card)(({ theme }) => ({
   backgroundColor: '#ffffff',
-  borderRadius: '16px',
-  boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+  borderRadius: '12px',
+  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.07)',
   overflow: 'visible'
 }));
 
 const HeaderGradient = styled(Box)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  background: 'linear-gradient(195deg, #42424a 0%, #191919 100%)',
   padding: theme.spacing(4),
   color: 'white',
-  borderRadius: '16px 16px 0 0'
+  borderRadius: '12px 12px 0 0'
 }));
 
 const GradeCard = styled(Paper)(({ theme }) => ({
@@ -155,8 +155,8 @@ export default function ValueImprovementCalculator() {
       multiple: 2.0,
       value: (assessmentData?.adjustedEbitda || 0) * 2,
       improvement: -52,
-      color: '#DC2626',
-      bgColor: '#FEE2E2'
+      color: '#f44335',
+      bgColor: '#ffebee'
     },
     {
       grade: 'D',
@@ -164,8 +164,8 @@ export default function ValueImprovementCalculator() {
       multiple: 3.0,
       value: (assessmentData?.adjustedEbitda || 0) * 3,
       improvement: -29,
-      color: '#EA580C',
-      bgColor: '#FED7AA'
+      color: '#ff9800',
+      bgColor: '#fff3e0'
     },
     {
       grade: 'C',
@@ -173,8 +173,8 @@ export default function ValueImprovementCalculator() {
       multiple: 4.2,
       value: (assessmentData?.adjustedEbitda || 0) * 4.2,
       improvement: 0,
-      color: '#EAB308',
-      bgColor: '#FEF3C7'
+      color: '#fb8c00',
+      bgColor: '#ffe0b2'
     },
     {
       grade: 'B',
@@ -182,8 +182,8 @@ export default function ValueImprovementCalculator() {
       multiple: 5.7,
       value: (assessmentData?.adjustedEbitda || 0) * 5.7,
       improvement: 36,
-      color: '#3B82F6',
-      bgColor: '#DBEAFE'
+      color: '#49a3f1',
+      bgColor: '#e3f2fd'
     },
     {
       grade: 'A',
@@ -191,8 +191,8 @@ export default function ValueImprovementCalculator() {
       multiple: 7.5,
       value: (assessmentData?.adjustedEbitda || 0) * 7.5,
       improvement: 79,
-      color: '#10B981',
-      bgColor: '#D1FAE5'
+      color: '#4CAF50',
+      bgColor: '#e8f5e9'
     }
   ];
 
@@ -253,14 +253,23 @@ export default function ValueImprovementCalculator() {
   return (
     <PageContainer>
       <Container maxWidth="lg">
-        {/* Back Button */}
-        <Button
-          startIcon={<ArrowLeft size={20} />}
-          onClick={() => window.history.back()}
-          sx={{ mb: 3, color: '#6B7280' }}
-        >
-          Back to Results
-        </Button>
+        {/* Navigation Buttons */}
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+          <Button
+            startIcon={<ArrowLeft size={20} />}
+            onClick={() => window.history.back()}
+            sx={{ color: '#6B7280' }}
+          >
+            Back to Results
+          </Button>
+          <MDButton
+            variant="outlined"
+            color="dark"
+            onClick={() => setLocation('/consumer-dashboard')}
+          >
+            Return to Dashboard
+          </MDButton>
+        </Box>
 
         <MainCard>
           {/* Header */}
@@ -292,10 +301,21 @@ export default function ValueImprovementCalculator() {
 
           <CardContent sx={{ p: 4 }}>
             {/* Current Status */}
-            <Alert severity="info" sx={{ mb: 4 }}>
-              <AlertTitle>Your Current Position</AlertTitle>
-              Your business currently has a <strong>Grade {assessmentData.currentGrade}</strong> operational rating with an estimated value of{' '}
-              <strong>{formatCurrency(assessmentData.currentValue)}</strong> based on a {assessmentData.currentMultiple}x multiple.
+            <Alert 
+              severity="info" 
+              sx={{ 
+                mb: 4,
+                backgroundColor: '#e3f2fd',
+                '& .MuiAlert-icon': {
+                  color: '#49a3f1'
+                }
+              }}
+            >
+              <AlertTitle sx={{ fontWeight: 'bold', color: '#344767' }}>Your Current Position</AlertTitle>
+              <Typography sx={{ color: '#344767' }}>
+                Your business currently has a <strong>Grade {assessmentData.currentGrade}</strong> operational rating with an estimated value of{' '}
+                <strong>{formatCurrency(assessmentData.currentValue)}</strong> based on a {assessmentData.currentMultiple}x multiple.
+              </Typography>
             </Alert>
 
             {/* Grade Selection */}
@@ -349,82 +369,88 @@ export default function ValueImprovementCalculator() {
                   Value Impact Analysis
                 </Typography>
 
-                <Grid container spacing={4}>
-                  <Grid item xs={12} md={4}>
-                    <Paper sx={{ p: 3, textAlign: 'center', backgroundColor: '#f3f4f6' }}>
-                      <Typography variant="subtitle2" sx={{ color: '#6B7280', mb: 1 }}>
-                        Current Value
-                      </Typography>
-                      <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#1F2937', mb: 1 }}>
-                        {formatCurrency(currentGradeData?.value || 0)}
-                      </Typography>
-                      <Chip
-                        label={`Grade ${currentGradeData?.grade}`}
-                        sx={{
-                          backgroundColor: currentGradeData?.bgColor,
-                          color: currentGradeData?.color,
-                          fontWeight: 'bold'
-                        }}
-                      />
-                    </Paper>
-                  </Grid>
-
-                  <Grid item xs={12} md={4}>
-                    <Paper sx={{ p: 3, textAlign: 'center' }}>
-                      <Typography variant="subtitle2" sx={{ color: '#6B7280', mb: 1 }}>
-                        Potential Change
-                      </Typography>
-                      <Box display="flex" alignItems="center" justifyContent="center" gap={1}>
-                        {selectedGradeData.improvement > 0 ? (
-                          <ArrowUp size={24} color="#10B981" />
-                        ) : selectedGradeData.improvement < 0 ? (
-                          <ArrowDown size={24} color="#DC2626" />
-                        ) : (
-                          <ChevronRight size={24} color="#6B7280" />
-                        )}
-                        <Typography
-                          variant="h4"
-                          sx={{
-                            fontWeight: 'bold',
-                            color: selectedGradeData.improvement > 0 ? '#10B981' : selectedGradeData.improvement < 0 ? '#DC2626' : '#6B7280'
-                          }}
-                        >
-                          {selectedGradeData.improvement > 0 ? '+' : ''}
-                          {selectedGradeData.improvement}%
-                        </Typography>
-                      </Box>
-                      <Typography variant="body2" sx={{ color: '#6B7280', mt: 1 }}>
-                        {formatCurrency(Math.abs(selectedGradeData.value - (currentGradeData?.value || 0)))} difference
-                      </Typography>
-                    </Paper>
-                  </Grid>
-
-                  <Grid item xs={12} md={4}>
-                    <Paper
+                <Box sx={{ display: 'flex', gap: 3, flexWrap: { xs: 'wrap', md: 'nowrap' } }}>
+                  <Paper sx={{ 
+                    flex: 1, 
+                    p: 3, 
+                    textAlign: 'center', 
+                    backgroundColor: '#f8f9fa',
+                    border: '1px solid #e9ecef'
+                  }}>
+                    <Typography variant="subtitle2" sx={{ color: '#6B7280', mb: 1 }}>
+                      Current Value
+                    </Typography>
+                    <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#344767', mb: 1 }}>
+                      {formatCurrency(currentGradeData?.value || 0)}
+                    </Typography>
+                    <Chip
+                      label={`Grade ${currentGradeData?.grade}`}
                       sx={{
-                        p: 3,
-                        textAlign: 'center',
-                        backgroundColor: selectedGradeData.bgColor,
-                        border: `2px solid ${selectedGradeData.color}`
+                        backgroundColor: currentGradeData?.bgColor,
+                        color: currentGradeData?.color,
+                        fontWeight: 'bold'
                       }}
-                    >
-                      <Typography variant="subtitle2" sx={{ color: '#6B7280', mb: 1 }}>
-                        Target Value
-                      </Typography>
-                      <Typography variant="h4" sx={{ fontWeight: 'bold', color: selectedGradeData.color, mb: 1 }}>
-                        {formatCurrency(selectedGradeData.value)}
-                      </Typography>
-                      <Chip
-                        label={`Grade ${selectedGradeData.grade}`}
+                    />
+                  </Paper>
+
+                  <Paper sx={{ 
+                    flex: 1, 
+                    p: 3, 
+                    textAlign: 'center',
+                    border: '1px solid #e9ecef' 
+                  }}>
+                    <Typography variant="subtitle2" sx={{ color: '#6B7280', mb: 1 }}>
+                      Potential Change
+                    </Typography>
+                    <Box display="flex" alignItems="center" justifyContent="center" gap={1}>
+                      {selectedGradeData.improvement > 0 ? (
+                        <ArrowUp size={24} color="#4CAF50" />
+                      ) : selectedGradeData.improvement < 0 ? (
+                        <ArrowDown size={24} color="#f44335" />
+                      ) : (
+                        <ChevronRight size={24} color="#6B7280" />
+                      )}
+                      <Typography
+                        variant="h4"
                         sx={{
-                          backgroundColor: 'white',
-                          color: selectedGradeData.color,
-                          fontWeight: 'bold'
+                          fontWeight: 'bold',
+                          color: selectedGradeData.improvement > 0 ? '#4CAF50' : selectedGradeData.improvement < 0 ? '#f44335' : '#6B7280'
                         }}
-                      />
-                    </Paper>
-                  </Grid>
-                </Grid>
+                      >
+                        {selectedGradeData.improvement > 0 ? '+' : ''}
+                        {selectedGradeData.improvement}%
+                      </Typography>
+                    </Box>
+                    <Typography variant="body2" sx={{ color: '#6B7280', mt: 1 }}>
+                      {formatCurrency(Math.abs(selectedGradeData.value - (currentGradeData?.value || 0)))} difference
+                    </Typography>
+                  </Paper>
+
+                  <Paper
+                    sx={{
+                      flex: 1,
+                      p: 3,
+                      textAlign: 'center',
+                      backgroundColor: selectedGradeData.bgColor,
+                      border: `2px solid ${selectedGradeData.color}`
+                    }}
+                  >
+                    <Typography variant="subtitle2" sx={{ color: '#6B7280', mb: 1 }}>
+                      Target Value
+                    </Typography>
+                    <Typography variant="h4" sx={{ fontWeight: 'bold', color: selectedGradeData.color, mb: 1 }}>
+                      {formatCurrency(selectedGradeData.value)}
+                    </Typography>
+                    <Chip
+                      label={`Grade ${selectedGradeData.grade}`}
+                      sx={{
+                        backgroundColor: 'white',
+                        color: selectedGradeData.color,
+                        fontWeight: 'bold'
+                      }}
+                    />
+                  </Paper>
+                </Box>
 
                 {/* Improvement Path */}
                 {selectedGradeData.improvement > 0 && (
@@ -440,20 +466,20 @@ export default function ValueImprovementCalculator() {
                 <Box display="flex" gap={2} justifyContent="center" mt={4}>
                   <MDButton
                     variant="gradient"
-                    color="primary"
+                    color="dark"
                     size="large"
                     onClick={() => window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank')}
-                    startIcon={<Target size={20} />}
                   >
+                    <Target size={20} style={{ marginRight: 8 }} />
                     Schedule Strategy Call
                   </MDButton>
                   <MDButton
-                    variant="outlined"
-                    color="primary"
+                    variant="gradient"
+                    color="info"
                     size="large"
                     onClick={() => setLocation('/assessment/growth')}
-                    startIcon={<TrendingUp size={20} />}
                   >
+                    <TrendingUp size={20} style={{ marginRight: 8 }} />
                     Get Detailed Analysis
                   </MDButton>
                 </Box>
