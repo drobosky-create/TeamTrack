@@ -109,8 +109,13 @@ function Router() {
       <Route path="/consumer-profile" component={ConsumerProfile} />
       <Route path="/admin-login" component={AdminLoginPage} />
       
-      {/* Admin Dashboard Route */}
+      {/* Admin Dashboard Routes */}
       <Route path="/dashboard" component={AdminDashboardWrapper} />
+      <Route path="/admin/clients" component={() => (
+        <AdminDashboardWrapper>
+          <AdminClientRecordsPage />
+        </AdminDashboardWrapper>
+      )} />
       <Route path="/assessment-selection" component={AssessmentSelection} />
       <Route path="/assessments/free" component={FreeAssessment} />
       <Route path="/assessments/growth" component={GrowthAssessment} />
@@ -136,7 +141,7 @@ function Router() {
             <Route path="/branding" component={BrandingPage} />
             <Route path="/analytics" component={AnalyticsPage} />
             <Route path="/clients" component={ClientManagementPage} />
-            <Route path="/admin/clients" component={AdminClientRecordsPage} />
+
             <Route path="/results/:id" component={AssessmentResults} />
             <Route path="/follow-up" component={FollowUpOptionsPage} />
             <Route path="/theme-manager" component={ThemeManager} />
