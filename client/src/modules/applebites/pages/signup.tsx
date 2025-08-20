@@ -87,7 +87,7 @@ export default function SignupPage() {
 
       if (response.ok) {
         // Force reload to update authentication state
-        window.location.href = '/dashboard';
+        window.location.href = '/consumer-dashboard';
       } else {
         setError(data.message || 'Registration failed. Please try again.');
       }

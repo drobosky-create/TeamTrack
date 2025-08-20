@@ -626,9 +626,7 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
     // Handle both Growth Assessment (weighted scoring) and Free Assessment (A-F grades)
     let avgScore = 3; // Default to average
     
-    // Check if this is a Growth Assessment with weighted answers
-    const isGrowthAssessment = formData.tier === 'growth' || 
-                               (valueDrivers && typeof Object.values(valueDrivers)[0] === 'number');
+    // Check if this is a Growth Assessment with weighted answers (already declared above)
     
     if (isGrowthAssessment) {
       // Growth Assessment uses weighted scoring (0-4 index where 4 is best)

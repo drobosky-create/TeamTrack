@@ -1331,7 +1331,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
             </MDButton>
             
             <MDButton 
-              onClick={() => window.location.href = '/dashboard'}
+              onClick={() => window.location.href = '/consumer-dashboard'}
               variant="outlined"
               size="large"
               sx={{ 

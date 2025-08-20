@@ -56,7 +56,7 @@ export default function LoginPage() {
         
         // Give a small delay to allow session to propagate
         setTimeout(() => {
-          window.location.href = '/dashboard';
+          window.location.href = '/consumer-dashboard';
         }, 100);
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');
