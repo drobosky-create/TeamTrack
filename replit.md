@@ -52,6 +52,11 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
   - Integrated actual NAICS multiplier data from JSON file using file system read instead of problematic dynamic imports
   - Growth Assessments now correctly calculate and apply industry-specific multipliers (e.g., Roofing Contractors with perfect scores = 11.0x multiplier)
   - Valuation reports generate successfully with accurate NAICS-based calculations showing proper valuation ranges
+- **Strategic Report Display Fix (August 20, 2025)**: Resolved issue where Growth assessments were showing basic ValuationResults instead of StrategicReport:
+  - Fixed `AssessmentResultsPage` component to check assessment tier and render appropriate component
+  - Growth and Capital tier assessments now correctly display StrategicReport with valuation gauge
+  - Free tier assessments continue to show basic ValuationResults component
+  - Both `/assessment-results/:id` route and `/modules/applebites/pages/assessment-results` properly handle tier-based rendering
 
 # User Preferences
 
