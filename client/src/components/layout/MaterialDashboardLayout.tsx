@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, AppBar, Toolbar, Drawer, Typography, IconButton, useTheme } from '@mui/material';
-import { Menu as MenuIcon } from '@mui/icons-material';
+import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
 import { useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
@@ -65,7 +65,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
         {drawer}
       </Drawer>
 
-      {/* Mobile Sidebar */}
+      {/* Mobile Sidebar - Full Screen Overlay */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -77,13 +77,38 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
           display: { xs: 'block', md: 'none' },
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
-            width: drawerWidth,
+            width: '100vw',
+            height: '100vh',
             background: 'var(--gradient-primary, linear-gradient(195deg, #66bb6a, #43a047))',
             color: 'hsl(var(--primary-foreground))',
-            overflow: 'hidden',
+            overflow: 'auto',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            zIndex: 1300,
+          },
+          '& .MuiBackdrop-root': {
+            display: 'none',
           },
         }}
       >
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          p: 2, 
+          borderBottom: '1px solid rgba(255,255,255,0.2)' 
+        }}>
+          <Typography variant="h6" sx={{ color: 'white' }}>
+            {adminUser ? "Admin Portal" : "PerformanceHub"}
+          </Typography>
+          <IconButton 
+            onClick={handleDrawerToggle}
+            sx={{ color: 'white' }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
         {drawer}
       </Drawer>
 
