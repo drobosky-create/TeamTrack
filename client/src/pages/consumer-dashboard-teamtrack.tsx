@@ -66,15 +66,17 @@ interface Assessment {
 // Past Assessments Component
 function PastAssessmentsSection({ userEmail }: { userEmail: string }) {
   const { data: assessments, isLoading } = useQuery<Assessment[]>({
-    queryKey: ['/api/assessments'],
+    queryKey: ['/api/consumer/assessments'],
   });
 
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredAssessments = useMemo(() => {
     if (!assessments) return [];
-    const emailLower = (userEmail || '').toLowerCase();
-    const base = assessments.filter(a => a.email?.toLowerCase() === emailLower);
+    
+    // For consumer dashboard, all assessments returned by /api/consumer/assessments
+    // are already filtered to the logged-in user, so no email filtering needed
+    const base = assessments;
 
     const searchLower = searchTerm.toLowerCase();
     return base.filter(assessment => {
@@ -84,8 +86,11 @@ function PastAssessmentsSection({ userEmail }: { userEmail: string }) {
         `${assessment.firstName} ${assessment.lastName}`.toLowerCase().includes(searchLower) ||
         assessment.email?.toLowerCase().includes(searchLower)
       );
+    }).sort((a, b) => {
+      // Sort by createdAt date, most recent first
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
-  }, [assessments, userEmail, searchTerm]);
+  }, [assessments, searchTerm]);
 
   const formatCurrency = (value: string | null) => {
     if (!value) return "$0";
