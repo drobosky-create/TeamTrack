@@ -646,31 +646,40 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
     });
     
     // Get industry-specific multiple based on NAICS code and performance
-    // Import the NAICS multiplier data directly
     let finalMultiple = 5.0;
     
     if (formData.naicsCode) {
-      // Use the actual NAICS multiplier data from the JSON file
-      const multipliersData = await import('../../attached_assets/updated_ebitda_multiples_by_naics_full_1755644266414.json');
-      const naicsData = multipliersData.default[formData.naicsCode];
-      
-      if (naicsData) {
-        // Determine if company qualifies for premium range based on performance
-        const isPremium = avgScore >= 4.0;
+      // Load and parse the NAICS multiplier data
+      try {
+        const fs = await import('fs');
+        const path = await import('path');
+        const filePath = path.default.join(process.cwd(), 'attached_assets', 'updated_ebitda_multiples_by_naics_full_1755644266414.json');
+        const fileContent = fs.default.readFileSync(filePath, 'utf8');
+        const multipliersData = JSON.parse(fileContent);
+        const naicsData = multipliersData[formData.naicsCode];
         
-        if (isPremium) {
-          // Use premium range, interpolate based on score (4.0-5.0 maps to min-max of premium range)
-          const normalizedScore = (avgScore - 4.0) / 1.0; // 0 to 1
-          finalMultiple = naicsData.premium_range.min + 
-                         (naicsData.premium_range.max - naicsData.premium_range.min) * normalizedScore;
+        if (naicsData) {
+          // Determine if company qualifies for premium range based on performance
+          const isPremium = avgScore >= 4.0;
+          
+          if (isPremium) {
+            // Use premium range, interpolate based on score (4.0-5.0 maps to min-max of premium range)
+            const normalizedScore = (avgScore - 4.0) / 1.0; // 0 to 1
+            finalMultiple = naicsData.premium_range.min + 
+                           (naicsData.premium_range.max - naicsData.premium_range.min) * normalizedScore;
+          } else {
+            // Use base range, interpolate based on score (0-3.9 maps to min-max of base range)
+            const normalizedScore = avgScore / 3.9; // 0 to 1
+            finalMultiple = naicsData.base_range.min + 
+                           (naicsData.base_range.max - naicsData.base_range.min) * normalizedScore;
+          }
+          console.log('NAICS Data Found:', { naicsCode: formData.naicsCode, data: naicsData, finalMultiple });
         } else {
-          // Use base range, interpolate based on score (0-3.9 maps to min-max of base range)
-          const normalizedScore = avgScore / 3.9; // 0 to 1
-          finalMultiple = naicsData.base_range.min + 
-                         (naicsData.base_range.max - naicsData.base_range.min) * normalizedScore;
+          console.log('NAICS code not found in data, using fallback');
+          finalMultiple = getIndustryMultiplier(formData.naicsCode, avgScore) || 5.0;
         }
-      } else {
-        // Fallback to industry multiplier if NAICS code not found
+      } catch (error) {
+        console.error('Error loading NAICS data:', error);
         finalMultiple = getIndustryMultiplier(formData.naicsCode, avgScore) || 5.0;
       }
     } else {
