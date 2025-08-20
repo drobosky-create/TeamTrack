@@ -4,7 +4,18 @@ PerformanceHub is a comprehensive performance tracking web application designed 
 
 The platform also integrates AppleBites, a consumer-facing business valuation platform requiring account creation before assessment access. The customer journey follows: Account Creation → Assessment Selection → 4-Step Assessment (Financials → Adjustments → Value Drivers → Follow-up) → Valuation Report → Value Improvement Calculator → AI Coaching Recommendations upsell. This dual functionality serves both internal team performance management and external business valuation needs within a single, cohesive platform.
 
-## Recent Updates (August 19, 2025 - Latest - Assessment Enhancements)
+## Recent Updates (August 20, 2025 - Latest - Win the Storm Event Landing Page)
+- **Win the Storm Event Landing Page (August 20, 2025)**: Created exclusive event landing page at `/winthestorm` route
+  - Event registration bypasses paywall and grants Growth plan ($1995 value) for free to attendees
+  - Features M&A Lounge speaker logo with white background for optimal contrast
+  - Dynamic pricing integration pulls current Stripe Growth plan pricing ($1995)
+  - Event code validation (WIN_THE_STORM_2025) ensures exclusive access
+  - Added eventCode field to consumerUsers schema for tracking special event signups
+  - Server endpoint handles both new user creation and existing user plan upgrades
+  - Streamlined design with focus on value proposition and registration form
+  - Automatic redirect to consumer dashboard after successful registration
+
+## Previous Updates (August 19, 2025 - Assessment Enhancements)
 - Successfully integrated MaterialDashboardLayout from TeamTrack with unified sidebar design for admin dashboard
 - Implemented dual authentication system supporting both regular users and admin sessions
 - Fixed horizontal scrolling issues in sidebar with proper overflow handling and text truncation
