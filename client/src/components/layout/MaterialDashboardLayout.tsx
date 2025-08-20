@@ -114,7 +114,15 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { md: 'none' } }}
+              sx={{ 
+                mr: 2, 
+                display: { md: 'none' },
+                color: '#2a2c37',
+                backgroundColor: 'rgba(42, 44, 55, 0.1)',
+                '&:hover': {
+                  backgroundColor: 'rgba(42, 44, 55, 0.2)',
+                }
+              }}
             >
               <MenuIcon />
             </IconButton>
