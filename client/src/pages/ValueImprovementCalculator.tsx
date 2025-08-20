@@ -323,42 +323,43 @@ export default function ValueImprovementCalculator() {
               Select Target Performance Level
             </Typography>
 
-            <Grid container spacing={3} sx={{ mb: 4 }}>
+            <Box sx={{ display: 'flex', gap: 2, mb: 4, flexWrap: 'wrap' }}>
               {gradeImpacts.map(impact => (
-                <Grid item xs={12} sm={6} md={4} lg={2.4} key={impact.grade}>
-                  <GradeCard
-                    elevation={selectedGrade === impact.grade ? 8 : 2}
-                    onClick={() => setSelectedGrade(impact.grade)}
-                    sx={{
-                      border: selectedGrade === impact.grade ? `2px solid ${impact.color}` : '2px solid transparent',
-                      backgroundColor: selectedGrade === impact.grade ? impact.bgColor : 'white'
-                    }}
-                  >
-                    <Box textAlign="center">
-                      <Typography
-                        variant="h3"
-                        sx={{
-                          fontWeight: 'bold',
-                          color: impact.color,
-                          mb: 1
-                        }}
-                      >
-                        {impact.grade}
-                      </Typography>
-                      <Typography variant="caption" sx={{ color: '#6B7280', display: 'block', mb: 1 }}>
-                        {impact.label}
-                      </Typography>
-                      <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1F2937' }}>
-                        {impact.multiple}x
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: '#6B7280' }}>
-                        Multiple
-                      </Typography>
-                    </Box>
-                  </GradeCard>
-                </Grid>
+                <GradeCard
+                  key={impact.grade}
+                  elevation={selectedGrade === impact.grade ? 8 : 2}
+                  onClick={() => setSelectedGrade(impact.grade)}
+                  sx={{
+                    flex: 1,
+                    minWidth: '150px',
+                    border: selectedGrade === impact.grade ? `2px solid ${impact.color}` : '2px solid transparent',
+                    backgroundColor: selectedGrade === impact.grade ? impact.bgColor : 'white'
+                  }}
+                >
+                  <Box textAlign="center">
+                    <Typography
+                      variant="h3"
+                      sx={{
+                        fontWeight: 'bold',
+                        color: impact.color,
+                        mb: 1
+                      }}
+                    >
+                      {impact.grade}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: '#6B7280', display: 'block', mb: 1 }}>
+                      {impact.label}
+                    </Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1F2937' }}>
+                      {impact.multiple}x
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#6B7280' }}>
+                      Multiple
+                    </Typography>
+                  </Box>
+                </GradeCard>
               ))}
-            </Grid>
+            </Box>
 
             {/* Value Comparison */}
             {selectedGradeData && (
