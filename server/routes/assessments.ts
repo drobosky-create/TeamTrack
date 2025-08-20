@@ -210,22 +210,9 @@ function calculateValuation(data: any) {
   else if (avgScore >= 2.5) baseMultiple = 3.0;
   else baseMultiple = 2.5;
 
-  // Industry adjustment (simplified - in production, use NAICS-specific data)
-  const industryMultipliers: Record<string, number> = {
-    'technology': 1.3,
-    'healthcare': 1.2,
-    'manufacturing': 0.9,
-    'retail': 0.8,
-    'services': 1.0,
-  };
-
-  const industryKey = data.industry?.toLowerCase() || 'services';
-  const industryMultiplier = Object.keys(industryMultipliers).find(key => 
-    industryKey.includes(key)
-  ) ? industryMultipliers[Object.keys(industryMultipliers).find(key => 
-    industryKey.includes(key)) || 'services'] : 1.0;
-
-  const finalMultiple = baseMultiple * industryMultiplier;
+  // Use unified getIndustryMultiplier function for NAICS-aware calculations
+  // This ensures Growth assessments use proper industry-specific multipliers
+  const finalMultiple = getIndustryMultiplier(data.naicsCode || data.industry, avgScore);
 
   // Calculate valuation ranges
   const midEstimate = adjustedEbitda * finalMultiple;
@@ -253,9 +240,10 @@ function calculateValuation(data: any) {
 
 // Generate narrative summary
 function generateNarrativeSummary(data: any, valuation: any) {
-  const yearInBusiness = new Date().getFullYear() - data.foundingYear;
+  const yearInBusiness = data.foundingYear ? new Date().getFullYear() - data.foundingYear : null;
+  const yearsText = yearInBusiness ? `${yearInBusiness}-year-old ` : '';
   
-  return `${data.companyName} is a ${yearInBusiness}-year-old ${data.industry} company with an adjusted EBITDA of $${valuation.adjustedEbitda.toLocaleString()}. Based on our comprehensive analysis of 10 key value drivers, we estimate the business value to be between $${valuation.lowEstimate.toLocaleString()} and $${valuation.highEstimate.toLocaleString()}, with a most likely value of $${valuation.midEstimate.toLocaleString()}. The company received an overall grade of ${valuation.overallScore}, reflecting ${valuation.overallScore === 'A' || valuation.overallScore === 'B' ? 'strong' : valuation.overallScore === 'C' ? 'moderate' : 'improvement opportunities in'} performance across key business metrics.`;
+  return `${data.companyName || 'The business'} is a ${yearsText}${data.industry || 'company'} with an adjusted EBITDA of $${valuation.adjustedEbitda.toLocaleString()}. Based on our comprehensive analysis of 10 key value drivers, we estimate the business value to be between $${valuation.lowEstimate.toLocaleString()} and $${valuation.highEstimate.toLocaleString()}, with a most likely value of $${valuation.midEstimate.toLocaleString()}. The company received an overall grade of ${valuation.overallScore}, reflecting ${valuation.overallScore === 'A' || valuation.overallScore === 'B' ? 'strong' : valuation.overallScore === 'C' ? 'moderate' : 'improvement opportunities in'} performance across key business metrics.`;
 }
 
 // Free assessment endpoint

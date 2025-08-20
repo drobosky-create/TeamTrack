@@ -5,7 +5,7 @@ import { useConsumerAuth } from "../../../hooks/use-consumer-auth";
 
 import { ArrowLeft, Home, FileText, TrendingUp, ExternalLink, LogOut, User, Plus, Crown, Clock, BarChart3 } from "lucide-react";
 import ValuationResults from "../../../components/valuation-results";
-import StrategicReport from "../components/strategic-report";
+import StrategicReportEnhanced from "../components/strategic-report-enhanced";
 // Using local interface instead of shared schema to avoid import errors
 import { Link } from "wouter";
 import MDBox from "../../../components/MD/MDBox";
@@ -233,7 +233,7 @@ export default function AssessmentResults() {
 
           {/* Show Strategic Report for paid tiers, basic ValuationResults for free tier */}
           {assessment?.tier === 'growth' || assessment?.tier === 'capital' ? (
-            <StrategicReport results={assessment} />
+            <StrategicReportEnhanced results={assessment} />
           ) : (
             <ValuationResults results={assessment || {} as any} />
           )}
