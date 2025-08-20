@@ -582,6 +582,30 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
     // Extract data from nested form structure
     const { ebitda, adjustments, valueDrivers, followUp } = formData;
     
+    // For Growth Assessment, we need to map the driver questions to grade categories
+    let processedValueDrivers: any = {};
+    const isGrowthAssessment = formData.tier === 'growth';
+    
+    if (isGrowthAssessment) {
+      // Map Growth Assessment drivers to categories (all get the same overall grade)
+      // We'll calculate the overall score later and apply it to all categories
+      processedValueDrivers = {
+        financialPerformance: null, // Will be set to overall grade
+        customerConcentration: null,
+        managementTeam: null,
+        competitivePosition: null,
+        growthProspects: null,
+        systemsProcesses: null,
+        assetQuality: null,
+        industryOutlook: null,
+        riskFactors: null,
+        ownerDependency: null
+      };
+    } else {
+      // Free Assessment already has these fields as grades
+      processedValueDrivers = valueDrivers;
+    }
+    
     // Calculate base EBITDA
     const baseEbitda = 
       (parseFloat(ebitda.netIncome) || 0) +
@@ -701,6 +725,13 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
     else if (avgScore >= 2.0) overallScore = 'D';
     else overallScore = 'F';
     
+    // For Growth Assessment, set all value driver grades to the overall score
+    if (isGrowthAssessment) {
+      for (const key in processedValueDrivers) {
+        processedValueDrivers[key] = overallScore;
+      }
+    }
+    
     // Generate AI-powered summaries if OpenAI is available
     let narrativeSummary = `Based on the financial analysis, the business has an adjusted EBITDA of $${adjustedEbitda.toLocaleString()} with a valuation range of $${lowEstimate.toLocaleString()} to $${highEstimate.toLocaleString()}.`;
     let executiveSummary = '';
@@ -725,16 +756,16 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
                 Overall Grade: ${overallScore}
                 
                 Value Drivers:
-                - Financial Performance: ${valueDrivers.financialPerformance}
-                - Customer Concentration: ${valueDrivers.customerConcentration}
-                - Management Team: ${valueDrivers.managementTeam}
-                - Competitive Position: ${valueDrivers.competitivePosition}
-                - Growth Prospects: ${valueDrivers.growthProspects}
-                - Systems & Processes: ${valueDrivers.systemsProcesses}
-                - Asset Quality: ${valueDrivers.assetQuality}
-                - Industry Outlook: ${valueDrivers.industryOutlook}
-                - Risk Factors: ${valueDrivers.riskFactors}
-                - Owner Dependency: ${valueDrivers.ownerDependency}
+                - Financial Performance: ${processedValueDrivers.financialPerformance}
+                - Customer Concentration: ${processedValueDrivers.customerConcentration}
+                - Management Team: ${processedValueDrivers.managementTeam}
+                - Competitive Position: ${processedValueDrivers.competitivePosition}
+                - Growth Prospects: ${processedValueDrivers.growthProspects}
+                - Systems & Processes: ${processedValueDrivers.systemsProcesses}
+                - Asset Quality: ${processedValueDrivers.assetQuality}
+                - Industry Outlook: ${processedValueDrivers.industryOutlook}
+                - Risk Factors: ${processedValueDrivers.riskFactors}
+                - Owner Dependency: ${processedValueDrivers.ownerDependency}
                 
                 Additional Context: ${followUp.additionalComments || 'None provided'}
                 
@@ -800,17 +831,17 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       otherAdjustments: parseFloat(adjustments.otherAdjustments) || 0,
       adjustmentNotes: adjustments.adjustmentNotes || '',
       
-      // Value drivers - For Growth Assessment, use overall score; for Free, use individual grades
-      financialPerformance: isGrowthAssessment ? overallScore : (valueDrivers.financialPerformance || 'C'),
-      customerConcentration: isGrowthAssessment ? overallScore : (valueDrivers.customerConcentration || 'C'),
-      managementTeam: isGrowthAssessment ? overallScore : (valueDrivers.managementTeam || 'C'),
-      competitivePosition: isGrowthAssessment ? overallScore : (valueDrivers.competitivePosition || 'C'),
-      growthProspects: isGrowthAssessment ? overallScore : (valueDrivers.growthProspects || 'C'),
-      systemsProcesses: isGrowthAssessment ? overallScore : (valueDrivers.systemsProcesses || 'C'),
-      assetQuality: isGrowthAssessment ? overallScore : (valueDrivers.assetQuality || 'C'),
-      industryOutlook: isGrowthAssessment ? overallScore : (valueDrivers.industryOutlook || 'C'),
-      riskFactors: isGrowthAssessment ? overallScore : (valueDrivers.riskFactors || 'C'),
-      ownerDependency: isGrowthAssessment ? overallScore : (valueDrivers.ownerDependency || 'C'),
+      // Value drivers - use processedValueDrivers which already has the correct grades
+      financialPerformance: processedValueDrivers.financialPerformance || 'C',
+      customerConcentration: processedValueDrivers.customerConcentration || 'C',
+      managementTeam: processedValueDrivers.managementTeam || 'C',
+      competitivePosition: processedValueDrivers.competitivePosition || 'C',
+      growthProspects: processedValueDrivers.growthProspects || 'C',
+      systemsProcesses: processedValueDrivers.systemsProcesses || 'C',
+      assetQuality: processedValueDrivers.assetQuality || 'C',
+      industryOutlook: processedValueDrivers.industryOutlook || 'C',
+      riskFactors: processedValueDrivers.riskFactors || 'C',
+      ownerDependency: processedValueDrivers.ownerDependency || 'C',
       
       // Follow-up
       followUpIntent: followUp.followUpIntent,
