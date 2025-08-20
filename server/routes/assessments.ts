@@ -800,17 +800,17 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       otherAdjustments: parseFloat(adjustments.otherAdjustments) || 0,
       adjustmentNotes: adjustments.adjustmentNotes || '',
       
-      // Value drivers
-      financialPerformance: valueDrivers.financialPerformance,
-      customerConcentration: valueDrivers.customerConcentration,
-      managementTeam: valueDrivers.managementTeam,
-      competitivePosition: valueDrivers.competitivePosition,
-      growthProspects: valueDrivers.growthProspects,
-      systemsProcesses: valueDrivers.systemsProcesses,
-      assetQuality: valueDrivers.assetQuality,
-      industryOutlook: valueDrivers.industryOutlook,
-      riskFactors: valueDrivers.riskFactors,
-      ownerDependency: valueDrivers.ownerDependency,
+      // Value drivers - Convert numerical scores to grades if needed
+      financialPerformance: isGrowthAssessment ? overallScore : valueDrivers.financialPerformance,
+      customerConcentration: isGrowthAssessment ? overallScore : valueDrivers.customerConcentration,
+      managementTeam: isGrowthAssessment ? overallScore : valueDrivers.managementTeam,
+      competitivePosition: isGrowthAssessment ? overallScore : valueDrivers.competitivePosition,
+      growthProspects: isGrowthAssessment ? overallScore : valueDrivers.growthProspects,
+      systemsProcesses: isGrowthAssessment ? overallScore : valueDrivers.systemsProcesses,
+      assetQuality: isGrowthAssessment ? overallScore : valueDrivers.assetQuality,
+      industryOutlook: isGrowthAssessment ? overallScore : valueDrivers.industryOutlook,
+      riskFactors: isGrowthAssessment ? overallScore : valueDrivers.riskFactors,
+      ownerDependency: isGrowthAssessment ? overallScore : valueDrivers.ownerDependency,
       
       // Follow-up
       followUpIntent: followUp.followUpIntent,
