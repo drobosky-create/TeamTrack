@@ -1,12 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  TrendingUp, 
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Alert,
+  AlertTitle,
+  Chip,
+  Grid,
+  Paper,
+  LinearProgress,
+  Container,
+  IconButton,
+  Divider
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import {
+  TrendingUp,
   Trophy,
   Target,
   AlertCircle,
@@ -15,8 +31,53 @@ import {
   ArrowUp,
   ArrowDown,
   Sparkles,
-  Loader2
+  Loader2,
+  Calculator,
+  ArrowLeft
 } from 'lucide-react';
+import MDBox from '@/components/MD/MDBox';
+import MDTypography from '@/components/MD/MDTypography';
+import MDButton from '@/components/MD/MDButton';
+
+// Styled Components
+const PageContainer = styled(Box)(({ theme }) => ({
+  minHeight: '100vh',
+  backgroundColor: '#f8f9fa',
+  padding: theme.spacing(3)
+}));
+
+const MainCard = styled(Card)(({ theme }) => ({
+  backgroundColor: '#ffffff',
+  borderRadius: '16px',
+  boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+  overflow: 'visible'
+}));
+
+const HeaderGradient = styled(Box)(({ theme }) => ({
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  padding: theme.spacing(4),
+  color: 'white',
+  borderRadius: '16px 16px 0 0'
+}));
+
+const GradeCard = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  borderRadius: '12px',
+  transition: 'all 0.3s ease',
+  cursor: 'pointer',
+  border: '2px solid transparent',
+  '&:hover': {
+    transform: 'translateY(-4px)',
+    boxShadow: '0 12px 24px rgba(0,0,0,0.15)'
+  }
+}));
+
+const ValueBox = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderRadius: '8px',
+  backgroundColor: '#f3f4f6',
+  textAlign: 'center'
+}));
 
 interface GradeImpact {
   grade: string;
@@ -25,14 +86,21 @@ interface GradeImpact {
   value: number;
   improvement: number;
   color: string;
+  bgColor: string;
 }
 
 interface Assessment {
   id: number;
   adjustedEbitda: string;
-  valueDrivers?: any;
-  finalMultiple: string;
-  businessValue: string;
+  financialPerformance?: string;
+  competitivePosition?: string;
+  systemsProcesses?: string;
+  growthProspects?: string;
+  riskFactors?: string;
+  assetQuality?: string;
+  valuationMultiple?: string;
+  midEstimate?: string;
+  company?: string;
   tier?: string;
 }
 
@@ -40,325 +108,360 @@ export default function ValueImprovementCalculator() {
   const { id } = useParams();
   const [, setLocation] = useLocation();
   const [selectedGrade, setSelectedGrade] = useState<string>('C');
-  
-  // Fetch latest assessment data or specific assessment by ID
-  const { data: response, isLoading } = useQuery<{success: boolean, assessment: Assessment}>({
-    queryKey: id === 'latest' ? ['/api/consumer/assessments/latest'] : [`/api/assessments/${id}`],
+
+  // Fetch assessment data
+  const { data: response, isLoading } = useQuery<{ success: boolean; assessment: Assessment }>({
+    queryKey: id === 'latest' ? ['/api/consumer/assessments/latest'] : [`/api/assessments/${id}`]
   });
-  
+
   const assessment = response?.assessment;
-  
+
   // Calculate average grade from value drivers
-  const calculateAverageGrade = (valueDrivers: any) => {
-    if (!valueDrivers) return 'C';
-    
-    const grades = ['financialPerformance', 'marketPosition', 'operationalExcellence', 
-                   'growthPotential', 'riskProfile', 'strategicAssets']
-      .map(key => valueDrivers[key])
-      .filter(Boolean);
-    
+  const calculateAverageGrade = (assessment: Assessment) => {
+    if (!assessment) return 'C';
+
+    const grades = [
+      assessment.financialPerformance,
+      assessment.competitivePosition,
+      assessment.systemsProcesses,
+      assessment.growthProspects,
+      assessment.riskFactors,
+      assessment.assetQuality
+    ].filter(Boolean);
+
     if (grades.length === 0) return 'C';
-    
-    const gradeValues: Record<string, number> = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1 };
+
+    const gradeValues: Record<string, number> = { A: 5, B: 4, C: 3, D: 2, F: 1 };
     const valueToGrade: Record<number, string> = { 5: 'A', 4: 'B', 3: 'C', 2: 'D', 1: 'F' };
-    
+
     const avgValue = grades.reduce((sum, grade) => sum + (gradeValues[grade] || 3), 0) / grades.length;
     return valueToGrade[Math.round(avgValue)] || 'C';
   };
-  
-  const assessmentData = assessment ? {
-    adjustedEbitda: parseFloat(assessment.adjustedEbitda || '0'),
-    currentGrade: calculateAverageGrade({
-      financialPerformance: assessment.financialPerformance,
-      marketPosition: assessment.competitivePosition,
-      operationalExcellence: assessment.systemsProcesses,
-      growthPotential: assessment.growthProspects,
-      riskProfile: assessment.riskFactors,
-      strategicAssets: assessment.assetQuality
-    }),
-    currentMultiple: parseFloat(assessment.valuationMultiple || '4.2'),
-    currentValue: parseFloat(assessment.midEstimate || '0'),
-  } : null;
+
+  const assessmentData = assessment
+    ? {
+        adjustedEbitda: parseFloat(assessment.adjustedEbitda || '0'),
+        currentGrade: calculateAverageGrade(assessment),
+        currentMultiple: parseFloat(assessment.valuationMultiple || '4.2'),
+        currentValue: parseFloat(assessment.midEstimate || '0'),
+        company: assessment.company || 'Your Business'
+      }
+    : null;
 
   const gradeImpacts: GradeImpact[] = [
-    { 
-      grade: 'F', 
-      label: 'Poor Operations', 
-      multiple: 2.0, 
-      value: assessmentData?.adjustedEbitda * 2 || 0,
+    {
+      grade: 'F',
+      label: 'Poor Operations',
+      multiple: 2.0,
+      value: (assessmentData?.adjustedEbitda || 0) * 2,
       improvement: -52,
-      color: 'bg-red-100 border-red-500 text-red-700'
+      color: '#DC2626',
+      bgColor: '#FEE2E2'
     },
-    { 
-      grade: 'D', 
-      label: 'Below Average', 
-      multiple: 3.0, 
-      value: assessmentData?.adjustedEbitda * 3 || 0,
+    {
+      grade: 'D',
+      label: 'Below Average',
+      multiple: 3.0,
+      value: (assessmentData?.adjustedEbitda || 0) * 3,
       improvement: -29,
-      color: 'bg-orange-100 border-orange-500 text-orange-700'
+      color: '#EA580C',
+      bgColor: '#FED7AA'
     },
-    { 
-      grade: 'C', 
-      label: 'Average Operations', 
-      multiple: 4.2, 
-      value: assessmentData?.adjustedEbitda * 4.2 || 0,
+    {
+      grade: 'C',
+      label: 'Average Operations',
+      multiple: 4.2,
+      value: (assessmentData?.adjustedEbitda || 0) * 4.2,
       improvement: 0,
-      color: 'bg-yellow-100 border-yellow-500 text-yellow-700'
+      color: '#EAB308',
+      bgColor: '#FEF3C7'
     },
-    { 
-      grade: 'B', 
-      label: 'Good Operations', 
-      multiple: 5.7, 
-      value: assessmentData?.adjustedEbitda * 5.7 || 0,
+    {
+      grade: 'B',
+      label: 'Good Operations',
+      multiple: 5.7,
+      value: (assessmentData?.adjustedEbitda || 0) * 5.7,
       improvement: 36,
-      color: 'bg-blue-100 border-blue-500 text-blue-700'
+      color: '#3B82F6',
+      bgColor: '#DBEAFE'
     },
-    { 
-      grade: 'A', 
-      label: 'Excellent Operations', 
-      multiple: 7.5, 
-      value: assessmentData?.adjustedEbitda * 7.5 || 0,
+    {
+      grade: 'A',
+      label: 'Excellent Operations',
+      multiple: 7.5,
+      value: (assessmentData?.adjustedEbitda || 0) * 7.5,
       improvement: 79,
-      color: 'bg-green-100 border-green-500 text-green-700'
-    },
+      color: '#10B981',
+      bgColor: '#D1FAE5'
+    }
   ];
 
   const currentGradeData = gradeImpacts.find(g => g.grade === assessmentData?.currentGrade);
   const selectedGradeData = gradeImpacts.find(g => g.grade === selectedGrade);
 
+  const formatCurrency = (value: number) => {
+    if (value >= 1000000) {
+      return `$${(value / 1000000).toFixed(1)}M`;
+    } else if (value >= 1000) {
+      return `$${(value / 1000).toFixed(0)}K`;
+    }
+    return `$${value.toFixed(0)}`;
+  };
+
   if (isLoading) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-muted-foreground">Loading assessment data...</p>
-        </div>
-      </div>
+      <PageContainer>
+        <Container maxWidth="lg">
+          <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="60vh">
+            <Loader2 className="animate-spin" size={48} color="#667eea" />
+            <Typography variant="h6" sx={{ mt: 2, color: '#6B7280' }}>
+              Loading assessment data...
+            </Typography>
+          </Box>
+        </Container>
+      </PageContainer>
     );
   }
 
   if (!assessmentData) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <Card className="max-w-md w-full mx-4">
-          <CardHeader>
-            <CardTitle>No Assessment Found</CardTitle>
-            <CardDescription>
-              You need to complete an assessment first to explore value improvements.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              onClick={() => setLocation('/assessment/free')}
-              className="w-full"
-            >
-              Start Free Assessment
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+      <PageContainer>
+        <Container maxWidth="md">
+          <MainCard>
+            <CardContent sx={{ p: 4 }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
+                No Assessment Found
+              </Typography>
+              <Typography variant="body1" sx={{ mb: 3, color: '#6B7280' }}>
+                You need to complete an assessment first to explore value improvements.
+              </Typography>
+              <MDButton
+                variant="gradient"
+                color="primary"
+                onClick={() => setLocation('/assessment/free')}
+                startIcon={<Calculator size={20} />}
+              >
+                Start Free Assessment
+              </MDButton>
+            </CardContent>
+          </MainCard>
+        </Container>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 py-12">
-      <div className="container max-w-6xl mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-3">Value Improvement Calculator</h1>
-          <p className="text-muted-foreground">
-            Explore how improving your operational grades affects your business valuation
-          </p>
-        </div>
+    <PageContainer>
+      <Container maxWidth="lg">
+        {/* Back Button */}
+        <Button
+          startIcon={<ArrowLeft size={20} />}
+          onClick={() => window.history.back()}
+          sx={{ mb: 3, color: '#6B7280' }}
+        >
+          Back to Results
+        </Button>
 
-        {/* Current Grade Display */}
-        <Card className="mb-8">
-          <CardHeader className="text-center">
-            <CardTitle>Your Current Operational Grade</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-center gap-8">
-              <div className="text-center">
-                <div className={`
-                  w-32 h-32 rounded-full flex items-center justify-center text-5xl font-bold
-                  ${currentGradeData?.color}
-                `}>
-                  <Trophy className="absolute h-12 w-12 opacity-20" />
-                  {assessmentData.currentGrade}
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">Current Performance Level</p>
-              </div>
-              
-              <div className="text-left space-y-2">
-                <p className="text-sm text-muted-foreground">This gauge shows your overall operational performance based on your assessment.</p>
-                <div className="flex items-center gap-4">
-                  <div>
-                    <p className="text-2xl font-bold">${(assessmentData.currentValue / 1000000).toFixed(1)}M</p>
-                    <p className="text-sm text-muted-foreground">Current Value</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold">{assessmentData.currentMultiple}x</p>
-                    <p className="text-sm text-muted-foreground">EBITDA Multiple</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <MainCard>
+          {/* Header */}
+          <HeaderGradient>
+            <Grid container spacing={3} alignItems="center">
+              <Grid item xs={12} md={8}>
+                <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+                  Value Improvement Calculator
+                </Typography>
+                <Typography variant="h6" sx={{ opacity: 0.9, mb: 2 }}>
+                  {assessmentData.company}
+                </Typography>
+                <Typography variant="body1" sx={{ opacity: 0.8 }}>
+                  Explore how operational improvements could impact your business value
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <ValueBox sx={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
+                  <Typography variant="body2" sx={{ color: 'white', opacity: 0.9, mb: 1 }}>
+                    Current EBITDA
+                  </Typography>
+                  <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
+                    {formatCurrency(assessmentData.adjustedEbitda)}
+                  </Typography>
+                </ValueBox>
+              </Grid>
+            </Grid>
+          </HeaderGradient>
 
-        {/* Grade Impact Cards */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">
-            Click any grade to see how operational improvements impact your business value
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {gradeImpacts.map((impact) => {
-              const isSelected = selectedGrade === impact.grade;
-              const isCurrent = assessmentData.currentGrade === impact.grade;
-              
-              return (
-                <Card
-                  key={impact.grade}
-                  className={`
-                    cursor-pointer transition-all hover:shadow-lg
-                    ${isSelected ? 'ring-2 ring-primary' : ''}
-                    ${isCurrent ? 'border-2' : ''}
-                  `}
-                  onClick={() => setSelectedGrade(impact.grade)}
-                >
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <Badge 
-                        className={impact.color}
-                        variant="outline"
+          <CardContent sx={{ p: 4 }}>
+            {/* Current Status */}
+            <Alert severity="info" sx={{ mb: 4 }}>
+              <AlertTitle>Your Current Position</AlertTitle>
+              Your business currently has a <strong>Grade {assessmentData.currentGrade}</strong> operational rating with an estimated value of{' '}
+              <strong>{formatCurrency(assessmentData.currentValue)}</strong> based on a {assessmentData.currentMultiple}x multiple.
+            </Alert>
+
+            {/* Grade Selection */}
+            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3 }}>
+              Select Target Performance Level
+            </Typography>
+
+            <Grid container spacing={3} sx={{ mb: 4 }}>
+              {gradeImpacts.map(impact => (
+                <Grid item xs={12} sm={6} md={4} lg={2.4} key={impact.grade}>
+                  <GradeCard
+                    elevation={selectedGrade === impact.grade ? 8 : 2}
+                    onClick={() => setSelectedGrade(impact.grade)}
+                    sx={{
+                      border: selectedGrade === impact.grade ? `2px solid ${impact.color}` : '2px solid transparent',
+                      backgroundColor: selectedGrade === impact.grade ? impact.bgColor : 'white'
+                    }}
+                  >
+                    <Box textAlign="center">
+                      <Typography
+                        variant="h3"
+                        sx={{
+                          fontWeight: 'bold',
+                          color: impact.color,
+                          mb: 1
+                        }}
                       >
                         {impact.grade}
-                      </Badge>
-                      {isCurrent && (
-                        <Badge variant="secondary" className="text-xs">
-                          Current
-                        </Badge>
-                      )}
-                    </div>
-                    <CardTitle className="text-sm">{impact.label}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div>
-                        <p className="text-xs text-muted-foreground">EBITDA Multiple</p>
-                        <p className="text-lg font-bold">{impact.multiple}x</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">Valuation</p>
-                        <p className="text-lg font-bold">${(impact.value / 1000000).toFixed(1)}M</p>
-                      </div>
-                      {impact.improvement !== 0 && (
-                        <div className="flex items-center gap-1">
-                          {impact.improvement > 0 ? (
-                            <ArrowUp className="h-3 w-3 text-green-600" />
-                          ) : (
-                            <ArrowDown className="h-3 w-3 text-red-600" />
-                          )}
-                          <span className={`text-xs font-semibold ${
-                            impact.improvement > 0 ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            {impact.improvement > 0 ? '+' : ''}{impact.improvement}%
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: '#6B7280', display: 'block', mb: 1 }}>
+                        {impact.label}
+                      </Typography>
+                      <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1F2937' }}>
+                        {impact.multiple}x
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: '#6B7280' }}>
+                        Multiple
+                      </Typography>
+                    </Box>
+                  </GradeCard>
+                </Grid>
+              ))}
+            </Grid>
 
-        {/* Selected Grade Analysis */}
-        {selectedGradeData && selectedGrade !== assessmentData.currentGrade && (
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>
-                What if you improved to Grade {selectedGrade}?
-              </CardTitle>
-              <CardDescription>
-                Potential value based on {selectedGradeData.label.toLowerCase()}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground mb-2">Current Value</p>
-                  <p className="text-2xl font-bold">
-                    ${(assessmentData.currentValue / 1000000).toFixed(1)}M
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground mb-2">Potential Value</p>
-                  <p className="text-2xl font-bold text-primary">
-                    ${(selectedGradeData.value / 1000000).toFixed(1)}M
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground mb-2">Value Increase</p>
-                  <p className={`text-2xl font-bold ${
-                    selectedGradeData.value > assessmentData.currentValue ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    {selectedGradeData.value > assessmentData.currentValue ? '+' : ''}
-                    ${((selectedGradeData.value - assessmentData.currentValue) / 1000000).toFixed(1)}M
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+            {/* Value Comparison */}
+            {selectedGradeData && (
+              <>
+                <Divider sx={{ my: 4 }} />
+                
+                <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3 }}>
+                  Value Impact Analysis
+                </Typography>
 
-        {/* AI Coaching CTA */}
-        <Card className="border-primary bg-gradient-to-r from-blue-50 to-purple-50">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <Sparkles className="h-6 w-6 text-primary" />
-              <CardTitle>AI-Powered Financial Coaching</CardTitle>
-            </div>
-            <CardDescription>
-              Get personalized recommendations to improve your business valuation based on your financial data and industry benchmarks.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Alert className="mb-4">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>
-                Our AI coaching analyzes your specific business metrics and provides actionable insights to help you:
-                <ul className="mt-2 ml-4 list-disc text-sm">
-                  <li>Improve operational efficiency</li>
-                  <li>Reduce customer concentration risk</li>
-                  <li>Strengthen management systems</li>
-                  <li>Enhance competitive positioning</li>
-                </ul>
-              </AlertDescription>
-            </Alert>
-            
-            <Button 
-              size="lg" 
-              className="w-full gap-2"
-              onClick={() => setLocation('/ai-coaching')}
-            >
-              Get AI Coaching Recommendations
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+                <Grid container spacing={4}>
+                  <Grid item xs={12} md={4}>
+                    <Paper sx={{ p: 3, textAlign: 'center', backgroundColor: '#f3f4f6' }}>
+                      <Typography variant="subtitle2" sx={{ color: '#6B7280', mb: 1 }}>
+                        Current Value
+                      </Typography>
+                      <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#1F2937', mb: 1 }}>
+                        {formatCurrency(currentGradeData?.value || 0)}
+                      </Typography>
+                      <Chip
+                        label={`Grade ${currentGradeData?.grade}`}
+                        sx={{
+                          backgroundColor: currentGradeData?.bgColor,
+                          color: currentGradeData?.color,
+                          fontWeight: 'bold'
+                        }}
+                      />
+                    </Paper>
+                  </Grid>
+
+                  <Grid item xs={12} md={4}>
+                    <Paper sx={{ p: 3, textAlign: 'center' }}>
+                      <Typography variant="subtitle2" sx={{ color: '#6B7280', mb: 1 }}>
+                        Potential Change
+                      </Typography>
+                      <Box display="flex" alignItems="center" justifyContent="center" gap={1}>
+                        {selectedGradeData.improvement > 0 ? (
+                          <ArrowUp size={24} color="#10B981" />
+                        ) : selectedGradeData.improvement < 0 ? (
+                          <ArrowDown size={24} color="#DC2626" />
+                        ) : (
+                          <ChevronRight size={24} color="#6B7280" />
+                        )}
+                        <Typography
+                          variant="h4"
+                          sx={{
+                            fontWeight: 'bold',
+                            color: selectedGradeData.improvement > 0 ? '#10B981' : selectedGradeData.improvement < 0 ? '#DC2626' : '#6B7280'
+                          }}
+                        >
+                          {selectedGradeData.improvement > 0 ? '+' : ''}
+                          {selectedGradeData.improvement}%
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" sx={{ color: '#6B7280', mt: 1 }}>
+                        {formatCurrency(Math.abs(selectedGradeData.value - (currentGradeData?.value || 0)))} difference
+                      </Typography>
+                    </Paper>
+                  </Grid>
+
+                  <Grid item xs={12} md={4}>
+                    <Paper
+                      sx={{
+                        p: 3,
+                        textAlign: 'center',
+                        backgroundColor: selectedGradeData.bgColor,
+                        border: `2px solid ${selectedGradeData.color}`
+                      }}
+                    >
+                      <Typography variant="subtitle2" sx={{ color: '#6B7280', mb: 1 }}>
+                        Target Value
+                      </Typography>
+                      <Typography variant="h4" sx={{ fontWeight: 'bold', color: selectedGradeData.color, mb: 1 }}>
+                        {formatCurrency(selectedGradeData.value)}
+                      </Typography>
+                      <Chip
+                        label={`Grade ${selectedGradeData.grade}`}
+                        sx={{
+                          backgroundColor: 'white',
+                          color: selectedGradeData.color,
+                          fontWeight: 'bold'
+                        }}
+                      />
+                    </Paper>
+                  </Grid>
+                </Grid>
+
+                {/* Improvement Path */}
+                {selectedGradeData.improvement > 0 && (
+                  <Alert severity="success" sx={{ mt: 4 }}>
+                    <AlertTitle>Path to Grade {selectedGradeData.grade}</AlertTitle>
+                    Achieving {selectedGradeData.label.toLowerCase()} could increase your business value by{' '}
+                    <strong>{selectedGradeData.improvement}%</strong> to <strong>{formatCurrency(selectedGradeData.value)}</strong>.
+                    Focus on improving operational efficiency, customer satisfaction, and strategic positioning.
+                  </Alert>
+                )}
+
+                {/* Action Buttons */}
+                <Box display="flex" gap={2} justifyContent="center" mt={4}>
+                  <MDButton
+                    variant="gradient"
+                    color="primary"
+                    size="large"
+                    onClick={() => window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank')}
+                    startIcon={<Target size={20} />}
+                  >
+                    Schedule Strategy Call
+                  </MDButton>
+                  <MDButton
+                    variant="outlined"
+                    color="primary"
+                    size="large"
+                    onClick={() => setLocation('/assessment/growth')}
+                    startIcon={<TrendingUp size={20} />}
+                  >
+                    Get Detailed Analysis
+                  </MDButton>
+                </Box>
+              </>
+            )}
           </CardContent>
-        </Card>
-
-        {/* Back to Results */}
-        <div className="mt-8 text-center">
-          <Button
-            variant="outline"
-            onClick={() => setLocation(`/assessment-results/${id}`)}
-          >
-            Back to Assessment Results
-          </Button>
-        </div>
-      </div>
-    </div>
+        </MainCard>
+      </Container>
+    </PageContainer>
   );
 }
