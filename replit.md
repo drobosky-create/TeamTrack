@@ -1,140 +1,55 @@
 # Overview
-
-PerformanceHub is a comprehensive performance tracking web application designed for team-based organizations. It provides role-based dashboards for admins, managers, and team members to conduct and track performance reviews across monthly, quarterly, and annual cycles. The system combines self-assessments with manager evaluations, uses customizable scoring templates, and supports file attachments for comprehensive performance documentation. 
-
-The platform also integrates AppleBites, a consumer-facing business valuation platform requiring account creation before assessment access. The customer journey follows: Account Creation → Assessment Selection → 4-Step Assessment (Financials → Adjustments → Value Drivers → Follow-up) → Valuation Report → Value Improvement Calculator → AI Coaching Recommendations upsell. This dual functionality serves both internal team performance management and external business valuation needs within a single, cohesive platform.
-
-## Recent Updates (August 20, 2025 - Latest - Win the Storm Event Landing Page)
-- **Win the Storm Event Landing Page (August 20, 2025)**: Created exclusive event landing page at `/winthestorm` route
-  - Event registration bypasses paywall and grants Growth plan ($1995 value) for free to attendees
-  - Features M&A Lounge speaker logo with white background for optimal contrast
-  - Dynamic pricing integration pulls current Stripe Growth plan pricing ($1995)
-  - Event code validation (WIN_THE_STORM_2025) ensures exclusive access
-  - Added eventCode field to consumerUsers schema for tracking special event signups
-  - Server endpoint handles both new user creation and existing user plan upgrades
-  - Streamlined design with focus on value proposition and registration form
-  - Automatic redirect to consumer dashboard after successful registration
-
-## Previous Updates (August 19, 2025 - Assessment Enhancements)
-- Successfully integrated MaterialDashboardLayout from TeamTrack with unified sidebar design for admin dashboard
-- Implemented dual authentication system supporting both regular users and admin sessions
-- Fixed horizontal scrolling issues in sidebar with proper overflow handling and text truncation
-- Created comprehensive AdminDashboard with role testing functionality and admin-specific features
-- Established consistent Material-UI gradient styling across all dashboard interfaces
-- Fully restored AppleBites landing page at `/applebites` route with three pricing tiers (Free, Growth & Exit, Capital)
-- Fixed AppleBites logo display by moving to `client/public/` directory for proper Vite static asset serving
-- Added authentic payment card icons (Visa, MasterCard, American Express, Discover) with official brand colors
-- Changed navigation button from "Meritage Partners" to "PerformanceHub" linking back to main application
-- Reduced footer vertical size for more compact, professional appearance
-- Clarified architecture: `/applebites` directory contains standalone app, while `client/src/pages/applebites-landing.tsx` serves the landing page
-- Implemented complete AppleBites payment flow with native Stripe Checkout Sessions:
-  - Free plan routes directly to signup page
-  - Growth & Exit plan ($795) uses Stripe Checkout Sessions API with Product ID integration
-  - System automatically fetches current price from Stripe Product (prod_xxx)
-  - Stripe handles all payment processing and promotion code validation natively
-  - Customers enter promotion codes directly on Stripe's hosted checkout page
-  - Checkout flow: AppleBites landing → Checkout preview page → Stripe hosted checkout → Consumer signup (with prefilled data after payment)
-  - After successful payment, redirects to signup with payment confirmation
-  - Capital plan button disabled with "Coming Soon" status
-  - All promotion codes and coupons are managed directly in Stripe Dashboard (not in application)
-  - Fixed Stripe URL validation by ensuring HTTPS protocol in redirect URLs
-  - Implemented both URL-based and sessionId-based redirect methods for maximum compatibility
-  - Uses STRIPE_PRODUCT_ID_GROWTH to dynamically fetch pricing from Stripe
-- Unified sidebar navigation implemented across consumer dashboard and past assessments pages
-- Free assessment page uses Material-UI styled components without sidebar for focused assessment experience
-- Fixed import paths for valuation forms to use module-relative paths
-- Navigation consistency: consumer-dashboard, past-assessments use unified sidebar; free-assessment uses full-width layout
-- Implemented AI-powered report generation using OpenAI GPT-4 for comprehensive business valuation summaries
-- Added `/api/valuation` endpoint that generates narrative summaries and executive insights using AI analysis
-- Assessment flow calculates EBITDA, applies adjustments, determines valuation multiples, and generates professional reports
-- Implemented Growth Assessment page with 5-step flow: EBITDA → Adjustments → Value Drivers → Follow-up → Results
-- Growth Assessment pre-populates financial data from previous assessments for returning users
-- AssessmentHeader now dynamically fetches Stripe pricing ($1995) via API for premium tier display
-- Fixed valuation gauge needle positioning to use actual assessment multiple (4.0x) within industry range (3.0x-9.0x)
-- **Critical Fix**: Growth Assessment now uses weighted scoring (0-4 indices) instead of A-F grades, properly differentiating from Free Assessment
-- Added NAICS code industry selection as first step in Growth Assessment flow for industry-specific valuation multipliers
-- Implemented proper score calculation: index 4 (highest answer) = 5 points, allowing scores up to 9.0x multiple for exceptional businesses
-- Industry multipliers apply based on NAICS codes (e.g., Software 1.4x, Manufacturing 0.9x) for accurate sector-specific valuations
-- **NAICS Data Update (August 19, 2025)**: Successfully integrated complete NAICS 2022 dataset with all 922 six-digit codes from official CSV, replacing incomplete sample of 27 codes
-- **Industry Selection UI Improvement**: Replaced search bar with intuitive two-level dropdown system - first select business sector, then specific industry from filtered list for easier navigation of 922 NAICS codes
-- **Generate Report Button Fix (August 20, 2025)**: Successfully resolved Growth Assessment report generation issues:
-  - Created `processedValueDrivers` object to properly map numerical scores (0-4) to letter grades (A-F) for database compatibility
-  - Fixed null value database insertion errors by ensuring all grade fields have values
-  - Integrated actual NAICS multiplier data from JSON file using file system read instead of problematic dynamic imports
-  - Growth Assessments now correctly calculate and apply industry-specific multipliers (e.g., Roofing Contractors with perfect scores = 11.0x multiplier)
-  - Valuation reports generate successfully with accurate NAICS-based calculations showing proper valuation ranges
-- **Strategic Report Display Fix (August 20, 2025)**: Resolved issue where Growth assessments were showing basic ValuationResults instead of StrategicReport:
-  - Fixed `AssessmentResultsPage` component to check assessment tier and render appropriate component
-  - Growth and Capital tier assessments now correctly display StrategicReport with valuation gauge
-  - Free tier assessments continue to show basic ValuationResults component
-  - Both `/assessment-results/:id` route and `/modules/applebites/pages/assessment-results` properly handle tier-based rendering
-- **Value Improvement Calculator Integration (August 20, 2025)**: Added "Explore Improvements" feature to assessment results:
-  - Added "Explore Improvements" button to both ValuationResults and StrategicReport components
-  - Button navigates to `/value-improvement/{assessment-id}` route
-  - Created `/api/consumer/assessments/latest` endpoint for fetching most recent assessment
-  - Updated ValueImprovementCalculator to fetch real assessment data using React Query
-  - Calculator displays grade-based value improvement scenarios showing potential business value at different operational performance levels
-  - **Material-UI Redesign (August 20, 2025)**: Completely redesigned Value Improvement Calculator with Material-UI components:
-    - Implemented dark gradient header (195deg, #42424a to #191919) matching AppleBites design system
-    - Added dual navigation: "Back to Results" and "Return to Dashboard" buttons
-    - Created interactive grade selection cards with hover effects and dynamic coloring
-    - Designed full-width Value Impact Analysis section with three-panel comparison layout
-    - Applied consistent theme colors: info blue (#49a3f1), dark grays (#344767), and grade-specific color coding
-    - Responsive flexbox layouts ensuring uniform widths across all sections
+PerformanceHub is a comprehensive web application for team performance tracking and business valuation. It offers role-based dashboards for managing performance reviews across various cycles, integrating self-assessments with manager evaluations, customizable scoring, and document attachments. Additionally, it features AppleBites, a consumer-facing platform for business valuation, guiding users through account creation, a four-step assessment process, valuation report generation, a value improvement calculator, and AI coaching recommendations. This dual functionality provides a unified platform for internal team management and external business valuation needs.
 
 # User Preferences
-
 Preferred communication style: Simple, everyday language.
 Design System: Universal token-based theming - all colors, gradients, spacing, shadows, and typography must reference tokens, never hardcoded values.
 
 # System Architecture
 
 ## Frontend Architecture
-- **Framework & Language**: React with TypeScript, utilizing functional components and hooks.
-- **Build Tool**: Vite for development and hot module replacement.
+- **Framework & Language**: React with TypeScript, using functional components and hooks.
+- **Build Tool**: Vite.
 - **Routing**: Wouter for client-side routing with role-based access.
 - **State Management**: TanStack Query for server state management and caching.
-- **UI Components**: Shadcn/ui built on Radix UI primitives, integrated with Material Dashboard React components for a sophisticated visual design. MaterialDashboardLayout provides unified sidebar experience with role-based navigation.
-- **Styling**: Tailwind CSS with universal token-based theming system. All styling properties (colors, gradients, spacing, shadows, typography) are defined in tokens.json as the single source of truth. Material-UI themes are dynamically generated from these tokens. Components reference theme.tokens or theme.gradients for all visual properties - no hardcoded values allowed.
+- **UI Components**: Shadcn/ui (built on Radix UI) integrated with Material Dashboard React components for a sophisticated visual design. MaterialDashboardLayout provides a unified sidebar experience with role-based navigation.
+- **Styling**: Tailwind CSS with a universal token-based theming system, defining all visual properties in `tokens.json`. Material-UI themes are dynamically generated from these tokens.
 - **Form Handling**: React Hook Form with Zod validation.
-- **Layout System**: UnifiedSidebar component with Material-UI gradient styling, overflow protection, and consistent branding across all dashboards.
+- **Layout System**: UnifiedSidebar component with Material-UI gradient styling and consistent branding.
 
 ## Backend Architecture
 - **Server**: Express.js with TypeScript for REST API.
-- **ORM**: Drizzle ORM with PostgreSQL dialect for type-safe database operations.
+- **ORM**: Drizzle ORM with PostgreSQL dialect.
 - **Authentication**: Replit-based OpenID Connect authentication using Passport.js, with PostgreSQL-based session store.
 - **File Handling**: Integration with Google Cloud Storage and Uppy for file uploads.
-- **API Design**: RESTful endpoints with role-based access control and error handling middleware.
+- **API Design**: RESTful endpoints with role-based access control and error handling.
 
 ## Database Design
 - **Database**: PostgreSQL (Neon serverless).
 - **Schema Management**: Drizzle Kit for migrations.
-- **Key Tables**: Users (with admin, manager, team_member roles), customizable review templates, reviews (with scoring, notes, attachments), and session management. Also includes tables for business valuation assessments (valuationAssessments, assessments) supporting A-F grading.
+- **Key Tables**: Users (with admin, manager, team_member roles), customizable review templates, reviews (with scoring, notes, attachments), session management, and business valuation assessments.
 
 ## Authentication & Authorization
-- **Authentication**: Dual authentication system - Replit-based OpenID Connect using Passport.js for regular users, and email/password authentication for admin access.
-- **Authorization**: Three-tier role-based access control (admin, manager, team_member) enforced via middleware on both client and server.
-- **Session Management**: Secure server-side sessions stored in PostgreSQL with bcrypt password hashing for admin accounts.
-- **Admin Portal**: Dedicated admin authentication flow with MaterialDashboardLayout integration and role testing capabilities.
-- **Role Navigation**: 
-  - **Admin**: Full system control with audit logs, export center, NAICS management, integrations (Stripe, SendGrid, GHL), activity tracking for dispute resolution, and role preview functionality
-  - **Manager**: Deal pipeline visibility, team oversight, approval workflows, client management, limited export tools for Meritage Partners reporting
-  - **User** (formerly Team Member): Consumer-focused AppleBites navigation with collaboration features, limited client view access, tasks & feedback from managers, notifications
+- **Authentication**: Dual system supporting Replit-based OpenID Connect for regular users and email/password for admin access.
+- **Authorization**: Three-tier role-based access control (admin, manager, team_member) enforced via middleware.
+- **Session Management**: Secure server-side sessions stored in PostgreSQL.
+- **Admin Portal**: Dedicated admin authentication flow with MaterialDashboardLayout integration.
+- **Role Navigation**: Distinct functionalities for Admin (full control, audit logs, integrations), Manager (deal pipeline, team oversight, client management), and User/Team Member (AppleBites navigation, collaboration, tasks, feedback).
 
 ## Data Flow Patterns
 - **Client-Server Communication**: REST API with JSON payloads.
-- **Caching**: React Query for client-side caching with automatic invalidation.
+- **Caching**: React Query for client-side caching.
 - **Error Handling**: Centralized error boundaries and toast notifications.
 - **Form Validation**: Client-side validation with Zod schemas.
 
 ## Feature Specifications & Design Choices
-- **Role-Based Dashboards**: Provides distinct dashboards for admins, managers, and team members.
-- **Performance Review System**: Supports monthly, quarterly, annual review cycles with self-assessments and manager evaluations.
-- **Customizable Templates**: Allows companies to create structured review templates with custom core values and competencies.
-- **Setup Wizard**: Guides users through initial system configuration, including template selection, team setup, and member invitation.
-- **AppleBites Consumer Flow**: Authentication-first approach requiring account creation before assessment access. 4-step assessment structure (Financials → Adjustments → Value Drivers → Follow-up) with user data from signup populating contact fields. Includes Value Improvement Calculator and AI coaching upsell path.
-- **Consumer Authentication**: Separate consumer user system with bcrypt password hashing, session management, and PostgreSQL storage.
-- **UI/UX Decisions**: Utilizes Material Dashboard React for a professional, modern aesthetic with a green gradient sidebar. Incorporates a centralized UI Token Management System for dynamic theme customization. Dual branded landing pages for PerformanceHub and AppleBites with distinct routing and consumer authentication.
+- **Role-Based Dashboards**: Provides distinct dashboards for different user roles.
+- **Performance Review System**: Supports monthly, quarterly, and annual review cycles with self-assessments and manager evaluations.
+- **Customizable Templates**: Allows creation of structured review templates with custom core values.
+- **Setup Wizard**: Guides initial system configuration.
+- **AppleBites Consumer Flow**: Authentication-first approach with a 4-step assessment (Financials, Adjustments, Value Drivers, Follow-up), including a Value Improvement Calculator and AI coaching.
+- **Consumer Authentication**: Separate user system with bcrypt hashing and PostgreSQL storage.
+- **UI/UX Decisions**: Utilizes Material Dashboard React for a modern aesthetic, with a centralized UI Token Management System for dynamic theme customization. Dual-branded landing pages for PerformanceHub and AppleBites.
 
 # External Dependencies
 
