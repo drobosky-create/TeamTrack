@@ -1,5 +1,6 @@
 import { Card, CardContent, Grid, Typography, Box, Chip, LinearProgress } from '@mui/material';
 import { TrendingUp, Target, BarChart3, PieChart, Calculator, Star, Crown, Zap, Award, Building2, Clock } from "lucide-react";
+import { useLocation } from "wouter";
 import MDBox from "../../../components/MD/MDBox";
 import MDTypography from "../../../components/MD/MDTypography";
 import MDButton from "../../../components/MD/MDButton";
@@ -11,6 +12,8 @@ interface StrategicReportProps {
 }
 
 export default function StrategicReport({ results }: StrategicReportProps) {
+  const [, setLocation] = useLocation();
+  
   const formatCurrency = (value: string | null | number) => {
     if (!value) return '$0';
     const numValue = typeof value === 'string' ? parseFloat(value) : value;
