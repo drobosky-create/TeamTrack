@@ -645,9 +645,14 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       tier: formData.tier
     });
     
+    // Import and use the actual NAICS multiplier data
+    const { getNAICSMultiplier } = require('../data/naics-multipliers');
+    
     // Get industry-specific multiple based on NAICS code and performance
-    // The getIndustryMultiplier function returns the actual EBITDA multiple to use
-    const finalMultiple = getIndustryMultiplier(formData.naicsCode || formData.industry, avgScore) || 5.0;
+    // Use the actual NAICS data file for accurate multipliers
+    const finalMultiple = formData.naicsCode 
+      ? getNAICSMultiplier(formData.naicsCode, avgScore)
+      : getIndustryMultiplier(formData.industry, avgScore) || 5.0;
     
     console.log('Calculated Multiple:', finalMultiple);
     

@@ -1,107 +1,2612 @@
 {
-  "238160": {
-    "industry": "Roofing Contractors",
-    "base_range": {
-      "min": 5.9,
-      "max": 8.4
-    },
-    "premium_range": {
-      "min": 8.5,
-      "max": 11.0
-    },
-    "notes": "Premium applies to firms with strong margins, recurring revenue, and defined systems."
-  },
-  "238220": {
-    "industry": "Plumbing, Heating, and Air-Conditioning Contractors",
-    "base_range": {
-      "min": 6.0,
-      "max": 8.0
-    },
-    "premium_range": {
-      "min": 8.5,
-      "max": 11.0
-    },
-    "notes": "Premium range reflects firms with strong service agreements or recurring maintenance contracts."
-  },
-  "238210": {
-    "industry": "Electrical Contractors and Other Wiring Installation Contractors",
-    "base_range": {
-      "min": 6.1,
-      "max": 8.7
-    },
-    "premium_range": {
-      "min": 8.8,
-      "max": 11.5
-    },
-    "notes": "Includes value of government and commercial contracts."
-  },
-  "238310": {
-    "industry": "Drywall and Insulation Contractors",
-    "base_range": {
-      "min": 5.5,
-      "max": 7.5
-    },
-    "premium_range": {
-      "min": 7.6,
-      "max": 9.8
-    },
-    "notes": "Premium reflects firms with integrated service offerings or strong regional positioning."
-  },
-  "238320": {
-    "industry": "Painting and Wall Covering Contractors",
-    "base_range": {
-      "min": 5.0,
-      "max": 6.5
-    },
-    "premium_range": {
-      "min": 6.6,
-      "max": 8.5
-    },
-    "notes": "Premium applies to commercial firms with brand presence or recurring contracts."
-  },
-  "238910": {
-    "industry": "Site Preparation Contractors",
-    "base_range": {
-      "min": 5.8,
-      "max": 7.8
-    },
-    "premium_range": {
-      "min": 8.0,
-      "max": 10.2
-    },
-    "notes": "Includes excavation, grading, and demolition contractors."
-  },
-  "236220": {
-    "industry": "Commercial and Institutional Building Construction",
-    "base_range": {
-      "min": 6.5,
-      "max": 9.0
-    },
-    "premium_range": {
-      "min": 9.1,
-      "max": 11.5
-    },
-    "notes": "Premium reflects backlog, bonding capacity, and GC relationships."
-  },
-  "general_construction": {
-    "industry": "General Construction (Aggregated Private Market)",
-    "base_range": {
-      "min": 4.0,
-      "max": 6.5
-    },
-    "premium_range": {
-      "min": 7.0,
-      "max": 9.5
-    },
-    "notes": "Applicable to small and mid-sized construction businesses across multiple sectors."
-  },
-  "public_comps": {
-    "industry": "Public Comparables - Construction & Engineering",
-    "base_range": {
-      "min": 11.5,
-      "max": 12.5
-    },
-    "premium_range": null,
-    "notes": "Reference from Equidam TRBC industry classification for public market comps."
+  "11": {
+    "industry": "Agriculture, Forestry, Fishing and Hunting",
+    "base_range": { "min": 3.5, "max": 5.5 },
+    "premium_range": { "min": 6.0, "max": 8.0 },
+    "notes": "General range for agriculture-related businesses.",
+    "children": {
+      "111110": {
+        "industry": "Soybean Farming",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Premium reflects firms with large acreage and established distribution."
+      },
+      "111120": {
+        "industry": "Oilseed (except Soybean) Farming",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Covers sunflower, canola, and other oilseed farming."
+      },
+      "111130": {
+        "industry": "Dry Pea and Bean Farming",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Premium for established supply contracts."
+      },
+      "111140": {
+        "industry": "Wheat Farming",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "111150": {
+        "industry": "Corn Farming",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Premium reflects firms with ethanol or feed contracts."
+      },
+      "111160": {
+        "industry": "Rice Farming",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "111191": {
+        "industry": "Oilseed and Grain Combination Farming",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "111199": {
+        "industry": "All Other Grain Farming",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "111211": {
+        "industry": "Potato Farming",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Premium reflects firms with established distribution contracts."
+      },
+      "111219": {
+        "industry": "Other Vegetable (except Potato) and Melon Farming",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "111310": {
+        "industry": "Orange Groves",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Premium reflects firms with branded juice supply contracts."
+      },
+      "111320": {
+        "industry": "Citrus (except Orange) Groves",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Includes grapefruit, lemons, and limes."
+      },
+      "111331": {
+        "industry": "Apple Orchards",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Premium for orchards with cider or retail operations."
+      },
+      "111332": {
+        "industry": "Grape Vineyards",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Premium reflects vineyards supplying wineries."
+      },
+      "112111": {
+        "industry": "Beef Cattle Ranching and Farming, including Feedlots",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Premium for firms with integrated feedlot operations."
+      },
+      "112120": {
+        "industry": "Dairy Cattle and Milk Production",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Premium reflects large herd sizes and distribution contracts."
+      },
+      "113110": {
+        "industry": "Timber Tract Operations",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "113310": {
+        "industry": "Logging",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Premium reflects mechanized or scaled operators."
+      },
+      "114111": {
+        "industry": "Finfish Fishing",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Includes both ocean and freshwater fishing."
+      },
+      "114112": {
+        "industry": "Shellfish Fishing",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Premium reflects access to high-value species and quotas."
+      },
+      "115112": {
+        "industry": "Soil Preparation, Planting, and Cultivating",
+        "base_range": {_
+        {
+          "21": {
+            "industry": "Mining, Quarrying, and Oil & Gas Extraction",
+            "base_range": { "min": 4.0, "max": 6.0 },
+            "premium_range": { "min": 6.5, "max": 9.0 },
+            "notes": "General range for resource extraction industries.",
+            "children": {
+              "211120": {
+                "industry": "Crude Petroleum Extraction",
+                "base_range": { "min": 4.0, "max": 6.0 },
+                "premium_range": { "min": 6.5, "max": 9.0 },
+                "notes": "Premium reflects firms with proven reserves and pipeline contracts."
+              },
+              "211130": {
+                "industry": "Natural Gas Extraction",
+                "base_range": { "min": 4.0, "max": 6.0 },
+                "premium_range": { "min": 6.5, "max": 9.0 },
+                "notes": "Premium applies to firms with established midstream agreements."
+              },
+              "212110": {
+                "industry": "Coal Mining",
+                "base_range": { "min": 3.5, "max": 5.0 },
+                "premium_range": { "min": 5.5, "max": 7.5 },
+                "notes": "Lower multiples due to long-term industry decline."
+              },
+              "212210": {
+                "industry": "Iron Ore Mining",
+                "base_range": { "min": 4.0, "max": 6.0 },
+                "premium_range": { "min": 6.5, "max": 9.0 },
+                "notes": "Premium reflects export contracts or integrated operations."
+              },
+              "212221": {
+                "industry": "Gold Ore Mining",
+                "base_range": { "min": 4.5, "max": 6.5 },
+                "premium_range": { "min": 7.0, "max": 9.5 },
+                "notes": "Higher multiples due to commodity demand stability."
+              },
+              "212222": {
+                "industry": "Silver Ore Mining",
+                "base_range": { "min": 4.5, "max": 6.5 },
+                "premium_range": { "min": 7.0, "max": 9.5 },
+                "notes": "Premium reflects firms with refinery partnerships."
+              },
+              "212230": {
+                "industry": "Copper, Nickel, Lead, and Zinc Mining",
+                "base_range": { "min": 4.0, "max": 6.0 },
+                "premium_range": { "min": 6.5, "max": 9.0 },
+                "notes": "Includes multiple base metals operations."
+              },
+              "212310": {
+                "industry": "Stone Mining and Quarrying",
+                "base_range": { "min": 4.0, "max": 6.0 },
+                "premium_range": { "min": 6.5, "max": 9.0 },
+                "notes": "Premium reflects large-scale quarry operations."
+              },
+              "212320": {
+                "industry": "Sand, Gravel, Clay, and Ceramic Mining and Quarrying",
+                "base_range": { "min": 4.0, "max": 6.0 },
+                "premium_range": { "min": 6.5, "max": 9.0 },
+                "notes": "Premium applies to suppliers with regional dominance."
+              },
+              "213111": {
+                "industry": "Drilling Oil and Gas Wells",
+                "base_range": { "min": 4.5, "max": 6.5 },
+                "premium_range": { "min": 7.0, "max": 9.0 },
+                "notes": "Premium reflects firms with long-term service contracts."
+              },
+              "213112": {
+                "industry": "Support Activities for Oil and Gas Operations",
+                "base_range": { "min": 4.5, "max": 6.5 },
+                "premium_range": { "min": 7.0, "max": 9.0 },
+                "notes": "Covers maintenance, logistics, and related services."
+              },
+              "213113": {
+                "industry": "Support Activities for Coal Mining",
+                "base_range": { "min": 3.5, "max": 5.0 },
+                "premium_range": { "min": 5.5, "max": 7.0 },
+                "notes": "Tied to the coal industry’s broader decline."
+              },
+              "213114": {
+                "industry": "Support Activities for Metal Mining",
+                "base_range": { "min": 4.0, "max": 6.0 },
+                "premium_range": { "min": 6.5, "max": 9.0 },
+                "notes": "Premium reflects service diversification and international operations."
+              },
+              "213115": {
+                "industry": "Support Activities for Nonmetallic Minerals (except Fuels) Mining",
+                "base_range": { "min": 4.0, "max": 6.0 },
+                "premium_range": { "min": 6.5, "max": 9.0 },
+                "notes": "Fallback to sector range."
+              }
+            }
+          }
+        }
+        {
+          "22": {
+            "industry": "Utilities",
+            "base_range": { "min": 6.0, "max": 8.0 },
+            "premium_range": { "min": 8.5, "max": 11.0 },
+            "notes": "Stable cash flow industries with regulated revenue models.",
+            "children": {
+              "221111": {
+                "industry": "Hydroelectric Power Generation",
+                "base_range": { "min": 6.0, "max": 8.0 },
+                "premium_range": { "min": 8.5, "max": 11.0 },
+                "notes": "Premium reflects long-term power purchase agreements (PPAs)."
+              },
+              "221112": {
+                "industry": "Fossil Fuel Electric Power Generation",
+                "base_range": { "min": 5.5, "max": 7.5 },
+                "premium_range": { "min": 8.0, "max": 10.0 },
+                "notes": "Lower multiples due to environmental regulation and transition risks."
+              },
+              "221113": {
+                "industry": "Nuclear Electric Power Generation",
+                "base_range": { "min": 6.5, "max": 8.5 },
+                "premium_range": { "min": 9.0, "max": 11.0 },
+                "notes": "Premium reflects scale and government-backed contracts."
+              },
+              "221114": {
+                "industry": "Solar Electric Power Generation",
+                "base_range": { "min": 6.0, "max": 8.0 },
+                "premium_range": { "min": 8.5, "max": 11.0 },
+                "notes": "Premium reflects firms with utility-scale solar farms and secured PPAs."
+              },
+              "221115": {
+                "industry": "Wind Electric Power Generation",
+                "base_range": { "min": 6.0, "max": 8.0 },
+                "premium_range": { "min": 8.5, "max": 11.0 },
+                "notes": "Premium reflects large-scale onshore and offshore operations."
+              },
+              "221116": {
+                "industry": "Geothermal Electric Power Generation",
+                "base_range": { "min": 6.0, "max": 8.0 },
+                "premium_range": { "min": 8.5, "max": 11.0 },
+                "notes": "Fallback to sector range."
+              },
+              "221117": {
+                "industry": "Biomass Electric Power Generation",
+                "base_range": { "min": 6.0, "max": 8.0 },
+                "premium_range": { "min": 8.5, "max": 11.0 },
+                "notes": "Fallback to sector range."
+              },
+              "221118": {
+                "industry": "Other Electric Power Generation",
+                "base_range": { "min": 6.0, "max": 8.0 },
+                "premium_range": { "min": 8.5, "max": 11.0 },
+                "notes": "Covers hybrid and emerging technologies."
+              },
+              "221121": {
+                "industry": "Electric Bulk Power Transmission and Control",
+                "base_range": { "min": 6.0, "max": 8.0 },
+                "premium_range": { "min": 8.5, "max": 11.0 },
+                "notes": "Premium reflects firms with strategic grid positions."
+              },
+              "221122": {
+                "industry": "Electric Power Distribution",
+                "base_range": { "min": 6.0, "max": 8.0 },
+                "premium_range": { "min": 8.5, "max": 11.0 },
+                "notes": "Stable regulated business models."
+              },
+              "221210": {
+                "industry": "Natural Gas Distribution",
+                "base_range": { "min": 6.0, "max": 8.0 },
+                "premium_range": { "min": 8.5, "max": 11.0 },
+                "notes": "Premium reflects long-term residential and industrial contracts."
+              },
+              "221310": {
+                "industry": "Water Supply and Irrigation Systems",
+                "base_range": { "min": 5.5, "max": 7.5 },
+                "premium_range": { "min": 8.0, "max": 10.0 },
+                "notes": "Lower multiples due to municipal ownership prevalence."
+              },
+              "221320": {
+                "industry": "Sewage Treatment Facilities",
+                "base_range": { "min": 5.5, "max": 7.5 },
+                "premium_range": { "min": 8.0, "max": 10.0 },
+                "notes": "Premium reflects privatized operations under government contracts."
+              },
+              "221330": {
+                "industry": "Steam and Air-Conditioning Supply",
+                "base_range": { "min": 6.0, "max": 8.0 },
+                "premium_range": { "min": 8.5, "max": 11.0 },
+                "notes": "Fallback to sector range."
+              }
+            }
+          }
+        }
+      {
+        "42": {
+          "industry": "Wholesale Trade",
+          "base_range": { "min": 5.0, "max": 7.0 },
+          "premium_range": { "min": 7.5, "max": 9.5 },
+          "notes": "General range for wholesale distributors with B2B contracts.",
+          "children": {
+            "423110": {
+              "industry": "Automobile and Other Motor Vehicle Merchant Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Premium reflects exclusive dealership agreements."
+            },
+            "423120": {
+              "industry": "Motor Vehicle Supplies and New Parts Merchant Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Premium reflects OEM distribution contracts."
+            },
+            "423130": {
+              "industry": "Tire and Tube Merchant Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Fallback to sector range."
+            },
+            "423210": {
+              "industry": "Furniture Merchant Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Premium reflects firms with strong retail contracts."
+            },
+            "423220": {
+              "industry": "Home Furnishing Merchant Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Fallback to sector range."
+            },
+            "423310": {
+              "industry": "Lumber, Plywood, Millwork, and Wood Panel Merchant Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Premium reflects housing construction demand cycles."
+            },
+            "423320": {
+              "industry": "Brick, Stone, and Related Construction Material Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Fallback to sector range."
+            },
+            "423330": {
+              "industry": "Roofing, Siding, and Insulation Material Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Premium reflects distribution to major contractors."
+            },
+            "423430": {
+              "industry": "Computer and Computer Peripheral Equipment and Software Wholesalers",
+              "base_range": { "min": 5.5, "max": 7.5 },
+              "premium_range": { "min": 8.0, "max": 10.0 },
+              "notes": "Premium reflects SaaS or managed IT distribution contracts."
+            },
+            "423440": {
+              "industry": "Other Commercial Equipment Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Fallback to sector range."
+            },
+            "423450": {
+              "industry": "Medical, Dental, and Hospital Equipment and Supplies Wholesalers",
+              "base_range": { "min": 5.5, "max": 7.5 },
+              "premium_range": { "min": 8.0, "max": 10.0 },
+              "notes": "Premium reflects long-term healthcare supply contracts."
+            },
+            "423460": {
+              "industry": "Ophthalmic Goods Merchant Wholesalers",
+              "base_range": { "min": 5.5, "max": 7.5 },
+              "premium_range": { "min": 8.0, "max": 10.0 },
+              "notes": "Niche healthcare distribution."
+            },
+            "423610": {
+              "industry": "Electrical Apparatus and Equipment, Wiring Supplies, and Related Equipment Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Premium reflects industrial/commercial utility contracts."
+            },
+            "423620": {
+              "industry": "Household Appliances, Electric Housewares, and Consumer Electronics Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Premium reflects contracts with big-box retailers."
+            },
+            "423690": {
+              "industry": "Other Electronic Parts and Equipment Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Fallback to sector range."
+            },
+            "423810": {
+              "industry": "Construction and Mining Machinery and Equipment Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Premium reflects OEM or exclusive dealership rights."
+            },
+            "423820": {
+              "industry": "Farm and Garden Machinery and Equipment Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Premium reflects distribution of tractors and irrigation systems."
+            },
+            "423930": {
+              "industry": "Recyclable Material Merchant Wholesalers",
+              "base_range": { "min": 4.5, "max": 6.5 },
+              "premium_range": { "min": 7.0, "max": 9.0 },
+              "notes": "Lower multiples reflect commodity pricing cycles."
+            },
+            "423940": {
+              "industry": "Jewelry, Watch, Precious Stone, and Precious Metal Wholesalers",
+              "base_range": { "min": 5.5, "max": 7.5 },
+              "premium_range": { "min": 8.0, "max": 10.0 },
+              "notes": "Premium reflects luxury brand contracts."
+            },
+            "423990": {
+              "industry": "All Other Durable Goods Merchant Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Fallback to sector range."
+            },
+            "424410": {
+              "industry": "General Line Grocery Merchant Wholesalers",
+              "base_range": { "min": 5.5, "max": 7.5 },
+              "premium_range": { "min": 8.0, "max": 10.0 },
+              "notes": "Premium reflects major retail distribution contracts."
+            },
+            "424420": {
+              "industry": "Packaged Frozen Food Merchant Wholesalers",
+              "base_range": { "min": 5.5, "max": 7.5 },
+              "premium_range": { "min": 8.0, "max": 10.0 },
+              "notes": "Premium reflects freezer logistics networks."
+            },
+            "424430": {
+              "industry": "Dairy Product (except Dried or Canned) Merchant Wholesalers",
+              "base_range": { "min": 5.5, "max": 7.5 },
+              "premium_range": { "min": 8.0, "max": 10.0 },
+              "notes": "Perishable logistics drive value."
+            },
+            "424440": {
+              "industry": "Poultry and Poultry Product Merchant Wholesalers",
+              "base_range": { "min": 5.5, "max": 7.5 },
+              "premium_range": { "min": 8.0, "max": 10.0 },
+              "notes": "Premium reflects national supply agreements."
+            },
+            "424450": {
+              "industry": "Confectionery Merchant Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Fallback to sector range."
+            },
+            "424460": {
+              "industry": "Fish and Seafood Merchant Wholesalers",
+              "base_range": { "min": 5.5, "max": 7.5 },
+              "premium_range": { "min": 8.0, "max": 10.0 },
+              "notes": "Premium reflects access to fresh supply and distribution contracts."
+            },
+            "424470": {
+              "industry": "Meat and Meat Product Merchant Wholesalers",
+              "base_range": { "min": 5.5, "max": 7.5 },
+              "premium_range": { "min": 8.0, "max": 10.0 },
+              "notes": "Premium reflects long-term supermarket contracts."
+            },
+            "424480": {
+              "industry": "Fruit and Vegetable Merchant Wholesalers",
+              "base_range": { "min": 5.5, "max": 7.5 },
+              "premium_range": { "min": 8.0, "max": 10.0 },
+              "notes": "Premium reflects cold storage distribution."
+            },
+            "424490": {
+              "industry": "Other Grocery and Related Products Merchant Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Fallback to sector range."
+            },
+            "424610": {
+              "industry": "Plastics Materials and Basic Forms and Shapes Merchant Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Premium reflects long-term industrial contracts."
+            },
+            "424690": {
+              "industry": "Other Chemical and Allied Products Merchant Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Fallback to sector range."
+            },
+            "424710": {
+              "industry": "Petroleum Bulk Stations and Terminals",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Premium reflects firms with secured pipeline access."
+            },
+            "424720": {
+              "industry": "Petroleum and Petroleum Products Merchant Wholesalers (except Bulk Stations and Terminals)",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Premium reflects retail fuel contracts."
+            },
+            "424930": {
+              "industry": "Recyclable Material Merchant Wholesalers (Non-Durable Goods)",
+              "base_range": { "min": 4.5, "max": 6.5 },
+              "premium_range": { "min": 7.0, "max": 9.0 },
+              "notes": "Commodity-driven business models."
+            },
+            "424940": {
+              "industry": "Jewelry, Watches, Precious Stones, and Metals Merchant Wholesalers (Non-Durable)",
+              "base_range": { "min": 5.5, "max": 7.5 },
+              "premium_range": { "min": 8.0, "max": 10.0 },
+              "notes": "Premium reflects luxury distribution networks."
+            },
+            "424990": {
+              "industry": "All Other Nondurable Goods Merchant Wholesalers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Fallback to sector range."
+            },
+            "425110": {
+              "industry": "Business to Business Electronic Markets",
+              "base_range": { "min": 6.0, "max": 8.0 },
+              "premium_range": { "min": 8.5, "max": 10.5 },
+              "notes": "Premium reflects digital platforms with recurring revenue."
+            },
+            "425120": {
+              "industry": "Wholesale Trade Agents and Brokers",
+              "base_range": { "min": 5.0, "max": 7.0 },
+              "premium_range": { "min": 7.5, "max": 9.5 },
+              "notes": "Fallback to sector range."
+            }
+          }
+        }
+      }
+    {
+      "44-45": {
+        "industry": "Retail Trade",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "General range for retail businesses, with premiums for firms with strong brand presence, recurring customers, or e-commerce channels.",
+        "children": {
+          "441110": {
+            "industry": "New Car Dealers",
+            "base_range": { "min": 5.0, "max": 7.0 },
+            "premium_range": { "min": 7.5, "max": 9.5 },
+            "notes": "Premium reflects exclusive OEM franchise agreements."
+          },
+          "441120": {
+            "industry": "Used Car Dealers",
+            "base_range": { "min": 4.5, "max": 6.5 },
+            "premium_range": { "min": 7.0, "max": 8.5 },
+            "notes": "Premium reflects firms with financing subsidiaries."
+          },
+          "441210": {
+            "industry": "Recreational Vehicle Dealers",
+            "base_range": { "min": 4.5, "max": 6.5 },
+            "premium_range": { "min": 7.0, "max": 9.0 },
+            "notes": "Premium reflects established brands and service centers."
+          },
+          "442110": {
+            "industry": "Furniture Stores",
+            "base_range": { "min": 4.5, "max": 6.5 },
+            "premium_range": { "min": 7.0, "max": 9.0 },
+            "notes": "Premium reflects design centers or regional dominance."
+          },
+          "442210": {
+            "industry": "Floor Covering Stores",
+            "base_range": { "min": 4.5, "max": 6.5 },
+            "premium_range": { "min": 7.0, "max": 9.0 },
+            "notes": "Fallback to sector range."
+          },
+          "443142": {
+            "industry": "Electronics Stores",
+            "base_range": { "min": 4.5, "max": 6.5 },
+            "premium_range": { "min": 7.0, "max": 9.0 },
+            "notes": "Premium reflects firms with strong e-commerce platforms."
+          },
+          "444110": {
+            "industry": "Home Centers",
+            "base_range": { "min": 5.0, "max": 7.0 },
+            "premium_range": { "min": 7.5, "max": 9.5 },
+            "notes": "Premium reflects brand strength and scale (e.g., national chains)."
+          },
+          "444120": {
+            "industry": "Paint and Wallpaper Stores",
+            "base_range": { "min": 4.5, "max": 6.0 },
+            "premium_range": { "min": 7.0, "max": 8.5 },
+            "notes": "Fallback to sector range."
+          },
+          "445110": {
+            "industry": "Supermarkets and Other Grocery (except Convenience) Stores",
+            "base_range": { "min": 5.5, "max": 7.5 },
+            "premium_range": { "min": 8.0, "max": 10.0 },
+            "notes": "Premium reflects long-term supply agreements and high customer retention."
+          },
+          "445120": {
+            "industry": "Convenience Stores",
+            "base_range": { "min": 4.5, "max": 6.5 },
+            "premium_range": { "min": 7.0, "max": 8.5 },
+            "notes": "Premium reflects franchise networks or fuel contracts."
+          },
+          "445230": {
+            "industry": "Fruit and Vegetable Markets",
+            "base_range": { "min": 4.5, "max": 6.5 },
+            "premium_range": { "min": 7.0, "max": 8.5 },
+            "notes": "Fallback to sector range."
+          },
+          "446110": {
+            "industry": "Pharmacies and Drug Stores",
+            "base_range": { "min": 5.5, "max": 7.5 },
+            "premium_range": { "min": 8.0, "max": 10.0 },
+            "notes": "Premium reflects recurring prescription revenue and insurance contracts."
+          },
+          "447110": {
+            "industry": "Gasoline Stations with Convenience Stores",
+            "base_range": { "min": 4.5, "max": 6.5 },
+            "premium_range": { "min": 7.0, "max": 8.5 },
+            "notes": "Premium reflects fuel supply agreements with major brands."
+          },
+          "448110": {
+            "industry": "Men’s Clothing Stores",
+            "base_range": { "min": 4.5, "max": 6.0 },
+            "premium_range": { "min": 7.0, "max": 8.5 },
+            "notes": "Premium reflects firms with e-commerce operations."
+          },
+          "448120": {
+            "industry": "Women’s Clothing Stores",
+            "base_range": { "min": 4.5, "max": 6.0 },
+            "premium_range": { "min": 7.0, "max": 8.5 },
+            "notes": "Premium reflects brand recognition and online presence."
+          },
+          "448310": {
+            "industry": "Jewelry Stores",
+            "base_range": { "min": 5.0, "max": 7.0 },
+            "premium_range": { "min": 7.5, "max": 9.5 },
+            "notes": "Premium reflects luxury and recurring customer base."
+          },
+          "451110": {
+            "industry": "Sporting Goods Stores",
+            "base_range": { "min": 4.5, "max": 6.5 },
+            "premium_range": { "min": 7.0, "max": 9.0 },
+            "notes": "Premium reflects brands with strong online retail platforms."
+          },
+          "451212": {
+            "industry": "Book Stores and News Dealers",
+            "base_range": { "min": 4.0, "max": 5.5 },
+            "premium_range": { "min": 6.5, "max": 8.0 },
+            "notes": "Lower multiples reflect industry decline due to digital media."
+          },
+          "452210": {
+            "industry": "Department Stores",
+            "base_range": { "min": 4.5, "max": 6.5 },
+            "premium_range": { "min": 7.0, "max": 9.0 },
+            "notes": "Premium reflects national chains with diversified offerings."
+          },
+          "452311": {
+            "industry": "Warehouse Clubs and Supercenters",
+            "base_range": { "min": 5.5, "max": 7.5 },
+            "premium_range": { "min": 8.0, "max": 10.0 },
+            "notes": "Premium reflects membership-based recurring revenue."
+          },
+          "453310": {
+            "industry": "Used Merchandise Stores",
+            "base_range": { "min": 4.0, "max": 5.5 },
+            "premium_range": { "min": 6.5, "max": 8.0 },
+            "notes": "Premium reflects consignment franchises with national presence."
+          },
+          "454110": {
+            "industry": "Electronic Shopping and Mail-Order Houses",
+            "base_range": { "min": 5.5, "max": 7.5 },
+            "premium_range": { "min": 8.0, "max": 10.5 },
+            "notes": "Premium reflects scalable e-commerce platforms."
+          },
+          "454210": {
+            "industry": "Vending Machine Operators",
+            "base_range": { "min": 4.0, "max": 6.0 },
+            "premium_range": { "min": 6.5, "max": 8.0 },
+            "notes": "Premium reflects firms with large route density."
+          },
+          "454390": {
+            "industry": "Other Direct Selling Establishments",
+            "base_range": { "min": 4.0, "max": 6.0 },
+            "premium_range": { "min": 6.5, "max": 8.0 },
+            "notes": "Covers multi-level marketing and home party sales."
+          }
+        }
+      }
+    }
+  {
+    "48-49": {
+      "industry": "Transportation and Warehousing",
+      "base_range": { "min": 4.5, "max": 6.5 },
+      "premium_range": { "min": 7.0, "max": 9.0 },
+      "notes": "General range for transportation and logistics providers, with premiums for recurring contracts, asset-light models, or specialized niches.",
+      "children": {
+        "481111": {
+          "industry": "Scheduled Passenger Air Transportation",
+          "base_range": { "min": 4.5, "max": 6.5 },
+          "premium_range": { "min": 7.0, "max": 9.0 },
+          "notes": "Premium reflects international routes and code-share agreements."
+        },
+        "481112": {
+          "industry": "Scheduled Freight Air Transportation",
+          "base_range": { "min": 5.0, "max": 7.0 },
+          "premium_range": { "min": 7.5, "max": 9.5 },
+          "notes": "Premium reflects firms with global freight contracts."
+        },
+        "482111": {
+          "industry": "Line-Haul Railroads",
+          "base_range": { "min": 5.5, "max": 7.5 },
+          "premium_range": { "min": 8.0, "max": 10.0 },
+          "notes": "Premium reflects national rail infrastructure and long-term contracts."
+        },
+        "482112": {
+          "industry": "Short Line Railroads",
+          "base_range": { "min": 4.5, "max": 6.0 },
+          "premium_range": { "min": 6.5, "max": 8.5 },
+          "notes": "Premium reflects interconnections with major carriers."
+        },
+        "483111": {
+          "industry": "Deep Sea Freight Transportation",
+          "base_range": { "min": 5.0, "max": 7.0 },
+          "premium_range": { "min": 7.5, "max": 9.5 },
+          "notes": "Premium reflects firms with global shipping lanes."
+        },
+        "483112": {
+          "industry": "Deep Sea Passenger Transportation",
+          "base_range": { "min": 4.5, "max": 6.5 },
+          "premium_range": { "min": 7.0, "max": 9.0 },
+          "notes": "Includes cruise lines; premium reflects fleet scale and brand strength."
+        },
+        "484110": {
+          "industry": "General Freight Trucking, Local",
+          "base_range": { "min": 4.5, "max": 6.5 },
+          "premium_range": { "min": 7.0, "max": 9.0 },
+          "notes": "Premium reflects recurring B2B contracts and route density."
+        },
+        "484121": {
+          "industry": "General Freight Trucking, Long-Distance, Truckload",
+          "base_range": { "min": 4.5, "max": 6.5 },
+          "premium_range": { "min": 7.0, "max": 9.0 },
+          "notes": "Premium reflects firms with national logistics networks."
+        },
+        "484122": {
+          "industry": "General Freight Trucking, Long-Distance, Less Than Truckload",
+          "base_range": { "min": 5.0, "max": 7.0 },
+          "premium_range": { "min": 7.5, "max": 9.5 },
+          "notes": "Premium reflects network-driven efficiency."
+        },
+        "484220": {
+          "industry": "Specialized Freight (except Used Goods) Trucking, Local",
+          "base_range": { "min": 4.5, "max": 6.5 },
+          "premium_range": { "min": 7.0, "max": 9.0 },
+          "notes": "Premium reflects specialized fleets (hazmat, refrigerated)."
+        },
+        "484230": {
+          "industry": "Specialized Freight (except Used Goods) Trucking, Long-Distance",
+          "base_range": { "min": 4.5, "max": 6.5 },
+          "premium_range": { "min": 7.0, "max": 9.0 },
+          "notes": "Premium reflects firms with national contracts and niche capabilities."
+        },
+        "485111": {
+          "industry": "Mixed Mode Transit Systems",
+          "base_range": { "min": 4.0, "max": 6.0 },
+          "premium_range": { "min": 6.5, "max": 8.5 },
+          "notes": "Lower multiples due to public/private funding dependency."
+        },
+        "485210": {
+          "industry": "Interurban and Rural Bus Transportation",
+          "base_range": { "min": 4.0, "max": 6.0 },
+          "premium_range": { "min": 6.5, "max": 8.5 },
+          "notes": "Fallback to sector range."
+        },
+        "485310": {
+          "industry": "Taxi Service",
+          "base_range": { "min": 3.5, "max": 5.0 },
+          "premium_range": { "min": 5.5, "max": 7.0 },
+          "notes": "Lower multiples due to disruption from ride-hailing apps."
+        },
+        "485320": {
+          "industry": "Limousine Service",
+          "base_range": { "min": 4.0, "max": 6.0 },
+          "premium_range": { "min": 6.5, "max": 8.5 },
+          "notes": "Premium reflects luxury and corporate contracts."
+        },
+        "485410": {
+          "industry": "School and Employee Bus Transportation",
+          "base_range": { "min": 4.5, "max": 6.5 },
+          "premium_range": { "min": 7.0, "max": 9.0 },
+          "notes": "Premium reflects stable municipal or educational contracts."
+        },
+        "485510": {
+          "industry": "Charter Bus Industry",
+          "base_range": { "min": 4.0, "max": 6.0 },
+          "premium_range": { "min": 6.5, "max": 8.5 },
+          "notes": "Fallback to sector range."
+        },
+        "486110": {
+          "industry": "Crude Petroleum Pipelines",
+          "base_range": { "min": 5.5, "max": 7.5 },
+          "premium_range": { "min": 8.0, "max": 10.0 },
+          "notes": "Premium reflects stable fee-based transport contracts."
+        },
+        "486210": {
+          "industry": "Natural Gas Transmission",
+          "base_range": { "min": 5.5, "max": 7.5 },
+          "premium_range": { "min": 8.0, "max": 10.0 },
+          "notes": "Premium reflects long-term pipeline agreements."
+        },
+        "488510": {
+          "industry": "Freight Transportation Arrangement",
+          "base_range": { "min": 5.0, "max": 7.0 },
+          "premium_range": { "min": 7.5, "max": 9.5 },
+          "notes": "Premium reflects asset-light brokerage models."
+        },
+        "492110": {
+          "industry": "Couriers and Express Delivery Services",
+          "base_range": { "min": 5.0, "max": 7.0 },
+          "premium_range": { "min": 7.5, "max": 9.5 },
+          "notes": "Premium reflects firms with e-commerce shipping contracts."
+        },
+        "493110": {
+          "industry": "General Warehousing and Storage",
+          "base_range": { "min": 5.0, "max": 7.0 },
+          "premium_range": { "min": 7.5, "max": 9.5 },
+          "notes": "Premium reflects e-commerce fulfillment operations."
+        },
+        "493120": {
+          "industry": "Refrigerated Warehousing and Storage",
+          "base_range": { "min": 5.5, "max": 7.5 },
+          "premium_range": { "min": 8.0, "max": 10.0 },
+          "notes": "Premium reflects food distribution and cold chain logistics."
+        },
+        "493190": {
+          "industry": "Other Warehousing and Storage",
+          "base_range": { "min": 4.5, "max": 6.5 },
+          "premium_range": { "min": 7.0, "max": 9.0 },
+          "notes": "Fallback to sector range."
+        }
+      }
+    }
+  }
+{
+  "51": {
+    "industry": "Information",
+    "base_range": { "min": 5.5, "max": 7.5 },
+    "premium_range": { "min": 8.0, "max": 10.5 },
+    "notes": "Covers publishing, media, telecommunications, and data services. Premiums reflect recurring subscription revenue, digital platforms, or IP ownership.",
+    "children": {
+      "511110": {
+        "industry": "Newspaper Publishers",
+        "base_range": { "min": 3.5, "max": 5.0 },
+        "premium_range": { "min": 6.0, "max": 7.5 },
+        "notes": "Lower multiples due to long-term industry decline."
+      },
+      "511120": {
+        "industry": "Periodical Publishers",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects firms with digital subscription models."
+      },
+      "511130": {
+        "industry": "Book Publishers",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Premium reflects strong author contracts or niche markets."
+      },
+      "511210": {
+        "industry": "Software Publishers",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 10.0, "max": 13.0 },
+        "notes": "Premium reflects SaaS, high ARR growth, and sticky customer bases."
+      },
+      "512110": {
+        "industry": "Motion Picture and Video Production",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects ownership of IP and distribution agreements."
+      },
+      "512120": {
+        "industry": "Motion Picture and Video Distribution",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects global rights management."
+      },
+      "512131": {
+        "industry": "Motion Picture Theaters (except Drive-Ins)",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 8.0 },
+        "notes": "Lower multiples due to industry decline; premium reflects luxury formats."
+      },
+      "512132": {
+        "industry": "Drive-In Motion Picture Theaters",
+        "base_range": { "min": 3.0, "max": 5.0 },
+        "premium_range": { "min": 5.5, "max": 7.0 },
+        "notes": "Niche industry with limited scalability."
+      },
+      "512230": {
+        "industry": "Music Publishers",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects catalogs with strong royalty streams."
+      },
+      "512240": {
+        "industry": "Sound Recording Studios",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.5 },
+        "notes": "Premium reflects ownership of publishing rights."
+      },
+      "515111": {
+        "industry": "Radio Networks",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.5 },
+        "notes": "Premium reflects national ad contracts."
+      },
+      "515112": {
+        "industry": "Radio Stations",
+        "base_range": { "min": 3.5, "max": 5.5 },
+        "premium_range": { "min": 6.0, "max": 7.5 },
+        "notes": "Lower multiples due to digital disruption."
+      },
+      "515120": {
+        "industry": "Television Broadcasting",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.5 },
+        "notes": "Premium reflects ownership of affiliates and content libraries."
+      },
+      "517311": {
+        "industry": "Wired Telecommunications Carriers",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects fiber network ownership."
+      },
+      "517312": {
+        "industry": "Wireless Telecommunications Carriers (except Satellite)",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects 5G networks and subscription bases."
+      },
+      "517410": {
+        "industry": "Satellite Telecommunications",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects firms with government and defense contracts."
+      },
+      "518210": {
+        "industry": "Data Processing, Hosting, and Related Services",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 9.0, "max": 11.5 },
+        "notes": "Premium reflects cloud computing and recurring SaaS contracts."
+      },
+      "519130": {
+        "industry": "Internet Publishing and Broadcasting and Web Search Portals",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 10.0, "max": 12.5 },
+        "notes": "Premium reflects recurring ad revenue and platform dominance."
+      },
+      "519190": {
+        "industry": "All Other Information Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Fallback to sector range."
+      }
+    }
   }
 }
+{
+  "52": {
+    "industry": "Finance and Insurance",
+    "base_range": { "min": 6.0, "max": 8.5 },
+    "premium_range": { "min": 9.0, "max": 12.0 },
+    "notes": "Covers banks, credit institutions, insurance, and financial services. Premiums reflect recurring revenue, AUM growth, or regulated stability.",
+    "children": {
+      "521110": {
+        "industry": "Monetary Authorities - Central Bank",
+        "base_range": { "min": 6.0, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 12.0 },
+        "notes": "Primarily government-run; valuation multiples not typically applicable."
+      },
+      "522110": {
+        "industry": "Commercial Banking",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 12.0 },
+        "notes": "Premium reflects scale, digital banking adoption, and deposit base stability."
+      },
+      "522120": {
+        "industry": "Savings Institutions",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects strong retail deposit franchises."
+      },
+      "522130": {
+        "industry": "Credit Unions",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Non-profit model; premiums reflect member loyalty and scale."
+      },
+      "522210": {
+        "industry": "Credit Card Issuing",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 12.0 },
+        "notes": "Premium reflects recurring interest income and large customer bases."
+      },
+      "522220": {
+        "industry": "Sales Financing",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects secured loan portfolios."
+      },
+      "522291": {
+        "industry": "Consumer Lending",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects fintech platforms and scalable digital origination."
+      },
+      "522292": {
+        "industry": "Real Estate Credit",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects mortgage servicing portfolios."
+      },
+      "522293": {
+        "industry": "International Trade Financing",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 12.0 },
+        "notes": "Premium reflects firms with global networks and secured contracts."
+      },
+      "523110": {
+        "industry": "Investment Banking and Securities Dealing",
+        "base_range": { "min": 7.0, "max": 9.0 },
+        "premium_range": { "min": 10.0, "max": 13.0 },
+        "notes": "Premium reflects strong M&A pipelines and institutional client bases."
+      },
+      "523120": {
+        "industry": "Securities Brokerage",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects scale and recurring fee income."
+      },
+      "523130": {
+        "industry": "Commodity Contracts Dealing",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects trading volume and regulatory licenses."
+      },
+      "523140": {
+        "industry": "Commodity Contracts Brokerage",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Fallback to sector range."
+      },
+      "523910": {
+        "industry": "Miscellaneous Intermediation",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Covers niche financing businesses."
+      },
+      "523920": {
+        "industry": "Portfolio Management",
+        "base_range": { "min": 7.0, "max": 9.0 },
+        "premium_range": { "min": 10.0, "max": 13.0 },
+        "notes": "Premium reflects AUM growth and recurring management fees."
+      },
+      "523930": {
+        "industry": "Investment Advice",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 12.0 },
+        "notes": "Premium reflects client stickiness and fee-based revenue."
+      },
+      "524113": {
+        "industry": "Direct Life Insurance Carriers",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 12.0 },
+        "notes": "Premium reflects large actuarial pools and long-term policyholder bases."
+      },
+      "524114": {
+        "industry": "Direct Health and Medical Insurance Carriers",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 12.0 },
+        "notes": "Premium reflects ACA participation and provider networks."
+      },
+      "524126": {
+        "industry": "Direct Property and Casualty Insurance Carriers",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 12.0 },
+        "notes": "Premium reflects firms with underwriting profitability and reinsurance coverage."
+      },
+      "524127": {
+        "industry": "Direct Title Insurance Carriers",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects firms with major real estate market share."
+      },
+      "524128": {
+        "industry": "Other Direct Insurance (except Life, Health, and Medical) Carriers",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Fallback to sector range."
+      },
+      "524210": {
+        "industry": "Insurance Agencies and Brokerages",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects recurring commission revenue."
+      },
+      "525910": {
+        "industry": "Open-End Investment Funds",
+        "base_range": { "min": 7.0, "max": 9.0 },
+        "premium_range": { "min": 10.0, "max": 13.0 },
+        "notes": "Premium reflects funds with large, diversified AUM."
+      },
+      "525920": {
+        "industry": "Trusts, Estates, and Agency Accounts",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 12.0 },
+        "notes": "Premium reflects firms with sticky high-net-worth client bases."
+      },
+      "525990": {
+        "industry": "Other Financial Vehicles",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Covers hedge funds, REITs, and niche investment vehicles."
+      }
+    }
+  }
+}
+{
+  "53": {
+    "industry": "Real Estate and Rental and Leasing",
+    "base_range": { "min": 5.5, "max": 7.5 },
+    "premium_range": { "min": 8.0, "max": 10.5 },
+    "notes": "Covers real estate operators, leasing, and rental services. Premiums reflect recurring lease income, high occupancy rates, or asset-light models.",
+    "children": {
+      "531110": {
+        "industry": "Lessors of Residential Buildings and Dwellings",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects stabilized occupancy and long-term leases."
+      },
+      "531120": {
+        "industry": "Lessors of Nonresidential Buildings (except Miniwarehouses)",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.5 },
+        "notes": "Premium reflects triple-net lease portfolios."
+      },
+      "531130": {
+        "industry": "Lessors of Miniwarehouses and Self-Storage Units",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 9.0, "max": 11.0 },
+        "notes": "Premium reflects recurring, recession-resistant cash flow."
+      },
+      "531190": {
+        "industry": "Lessors of Other Real Estate Property",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Fallback to sector range."
+      },
+      "531210": {
+        "industry": "Offices of Real Estate Agents and Brokers",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects recurring commission revenue via teams or franchises."
+      },
+      "531311": {
+        "industry": "Residential Property Managers",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects recurring fee-based contracts with property owners."
+      },
+      "531312": {
+        "industry": "Nonresidential Property Managers",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects portfolios with stable commercial tenants."
+      },
+      "531320": {
+        "industry": "Offices of Real Estate Appraisers",
+        "base_range": { "min": 4.5, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Lower multiples due to cyclical transaction volumes."
+      },
+      "531390": {
+        "industry": "Other Activities Related to Real Estate",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Covers escrow, title, and other transaction support."
+      },
+      "532111": {
+        "industry": "Passenger Car Rental",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Premium reflects fleet scale and airport contracts."
+      },
+      "532120": {
+        "industry": "Truck, Utility Trailer, and RV Rental and Leasing",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Premium reflects recurring B2B fleet contracts."
+      },
+      "532210": {
+        "industry": "Consumer Electronics and Appliances Rental",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.5 },
+        "notes": "Premium reflects national brand franchises."
+      },
+      "532310": {
+        "industry": "General Rental Centers",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Fallback to sector range."
+      },
+      "532412": {
+        "industry": "Construction, Mining, and Forestry Machinery and Equipment Rental and Leasing",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects industrial and infrastructure project demand."
+      },
+      "532420": {
+        "industry": "Office Machinery and Equipment Rental and Leasing",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Fallback to sector range."
+      },
+      "532490": {
+        "industry": "Other Commercial and Industrial Machinery and Equipment Rental and Leasing",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Covers niche industrial equipment rental providers."
+      },
+      "533110": {
+        "industry": "Lessors of Nonfinancial Intangible Assets (except Copyrighted Works)",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects royalties from patents, trademarks, and brand licensing."
+      }
+    }
+  }
+}
+{
+  "54": {
+    "industry": "Professional, Scientific, and Technical Services",
+    "base_range": { "min": 5.5, "max": 7.5 },
+    "premium_range": { "min": 8.0, "max": 10.5 },
+    "notes": "Covers consulting, IT, legal, accounting, engineering, and scientific services. Premiums reflect recurring contracts, specialization, or scalable platforms.",
+    "children": {
+      "541110": {
+        "industry": "Offices of Lawyers",
+        "base_range": { "min": 5.5, "max": 7.0 },
+        "premium_range": { "min": 8.0, "max": 9.5 },
+        "notes": "Premium reflects specialized practices or long-term corporate clients."
+      },
+      "541211": {
+        "industry": "Offices of Certified Public Accountants",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects recurring compliance and advisory revenue."
+      },
+      "541213": {
+        "industry": "Tax Preparation Services",
+        "base_range": { "min": 4.5, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects franchise or technology-driven platforms."
+      },
+      "541214": {
+        "industry": "Payroll Services",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects recurring revenue and high retention SaaS models."
+      },
+      "541310": {
+        "industry": "Architectural Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects firms with large commercial contracts."
+      },
+      "541330": {
+        "industry": "Engineering Services",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects long-term infrastructure and government projects."
+      },
+      "541340": {
+        "industry": "Drafting Services",
+        "base_range": { "min": 4.5, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "541380": {
+        "industry": "Testing Laboratories",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects FDA-approved or accredited facilities."
+      },
+      "541511": {
+        "industry": "Custom Computer Programming Services",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects recurring SaaS contracts or niche specialization."
+      },
+      "541512": {
+        "industry": "Computer Systems Design Services",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 11.5 },
+        "notes": "Premium reflects managed services and IT outsourcing contracts."
+      },
+      "541513": {
+        "industry": "Computer Facilities Management Services",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects enterprise outsourcing relationships."
+      },
+      "541519": {
+        "industry": "Other Computer Related Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Covers cybersecurity, IT consulting, and niche specialties."
+      },
+      "541611": {
+        "industry": "Administrative Management and General Management Consulting Services",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects established consulting firms with recurring retainers."
+      },
+      "541612": {
+        "industry": "Human Resources Consulting Services",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects SaaS-enabled HR platforms or enterprise clients."
+      },
+      "541613": {
+        "industry": "Marketing Consulting Services",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects digital-first and performance marketing firms."
+      },
+      "541614": {
+        "industry": "Process, Physical Distribution, and Logistics Consulting Services",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects enterprise supply chain contracts."
+      },
+      "541618": {
+        "industry": "Other Management Consulting Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Fallback to sector range."
+      },
+      "541690": {
+        "industry": "Other Scientific and Technical Consulting Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects firms with environmental or energy specialization."
+      },
+      "541710": {
+        "industry": "Research and Development in Biotechnology",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 12.0 },
+        "notes": "Premium reflects IP portfolios and FDA approvals."
+      },
+      "541720": {
+        "industry": "Research and Development in the Social Sciences and Humanities",
+        "base_range": { "min": 4.5, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Lower multiples due to funding reliance."
+      },
+      "541810": {
+        "industry": "Advertising Agencies",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects digital media and recurring retainers."
+      },
+      "541820": {
+        "industry": "Public Relations Agencies",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects firms with strong corporate clients."
+      },
+      "541830": {
+        "industry": "Media Buying Agencies",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects firms with scaled ad inventory access."
+      },
+      "541840": {
+        "industry": "Media Representatives",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Fallback to sector range."
+      },
+      "541850": {
+        "industry": "Display Advertising",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects digital-first ad tech firms."
+      },
+      "541860": {
+        "industry": "Direct Mail Advertising",
+        "base_range": { "min": 4.5, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Lower multiples due to decline of traditional media."
+      },
+      "541870": {
+        "industry": "Advertising Material Distribution Services",
+        "base_range": { "min": 4.5, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "541890": {
+        "industry": "Other Services Related to Advertising",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Covers niche or specialized firms."
+      },
+      "541910": {
+        "industry": "Marketing Research and Public Opinion Polling",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects proprietary datasets or methodologies."
+      },
+      "541940": {
+        "industry": "Veterinary Services",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects chains or consolidators with recurring care revenue."
+      },
+      "541990": {
+        "industry": "All Other Professional, Scientific, and Technical Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Fallback to sector range."
+      }
+    }
+  }
+}
+{
+  "55": {
+    "industry": "Management of Companies and Enterprises",
+    "base_range": { "min": 6.0, "max": 8.0 },
+    "premium_range": { "min": 8.5, "max": 11.0 },
+    "notes": "Includes holding companies and corporate offices. Premiums reflect diversified revenue streams, governance, and scale.",
+    "children": {
+      "551111": {
+        "industry": "Offices of Bank Holding Companies",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 11.0 },
+        "notes": "Premium reflects diversified financial subsidiaries and regulatory approvals."
+      },
+      "551112": {
+        "industry": "Offices of Other Holding Companies",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects diversified investments across industries."
+      },
+      "551114": {
+        "industry": "Corporate, Subsidiary, and Regional Managing Offices",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects centralized management of large, multi-division enterprises."
+      }
+    }
+  }
+}
+{
+  "56": {
+    "industry": "Administrative and Support and Waste Management and Remediation Services",
+    "base_range": { "min": 5.0, "max": 7.0 },
+    "premium_range": { "min": 7.5, "max": 9.5 },
+    "notes": "Covers staffing, facilities support, security, cleaning, landscaping, and waste management. Premiums reflect recurring contracts, scale, and compliance-driven demand.",
+    "children": {
+      "561110": {
+        "industry": "Office Administrative Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects firms offering outsourced back-office functions."
+      },
+      "561210": {
+        "industry": "Facilities Support Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects government and enterprise contracts."
+      },
+      "561311": {
+        "industry": "Employment Placement Agencies",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects specialized niches like healthcare and IT staffing."
+      },
+      "561320": {
+        "industry": "Temporary Help Services",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects large client bases and recurring labor demand."
+      },
+      "561410": {
+        "industry": "Document Preparation Services",
+        "base_range": { "min": 4.5, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "561422": {
+        "industry": "Telemarketing Bureaus and Other Contact Centers",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects scale and outsourcing contracts."
+      },
+      "561431": {
+        "industry": "Private Mail Centers",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 8.5 },
+        "notes": "Premium reflects franchise networks."
+      },
+      "561440": {
+        "industry": "Collection Agencies",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects compliance-driven demand."
+      },
+      "561450": {
+        "industry": "Credit Bureaus",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects recurring data subscriptions."
+      },
+      "561510": {
+        "industry": "Travel Agencies",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects corporate travel management contracts."
+      },
+      "561520": {
+        "industry": "Tour Operators",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects firms with strong brand recognition."
+      },
+      "561611": {
+        "industry": "Investigation Services",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Premium reflects corporate and government clients."
+      },
+      "561612": {
+        "industry": "Security Guards and Patrol Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects large-scale enterprise and government contracts."
+      },
+      "561720": {
+        "industry": "Janitorial Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects recurring B2B contracts and scale."
+      },
+      "561730": {
+        "industry": "Landscaping Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects recurring HOA and commercial contracts."
+      },
+      "561740": {
+        "industry": "Carpet and Upholstery Cleaning Services",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 8.5 },
+        "notes": "Fallback to sector range."
+      },
+      "561790": {
+        "industry": "Other Services to Buildings and Dwellings",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Includes pest control and other building services."
+      },
+      "562111": {
+        "industry": "Solid Waste Collection",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects long-term municipal contracts."
+      },
+      "562112": {
+        "industry": "Hazardous Waste Collection",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects regulatory-driven demand."
+      },
+      "562119": {
+        "industry": "Other Waste Collection",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 9.5 },
+        "notes": "Fallback to sector range."
+      },
+      "562211": {
+        "industry": "Hazardous Waste Treatment and Disposal",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects compliance with EPA standards."
+      },
+      "562212": {
+        "industry": "Solid Waste Landfill",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects permitted and operating landfill assets."
+      },
+      "562213": {
+        "industry": "Solid Waste Combustors and Incinerators",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects energy recovery facilities."
+      },
+      "562910": {
+        "industry": "Remediation Services",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects environmental cleanup and regulatory demand."
+      },
+      "562991": {
+        "industry": "Septic Tank and Related Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Fallback to sector range."
+      },
+      "562998": {
+        "industry": "All Other Miscellaneous Waste Management Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Fallback to sector range."
+      }
+    }
+  }
+}
+{
+  "61": {
+    "industry": "Educational Services",
+    "base_range": { "min": 4.5, "max": 6.5 },
+    "premium_range": { "min": 7.0, "max": 9.0 },
+    "notes": "Covers schools, training providers, and educational support. Premiums reflect accreditation, recurring tuition revenue, and scalable delivery models.",
+    "children": {
+      "611110": {
+        "industry": "Elementary and Secondary Schools",
+        "base_range": { "min": 4.5, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Primarily public or non-profit; premiums apply to private accredited institutions."
+      },
+      "611210": {
+        "industry": "Junior Colleges",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Premium reflects accreditation and government funding stability."
+      },
+      "611310": {
+        "industry": "Colleges, Universities, and Professional Schools",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects endowments, research funding, and brand recognition."
+      },
+      "611410": {
+        "industry": "Business and Secretarial Schools",
+        "base_range": { "min": 4.5, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects corporate training partnerships."
+      },
+      "611420": {
+        "industry": "Computer Training",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects coding bootcamps and tech certifications."
+      },
+      "611430": {
+        "industry": "Professional and Management Development Training",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects executive training and scalable online platforms."
+      },
+      "611511": {
+        "industry": "Cosmetology and Barber Schools",
+        "base_range": { "min": 4.5, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects franchise models or strong brand names."
+      },
+      "611512": {
+        "industry": "Flight Training",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects FAA certification and contracts with airlines."
+      },
+      "611513": {
+        "industry": "Apprenticeship Training",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Premium reflects government or union sponsorship."
+      },
+      "611519": {
+        "industry": "Other Technical and Trade Schools",
+        "base_range": { "min": 4.5, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "611610": {
+        "industry": "Fine Arts Schools",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects reputation and recurring donor/funding support."
+      },
+      "611620": {
+        "industry": "Sports and Recreation Instruction",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects scalable franchises or academy models."
+      },
+      "611630": {
+        "industry": "Language Schools",
+        "base_range": { "min": 4.5, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects international presence and online programs."
+      },
+      "611691": {
+        "industry": "Exam Preparation and Tutoring",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects scalable online delivery platforms."
+      },
+      "611692": {
+        "industry": "Automobile Driving Schools",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects franchise or government licensing."
+      },
+      "611699": {
+        "industry": "All Other Miscellaneous Schools and Instruction",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "611710": {
+        "industry": "Educational Support Services",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Premium reflects digital platforms, testing services, or curriculum providers."
+      }
+    }
+  }
+}
+{
+  "62": {
+    "industry": "Health Care and Social Assistance",
+    "base_range": { "min": 6.0, "max": 8.0 },
+    "premium_range": { "min": 8.5, "max": 11.0 },
+    "notes": "Covers hospitals, physicians, outpatient care, nursing facilities, and social services. Premiums reflect recurring patient volumes, government reimbursements, and scalability of service models.",
+    "children": {
+      "621111": {
+        "industry": "Offices of Physicians (except Mental Health Specialists)",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects multi-location practices and recurring patient revenue."
+      },
+      "621112": {
+        "industry": "Offices of Physicians, Mental Health Specialists",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects increasing demand and integration with telehealth."
+      },
+      "621210": {
+        "industry": "Offices of Dentists",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects group practices, recurring hygiene care, and DSO consolidators."
+      },
+      "621310": {
+        "industry": "Offices of Chiropractors",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects recurring wellness memberships."
+      },
+      "621320": {
+        "industry": "Offices of Optometrists",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects recurring eyewear sales and multi-location practices."
+      },
+      "621330": {
+        "industry": "Offices of Mental Health Practitioners (except Physicians)",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects telehealth scalability."
+      },
+      "621340": {
+        "industry": "Offices of Physical, Occupational and Speech Therapists, and Audiologists",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects outpatient rehab networks and recurring therapy sessions."
+      },
+      "621391": {
+        "industry": "Offices of Podiatrists",
+        "base_range": { "min": 5.5, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Fallback to sector range."
+      },
+      "621399": {
+        "industry": "Offices of All Other Miscellaneous Health Practitioners",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Fallback to sector range."
+      },
+      "621410": {
+        "industry": "Family Planning Centers",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Primarily non-profit; premiums apply to accredited private clinics."
+      },
+      "621420": {
+        "industry": "Outpatient Mental Health and Substance Abuse Centers",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects insurance-backed and multi-state platforms."
+      },
+      "621491": {
+        "industry": "HMO Medical Centers",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 11.0 },
+        "notes": "Premium reflects membership-based recurring revenue."
+      },
+      "621492": {
+        "industry": "Kidney Dialysis Centers",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 11.5 },
+        "notes": "Premium reflects stable reimbursement models and recurring treatments."
+      },
+      "621493": {
+        "industry": "Freestanding Ambulatory Surgical and Emergency Centers",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 11.5 },
+        "notes": "Premium reflects lower-cost alternatives to hospitals with high demand."
+      },
+      "621498": {
+        "industry": "All Other Outpatient Care Centers",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Fallback to sector range."
+      },
+      "621511": {
+        "industry": "Medical Laboratories",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects recurring diagnostic contracts."
+      },
+      "621512": {
+        "industry": "Diagnostic Imaging Centers",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects MRI, CT, and specialty imaging facilities."
+      },
+      "621610": {
+        "industry": "Home Health Care Services",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects demand growth and recurring Medicare reimbursement."
+      },
+      "622110": {
+        "industry": "General Medical and Surgical Hospitals",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 11.5 },
+        "notes": "Premium reflects scale, specialty care, and integrated networks."
+      },
+      "622210": {
+        "industry": "Psychiatric and Substance Abuse Hospitals",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 8.5, "max": 10.5 },
+        "notes": "Premium reflects growing demand and insurance reimbursement."
+      },
+      "622310": {
+        "industry": "Specialty (except Psychiatric and Substance Abuse) Hospitals",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 11.5 },
+        "notes": "Premium reflects niche expertise and strong referral pipelines."
+      },
+      "623110": {
+        "industry": "Nursing Care Facilities (Skilled Nursing Facilities)",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects Medicare/Medicaid contracts and consolidators."
+      },
+      "623210": {
+        "industry": "Residential Intellectual and Developmental Disability Facilities",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects long-term government funding."
+      },
+      "623220": {
+        "industry": "Residential Mental Health and Substance Abuse Facilities",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects insurance acceptance and strong occupancy."
+      },
+      "623311": {
+        "industry": "Continuing Care Retirement Communities",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects predictable, recurring occupancy."
+      },
+      "623312": {
+        "industry": "Assisted Living Facilities for the Elderly",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects demand growth and stable occupancy."
+      },
+      "623990": {
+        "industry": "Other Residential Care Facilities",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Fallback to sector range."
+      },
+      "624110": {
+        "industry": "Child and Youth Services",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Premium reflects government contracts and recurring demand."
+      },
+      "624120": {
+        "industry": "Services for the Elderly and Persons with Disabilities",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects government reimbursement and high demand."
+      },
+      "624190": {
+        "industry": "Other Individual and Family Services",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Fallback to sector range."
+      },
+      "624210": {
+        "industry": "Community Food Services",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Primarily non-profit; premiums reflect scalable models."
+      },
+      "624220": {
+        "industry": "Community Housing Services",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Primarily non-profit; premiums reflect recurring government funding."
+      },
+      "624230": {
+        "industry": "Emergency and Other Relief Services",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "624310": {
+        "industry": "Vocational Rehabilitation Services",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Premium reflects workforce development contracts."
+      },
+      "624410": {
+        "industry": "Child Day Care Services",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects high occupancy and recurring enrollment."
+      }
+    }
+  }
+}
+{
+  "71": {
+    "industry": "Arts, Entertainment, and Recreation",
+    "base_range": { "min": 4.5, "max": 6.5 },
+    "premium_range": { "min": 7.0, "max": 9.0 },
+    "notes": "Covers performing arts, sports, museums, and recreation industries. Premiums reflect strong brand, recurring memberships, or unique IP.",
+    "children": {
+      "711110": {
+        "industry": "Theater Companies and Dinner Theaters",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects strong regional reputation and subscription models."
+      },
+      "711120": {
+        "industry": "Dance Companies",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Primarily non-profit; premiums apply to touring companies."
+      },
+      "711130": {
+        "industry": "Musical Groups and Artists",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Premium reflects ownership of IP and royalties."
+      },
+      "711190": {
+        "industry": "Other Performing Arts Companies",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "711211": {
+        "industry": "Sports Teams and Clubs",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 9.0, "max": 12.0 },
+        "notes": "Premium reflects media rights, sponsorships, and fan base size."
+      },
+      "711212": {
+        "industry": "Racetracks",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects major events and gaming integration."
+      },
+      "711219": {
+        "industry": "Other Spectator Sports",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Fallback to sector range."
+      },
+      "711310": {
+        "industry": "Promoters of Performing Arts, Sports, and Similar Events with Facilities",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects ticketing platforms and sponsorship revenue."
+      },
+      "711320": {
+        "industry": "Promoters of Performing Arts, Sports, and Similar Events without Facilities",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects global touring and exclusive contracts."
+      },
+      "711410": {
+        "industry": "Agents and Managers for Artists, Athletes, Entertainers, and Other Public Figures",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects recurring commissions from top clients."
+      },
+      "711510": {
+        "industry": "Independent Artists, Writers, and Performers",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects strong IP portfolios or digital following."
+      },
+      "712110": {
+        "industry": "Museums",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Primarily non-profit; premiums apply to private or specialized museums."
+      },
+      "712120": {
+        "industry": "Historical Sites",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Mostly government-funded; private operations may apply premiums."
+      },
+      "712130": {
+        "industry": "Zoos and Botanical Gardens",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Premium reflects brand, attendance, and donor support."
+      },
+      "712190": {
+        "industry": "Nature Parks and Other Similar Institutions",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Primarily non-profit; premiums reflect unique destinations."
+      },
+      "713110": {
+        "industry": "Amusement and Theme Parks",
+        "base_range": { "min": 6.0, "max": 8.0 },
+        "premium_range": { "min": 9.0, "max": 11.0 },
+        "notes": "Premium reflects scale, branding, and recurring visitors."
+      },
+      "713210": {
+        "industry": "Casinos (except Casino Hotels)",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.5, "max": 12.0 },
+        "notes": "Premium reflects gaming licenses, recurring patrons, and integrated resorts."
+      },
+      "713290": {
+        "industry": "Other Gambling Industries",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Includes online gambling; premium reflects regulatory approvals."
+      },
+      "713910": {
+        "industry": "Golf Courses and Country Clubs",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects recurring membership revenue."
+      },
+      "713920": {
+        "industry": "Skiing Facilities",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects real estate integration and resort branding."
+      },
+      "713930": {
+        "industry": "Marinas",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects long-term slip rentals and ancillary services."
+      },
+      "713940": {
+        "industry": "Fitness and Recreational Sports Centers",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects recurring memberships and national franchises."
+      },
+      "713950": {
+        "industry": "Bowling Centers",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 8.5 },
+        "notes": "Fallback to sector range."
+      },
+      "713990": {
+        "industry": "All Other Amusement and Recreation Industries",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 9.0 },
+        "notes": "Covers niche and regional recreation providers."
+      }
+    }
+  }
+}
+{
+  "72": {
+    "industry": "Accommodation and Food Services",
+    "base_range": { "min": 5.0, "max": 7.0 },
+    "premium_range": { "min": 7.5, "max": 9.5 },
+    "notes": "Covers hotels, lodging, restaurants, and food services. Premiums reflect brand strength, recurring customers, and scalability through franchising.",
+    "children": {
+      "721110": {
+        "industry": "Hotels (except Casino Hotels) and Motels",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects strong occupancy rates and brand/franchise value."
+      },
+      "721120": {
+        "industry": "Casino Hotels",
+        "base_range": { "min": 6.5, "max": 8.5 },
+        "premium_range": { "min": 9.0, "max": 11.5 },
+        "notes": "Premium reflects integrated gaming operations."
+      },
+      "721191": {
+        "industry": "Bed-and-Breakfast Inns",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 8.5 },
+        "notes": "Premium reflects unique destination branding."
+      },
+      "721199": {
+        "industry": "All Other Traveler Accommodation",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 8.5 },
+        "notes": "Fallback to sector range."
+      },
+      "721211": {
+        "industry": "RV (Recreational Vehicle) Parks and Campgrounds",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects recurring seasonal demand and unique destinations."
+      },
+      "721214": {
+        "industry": "Recreational and Vacation Camps (except Campgrounds)",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 8.5 },
+        "notes": "Premium reflects brand reputation and long-term contracts."
+      },
+      "721310": {
+        "industry": "Rooming and Boarding Houses, Dormitories, and Workers' Camps",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Fallback to sector range."
+      },
+      "722310": {
+        "industry": "Food Service Contractors",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects recurring institutional contracts (schools, hospitals, corporations)."
+      },
+      "722320": {
+        "industry": "Caterers",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects large-scale or recurring corporate accounts."
+      },
+      "722330": {
+        "industry": "Mobile Food Services",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 8.5 },
+        "notes": "Premium reflects strong brand and multi-location food trucks."
+      },
+      "722410": {
+        "industry": "Drinking Places (Alcoholic Beverages)",
+        "base_range": { "min": 4.0, "max": 6.0 },
+        "premium_range": { "min": 6.5, "max": 8.0 },
+        "notes": "Premium reflects popular or franchise bar concepts."
+      },
+      "722511": {
+        "industry": "Full-Service Restaurants",
+        "base_range": { "min": 5.0, "max": 7.0 },
+        "premium_range": { "min": 7.5, "max": 9.5 },
+        "notes": "Premium reflects national chains, franchises, and scalable concepts."
+      },
+      "722513": {
+        "industry": "Limited-Service Restaurants",
+        "base_range": { "min": 5.5, "max": 7.5 },
+        "premium_range": { "min": 8.0, "max": 10.0 },
+        "notes": "Premium reflects fast casual/QSR chains with franchise scalability."
+      },
+      "722514": {
+        "industry": "Cafeterias, Grill Buffets, and Buffets",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max": 8.5 },
+        "notes": "Fallback to sector range."
+      },
+      "722515": {
+        "industry": "Snack and Nonalcoholic Beverage Bars",
+        "base_range": { "min": 4.5, "max": 6.5 },
+        "premium_range": { "min": 7.0, "max":_
+          {
+            "81": {
+              "industry": "Other Services (except Public Administration)",
+              "base_range": { "min": 4.5, "max": 6.5 },
+              "premium_range": { "min": 7.0, "max": 9.0 },
+              "notes": "Covers repair services, personal care, religious and civic organizations. Premiums reflect recurring memberships, scalable franchises, or niche specialization.",
+              "children": {
+                "811111": {
+                  "industry": "General Automotive Repair",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.5 },
+                  "notes": "Premium reflects multi-location chains and franchise models."
+                },
+                "811112": {
+                  "industry": "Automotive Exhaust System Repair",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 8.5 },
+                  "notes": "Fallback to sector range."
+                },
+                "811113": {
+                  "industry": "Automotive Transmission Repair",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.0 },
+                  "notes": "Premium reflects recurring specialized service demand."
+                },
+                "811118": {
+                  "industry": "Other Automotive Mechanical and Electrical Repair and Maintenance",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.0 },
+                  "notes": "Fallback to sector range."
+                },
+                "811121": {
+                  "industry": "Automotive Body, Paint, and Interior Repair and Maintenance",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.5 },
+                  "notes": "Premium reflects insurance contracts and DRP relationships."
+                },
+                "811122": {
+                  "industry": "Automotive Glass Replacement Shops",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.0 },
+                  "notes": "Premium reflects national brand franchises."
+                },
+                "811191": {
+                  "industry": "Automotive Oil Change and Lubrication Shops",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.5 },
+                  "notes": "Premium reflects recurring maintenance demand."
+                },
+                "811192": {
+                  "industry": "Car Washes",
+                  "base_range": { "min": 5.5, "max": 7.5 },
+                  "premium_range": { "min": 8.0, "max": 10.0 },
+                  "notes": "Premium reflects recurring membership models."
+                },
+                "811198": {
+                  "industry": "All Other Automotive Repair and Maintenance",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 9.0 },
+                  "notes": "Fallback to sector range."
+                },
+                "811211": {
+                  "industry": "Consumer Electronics Repair and Maintenance",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Premium reflects specialized service demand."
+                },
+                "811212": {
+                  "industry": "Computer and Office Machine Repair and Maintenance",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 8.5 },
+                  "notes": "Fallback to sector range."
+                },
+                "811310": {
+                  "industry": "Commercial and Industrial Machinery and Equipment (except Automotive and Electronic) Repair and Maintenance",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.5 },
+                  "notes": "Premium reflects industrial client base."
+                },
+                "811411": {
+                  "industry": "Home and Garden Equipment Repair and Maintenance",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Fallback to sector range."
+                },
+                "811412": {
+                  "industry": "Appliance Repair and Maintenance",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 9.0 },
+                  "notes": "Premium reflects recurring home service contracts."
+                },
+                "811420": {
+                  "industry": "Reupholstery and Furniture Repair",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Fallback to sector range."
+                },
+                "811430": {
+                  "industry": "Footwear and Leather Goods Repair",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Fallback to sector range."
+                },
+                "811490": {
+                  "industry": "Other Personal and Household Goods Repair and Maintenance",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Fallback to sector range."
+                },
+                "812111": {
+                  "industry": "Barber Shops",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 8.5 },
+                  "notes": "Premium reflects recurring demand and franchise scalability."
+                },
+                "812112": {
+                  "industry": "Beauty Salons",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 8.5 },
+                  "notes": "Premium reflects multi-location operations and franchises."
+                },
+                "812113": {
+                  "industry": "Nail Salons",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 8.5 },
+                  "notes": "Premium reflects strong recurring client base."
+                },
+                "812191": {
+                  "industry": "Diet and Weight Reducing Centers",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.5 },
+                  "notes": "Premium reflects scalable membership models."
+                },
+                "812199": {
+                  "industry": "Other Personal Care Services",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 8.5 },
+                  "notes": "Fallback to sector range."
+                },
+                "812210": {
+                  "industry": "Funeral Homes and Funeral Services",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.5 },
+                  "notes": "Premium reflects recurring pre-need contracts."
+                },
+                "812220": {
+                  "industry": "Cemeteries and Crematories",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.5 },
+                  "notes": "Premium reflects perpetual care funds and recurring demand."
+                },
+                "812310": {
+                  "industry": "Coin-Operated Laundries and Drycleaners",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.0 },
+                  "notes": "Premium reflects recurring revenue and franchise models."
+                },
+                "812320": {
+                  "industry": "Drycleaning and Laundry Services (except Coin-Operated)",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.0 },
+                  "notes": "Premium reflects contracts with hotels, hospitals, and institutions."
+                },
+                "812331": {
+                  "industry": "Linen Supply",
+                  "base_range": { "min": 5.5, "max": 7.5 },
+                  "premium_range": { "min": 8.0, "max": 10.0 },
+                  "notes": "Premium reflects recurring commercial accounts."
+                },
+                "812332": {
+                  "industry": "Industrial Launderers",
+                  "base_range": { "min": 5.5, "max": 7.5 },
+                  "premium_range": { "min": 8.0, "max": 10.0 },
+                  "notes": "Premium reflects scale and recurring institutional contracts."
+                },
+                "812910": {
+                  "industry": "Pet Care (except Veterinary) Services",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.5 },
+                  "notes": "Premium reflects recurring grooming and boarding demand."
+                },
+                "812921": {
+                  "industry": "Photofinishing Laboratories (except One-Hour)",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Declining industry; premium applies to niche firms."
+                },
+                "812922": {
+                  "industry": "One-Hour Photofinishing",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Declining industry; fallback to sector range."
+                },
+                "812930": {
+                  "industry": "Parking Lots and Garages",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.0 },
+                  "notes": "Premium reflects urban demand and recurring contracts."
+                },
+                "812990": {
+                  "industry": "All Other Personal Services",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 9.0 },
+                  "notes": "Fallback to sector range."
+                },
+                "813110": {
+                  "industry": "Religious Organizations",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Primarily nonprofit; premium reflects large recurring memberships."
+                },
+                "813210": {
+                  "industry": "Grantmaking and Giving Services",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Nonprofit; premiums apply to private foundations with large endowments."
+                },
+                "813311": {
+                  "industry": "Human Rights Organizations",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Nonprofit sector; fallback to sector range."
+                },
+                "813312": {
+                  "industry": "Environment, Conservation and Wildlife Organizations",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Premium reflects strong donor networks and grant funding."
+                },
+                "813319": {
+                  "industry": "Other Social Advocacy Organizations",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Fallback to sector range."
+                },
+                "813410": {
+                  "industry": "Civic and Social Organizations",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 8.5 },
+                  "notes": "Premium reflects recurring memberships and national associations."
+                },
+                "813910": {
+                  "industry": "Business Associations",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 9.0 },
+                  "notes": "Premium reflects scale and recurring membership dues."
+                },
+                "813920": {
+                  "industry": "Professional Organizations",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.5 },
+                  "notes": "Premium reflects strong recurring membership and certifications."
+                },
+                "813930": {
+                  "industry": "Labor Unions and Similar Labor Organizations",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.0 },
+                  "notes": "Premium reflects dues-driven recurring revenue."
+                },
+                "813940": {
+                  "industry": "Political Organizations",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Primarily nonprofit; premium reflects recurring donor networks."
+                },
+                "813990": {
+                  "industry": "Other Similar Organizations (except Business, Professional, Labor, and Political Organizations)",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Fallback to sector range."
+                }
+              }
+            }
+          }
+          {
+            "92": {
+              "industry": "Public Administration",
+              "base_range": { "min": 4.0, "max": 6.0 },
+              "premium_range": { "min": 6.5, "max": 8.0 },
+              "notes": "Primarily government-funded entities. Rarely transacted as private businesses, but ranges reflect outsourced or privatized operations where applicable.",
+              "children": {
+                "921110": {
+                  "industry": "Executive Offices",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Governmental in nature; valuation applicable to outsourced advisory entities."
+                },
+                "922110": {
+                  "industry": "Courts",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Not typically privately owned; values reference outsourced court services or arbitration bodies."
+                },
+                "922120": {
+                  "industry": "Police Protection",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Premium applies to outsourced security or municipal contracts."
+                },
+                "922130": {
+                  "industry": "Legal Counsel and Prosecution",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Comparable to contracted legal services firms."
+                },
+                "922140": {
+                  "industry": "Correctional Institutions",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 8.5 },
+                  "notes": "Premium reflects private prison operators under government contracts."
+                },
+                "923110": {
+                  "industry": "Administration of Education Programs",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Applicable to outsourced program administration."
+                },
+                "923120": {
+                  "industry": "Administration of Public Health Programs",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Comparable to private administrators managing healthcare grants or programs."
+                },
+                "923130": {
+                  "industry": "Administration of Human Resource Programs (except Education, Public Health, and Veterans' Affairs Programs)",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Private equivalents include outsourced HR and benefits administrators."
+                },
+                "924110": {
+                  "industry": "Administration of Air and Water Resource and Solid Waste Management Programs",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 8.5 },
+                  "notes": "Premium reflects environmental services firms with government contracts."
+                },
+                "925120": {
+                  "industry": "Administration of Urban Planning and Community and Rural Development",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Comparable to private planning consultancies with government contracts."
+                },
+                "926110": {
+                  "industry": "Administration of General Economic Programs",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Fallback to sector range."
+                },
+                "926120": {
+                  "industry": "Regulation and Administration of Transportation Programs",
+                  "base_range": { "min": 4.0, "max": 6.0 },
+                  "premium_range": { "min": 6.5, "max": 8.0 },
+                  "notes": "Comparable to private transport regulators or contractors."
+                },
+                "926130": {
+                  "industry": "Regulation and Administration of Communications, Electric, Gas, and Other Utilities",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 8.5 },
+                  "notes": "Premium reflects outsourced public utility regulators and contractors."
+                },
+                "927110": {
+                  "industry": "Space Research and Technology",
+                  "base_range": { "min": 5.0, "max": 7.0 },
+                  "premium_range": { "min": 7.5, "max": 9.5 },
+                  "notes": "Premium reflects private aerospace contractors supporting government programs."
+                },
+                "928110": {
+                  "industry": "National Security",
+                  "base_range": { "min": 5.5, "max": 7.5 },
+                  "premium_range": { "min": 8.0, "max": 10.0 },
+                  "notes": "Premium reflects private defense contractors and security service providers."
+                },
+                "928120": {
+                  "industry": "International Affairs",
+                  "base_range": { "min": 4.5, "max": 6.5 },
+                  "premium_range": { "min": 7.0, "max": 8.5 },
+                  "notes": "Premium reflects private organizations engaged in international development and policy."
+                }
+              }
+            }
+          }
+
