@@ -835,6 +835,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get Stripe product pricing
+  app.get('/api/stripe/price/growth', async (req, res) => {
+    try {
+      if (!process.env.STRIPE_PRODUCT_ID_GROWTH) {
+        return res.json({ price: 795 }); // fallback price
+      }
+
+      const product = await stripe.products.retrieve(process.env.STRIPE_PRODUCT_ID_GROWTH, {
+        expand: ['default_price']
+      });
+
+      const defaultPrice = product.default_price as any;
+      const price = defaultPrice?.unit_amount ? defaultPrice.unit_amount / 100 : 795;
+
+      res.json({ price });
+    } catch (error) {
+      console.error('Error fetching Stripe price:', error);
+      res.json({ price: 795 }); // fallback price
+    }
+  });
+
   // Verify Stripe Checkout Session and get customer info
   app.get("/api/payments/verify-session/:sessionId", async (req, res) => {
     try {

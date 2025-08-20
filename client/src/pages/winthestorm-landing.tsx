@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'wouter';
 import { Box, Typography, Button, TextField, Card, CardContent, Container } from '@mui/material';
 import { CheckCircle, TrendingUp, BarChart3, Award, Users, Calendar, MapPin } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import eventImage from '@assets/WTS  M&A Lounge Speakers_1755705427114.png';
+import { useQuery } from '@tanstack/react-query';
 
 interface EventSignupFormData {
   firstName: string;
@@ -15,7 +14,6 @@ interface EventSignupFormData {
 
 export default function WinTheStormLanding() {
   const [, setLocation] = useLocation();
-  const { toast } = useToast();
   const [formData, setFormData] = useState<EventSignupFormData>({
     firstName: '',
     lastName: '',
@@ -25,6 +23,16 @@ export default function WinTheStormLanding() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  // Fetch dynamic pricing from Stripe
+  const { data: priceData } = useQuery({
+    queryKey: ['/api/stripe/price/growth'],
+    queryFn: async () => {
+      const response = await fetch('/api/stripe/price/growth');
+      if (!response.ok) return { price: 795 }; // fallback
+      return response.json();
+    }
+  });
 
   const handleInputChange = (field: keyof EventSignupFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, [field]: e.target.value }));
@@ -50,29 +58,15 @@ export default function WinTheStormLanding() {
 
       if (response.ok) {
         setSubmitted(true);
-        toast({
-          title: "Registration Successful!",
-          description: "Welcome to AppleBites Growth! Redirecting to your dashboard...",
-        });
-        
         // Redirect to consumer dashboard after a short delay
         setTimeout(() => {
           setLocation('/consumer-dashboard');
         }, 2000);
       } else {
-        toast({
-          title: "Registration Failed",
-          description: data.message || "Please try again.",
-          variant: "destructive",
-        });
+        console.error('Registration failed:', data.message);
       }
     } catch (error) {
       console.error('Event signup error:', error);
-      toast({
-        title: "Registration Failed",
-        description: "Network error. Please try again.",
-        variant: "destructive",
-      });
     } finally {
       setIsLoading(false);
     }
@@ -104,23 +98,23 @@ export default function WinTheStormLanding() {
       {/* Hero Section */}
       <Container maxWidth="lg" sx={{ pt: 8, pb: 4 }}>
         <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h2" fontWeight="bold" sx={{ color: 'white', mb: 2 }}>
-            Win the Storm
-          </Typography>
-          <Typography variant="h4" sx={{ color: '#B8D4F0', mb: 4, fontWeight: 300 }}>
-            M&A Lounge Event - Exclusive Access
-          </Typography>
-          
-          {/* Event Image */}
-          <Box sx={{ mb: 4, display: 'flex', justifyContent: 'center' }}>
+          {/* Event Image with Dark Background */}
+          <Box sx={{ 
+            mb: 4, 
+            display: 'flex', 
+            justifyContent: 'center',
+            background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+            borderRadius: 3,
+            p: 4,
+            boxShadow: '0 20px 40px rgba(0,0,0,0.5)'
+          }}>
             <img 
-              src={eventImage} 
+              src="/WTS__M&A_Lounge_Speakers_1755705427114.png" 
               alt="M&A Lounge Speakers" 
               style={{ 
                 maxWidth: '100%', 
                 height: 'auto', 
-                borderRadius: 16,
-                boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
+                borderRadius: 12
               }} 
             />
           </Box>
@@ -213,7 +207,7 @@ export default function WinTheStormLanding() {
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 2 }}>
                   <Typography variant="h3" sx={{ color: '#EF4444', textDecoration: 'line-through' }}>
-                    $795
+                    ${priceData?.price || 795}
                   </Typography>
                   <Typography variant="h3" fontWeight="bold" sx={{ color: '#4ADE80' }}>
                     FREE
