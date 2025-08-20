@@ -61,14 +61,14 @@ export default function AssessmentResults() {
     retry: false,
   });
 
-  // Fetch all assessments to find the specific one
-  const { data: assessments, isLoading: assessmentsLoading } = useQuery<ValuationAssessment[]>({
-    queryKey: ['/api/analytics/assessments'],
+  // Fetch the specific assessment directly
+  const { data: assessmentData, isLoading: assessmentsLoading } = useQuery<{ success: boolean; assessment: ValuationAssessment }>({
+    queryKey: [`/api/assessments/${assessmentId}`],
     enabled: !!assessmentId,
   });
 
-  // Find the specific assessment
-  const assessment = assessments?.find(a => a.id.toString() === assessmentId);
+  // Get the assessment from the response
+  const assessment = assessmentData?.assessment;
 
   const { data: user } = useQuery({
     queryKey: ['/api/auth/user'],
@@ -224,6 +224,9 @@ export default function AssessmentResults() {
             </Button>
           </Box>
 
+          {/* Debug log to see the tier value */}
+          {console.log('Assessment tier:', assessment.tier, 'Full assessment:', assessment)}
+          
           {/* Show Strategic Report for paid tiers, basic ValuationResults for free tier */}
           {(assessment.tier === 'growth' || assessment.tier === 'capital' || assessment.tier === 'paid') ? (
             <StrategicReport results={assessment} />
