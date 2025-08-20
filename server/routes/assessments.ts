@@ -800,17 +800,17 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       otherAdjustments: parseFloat(adjustments.otherAdjustments) || 0,
       adjustmentNotes: adjustments.adjustmentNotes || '',
       
-      // Value drivers - Convert numerical scores to grades if needed
-      financialPerformance: isGrowthAssessment ? overallScore : valueDrivers.financialPerformance,
-      customerConcentration: isGrowthAssessment ? overallScore : valueDrivers.customerConcentration,
-      managementTeam: isGrowthAssessment ? overallScore : valueDrivers.managementTeam,
-      competitivePosition: isGrowthAssessment ? overallScore : valueDrivers.competitivePosition,
-      growthProspects: isGrowthAssessment ? overallScore : valueDrivers.growthProspects,
-      systemsProcesses: isGrowthAssessment ? overallScore : valueDrivers.systemsProcesses,
-      assetQuality: isGrowthAssessment ? overallScore : valueDrivers.assetQuality,
-      industryOutlook: isGrowthAssessment ? overallScore : valueDrivers.industryOutlook,
-      riskFactors: isGrowthAssessment ? overallScore : valueDrivers.riskFactors,
-      ownerDependency: isGrowthAssessment ? overallScore : valueDrivers.ownerDependency,
+      // Value drivers - For Growth Assessment, use overall score; for Free, use individual grades
+      financialPerformance: isGrowthAssessment ? overallScore : (valueDrivers.financialPerformance || 'C'),
+      customerConcentration: isGrowthAssessment ? overallScore : (valueDrivers.customerConcentration || 'C'),
+      managementTeam: isGrowthAssessment ? overallScore : (valueDrivers.managementTeam || 'C'),
+      competitivePosition: isGrowthAssessment ? overallScore : (valueDrivers.competitivePosition || 'C'),
+      growthProspects: isGrowthAssessment ? overallScore : (valueDrivers.growthProspects || 'C'),
+      systemsProcesses: isGrowthAssessment ? overallScore : (valueDrivers.systemsProcesses || 'C'),
+      assetQuality: isGrowthAssessment ? overallScore : (valueDrivers.assetQuality || 'C'),
+      industryOutlook: isGrowthAssessment ? overallScore : (valueDrivers.industryOutlook || 'C'),
+      riskFactors: isGrowthAssessment ? overallScore : (valueDrivers.riskFactors || 'C'),
+      ownerDependency: isGrowthAssessment ? overallScore : (valueDrivers.ownerDependency || 'C'),
       
       // Follow-up
       followUpIntent: followUp.followUpIntent,
