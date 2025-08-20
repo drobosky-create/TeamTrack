@@ -95,6 +95,7 @@ export const consumerUsers = pgTable("consumer_users", {
   plan: assessmentTierEnum("plan").default('free').notNull(), // Track which plan they have
   stripeSessionId: varchar("stripe_session_id"), // Track the Stripe checkout session
   eventCode: varchar("event_code"), // Track special event signups
+  hasPassword: boolean("has_password").default(false),
   isActive: boolean("is_active").default(true),
   lastLoginAt: timestamp("last_login_at"),
   createdAt: timestamp("created_at").defaultNow(),

@@ -49,6 +49,7 @@ import AppleBitesCheckoutPage from "@/pages/applebites-checkout";
 import PastAssessmentsPage from "@/modules/applebites/pages/past-assessments";
 import AssessmentResultsPage from "@/pages/assessment-results-page";
 import WinTheStormLanding from "@/pages/winthestorm-landing";
+import ConsumerProfile from "@/pages/consumer-profile";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 import { AdminAuthProvider, useAdminAuth } from './hooks/use-admin-auth';
 
@@ -105,6 +106,7 @@ function Router() {
       <Route path="/tasks-feedback" component={NotFound} />
       <Route path="/notifications" component={Notifications} />
       <Route path="/profile" component={Profile} />
+      <Route path="/consumer-profile" component={ConsumerProfile} />
       <Route path="/admin-login" component={AdminLoginPage} />
       
       {/* Admin Dashboard Route */}

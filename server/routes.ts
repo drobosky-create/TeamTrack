@@ -650,6 +650,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Consumer set password endpoint
+  app.post('/api/consumer/set-password', async (req, res) => {
+    if (!req.session.consumerUser) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    try {
+      const { password } = req.body;
+      
+      if (!password || password.length < 8) {
+        return res.status(400).json({ message: 'Password must be at least 8 characters long' });
+      }
+
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+      
+      // Update the user's password
+      const [updatedUser] = await db
+        .update(schema.consumerUsers)
+        .set({ 
+          passwordHash: hashedPassword,
+          hasPassword: true 
+        })
+        .where(eq(schema.consumerUsers.id, req.session.consumerUser.id))
+        .returning();
+      
+      // Update session
+      req.session.consumerUser = {
+        ...req.session.consumerUser,
+        hasPassword: true
+      };
+
+      res.json({ 
+        message: 'Password set successfully',
+        user: {
+          id: updatedUser.id,
+          email: updatedUser.email,
+          hasPassword: true,
+          plan: updatedUser.plan,
+          createdAt: updatedUser.createdAt
+        }
+      });
+    } catch (error) {
+      console.error('Error setting password:', error);
+      res.status(500).json({ message: 'Failed to set password' });
+    }
+  });
+
   // Consumer Authentication Routes
   app.post('/api/consumer/signup', async (req, res) => {
     try {

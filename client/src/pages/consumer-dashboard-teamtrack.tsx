@@ -445,11 +445,11 @@ export default function ConsumerDashboardTeamTrack() {
               </Button>
             </Link>
             
-            {/* Profile Management */}
-            <Link href="/profile">
+            {/* Profile */}
+            <Link href="/consumer-profile">
               <Button className="w-full justify-start bg-transparent hover:bg-white/10 text-white py-3">
-                <User className="h-4 w-4 mr-3" />
-                Profile Management
+                <UserCircle className="h-4 w-4 mr-3" />
+                Profile
               </Button>
             </Link>
             
@@ -586,6 +586,17 @@ export default function ConsumerDashboardTeamTrack() {
                   >
                     <Calculator className="h-4 w-4 mr-3" />
                     Value Calculator
+                  </Button>
+                </Link>
+
+                <Link href="/consumer-profile">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <UserCircle className="h-4 w-4 mr-3" />
+                    Profile
                   </Button>
                 </Link>
 

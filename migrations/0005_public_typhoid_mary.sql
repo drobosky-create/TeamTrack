@@ -1,0 +1,1 @@
+ALTER TABLE "consumer_users" ADD COLUMN "event_code" varchar;
