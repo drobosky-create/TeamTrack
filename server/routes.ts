@@ -721,6 +721,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin endpoint to track consumer signups
+  app.get('/api/admin/consumer-signups', async (req, res) => {
+    if (!req.session.adminUser) {
+      return res.status(401).json({ message: 'Admin authentication required' });
+    }
+    
+    try {
+      const signups = await db.query.consumerUsers.findMany({
+        orderBy: (users, { desc }) => [desc(users.createdAt)],
+        limit: 100
+      });
+      
+      res.json({
+        total: signups.length,
+        signups: signups.map(user => ({
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          companyName: user.companyName,
+          plan: user.plan,
+          createdAt: user.createdAt,
+          stripeSessionId: user.stripeSessionId
+        }))
+      });
+    } catch (error) {
+      console.error('Error fetching consumer signups:', error);
+      res.status(500).json({ message: 'Failed to fetch signups' });
+    }
+  });
+
   // Verify Stripe Checkout Session and get customer info
   app.get("/api/payments/verify-session/:sessionId", async (req, res) => {
     try {
