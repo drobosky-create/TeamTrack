@@ -1,0 +1,53 @@
+Fix the Generate Report button so that Growth Assessments correctly generate and save valuation reports. The main problems are:
+
+Form/UI
+
+The button currently just scrolls; make sure it prevents default form submission (event.preventDefault()) and calls the report generation API.
+
+Verify that onClick (or form onSubmit) actually awaits the fetch/axios call to /api/assessments.
+
+Server (server/routes/assessments.ts)
+
+Growth Assessments are saving null values because value drivers are stored as numbers (0–4) but the DB expects letter grades (A–F).
+
+Create a convertScoreToGrade(score: number) helper (0=F, 1=D, 2=C, 3=B, 4+=A).
+
+Map the incoming driver fields (like driver-financial-performance-1) into a new processedValueDrivers object with the correct DB column names (financialPerformance, customerConcentration, etc.) and letter grades.
+
+Replace all references in the DB insert with processedValueDrivers.
+
+Database
+
+Ensure that no NOT NULL column (e.g., financial_performance, customer_concentration, management_team) is left unset.
+
+If a field is missing, set a default grade of "C" so the insert won’t fail.
+
+Error Handling
+
+Wrap the DB insert in a try/catch and log both the prepared data and the SQL error message so we can see failures.
+
+If NAICS multiplier data is missing, log a warning and fall back to a default multiplier.
+
+Testing
+
+Add console logs before inserting into DB showing the exact processedValueDrivers object and NAICS multiplier.
+
+Run a Growth Assessment with Roofing Contractors (NAICS 238160). With all top scores, it should:
+
+Calculate an overall score of 5.0 → grade “A”
+
+Apply 11.0× multiplier (high end of ~3×–6× range for NAICS 238160)
+
+Save non-null grades to DB
+
+Generate a valuation report successfully
+
+Acceptance Criteria
+
+Clicking Generate Report triggers the API and no longer just scrolls.
+
+Growth Assessment data saves without null values.
+
+The valuation report displays correct NAICS-based multiples.
+
+Console logs confirm that data saved to DB matches expected values.
