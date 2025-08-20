@@ -378,26 +378,45 @@ export default function AdminClientRecordsPage() {
       {/* Enhanced Admin Client Table */}
       <Card>
         <CardContent sx={{ p: 0 }}>
-          <TableContainer component={Paper} elevation={0}>
-            <Table>
+          <TableContainer 
+            component={Paper} 
+            elevation={0}
+            sx={{ 
+              overflowX: 'auto',
+              '&::-webkit-scrollbar': {
+                height: '8px',
+              },
+              '&::-webkit-scrollbar-track': {
+                backgroundColor: '#f1f1f1',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: '#c1c1c1',
+                borderRadius: '4px',
+              },
+              '&::-webkit-scrollbar-thumb:hover': {
+                backgroundColor: '#a8a8a8',
+              },
+            }}
+          >
+            <Table sx={{ minWidth: 1200 }}>
               <TableHead>
                 <TableRow sx={{ backgroundColor: '#F9FAFB' }}>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Company</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Contact</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>NAICS</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Assessment</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Valuation</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Revenue</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Assigned To</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Follow-Up</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', minWidth: 200 }}>Company</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', minWidth: 180 }}>Contact</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', minWidth: 120, display: { xs: 'none', md: 'table-cell' } }}>NAICS</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', minWidth: 120 }}>Assessment</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', minWidth: 100 }}>Status</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', minWidth: 120, display: { xs: 'none', lg: 'table-cell' } }}>Valuation</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', minWidth: 120, display: { xs: 'none', lg: 'table-cell' } }}>Revenue</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', minWidth: 140, display: { xs: 'none', md: 'table-cell' } }}>Assigned To</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', minWidth: 140, display: { xs: 'none', md: 'table-cell' } }}>Follow-Up</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', minWidth: 120 }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {filteredClients.map((client) => (
                   <TableRow key={client.id} hover>
-                    <TableCell>
+                    <TableCell sx={{ minWidth: 200 }}>
                       <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
                         {client.companyName}
                       </Typography>
@@ -405,33 +424,47 @@ export default function AdminClientRecordsPage() {
                         Created: {client.createdDate}
                       </Typography>
                     </TableCell>
-                    <TableCell>
+                    <TableCell sx={{ minWidth: 180 }}>
                       <Typography variant="body2">{client.contactName}</Typography>
                       <Typography variant="caption" color="text.secondary">
                         {client.email}
                       </Typography>
+                      {/* Show additional info on mobile */}
+                      <Box sx={{ display: { xs: 'block', md: 'none' }, mt: 1 }}>
+                        <Chip
+                          label={client.assessmentType.toUpperCase()}
+                          color={client.paidTier ? 'primary' : 'default'}
+                          size="small"
+                          sx={{ mr: 1 }}
+                        />
+                        <Chip
+                          label={client.status.toUpperCase()}
+                          color={getStatusColor(client.status) as any}
+                          size="small"
+                        />
+                      </Box>
                     </TableCell>
-                    <TableCell>
+                    <TableCell sx={{ minWidth: 120, display: { xs: 'none', md: 'table-cell' } }}>
                       <Typography variant="body2">{client.naicsCode}</Typography>
                       <Typography variant="caption" color="text.secondary">
                         {client.industry}
                       </Typography>
                     </TableCell>
-                    <TableCell>
+                    <TableCell sx={{ minWidth: 120, display: { xs: 'none', sm: 'table-cell' } }}>
                       <Chip
                         label={client.assessmentType.toUpperCase()}
                         color={client.paidTier ? 'primary' : 'default'}
                         size="small"
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell sx={{ minWidth: 100, display: { xs: 'none', sm: 'table-cell' } }}>
                       <Chip
                         label={client.status.toUpperCase()}
                         color={getStatusColor(client.status) as any}
                         size="small"
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell sx={{ minWidth: 120, display: { xs: 'none', lg: 'table-cell' } }}>
                       <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                         {client.valuation 
                           ? `$${(client.valuation / 1000000).toFixed(1)}M`
@@ -444,22 +477,24 @@ export default function AdminClientRecordsPage() {
                         </Typography>
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell sx={{ minWidth: 120, display: { xs: 'none', lg: 'table-cell' } }}>
                       {client.revenue 
                         ? `$${(client.revenue / 1000000).toFixed(1)}M`
                         : 'N/A'
                       }
                     </TableCell>
-                    <TableCell>{client.assignedTo}</TableCell>
-                    <TableCell>
+                    <TableCell sx={{ minWidth: 140, display: { xs: 'none', md: 'table-cell' } }}>
+                      {client.assignedTo}
+                    </TableCell>
+                    <TableCell sx={{ minWidth: 140, display: { xs: 'none', md: 'table-cell' } }}>
                       <Chip
                         label={client.followUpStatus.replace('_', ' ').toUpperCase()}
                         color={getFollowUpColor(client.followUpStatus) as any}
                         size="small"
                       />
                     </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', gap: 1 }}>
+                    <TableCell sx={{ minWidth: 120 }}>
+                      <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'nowrap' }}>
                         <IconButton 
                           size="small" 
                           onClick={() => handleViewClient(client)}
