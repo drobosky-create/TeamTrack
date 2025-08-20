@@ -42,9 +42,11 @@ export default function ValueImprovementCalculator() {
   const [selectedGrade, setSelectedGrade] = useState<string>('C');
   
   // Fetch latest assessment data or specific assessment by ID
-  const { data: assessment, isLoading } = useQuery<Assessment>({
+  const { data: response, isLoading } = useQuery<{success: boolean, assessment: Assessment}>({
     queryKey: id === 'latest' ? ['/api/consumer/assessments/latest'] : [`/api/assessments/${id}`],
   });
+  
+  const assessment = response?.assessment;
   
   // Calculate average grade from value drivers
   const calculateAverageGrade = (valueDrivers: any) => {
@@ -65,10 +67,17 @@ export default function ValueImprovementCalculator() {
   };
   
   const assessmentData = assessment ? {
-    adjustedEbitda: parseFloat(assessment.adjustedEbitda),
-    currentGrade: calculateAverageGrade(assessment.valueDrivers),
-    currentMultiple: parseFloat(assessment.finalMultiple),
-    currentValue: parseFloat(assessment.businessValue),
+    adjustedEbitda: parseFloat(assessment.adjustedEbitda || '0'),
+    currentGrade: calculateAverageGrade({
+      financialPerformance: assessment.financialPerformance,
+      marketPosition: assessment.competitivePosition,
+      operationalExcellence: assessment.systemsProcesses,
+      growthPotential: assessment.growthProspects,
+      riskProfile: assessment.riskFactors,
+      strategicAssets: assessment.assetQuality
+    }),
+    currentMultiple: parseFloat(assessment.valuationMultiple || '4.2'),
+    currentValue: parseFloat(assessment.midEstimate || '0'),
   } : null;
 
   const gradeImpacts: GradeImpact[] = [
