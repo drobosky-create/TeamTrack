@@ -567,6 +567,89 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Event signup route - bypasses paywall for special events
+  app.post('/api/consumer/event-signup', async (req, res) => {
+    try {
+      const { firstName, lastName, email, companyName, phone, eventCode, plan } = req.body;
+      
+      // Validate event code
+      if (eventCode !== 'WIN_THE_STORM_2025') {
+        return res.status(400).json({ message: 'Invalid event code' });
+      }
+      
+      // Check if user already exists
+      const existingUser = await db.query.consumerUsers.findFirst({
+        where: eq(schema.consumerUsers.email, email)
+      });
+      
+      if (existingUser) {
+        // Update existing user to Growth plan
+        await db.update(schema.consumerUsers)
+          .set({ 
+            plan: 'growth',
+            updatedAt: new Date()
+          })
+          .where(eq(schema.consumerUsers.id, existingUser.id));
+          
+        // Create session for existing user
+        req.session.consumerUser = {
+          id: existingUser.id,
+          email: existingUser.email,
+          firstName: existingUser.firstName,
+          lastName: existingUser.lastName,
+          companyName: existingUser.companyName,
+          plan: 'growth'
+        };
+        
+        return res.json({ 
+          message: "Account updated with Growth plan access",
+          user: { ...existingUser, plan: 'growth' }
+        });
+      }
+      
+      // Create new user with Growth plan
+      const newUser = await db.insert(schema.consumerUsers).values({
+        email,
+        firstName,
+        lastName,
+        companyName,
+        phone,
+        plan: 'growth', // Grant Growth plan for free
+        passwordHash: await bcrypt.hash('temp123!', 12), // Temporary password
+        eventCode: eventCode,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }).returning();
+      
+      if (!newUser || newUser.length === 0) {
+        return res.status(500).json({ message: 'Failed to create user account' });
+      }
+      
+      const user = newUser[0];
+      
+      // Create session
+      req.session.consumerUser = {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        companyName: user.companyName,
+        plan: user.plan
+      };
+      
+      // Remove password hash from response
+      const { passwordHash: _, ...userResponse } = user;
+      
+      res.status(201).json({ 
+        message: "Account created with complimentary Growth plan",
+        user: userResponse 
+      });
+    } catch (error) {
+      console.error('Error during event signup:', error);
+      res.status(500).json({ message: 'Event signup failed' });
+    }
+  });
+
   // Consumer Authentication Routes
   app.post('/api/consumer/signup', async (req, res) => {
     try {

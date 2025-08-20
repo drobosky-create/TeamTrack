@@ -48,6 +48,7 @@ import ThemeManager from "@/components/admin/ThemeManager";
 import AppleBitesCheckoutPage from "@/pages/applebites-checkout";
 import PastAssessmentsPage from "@/modules/applebites/pages/past-assessments";
 import AssessmentResultsPage from "@/pages/assessment-results-page";
+import WinTheStormLanding from "@/pages/winthestorm-landing";
 import { ThemeTokenProvider } from "@/components/ThemeTokenProvider";
 import { AdminAuthProvider, useAdminAuth } from './hooks/use-admin-auth';
 
@@ -92,6 +93,7 @@ function Router() {
       <Route path="/applebites-checkout" component={AppleBitesCheckoutPage} />
       <Route path="/applebites/growth-assessment" component={GrowthAssessment} />
       <Route path="/performance-hub" component={PerformanceHubLanding} />
+      <Route path="/winthestorm" component={WinTheStormLanding} />
       <Route path="/consumer-auth" component={ConsumerAuth} />
       <Route path="/consumer-signup" component={ConsumerSignup} />
       <Route path="/consumer-login" component={ConsumerLogin} />
