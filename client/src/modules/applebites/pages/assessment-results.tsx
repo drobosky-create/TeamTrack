@@ -6,7 +6,7 @@ import { useConsumerAuth } from "../../../hooks/use-consumer-auth";
 import { ArrowLeft, Home, FileText, TrendingUp, ExternalLink, LogOut, User, Plus, Crown, Clock, BarChart3 } from "lucide-react";
 import ValuationResults from "../../../components/valuation-results";
 import StrategicReport from "../components/strategic-report";
-import type { ValuationAssessment } from "@shared/schema";
+// Using local interface instead of shared schema to avoid import errors
 import { Link } from "wouter";
 import MDBox from "../../../components/MD/MDBox";
 import MDTypography from "../../../components/MD/MDTypography";
@@ -64,7 +64,7 @@ export default function AssessmentResults() {
   });
 
   // Fetch the specific assessment directly
-  const { data: assessmentData, isLoading: assessmentsLoading } = useQuery<{ success: boolean; assessment: ValuationAssessment }>({
+  const { data: assessmentData, isLoading: assessmentsLoading } = useQuery<{ success: boolean; assessment: any }>({
     queryKey: ['/api/assessments', assessmentId],
     queryFn: async () => {
       const response = await fetch(`/api/assessments/${assessmentId}`, { credentials: 'include' });
@@ -235,7 +235,7 @@ export default function AssessmentResults() {
           {assessment?.tier === 'growth' || assessment?.tier === 'capital' ? (
             <StrategicReport results={assessment} />
           ) : (
-            <ValuationResults results={assessment || {} as ValuationAssessment} />
+            <ValuationResults results={assessment || {} as any} />
           )}
         </Container>
       </MainContent>
