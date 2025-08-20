@@ -4,7 +4,7 @@ import { useAuth } from "../../../hooks/useAuth";
 
 import { ArrowLeft, Home, FileText, TrendingUp, ExternalLink, LogOut, User, Plus, Crown, Clock, BarChart3 } from "lucide-react";
 import ValuationResults from "../../../components/valuation-results";
-import StrategicReport from "../../../components/strategic-report";
+import StrategicReport from "../components/strategic-report";
 import type { ValuationAssessment } from "@shared/schema";
 import { Link } from "wouter";
 import MDBox from "../../../components/MD/MDBox";
