@@ -98,20 +98,20 @@ export default function WinTheStormLanding() {
       {/* Hero Section */}
       <Container maxWidth="lg" sx={{ pt: 8, pb: 4 }}>
         <Box sx={{ textAlign: 'center', mb: 6 }}>
-          {/* Event Image with White Background for Contrast */}
+          {/* Event Image with Dark Background */}
           <Box sx={{ 
             mb: 4, 
             display: 'flex', 
             justifyContent: 'center',
-            background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+            background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
             borderRadius: 3,
             p: 4,
             boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
             border: '2px solid rgba(255,255,255,0.1)'
           }}>
             <img 
-              src="/ma-lounge-speakers.png" 
-              alt="M&A Lounge Speakers" 
+              src="/wts-ma-lounge-dark.png" 
+              alt="Win the Storm - M&A Lounge Speakers" 
               style={{ 
                 maxWidth: '100%', 
                 height: 'auto', 
