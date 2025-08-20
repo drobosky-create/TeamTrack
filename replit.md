@@ -63,6 +63,13 @@ The platform also integrates AppleBites, a consumer-facing business valuation pl
   - Created `/api/consumer/assessments/latest` endpoint for fetching most recent assessment
   - Updated ValueImprovementCalculator to fetch real assessment data using React Query
   - Calculator displays grade-based value improvement scenarios showing potential business value at different operational performance levels
+  - **Material-UI Redesign (August 20, 2025)**: Completely redesigned Value Improvement Calculator with Material-UI components:
+    - Implemented dark gradient header (195deg, #42424a to #191919) matching AppleBites design system
+    - Added dual navigation: "Back to Results" and "Return to Dashboard" buttons
+    - Created interactive grade selection cards with hover effects and dynamic coloring
+    - Designed full-width Value Impact Analysis section with three-panel comparison layout
+    - Applied consistent theme colors: info blue (#49a3f1), dark grays (#344767), and grade-specific color coding
+    - Responsive flexbox layouts ensuring uniform widths across all sections
 
 # User Preferences
 
