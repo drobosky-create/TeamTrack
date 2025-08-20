@@ -507,7 +507,7 @@ export default function ConsumerDashboardTeamTrack() {
           {/* Top Stats Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             {/* Plan Badge */}
-            <div className="bg-[#1976d2] text-white rounded-lg p-4 flex items-center justify-between">
+            <div className={`${user.plan === 'growth' ? 'bg-green-600' : 'bg-[#1976d2]'} text-white rounded-lg p-4 flex items-center justify-between`}>
               <div>
                 <h3 className="text-2xl font-bold">{getTierLabel(user.plan)}</h3>
                 <p className="text-sm opacity-90 mt-1">Current Plan</p>
