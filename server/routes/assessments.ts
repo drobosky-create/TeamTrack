@@ -645,14 +645,37 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       tier: formData.tier
     });
     
-    // Import and use the actual NAICS multiplier data
-    const { getNAICSMultiplier } = require('../data/naics-multipliers');
-    
     // Get industry-specific multiple based on NAICS code and performance
-    // Use the actual NAICS data file for accurate multipliers
-    const finalMultiple = formData.naicsCode 
-      ? getNAICSMultiplier(formData.naicsCode, avgScore)
-      : getIndustryMultiplier(formData.industry, avgScore) || 5.0;
+    // Import the NAICS multiplier data directly
+    let finalMultiple = 5.0;
+    
+    if (formData.naicsCode) {
+      // Use the actual NAICS multiplier data from the JSON file
+      const multipliersData = await import('../../attached_assets/updated_ebitda_multiples_by_naics_full_1755644266414.json');
+      const naicsData = multipliersData.default[formData.naicsCode];
+      
+      if (naicsData) {
+        // Determine if company qualifies for premium range based on performance
+        const isPremium = avgScore >= 4.0;
+        
+        if (isPremium) {
+          // Use premium range, interpolate based on score (4.0-5.0 maps to min-max of premium range)
+          const normalizedScore = (avgScore - 4.0) / 1.0; // 0 to 1
+          finalMultiple = naicsData.premium_range.min + 
+                         (naicsData.premium_range.max - naicsData.premium_range.min) * normalizedScore;
+        } else {
+          // Use base range, interpolate based on score (0-3.9 maps to min-max of base range)
+          const normalizedScore = avgScore / 3.9; // 0 to 1
+          finalMultiple = naicsData.base_range.min + 
+                         (naicsData.base_range.max - naicsData.base_range.min) * normalizedScore;
+        }
+      } else {
+        // Fallback to industry multiplier if NAICS code not found
+        finalMultiple = getIndustryMultiplier(formData.naicsCode, avgScore) || 5.0;
+      }
+    } else {
+      finalMultiple = getIndustryMultiplier(formData.industry, avgScore) || 5.0;
+    }
     
     console.log('Calculated Multiple:', finalMultiple);
     
