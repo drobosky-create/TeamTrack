@@ -1,6 +1,7 @@
 import { useRoute, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../../hooks/useAuth";
+import { useConsumerAuth } from "../../../hooks/use-consumer-auth";
 
 import { ArrowLeft, Home, FileText, TrendingUp, ExternalLink, LogOut, User, Plus, Crown, Clock, BarChart3 } from "lucide-react";
 import ValuationResults from "../../../components/valuation-results";
@@ -52,6 +53,7 @@ export default function AssessmentResults() {
   const [, params] = useRoute("/assessment-results/:id");
   const [, setLocation] = useLocation();
   const { user: authUser, isLoading: authLoading } = useAuth();
+  const { user: consumerUser, isLoading: consumerLoading } = useConsumerAuth();
   
   const assessmentId = params?.id;
 
@@ -75,10 +77,10 @@ export default function AssessmentResults() {
     enabled: !!authUser,
   });
 
-  // Allow access if user is authenticated OR admin is authenticated
-  const hasAccess = authUser || (adminStatus?.authenticated === true);
+  // Allow access if any type of user is authenticated
+  const hasAccess = authUser || consumerUser || (adminStatus?.authenticated === true);
 
-  if (authLoading || assessmentsLoading) {
+  if (authLoading || consumerLoading || assessmentsLoading) {
     return (
       <DashboardBackground>
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
@@ -100,7 +102,7 @@ export default function AssessmentResults() {
   }
 
   // Redirect to login if no access
-  if (!hasAccess && !authLoading) {
+  if (!hasAccess && !authLoading && !consumerLoading) {
     setLocation('/admin-login');
     return null;
   }
@@ -127,9 +129,9 @@ export default function AssessmentResults() {
             </Typography>
             <Button 
               onClick={() => setLocation('/value-calculator')}
-              
+              variant="contained"
+              startIcon={<ArrowLeft size={18} />}
             >
-              <ArrowLeft  />
               Back to Value Calculator
             </Button>
           </Box>
@@ -225,10 +227,10 @@ export default function AssessmentResults() {
           </Box>
 
           {/* Debug log to see the tier value */}
-          {console.log('Assessment tier:', assessment.tier, 'Full assessment:', assessment)}
+          {console.log('Assessment tier:', assessment?.tier, 'Full assessment:', assessment)}
           
           {/* Show Strategic Report for paid tiers, basic ValuationResults for free tier */}
-          {(assessment.tier === 'growth' || assessment.tier === 'capital' || assessment.tier === 'paid') ? (
+          {(assessment?.tier === 'growth' || assessment?.tier === 'capital' || assessment?.tier === 'paid') ? (
             <StrategicReport results={assessment} />
           ) : (
             <ValuationResults results={assessment} />
