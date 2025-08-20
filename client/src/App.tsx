@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -163,6 +163,58 @@ function Router() {
   );
 }
 
+// Dynamic Title Manager Component
+function DynamicTitleManager() {
+  const [location] = useLocation();
+
+  useEffect(() => {
+    const updatePageTitle = () => {
+      const titles: Record<string, string> = {
+        '/': 'AppleBites - AI-Powered Business Valuation Platform',
+        '/applebites': 'AppleBites - AI-Powered Business Valuation Platform',
+        '/winthestorm': 'Win The Storm Event - AppleBites Exclusive Access',
+        '/consumer-signup': 'Sign Up - AppleBites',
+        '/consumer-login': 'Login - AppleBites', 
+        '/consumer-auth': 'Get Started - AppleBites',
+        '/assessment-selection': 'Choose Your Assessment - AppleBites',
+        '/free-assessment': 'Free Business Assessment - AppleBites',
+        '/growth-assessment': 'Growth Assessment - AppleBites',
+        '/assessment-results': 'Your Valuation Results - AppleBites',
+        '/value-calculator': 'Value Improvement Calculator - AppleBites',
+        '/follow-up': 'Next Steps - AppleBites',
+        '/consumer-dashboard': 'Dashboard - AppleBites',
+        '/consumer-profile': 'Your Profile - AppleBites',
+        '/past-assessments': 'Past Assessments - AppleBites',
+        '/performancehub': 'PerformanceHub - Team Performance Tracking',
+        '/admin': 'Admin Dashboard - PerformanceHub',
+        '/admin-login': 'Admin Login - PerformanceHub'
+      };
+
+      const pageTitle = titles[location] || 'AppleBites - AI-Powered Business Valuation Platform';
+      document.title = pageTitle;
+
+      // Update Open Graph meta tags dynamically
+      const updateMetaTag = (property: string, content: string) => {
+        let metaTag = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement;
+        if (metaTag) {
+          metaTag.content = content;
+        }
+      };
+
+      if (location.includes('applebites') || location === '/' || location.includes('assessment') || location.includes('consumer')) {
+        updateMetaTag('og:title', pageTitle);
+        updateMetaTag('og:description', 'Get your business valued instantly with AppleBites. Professional AI-powered valuations, growth insights, and strategic recommendations.');
+        updateMetaTag('twitter:title', pageTitle);
+        updateMetaTag('twitter:description', 'Get your business valued instantly with AppleBites. Professional AI-powered valuations, growth insights, and strategic recommendations.');
+      }
+    };
+
+    updatePageTitle();
+  }, [location]);
+
+  return null;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -170,6 +222,7 @@ function App() {
         <ThemeTokenProvider>
           <TooltipProvider>
             <Toaster />
+            <DynamicTitleManager />
             <Router />
           </TooltipProvider>
         </ThemeTokenProvider>
