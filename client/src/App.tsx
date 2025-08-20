@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -72,6 +73,17 @@ function AdminDashboardWrapper() {
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
+  
+  // Check if we're on the AppleBites domain and redirect to /applebites
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    const pathname = window.location.pathname;
+    
+    // If on applebites.ai domain and not already on /applebites route, redirect
+    if (hostname.includes('applebites') && !pathname.startsWith('/applebites') && pathname === '/') {
+      window.location.replace('/applebites');
+    }
+  }, []);
 
   return (
     <Switch>

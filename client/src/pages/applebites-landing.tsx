@@ -41,21 +41,31 @@ export default function AppleBitesLanding() {
         background: '#1a2332',
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
       }}>
-        <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
+        <Toolbar sx={{ 
+          justifyContent: 'space-between', 
+          py: { xs: 2, sm: 1 },
+          px: { xs: 2, sm: 3 },
+          minHeight: { xs: 80, sm: 64 }
+        }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box
               component="img"
               src="/apple-bites-logo.png"
               alt="AppleBites"
               sx={{ 
-                height: 150,
+                height: { xs: 60, sm: 50, md: 150 },
                 width: 'auto',
-                mr: 2,
+                mr: { xs: 1, sm: 2 },
                 objectFit: 'contain'
               }}
             />
           </Box>
-          <Box sx={{ display: 'flex', gap: 1 }}>
+          <Box sx={{ 
+            display: 'flex', 
+            gap: { xs: 0.5, sm: 1, md: 2 },
+            flexWrap: { xs: 'wrap', sm: 'nowrap' },
+            alignItems: 'center'
+          }}>
             <Button
               variant="text"
               size="small"
@@ -63,8 +73,10 @@ export default function AppleBitesLanding() {
               href="/admin-login"
               sx={{ 
                 color: 'white',
-                fontSize: '0.875rem',
-                px: 2,
+                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                px: { xs: 1, sm: 2 },
+                py: { xs: 0.5, sm: 1 },
+                minWidth: { xs: 'auto', sm: 'auto' },
                 textTransform: 'none',
                 '&:hover': { 
                   backgroundColor: 'rgba(255, 255, 255, 0.1)'
@@ -80,8 +92,10 @@ export default function AppleBitesLanding() {
               href="/consumer-login"
               sx={{ 
                 color: 'white',
-                fontSize: '0.875rem',
-                px: 2,
+                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                px: { xs: 1, sm: 2 },
+                py: { xs: 0.5, sm: 1 },
+                minWidth: { xs: 'auto', sm: 'auto' },
                 textTransform: 'none',
                 '&:hover': { 
                   backgroundColor: 'rgba(255, 255, 255, 0.1)'
@@ -95,12 +109,15 @@ export default function AppleBitesLanding() {
               size="small"
               sx={{ 
                 color: 'white',
-                fontSize: '0.875rem',
-                px: 2,
+                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                px: { xs: 1, sm: 2 },
+                py: { xs: 0.5, sm: 1 },
+                minWidth: { xs: 'auto', sm: 'auto' },
                 textTransform: 'none',
                 '&:hover': { 
                   backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                }
+                },
+                display: { xs: 'none', sm: 'inline-flex' }
               }}
             >
               Pricing
@@ -110,12 +127,15 @@ export default function AppleBitesLanding() {
               size="small"
               sx={{ 
                 color: 'white',
-                fontSize: '0.875rem',
-                px: 2,
+                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                px: { xs: 1, sm: 2 },
+                py: { xs: 0.5, sm: 1 },
+                minWidth: { xs: 'auto', sm: 'auto' },
                 textTransform: 'none',
                 '&:hover': { 
                   backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                }
+                },
+                display: { xs: 'none', sm: 'inline-flex' }
               }}
             >
               About
@@ -128,8 +148,10 @@ export default function AppleBitesLanding() {
               sx={{ 
                 backgroundColor: '#4CAF50',
                 color: 'white',
-                fontSize: '0.875rem',
-                px: 2,
+                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                px: { xs: 1.5, sm: 2 },
+                py: { xs: 0.5, sm: 1 },
+                minWidth: { xs: 'auto', sm: 'auto' },
                 textTransform: 'uppercase',
                 fontWeight: 600,
                 '&:hover': { 
