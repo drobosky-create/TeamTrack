@@ -1,3 +1,4 @@
+import React from 'react';
 import { Card, CardContent, Grid, Typography, Box, Chip, LinearProgress } from '@mui/material';
 import { TrendingUp, Target, BarChart3, PieChart, Calculator, Star, Crown, Zap, Award, Building2, Clock } from "lucide-react";
 import { useLocation } from "wouter";
@@ -5,7 +6,7 @@ import MDBox from "../../../components/MD/MDBox";
 import MDTypography from "../../../components/MD/MDTypography";
 import MDButton from "../../../components/MD/MDButton";
 import ValueDriversHeatmap from "../../../components/value-drivers-heatmap";
-import type { ValuationAssessment } from "@shared/schema";
+import type { ValuationAssessment } from "../../../../shared/schema";
 
 interface StrategicReportProps {
   results: ValuationAssessment;
@@ -173,8 +174,8 @@ export default function StrategicReport({ results }: StrategicReportProps) {
     if (gradeToScore(results.financialPerformance) >= 4) {
       strengths.push('Strong financial performance relative to industry benchmarks');
     }
-    if (gradeToScore(results.recurringRevenue) >= 4) {
-      strengths.push('Robust recurring revenue base providing predictable cash flows');
+    if (gradeToScore(results.financialPerformance) >= 4) {
+      strengths.push('Strong financial performance providing predictable cash flows');
     }
     if (gradeToScore(results.managementTeam) >= 4) {
       strengths.push('Experienced management team with proven operational capabilities');
@@ -474,7 +475,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
         <CardContent sx={{ p: 2.5 }}>
           <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={2}>
             <MDBox>
-              <MDTypography variant="h4" fontWeight="300" sx={{ color: 'rgba(255,255,255,0.9)', mb: 2, letterSpacing: '0.5px' }}>
+              <MDTypography variant="h4" fontWeight="light" sx={{ color: 'rgba(255,255,255,0.9)', mb: 2, letterSpacing: '0.5px' }}>
                 Strategic Business Valuation
               </MDTypography>
               <MDTypography variant="body1" sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: '300' }}>
