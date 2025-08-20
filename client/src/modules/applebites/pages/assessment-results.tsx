@@ -69,13 +69,20 @@ export default function AssessmentResults() {
     queryFn: async () => {
       const response = await fetch(`/api/assessments/${assessmentId}`, { credentials: 'include' });
       if (!response.ok) throw new Error('Failed to fetch assessment');
-      return response.json();
+      const data = await response.json();
+      console.log('API Response:', data);
+      console.log('Assessment tier from API:', data.assessment?.tier);
+      return data;
     },
     enabled: !!assessmentId,
   });
 
   // Get the assessment from the response
   const assessment = assessmentData?.assessment;
+  
+  // Log the assessment after it's extracted
+  console.log('Assessment after extraction:', assessment);
+  console.log('Assessment tier after extraction:', assessment?.tier);
 
   const { data: user } = useQuery({
     queryKey: ['/api/auth/user'],
