@@ -226,14 +226,40 @@ export default function AssessmentResults() {
             </Button>
           </Box>
 
-          {/* Debug log to see the tier value */}
-          {console.log('Assessment tier:', assessment?.tier, 'Full assessment:', assessment)}
+          {/* Debug assessment data */}
+          {(() => {
+            console.log('=== ASSESSMENT DEBUG ===');
+            console.log('Assessment ID:', assessmentId);
+            console.log('Assessment exists:', !!assessment);
+            console.log('Assessment tier:', assessment?.tier);
+            console.log('Tier is growth:', assessment?.tier === 'growth');
+            console.log('Should show strategic:', assessment?.tier === 'growth' || assessment?.tier === 'capital' || assessment?.tier === 'paid');
+            console.log('Full assessment:', assessment);
+            return null;
+          })()}
           
-          {/* Show Strategic Report for paid tiers, basic ValuationResults for free tier */}
-          {(assessment?.tier === 'growth' || assessment?.tier === 'capital' || assessment?.tier === 'paid') ? (
-            <StrategicReport results={assessment} />
+          {/* Simplified tier check */}
+          {assessment?.tier === 'growth' ? (
+            <Box>
+              <Typography variant="h4" sx={{ mb: 2, color: 'green' }}>
+                GROWTH TIER DETECTED - SHOULD SHOW STRATEGIC REPORT
+              </Typography>
+              <StrategicReport results={assessment} />
+            </Box>
+          ) : assessment?.tier === 'capital' ? (
+            <Box>
+              <Typography variant="h4" sx={{ mb: 2, color: 'blue' }}>
+                CAPITAL TIER DETECTED - SHOULD SHOW STRATEGIC REPORT
+              </Typography>
+              <StrategicReport results={assessment} />
+            </Box>
           ) : (
-            <ValuationResults results={assessment} />
+            <Box>
+              <Typography variant="h4" sx={{ mb: 2, color: 'red' }}>
+                FREE TIER OR UNKNOWN - SHOWING BASIC REPORT (tier: {assessment?.tier || 'undefined'})
+              </Typography>
+              <ValuationResults results={assessment || {} as ValuationAssessment} />
+            </Box>
           )}
         </Container>
       </MainContent>
