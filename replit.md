@@ -1,6 +1,13 @@
 # Overview
 PerformanceHub is a comprehensive web application for team performance tracking and business valuation. It offers role-based dashboards for managing performance reviews across various cycles, integrating self-assessments with manager evaluations, customizable scoring, and document attachments. Additionally, it features AppleBites, a consumer-facing platform for business valuation, guiding users through account creation, a four-step assessment process, valuation report generation, a value improvement calculator, and AI coaching recommendations. This dual functionality provides a unified platform for internal team management and external business valuation needs.
 
+## Recent Changes (August 2025)
+- **Admin Client Records Integration**: Connected Client Records page to real consumer signup database, displaying actual AppleBites user registrations
+- **Mobile Navigation Enhancement**: Replaced glitchy slide-out drawer with full-screen overlay navigation for better mobile UX
+- **Responsive Table Design**: Implemented smooth horizontal scrolling with custom scrollbar styling and adaptive column visibility for mobile devices
+- **Search Functionality**: Enhanced search capabilities to work with real consumer data across multiple fields (company, contact, email)
+- **Authentication System**: Fixed admin login with proper bcrypt password hashing for drobosky@quantifi-partners.com credentials
+
 # User Preferences
 Preferred communication style: Simple, everyday language.
 Design System: Universal token-based theming - all colors, gradients, spacing, shadows, and typography must reference tokens, never hardcoded values.
@@ -33,8 +40,9 @@ Design System: Universal token-based theming - all colors, gradients, spacing, s
 - **Authentication**: Dual system supporting Replit-based OpenID Connect for regular users and email/password for admin access.
 - **Authorization**: Three-tier role-based access control (admin, manager, team_member) enforced via middleware.
 - **Session Management**: Secure server-side sessions stored in PostgreSQL.
-- **Admin Portal**: Dedicated admin authentication flow with MaterialDashboardLayout integration.
-- **Role Navigation**: Distinct functionalities for Admin (full control, audit logs, integrations), Manager (deal pipeline, team oversight, client management), and User/Team Member (AppleBites navigation, collaboration, tasks, feedback).
+- **Admin Portal**: Dedicated admin authentication flow with MaterialDashboardLayout integration and mobile-optimized full-screen navigation.
+- **Role Navigation**: Distinct functionalities for Admin (full control, audit logs, integrations, client records), Manager (deal pipeline, team oversight, client management), and User/Team Member (AppleBites navigation, collaboration, tasks, feedback).
+- **Consumer Auth**: Separate authentication system for AppleBites platform users with bcrypt password hashing.
 
 ## Data Flow Patterns
 - **Client-Server Communication**: REST API with JSON payloads.
@@ -43,13 +51,14 @@ Design System: Universal token-based theming - all colors, gradients, spacing, s
 - **Form Validation**: Client-side validation with Zod schemas.
 
 ## Feature Specifications & Design Choices
-- **Role-Based Dashboards**: Provides distinct dashboards for different user roles.
+- **Role-Based Dashboards**: Provides distinct dashboards for different user roles with mobile-responsive navigation.
 - **Performance Review System**: Supports monthly, quarterly, and annual review cycles with self-assessments and manager evaluations.
 - **Customizable Templates**: Allows creation of structured review templates with custom core values.
 - **Setup Wizard**: Guides initial system configuration.
 - **AppleBites Consumer Flow**: Authentication-first approach with a 4-step assessment (Financials, Adjustments, Value Drivers, Follow-up), including a Value Improvement Calculator and AI coaching.
 - **Consumer Authentication**: Separate user system with bcrypt hashing and PostgreSQL storage.
-- **UI/UX Decisions**: Utilizes Material Dashboard React for a modern aesthetic, with a centralized UI Token Management System for dynamic theme customization. Dual-branded landing pages for PerformanceHub and AppleBites.
+- **Admin Client Management**: Real-time view of consumer signups with advanced search, filtering, and responsive table design for mobile devices.
+- **UI/UX Decisions**: Utilizes Material Dashboard React for a modern aesthetic, with a centralized UI Token Management System for dynamic theme customization. Dual-branded landing pages for PerformanceHub and AppleBites. Mobile-first responsive design with full-screen navigation overlays.
 
 # External Dependencies
 
