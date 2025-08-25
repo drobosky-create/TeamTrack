@@ -787,26 +787,56 @@ router.get('/api/assessments/test-ghl', async (req: Request, res: Response) => {
       });
     }
     
-    // Try the most basic endpoint without version headers
-    const response = await fetch(`https://services.leadconnectorhq.com/locations/${locationId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Accept': 'application/json'
+    // Test with Version header which is required
+    const tests = [
+      {
+        name: 'Bearer with Version 2021-07-28',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Accept': 'application/json',
+          'Version': '2021-07-28'
+        }
+      },
+      {
+        name: 'Bearer with Version 2021-04-15',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Accept': 'application/json',
+          'Version': '2021-04-15'
+        }
       }
-    });
+    ];
     
-    const responseText = await response.text();
+    const results = [];
+    
+    for (const test of tests) {
+      try {
+        const response = await fetch(`https://services.leadconnectorhq.com/locations/${locationId}`, {
+          method: 'GET',
+          headers: test.headers
+        });
+        
+        const responseText = await response.text();
+        
+        results.push({
+          test: test.name,
+          status: response.status,
+          statusText: response.statusText,
+          body: responseText.substring(0, 100)
+        });
+      } catch (err) {
+        results.push({
+          test: test.name,
+          error: err instanceof Error ? err.message : 'Unknown error'
+        });
+      }
+    }
     
     res.json({
-      success: response.ok,
-      status: response.status,
-      statusText: response.statusText,
-      headers: Object.fromEntries(response.headers.entries()),
-      body: responseText.substring(0, 500),
       apiKeyLength: apiKey.length,
       apiKeyPrefix: apiKey.substring(0, 10) + '...',
-      locationId: locationId
+      locationId: locationId,
+      testResults: results
     });
   } catch (error) {
     res.status(500).json({

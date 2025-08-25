@@ -62,6 +62,7 @@ export class GoHighLevelService {
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
         'Version': '2021-07-28'
       },
       body: data ? JSON.stringify(data) : undefined
@@ -77,20 +78,28 @@ export class GoHighLevelService {
 
   async createOrUpdateContact(contactData: GoHighLevelContact): Promise<any> {
     try {
-      // First, try to find existing contact by email
+      // Use v2 endpoints - First, try to find existing contact by email
       const searchResponse = await this.makeRequest(
-        `/locations/${this.locationId}/contacts/?email=${encodeURIComponent(contactData.email)}`
+        `/contacts/v2/search?locationId=${this.locationId}&email=${encodeURIComponent(contactData.email)}`
       );
 
       let contactId: string;
 
       if (searchResponse.contacts && searchResponse.contacts.length > 0) {
-        // Update existing contact
+        // Update existing contact using v2 endpoint
         contactId = searchResponse.contacts[0].id;
-        await this.makeRequest(`/locations/${this.locationId}/contacts/${contactId}`, 'PUT', contactData);
+        const updateData = {
+          ...contactData,
+          locationId: this.locationId
+        };
+        await this.makeRequest(`/contacts/v2/${contactId}`, 'PUT', updateData);
       } else {
-        // Create new contact
-        const createResponse = await this.makeRequest(`/locations/${this.locationId}/contacts/`, 'POST', contactData);
+        // Create new contact using v2 endpoint
+        const createData = {
+          ...contactData,
+          locationId: this.locationId
+        };
+        const createResponse = await this.makeRequest(`/contacts/v2/`, 'POST', createData);
         contactId = createResponse.contact.id;
       }
 
