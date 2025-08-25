@@ -524,7 +524,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Overall grade score (0-20 points)
     const gradeScore = assessment.valueDrivers ? 
       Object.values(assessment.valueDrivers).reduce((sum: number, grade: any) => {
-        const gradeValue = grade === 'A' ? 5 : grade === 'B' ? 4 : grade === 'C' ? 3 : grade === 'D' ? 2 : 1;
+        const gradeValue = grade === 'A' ? 5 : grade === 'B' ? 4 : grade === 'C' ? 3 : grade === 'D' ? 2 : grade === 'F' ? 1 : 3;
         return sum + gradeValue;
       }, 0) / Object.keys(assessment.valueDrivers).length : 3;
     
