@@ -84,7 +84,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
-          tags: ['applebites-signup', 'new-user', 'free-tier'],
+          tags: ['applebites-signup', 'new-user', 'tier-free', 'Platform User'],
           customFields: {
             signupDate: new Date().toISOString(),
             tier: 'free',
@@ -837,6 +837,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         // Send email through GoHighLevel and create contact
         try {
+          // Add hot-capital tag for high-value assessments (good capital candidates)
+          const isHighValue = metrics.midEstimate >= 2000000; // $2M+ valuations
+          const hasGoodGrades = ['A', 'B'].includes(metrics.overallScore);
+          const isCapitalCandidate = isHighValue && hasGoodGrades && assessment.followUpIntent === 'yes';
+          
+          if (isCapitalCandidate) {
+            // This will trigger the "hot-capital" workflow in GoHighLevel
+            await goHighLevelService.createOrUpdateContact({
+              firstName: assessment.firstName,
+              lastName: assessment.lastName,
+              email: assessment.email,
+              phone: assessment.phone,
+              companyName: assessment.company,
+              tags: ['hot-capital', 'high-value-assessment', 'capital-candidate'],
+              customFields: {
+                hotCapitalReason: `$${metrics.midEstimate.toLocaleString()} valuation with ${metrics.overallScore} grade`,
+                assessmentValue: metrics.midEstimate,
+                capitalEligible: true
+              }
+            });
+            console.log(`Marked assessment ${assessment.id} as hot-capital candidate (${metrics.overallScore} grade, $${metrics.midEstimate.toLocaleString()})`);
+          }
+          
           const ghlResult = await goHighLevelService.processValuationAssessment(assessment, pdfBuffer);
           console.log(`GoHighLevel processing completed:`, {
             contactCreated: ghlResult.contactCreated,
@@ -2016,7 +2039,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             email: existingUser.email,
             phone: purchaseData.phone,
             companyName: purchaseData.company,
-            tags: ['applebites-user', 'growth-tier', 'ghl-purchase'],
+            tags: ['applebites-user', 'tier-growth', 'ghl-purchase', 'New Account - Payment Signup'],
             customFields: {
               tier: 'growth',
               purchaseDate: new Date().toISOString(),
@@ -2054,7 +2077,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             email: purchaseData.email,
             phone: purchaseData.phone,
             companyName: purchaseData.company,
-            tags: ['applebites-user', 'growth-tier', 'ghl-purchase', 'new-customer'],
+            tags: ['applebites-user', 'tier-growth', 'ghl-purchase', 'new-customer', 'New Account - Payment Signup'],
             customFields: {
               tier: 'growth',
               signupDate: new Date().toISOString(),
@@ -3274,7 +3297,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                       firstName: existingUser.firstName,
                       lastName: existingUser.lastName,
                       email: existingUser.email,
-                      tags: ['applebites-user', `${newTier}-tier`, 'stripe-purchase'],
+                      tags: ['applebites-user', `tier-${newTier}`, 'stripe-purchase', 'New Account - Payment Signup'],
                       customFields: {
                         tier: newTier,
                         purchaseDate: new Date().toISOString(),
@@ -3315,7 +3338,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                       firstName,
                       lastName,
                       email: customerEmail,
-                      tags: ['applebites-user', `${newTier}-tier`, 'stripe-purchase', 'new-customer'],
+                      tags: ['applebites-user', `tier-${newTier}`, 'stripe-purchase', 'new-customer', 'New Account - Payment Signup'],
                       customFields: {
                         tier: newTier,
                         signupDate: new Date().toISOString(),
@@ -3355,7 +3378,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     firstName: user.firstName,
                     lastName: user.lastName,
                     email: user.email,
-                    tags: ['applebites-user', `${newTier}-tier`, 'stripe-purchase'],
+                    tags: ['applebites-user', `tier-${newTier}`, 'stripe-purchase', 'New Account - Payment Signup'],
                     customFields: {
                       tier: newTier,
                       purchaseDate: new Date().toISOString(),
