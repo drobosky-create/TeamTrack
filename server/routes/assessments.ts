@@ -772,6 +772,70 @@ router.delete('/api/consumer/assessments/:id', async (req: Request, res: Respons
   }
 });
 
+// Test GoHighLevel API connection (must be before :id route)
+router.get('/api/assessments/test-ghl', async (req: Request, res: Response) => {
+  try {
+    const apiKey = process.env.GHL_API_KEY;
+    const locationId = process.env.GHL_LOCATION_ID;
+    
+    if (!apiKey || !locationId) {
+      return res.status(500).json({
+        success: false,
+        error: 'Missing GHL credentials',
+        hasApiKey: !!apiKey,
+        hasLocationId: !!locationId
+      });
+    }
+    
+    // Try the most basic endpoint without version headers
+    const response = await fetch(`https://services.leadconnectorhq.com/locations/${locationId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Accept': 'application/json'
+      }
+    });
+    
+    const responseText = await response.text();
+    
+    res.json({
+      success: response.ok,
+      status: response.status,
+      statusText: response.statusText,
+      headers: Object.fromEntries(response.headers.entries()),
+      body: responseText.substring(0, 500),
+      apiKeyLength: apiKey.length,
+      apiKeyPrefix: apiKey.substring(0, 10) + '...',
+      locationId: locationId
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// Get migration status (must be before :id route)
+router.get('/api/assessments/migration-status', async (req: Request, res: Response) => {
+  try {
+    const count = await db
+      .select()
+      .from(valuationAssessments);
+    
+    res.json({
+      success: true,
+      totalAssessments: count.length,
+      message: `Found ${count.length} assessments ready for migration`
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 // Get assessment results
 router.get('/api/assessments/:id', async (req: Request, res: Response) => {
   try {
@@ -1110,26 +1174,6 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
     res.status(500).json({ 
       success: false, 
       message: 'Failed to process valuation',
-      error: error instanceof Error ? error.message : 'Unknown error'
-    });
-  }
-});
-
-// Get migration status
-router.get('/api/assessments/migration-status', async (req: Request, res: Response) => {
-  try {
-    const count = await db
-      .select()
-      .from(valuationAssessments);
-    
-    res.json({
-      success: true,
-      totalAssessments: count.length,
-      message: `Found ${count.length} assessments ready for migration`
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
       error: error instanceof Error ? error.message : 'Unknown error'
     });
   }
