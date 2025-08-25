@@ -1,5 +1,5 @@
 import { ValuationAssessment } from "@shared/schema";
-import { CheckCircle, Calendar, Calculator, TrendingUp } from "lucide-react";
+import { CheckCircle, Calendar, Calculator, TrendingUp, ArrowLeft } from "lucide-react";
 import { useLocation } from "wouter";
 import { Card, CardContent, Typography, Box } from '@mui/material';
 import ValueDriversHeatmap from "./value-drivers-heatmap";
@@ -56,8 +56,32 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
     setLocation(`/value-improvement/${results.id}`);
   };
 
+  const handleBackToDashboard = () => {
+    setLocation('/dashboard');
+  };
+
   return (
     <MDBox sx={{ maxWidth: '1200px', margin: '0 auto', p: 2 }}>
+      {/* Back to Dashboard Button */}
+      <MDBox mb={3}>
+        <MDButton
+          onClick={handleBackToDashboard}
+          variant="outlined"
+          color="dark"
+          startIcon={<ArrowLeft size={16} />}
+          sx={{
+            color: '#0A1F44',
+            borderColor: '#0A1F44',
+            '&:hover': {
+              backgroundColor: '#0A1F44',
+              color: 'white',
+            },
+          }}
+        >
+          Back to Dashboard
+        </MDButton>
+      </MDBox>
+
       {/* Header Section */}
       <MDBox textAlign="center" mb={1}>
         <CheckCircle size={32} color="#4CAF50" style={{ marginBottom: '16px' }} />
