@@ -44,7 +44,7 @@ export class GoHighLevelService {
     }
     
     // Use Private Integration Token for contacts API
-    this.apiKey = process.env.GHL_PIT_API || process.env.GHL_API_KEY;
+    this.apiKey = process.env.GHL_PIT_API || process.env.GHL_API_KEY!;
     this.locationId = process.env.GHL_LOCATION_ID;
     this.webhookUrls = {
       freeResults: process.env.GHL_WEBHOOK_FREE_RESULTS || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3',

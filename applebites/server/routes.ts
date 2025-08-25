@@ -1733,8 +1733,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       for (const user of users) {
         try {
           const ghlContactData = {
-            firstName: user.firstName || '',
-            lastName: user.lastName || '',
+            firstName: user.firstName || undefined,
+            lastName: user.lastName || undefined,
             email: user.email,
             tags: [
               'applebites-migration',
@@ -1793,11 +1793,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
           
           const ghlContactData = {
-            firstName: lead.firstName || '',
-            lastName: lead.lastName || '',
+            firstName: lead.firstName || undefined,
+            lastName: lead.lastName || undefined,
             email: lead.email,
-            phone: lead.phone,
-            companyName: lead.company,
+            phone: lead.phone || undefined,
+            companyName: lead.company || undefined,
             tags: [
               'applebites-migration',
               'lead-migration',
@@ -1851,11 +1851,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
           if (!existingUser && !existingLead) {
             // Create new contact from assessment data
             const ghlContactData = {
-              firstName: assessment.firstName || '',
-              lastName: assessment.lastName || '',
+              firstName: assessment.firstName || undefined,
+              lastName: assessment.lastName || undefined,
               email: assessment.email,
-              phone: assessment.phone,
-              companyName: assessment.company,
+              phone: assessment.phone || undefined,
+              companyName: assessment.company || undefined,
               tags: [
                 'applebites-migration',
                 'assessment-migration',
