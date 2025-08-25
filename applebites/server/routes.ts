@@ -78,6 +78,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
         isActive: true
       });
 
+      // Create contact in GoHighLevel immediately upon account creation
+      try {
+        const ghlContactData = {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          tags: ['applebites-signup', 'new-user', 'free-tier'],
+          customFields: {
+            signupDate: new Date().toISOString(),
+            tier: 'free',
+            authProvider: 'email',
+            source: 'applebites_signup'
+          }
+        };
+        
+        const ghlResult = await goHighLevelService.createOrUpdateContact(ghlContactData);
+        console.log(`Created GHL contact for new user ${user.id}:`, ghlResult.contactId);
+        
+        // Store GHL contact ID for future updates
+        if (ghlResult.contactId) {
+          await storage.updateUser(user.id, { ghlContactId: ghlResult.contactId });
+        }
+      } catch (ghlError) {
+        console.error('Failed to create GHL contact during signup:', ghlError);
+        // Don't fail signup if GHL fails - user account is still created
+      }
+
       // Create session
       req.session.userId = user.id;
       req.session.userEmail = user.email;
@@ -1980,6 +2007,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
         
         console.log(`Updated existing user ${existingUser.id} with growth purchase`);
+        
+        // Update GoHighLevel contact with purchase information
+        try {
+          const ghlContactData = {
+            firstName: existingUser.firstName,
+            lastName: existingUser.lastName,
+            email: existingUser.email,
+            phone: purchaseData.phone,
+            companyName: purchaseData.company,
+            tags: ['applebites-user', 'growth-tier', 'ghl-purchase'],
+            customFields: {
+              tier: 'growth',
+              purchaseDate: new Date().toISOString(),
+              purchaseAmount: purchaseData.amount,
+              transactionId: purchaseData.transactionId,
+              source: 'ghl_webhook_purchase'
+            }
+          };
+          
+          await goHighLevelService.createOrUpdateContact(ghlContactData);
+          console.log(`Updated GHL contact for user ${existingUser.id} via webhook purchase`);
+        } catch (ghlError) {
+          console.error('Failed to update GHL contact during webhook purchase:', ghlError);
+        }
       } else {
         // Create new user for the purchase
         const fullName = `${purchaseData.firstName || ''} ${purchaseData.lastName || ''}`.trim();
@@ -1994,6 +2045,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
         
         console.log(`Created new user ${newUser.id} for growth purchase`);
+        
+        // Update GoHighLevel contact with purchase information
+        try {
+          const ghlContactData = {
+            firstName: purchaseData.firstName,
+            lastName: purchaseData.lastName,
+            email: purchaseData.email,
+            phone: purchaseData.phone,
+            companyName: purchaseData.company,
+            tags: ['applebites-user', 'growth-tier', 'ghl-purchase', 'new-customer'],
+            customFields: {
+              tier: 'growth',
+              signupDate: new Date().toISOString(),
+              purchaseDate: new Date().toISOString(),
+              purchaseAmount: purchaseData.amount,
+              transactionId: purchaseData.transactionId,
+              source: 'ghl_webhook_purchase'
+            }
+          };
+          
+          await goHighLevelService.createOrUpdateContact(ghlContactData);
+          console.log(`Updated GHL contact for new user ${newUser.id} via webhook purchase`);
+        } catch (ghlError) {
+          console.error('Failed to update GHL contact for new webhook purchase user:', ghlError);
+        }
       }
 
       // Also create/update lead record for tracking
@@ -3191,6 +3267,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   await storage.updateUserTier(existingUser.id, newTier);
                   finalUserId = existingUser.id;
                   console.log(`Updated existing user ${existingUser.id} to tier ${newTier} after purchase`);
+                  
+                  // Update GoHighLevel contact with new tier
+                  try {
+                    const ghlContactData = {
+                      firstName: existingUser.firstName,
+                      lastName: existingUser.lastName,
+                      email: existingUser.email,
+                      tags: ['applebites-user', `${newTier}-tier`, 'stripe-purchase'],
+                      customFields: {
+                        tier: newTier,
+                        purchaseDate: new Date().toISOString(),
+                        stripeSessionId: session.id,
+                        purchaseAmount: session.amount_total,
+                        source: 'stripe_upgrade'
+                      }
+                    };
+                    
+                    await goHighLevelService.createOrUpdateContact(ghlContactData);
+                    console.log(`Updated GHL contact for user ${existingUser.id} with tier ${newTier}`);
+                  } catch (ghlError) {
+                    console.error('Failed to update GHL contact during Stripe purchase:', ghlError);
+                  }
                 } else {
                   // Create new user account with purchased tier
                   const nameParts = customerName?.split(' ') || ['', ''];
@@ -3210,6 +3308,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   finalUserId = newUser.id;
                   createdNewUser = true;
                   console.log(`Created new user ${newUser.id} with tier ${newTier} after purchase`);
+                  
+                  // Create GoHighLevel contact for new purchase user
+                  try {
+                    const ghlContactData = {
+                      firstName,
+                      lastName,
+                      email: customerEmail,
+                      tags: ['applebites-user', `${newTier}-tier`, 'stripe-purchase', 'new-customer'],
+                      customFields: {
+                        tier: newTier,
+                        signupDate: new Date().toISOString(),
+                        purchaseDate: new Date().toISOString(),
+                        stripeSessionId: session.id,
+                        purchaseAmount: session.amount_total,
+                        authProvider: 'stripe_purchase',
+                        source: 'stripe_purchase'
+                      }
+                    };
+                    
+                    const ghlResult = await goHighLevelService.createOrUpdateContact(ghlContactData);
+                    if (ghlResult.contactId) {
+                      await storage.updateUser(newUser.id, { ghlContactId: ghlResult.contactId });
+                    }
+                    console.log(`Created GHL contact for new purchase user ${newUser.id}`);
+                  } catch (ghlError) {
+                    console.error('Failed to create GHL contact for new purchase user:', ghlError);
+                  }
                 }
               } catch (error) {
                 console.error('Error creating/updating user during payment verification:', error);
@@ -3218,9 +3343,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
           } else {
             // Update existing authenticated user
             try {
+              const user = await storage.getUser(userId);
               await storage.updateUserTier(userId, newTier);
               finalUserId = userId;
               console.log(`Updated user ${userId} to tier ${newTier} after payment verification`);
+              
+              // Update GoHighLevel contact with new tier
+              if (user) {
+                try {
+                  const ghlContactData = {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    tags: ['applebites-user', `${newTier}-tier`, 'stripe-purchase'],
+                    customFields: {
+                      tier: newTier,
+                      purchaseDate: new Date().toISOString(),
+                      stripeSessionId: session.id,
+                      purchaseAmount: session.amount_total,
+                      source: 'stripe_upgrade'
+                    }
+                  };
+                  
+                  await goHighLevelService.createOrUpdateContact(ghlContactData);
+                  console.log(`Updated GHL contact for user ${userId} with tier ${newTier}`);
+                } catch (ghlError) {
+                  console.error('Failed to update GHL contact during authenticated user purchase:', ghlError);
+                }
+              }
             } catch (error) {
               console.error('Error updating user tier during verification:', error);
             }
