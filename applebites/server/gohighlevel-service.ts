@@ -348,7 +348,11 @@ export class GoHighLevelService {
         tags: [
           'Business Valuation Lead',
           `Grade: ${assessment.overallScore}`,
-          `Value: $${Number(assessment.midEstimate).toLocaleString()}`
+          `Value: $${Number(assessment.midEstimate).toLocaleString()}`,
+          // Add nurture tag based on followUpIntent
+          ...(assessment.followUpIntent === 'yes' ? ['nurture-hot'] : 
+              assessment.followUpIntent === 'maybe' ? ['nurture-warm'] : 
+              assessment.followUpIntent === 'no' ? ['nurture-cold'] : ['nurture-unknown'])
         ],
         customFields: {
           // Convert decimal strings to numbers for GoHighLevel
