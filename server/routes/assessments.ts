@@ -1115,6 +1115,158 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
   }
 });
 
+// Get migration status
+router.get('/api/assessments/migration-status', async (req: Request, res: Response) => {
+  try {
+    const count = await db
+      .select()
+      .from(valuationAssessments);
+    
+    res.json({
+      success: true,
+      totalAssessments: count.length,
+      message: `Found ${count.length} assessments ready for migration`
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// Migrate existing assessments to GoHighLevel
+router.post('/api/assessments/migrate-to-ghl', async (req: Request, res: Response) => {
+  try {
+    console.log('Starting migration of existing assessments to GoHighLevel...');
+    
+    // Fetch all existing assessments from database
+    const assessments = await db
+      .select()
+      .from(valuationAssessments)
+      .orderBy(desc(valuationAssessments.createdAt));
+    
+    console.log(`Found ${assessments.length} assessments to migrate`);
+    
+    const results = {
+      total: assessments.length,
+      successful: 0,
+      failed: 0,
+      skipped: 0,
+      details: [] as any[]
+    };
+    
+    // Process each assessment
+    for (const assessment of assessments) {
+      try {
+        // Skip if no email
+        if (!assessment.email) {
+          results.skipped++;
+          results.details.push({
+            id: assessment.id,
+            status: 'skipped',
+            reason: 'No email address'
+          });
+          continue;
+        }
+        
+        // Create contact data with all assessment information
+        const contactResult = await createGHLContact({
+          firstName: assessment.firstName || 'Unknown',
+          lastName: assessment.lastName || 'Unknown',
+          email: assessment.email,
+          phone: assessment.phone || '',
+          companyName: assessment.company || 'Unknown Company',
+          tags: [
+            `${assessment.tier || 'free'}-assessment`,
+            assessment.industryDescription || 'Unknown Industry',
+            `grade-${assessment.overallScore || 'C'}`,
+            'migrated-data'
+          ],
+          customFields: {
+            assessmentType: assessment.tier || 'free',
+            assessmentId: assessment.id,
+            assessmentDate: assessment.createdAt,
+            industry: assessment.industryDescription,
+            naicsCode: assessment.naicsCode,
+            overallGrade: assessment.overallScore,
+            valuationLow: assessment.lowEstimate ? parseFloat(assessment.lowEstimate) : 0,
+            valuationMid: assessment.midEstimate ? parseFloat(assessment.midEstimate) : 0,
+            valuationHigh: assessment.highEstimate ? parseFloat(assessment.highEstimate) : 0,
+            adjustedEbitda: assessment.adjustedEbitda ? parseFloat(assessment.adjustedEbitda) : 0,
+            valuationMultiple: assessment.valuationMultiple ? parseFloat(assessment.valuationMultiple) : 0,
+            financialPerformance: assessment.financialPerformance,
+            customerConcentration: assessment.customerConcentration,
+            managementTeam: assessment.managementTeam,
+            competitivePosition: assessment.competitivePosition,
+            growthProspects: assessment.growthProspects,
+            systemsProcesses: assessment.systemsProcesses,
+            assetQuality: assessment.assetQuality,
+            industryOutlook: assessment.industryOutlook,
+            riskFactors: assessment.riskFactors,
+            ownerDependency: assessment.ownerDependency,
+            followUpIntent: assessment.followUpIntent,
+            migrated: true,
+            migratedAt: new Date().toISOString()
+          }
+        });
+        
+        if (contactResult) {
+          results.successful++;
+          results.details.push({
+            id: assessment.id,
+            email: assessment.email,
+            company: assessment.company,
+            status: 'success',
+            ghlContactId: contactResult.id || contactResult.contact?.id
+          });
+          console.log(`✓ Migrated: ${assessment.email} (${assessment.company})`);
+        } else {
+          results.failed++;
+          results.details.push({
+            id: assessment.id,
+            email: assessment.email,
+            company: assessment.company,
+            status: 'failed',
+            reason: 'GHL API returned null'
+          });
+          console.log(`✗ Failed: ${assessment.email} (${assessment.company})`);
+        }
+        
+        // Add a small delay to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+      } catch (error) {
+        results.failed++;
+        results.details.push({
+          id: assessment.id,
+          email: assessment.email,
+          company: assessment.company,
+          status: 'error',
+          error: error instanceof Error ? error.message : 'Unknown error'
+        });
+        console.error(`Error migrating assessment ${assessment.id}:`, error);
+      }
+    }
+    
+    console.log('Migration complete:', results);
+    
+    res.json({
+      success: true,
+      message: `Migration complete: ${results.successful} successful, ${results.failed} failed, ${results.skipped} skipped`,
+      results
+    });
+    
+  } catch (error) {
+    console.error('Migration failed:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Migration failed',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 // Test endpoint for GHL integration
 router.post('/api/assessments/test-ghl', async (req: Request, res: Response) => {
   try {
