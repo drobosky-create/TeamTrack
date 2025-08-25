@@ -36,14 +36,14 @@ export class GoHighLevelService {
   private baseUrl = 'https://services.leadconnectorhq.com';
 
   constructor() {
-    if (!process.env.GHL_API_KEY) {
-      throw new Error("GHL_API_KEY environment variable is required");
+    if (!process.env.GHL_PIT_API && !process.env.GHL_API_KEY) {
+      throw new Error("GHL_PIT_API or GHL_API_KEY environment variable is required");
     }
     if (!process.env.GHL_LOCATION_ID) {
       throw new Error("GHL_LOCATION_ID environment variable is required");
     }
     
-    this.apiKey = process.env.GHL_API_KEY;
+    this.apiKey = process.env.GHL_API_KEY || process.env.GHL_PIT_API;
     this.locationId = process.env.GHL_LOCATION_ID;
     this.webhookUrls = {
       freeResults: process.env.GHL_WEBHOOK_FREE_RESULTS || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3',
@@ -57,10 +57,15 @@ export class GoHighLevelService {
   private async makeRequest(endpoint: string, method: string = 'GET', data?: any) {
     const url = `${this.baseUrl}${endpoint}`;
     
+    // Private Integration Tokens start with 'pit-' and use direct Authorization header
+    const authHeader = this.apiKey.startsWith('pit-') 
+      ? this.apiKey 
+      : `Bearer ${this.apiKey}`;
+    
     const response = await fetch(url, {
       method,
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        'Authorization': authHeader,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Version': '2021-07-28'
