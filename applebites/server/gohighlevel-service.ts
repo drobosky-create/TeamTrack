@@ -36,15 +36,15 @@ export class GoHighLevelService {
   private baseUrl = 'https://services.leadconnectorhq.com';
 
   constructor() {
-    if (!process.env.GOHIGHLEVEL_API_KEY) {
-      throw new Error("GOHIGHLEVEL_API_KEY environment variable is required");
+    if (!process.env.GHL_API_KEY) {
+      throw new Error("GHL_API_KEY environment variable is required");
     }
-    if (!process.env.GOHIGHLEVEL_LOCATION_ID) {
-      throw new Error("GOHIGHLEVEL_LOCATION_ID environment variable is required");
+    if (!process.env.GHL_LOCATION_ID) {
+      throw new Error("GHL_LOCATION_ID environment variable is required");
     }
     
-    this.apiKey = process.env.GOHIGHLEVEL_API_KEY;
-    this.locationId = process.env.GOHIGHLEVEL_LOCATION_ID;
+    this.apiKey = process.env.GHL_API_KEY;
+    this.locationId = process.env.GHL_LOCATION_ID;
     this.webhookUrls = {
       freeResults: process.env.GHL_WEBHOOK_FREE_RESULTS || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3',
       growthPurchase: 'https://applebites.ai/api/webhook/growth-purchase', // Incoming webhook endpoint
