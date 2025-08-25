@@ -524,7 +524,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Overall grade score (0-20 points)
     const gradeScore = assessment.valueDrivers ? 
       Object.values(assessment.valueDrivers).reduce((sum: number, grade: any) => {
-        const gradeValue = grade === 'A' ? 5 : grade === 'B' ? 4 : grade === 'C' ? 3 : grade === 'D' ? 2 : grade === 'F' ? 1 : 3;
+        const gradeValue = grade === 'A' ? 5 : grade === 'B' ? 4 : grade === 'C' ? 3 : grade === 'D' ? 2 : grade === 'E' ? 1 : 3;
         return sum + gradeValue;
       }, 0) / Object.keys(assessment.valueDrivers).length : 3;
     
@@ -561,7 +561,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         case 'B': return 4;
         case 'C': return 3;
         case 'D': return 2;
-        case 'F': return 1;
+        case 'E': return 1;
         default: return 3;
       }
     };
@@ -710,7 +710,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const gradeToScore = (grade: string): number => {
           switch (grade) {
             case 'A': return 10; case 'B': return 8; case 'C': return 6; 
-            case 'D': return 4; case 'F': return 2; default: return 6;
+            case 'D': return 4; case 'E': return 2; default: return 6;
           }
         };
         

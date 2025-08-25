@@ -66,7 +66,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
 
   const gradeToScore = (grade: string | null | undefined): number => {
     if (!grade) return 2.5;
-    const gradeMap: { [key: string]: number } = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1 };
+    const gradeMap: { [key: string]: number } = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'E': 1 };
     return gradeMap[grade.charAt(0)] || 2.5;
   };
 
@@ -77,7 +77,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
       case 'B': return '#3b82f6';
       case 'C': return '#f59e0b';
       case 'D': return '#ef4444';
-      case 'F': return '#dc2626';
+      case 'E': return '#dc2626';
       default: return '#64748b';
     }
   };

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
 interface ModernGradeChartProps {
-  currentGrade: 'A' | 'B' | 'C' | 'D' | 'F';
-  onGradeSelect: (grade: 'A' | 'B' | 'C' | 'D' | 'F') => void;
-  selectedGrade: 'A' | 'B' | 'C' | 'D' | 'F';
-  getValuation: (grade: 'A' | 'B' | 'C' | 'D' | 'F') => number;
-  getMultiple: (grade: 'A' | 'B' | 'C' | 'D' | 'F') => number;
+  currentGrade: 'A' | 'B' | 'C' | 'D' | 'E';
+  onGradeSelect: (grade: 'A' | 'B' | 'C' | 'D' | 'E') => void;
+  selectedGrade: 'A' | 'B' | 'C' | 'D' | 'E';
+  getValuation: (grade: 'A' | 'B' | 'C' | 'D' | 'E') => number;
+  getMultiple: (grade: 'A' | 'B' | 'C' | 'D' | 'E') => number;
 }
 
 export default function ModernGradeChart({ 
@@ -18,7 +18,7 @@ export default function ModernGradeChart({
   const [hoveredGrade, setHoveredGrade] = useState<string | null>(null);
 
   const grades = [
-    { grade: 'F', label: 'Poor', color: 'rgb(239, 68, 68)', bgColor: 'rgb(254, 242, 242)', borderColor: 'rgb(252, 165, 165)' },
+    { grade: 'E', label: 'Poor', color: 'rgb(239, 68, 68)', bgColor: 'rgb(254, 242, 242)', borderColor: 'rgb(252, 165, 165)' },
     { grade: 'D', label: 'Below Average', color: 'rgb(249, 115, 22)', bgColor: 'rgb(255, 247, 237)', borderColor: 'rgb(253, 186, 116)' },
     { grade: 'C', label: 'Average', color: 'rgb(245, 158, 11)', bgColor: 'rgb(255, 251, 235)', borderColor: 'rgb(252, 211, 77)' },
     { grade: 'B', label: 'Good', color: 'rgb(59, 130, 246)', bgColor: 'rgb(239, 246, 255)', borderColor: 'rgb(147, 197, 253)' },

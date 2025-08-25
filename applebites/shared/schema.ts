@@ -347,16 +347,16 @@ export const adjustmentsSchema = z.object({
 });
 
 export const valueDriversSchema = z.object({
-  financialPerformance: z.enum(["A", "B", "C", "D", "F"]),
-  customerConcentration: z.enum(["A", "B", "C", "D", "F"]),
-  managementTeam: z.enum(["A", "B", "C", "D", "F"]),
-  competitivePosition: z.enum(["A", "B", "C", "D", "F"]),
-  growthProspects: z.enum(["A", "B", "C", "D", "F"]),
-  systemsProcesses: z.enum(["A", "B", "C", "D", "F"]),
-  assetQuality: z.enum(["A", "B", "C", "D", "F"]),
-  industryOutlook: z.enum(["A", "B", "C", "D", "F"]),
-  riskFactors: z.enum(["A", "B", "C", "D", "F"]),
-  ownerDependency: z.enum(["A", "B", "C", "D", "F"]),
+  financialPerformance: z.enum(["A", "B", "C", "D", "E"]),
+  customerConcentration: z.enum(["A", "B", "C", "D", "E"]),
+  managementTeam: z.enum(["A", "B", "C", "D", "E"]),
+  competitivePosition: z.enum(["A", "B", "C", "D", "E"]),
+  growthProspects: z.enum(["A", "B", "C", "D", "E"]),
+  systemsProcesses: z.enum(["A", "B", "C", "D", "E"]),
+  assetQuality: z.enum(["A", "B", "C", "D", "E"]),
+  industryOutlook: z.enum(["A", "B", "C", "D", "E"]),
+  riskFactors: z.enum(["A", "B", "C", "D", "E"]),
+  ownerDependency: z.enum(["A", "B", "C", "D", "E"]),
 });
 
 export const followUpSchema = z.object({

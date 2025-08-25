@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 interface OperationalGradeGaugeProps {
-  grade: 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: 'A' | 'B' | 'C' | 'D' | 'E';
   title?: string;
   animated?: boolean;
-  onGradeClick?: (grade: 'A' | 'B' | 'C' | 'D' | 'F') => void;
+  onGradeClick?: (grade: 'A' | 'B' | 'C' | 'D' | 'E') => void;
 }
 
 const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({ 
@@ -17,7 +17,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
   
   // Define grade segments with colors and angles (semi-circle from 0 to 180 degrees)
   const gradeSegments = [
-    { grade: 'F', color: 'bg-red-500', angle: 0, label: 'Poor' },
+    { grade: 'E', color: 'bg-red-500', angle: 0, label: 'Poor' },
     { grade: 'D', color: 'bg-orange-400', angle: 36, label: 'Below Average' },
     { grade: 'C', color: 'bg-yellow-300', angle: 72, label: 'Average' },
     { grade: 'B', color: 'bg-sky-400', angle: 108, label: 'Good' },
