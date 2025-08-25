@@ -1710,6 +1710,269 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // POST /api/migrate-to-ghl - Send all existing leads and users to GoHighLevel
+  app.post("/api/migrate-to-ghl", async (req, res) => {
+    try {
+      console.log('Starting migration of all existing data to GoHighLevel...');
+      
+      // Get all existing data
+      const [users, leads, assessments] = await Promise.all([
+        storage.getAllUsers(),
+        storage.getAllLeads(), 
+        storage.getAllValuationAssessments()
+      ]);
+      
+      console.log(`Found ${users.length} users, ${leads.length} leads, ${assessments.length} assessments`);
+      
+      let migratedContacts = 0;
+      let errors = 0;
+      const migrationResults = [];
+      
+      // Migrate Users
+      console.log('Migrating users...');
+      for (const user of users) {
+        try {
+          const ghlContactData = {
+            firstName: user.firstName || '',
+            lastName: user.lastName || '',
+            email: user.email,
+            tags: [
+              'applebites-migration',
+              'Platform User',
+              user.tier ? `tier-${user.tier}` : 'tier-free',
+              ...(user.authProvider === 'stripe_purchase' ? ['New Account - Payment Signup'] : [])
+            ],
+            customFields: {
+              migrationDate: new Date().toISOString(),
+              originalUserId: user.id,
+              tier: user.tier || 'free',
+              authProvider: user.authProvider || 'email',
+              signupDate: user.createdAt || new Date().toISOString(),
+              source: 'user_migration',
+              awaitingPasswordCreation: user.awaitingPasswordCreation || false
+            }
+          };
+          
+          const result = await goHighLevelService.createOrUpdateContact(ghlContactData);
+          migratedContacts++;
+          migrationResults.push({
+            type: 'user',
+            id: user.id,
+            email: user.email,
+            ghlContactId: result.contactId,
+            status: 'success'
+          });
+          
+          // Update user with GHL contact ID if we got one
+          if (result.contactId && !user.ghlContactId) {
+            await storage.updateUser(user.id, { ghlContactId: result.contactId });
+          }
+          
+        } catch (error) {
+          console.error(`Failed to migrate user ${user.id}:`, error);
+          errors++;
+          migrationResults.push({
+            type: 'user',
+            id: user.id,
+            email: user.email,
+            status: 'error',
+            error: error instanceof Error ? error.message : 'Unknown error'
+          });
+        }
+      }
+      
+      // Migrate standalone Leads (not associated with users)
+      console.log('Migrating leads...');
+      for (const lead of leads) {
+        try {
+          // Skip if we already have a user with this email
+          const userExists = users.find(u => u.email === lead.email);
+          if (userExists) {
+            console.log(`Skipping lead ${lead.id} - user already exists for ${lead.email}`);
+            continue;
+          }
+          
+          const ghlContactData = {
+            firstName: lead.firstName || '',
+            lastName: lead.lastName || '',
+            email: lead.email,
+            phone: lead.phone,
+            companyName: lead.company,
+            tags: [
+              'applebites-migration',
+              'lead-migration',
+              lead.leadStatus ? `status-${lead.leadStatus}` : 'status-new',
+              ...(lead.tags || [])
+            ],
+            customFields: {
+              migrationDate: new Date().toISOString(),
+              originalLeadId: lead.id,
+              leadSource: lead.leadSource || 'unknown',
+              leadStatus: lead.leadStatus || 'new',
+              leadScore: lead.leadScore || 0,
+              estimatedValue: lead.estimatedValue || 0,
+              followUpIntent: lead.followUpIntent || 'unknown',
+              source: 'lead_migration',
+              notes: lead.notes || ''
+            }
+          };
+          
+          const result = await goHighLevelService.createOrUpdateContact(ghlContactData);
+          migratedContacts++;
+          migrationResults.push({
+            type: 'lead',
+            id: lead.id,
+            email: lead.email,
+            ghlContactId: result.contactId,
+            status: 'success'
+          });
+          
+        } catch (error) {
+          console.error(`Failed to migrate lead ${lead.id}:`, error);
+          errors++;
+          migrationResults.push({
+            type: 'lead',
+            id: lead.id,
+            email: lead.email,
+            status: 'error',
+            error: error instanceof Error ? error.message : 'Unknown error'
+          });
+        }
+      }
+      
+      // Enhance contacts with assessment data
+      console.log('Enhancing contacts with assessment data...');
+      for (const assessment of assessments) {
+        try {
+          // Find if we already have this contact (by email)
+          const existingUser = users.find(u => u.email === assessment.email);
+          const existingLead = leads.find(l => l.email === assessment.email);
+          
+          if (!existingUser && !existingLead) {
+            // Create new contact from assessment data
+            const ghlContactData = {
+              firstName: assessment.firstName || '',
+              lastName: assessment.lastName || '',
+              email: assessment.email,
+              phone: assessment.phone,
+              companyName: assessment.company,
+              tags: [
+                'applebites-migration',
+                'assessment-migration',
+                `tier-${assessment.tier || 'free'}`,
+                `grade-${assessment.overallScore}`,
+                ...(assessment.followUpIntent === 'yes' ? ['follow-up-requested'] : [])
+              ],
+              customFields: {
+                migrationDate: new Date().toISOString(),
+                originalAssessmentId: assessment.id,
+                tier: assessment.tier || 'free',
+                assessmentDate: assessment.createdAt,
+                overallGrade: assessment.overallScore,
+                valuationLow: Number(assessment.lowEstimate) || 0,
+                valuationMid: Number(assessment.midEstimate) || 0,
+                valuationHigh: Number(assessment.highEstimate) || 0,
+                adjustedEbitda: Number(assessment.adjustedEbitda) || 0,
+                financialPerformance: assessment.financialPerformance,
+                customerConcentration: assessment.customerConcentration,
+                managementTeam: assessment.managementTeam,
+                competitivePosition: assessment.competitivePosition,
+                growthProspects: assessment.growthProspects,
+                systemsProcesses: assessment.systemsProcesses,
+                assetQuality: assessment.assetQuality,
+                industryOutlook: assessment.industryOutlook,
+                riskFactors: assessment.riskFactors,
+                ownerDependency: assessment.ownerDependency,
+                followUpIntent: assessment.followUpIntent || 'unknown',
+                source: 'assessment_migration'
+              }
+            };
+            
+            const result = await goHighLevelService.createOrUpdateContact(ghlContactData);
+            migratedContacts++;
+            migrationResults.push({
+              type: 'assessment',
+              id: assessment.id,
+              email: assessment.email,
+              ghlContactId: result.contactId,
+              status: 'success'
+            });
+          } else {
+            // Update existing contact with assessment data
+            const ghlContactData = {
+              email: assessment.email,
+              tags: [
+                `grade-${assessment.overallScore}`,
+                ...(assessment.followUpIntent === 'yes' ? ['follow-up-requested'] : [])
+              ],
+              customFields: {
+                latestAssessmentId: assessment.id,
+                latestAssessmentDate: assessment.createdAt,
+                overallGrade: assessment.overallScore,
+                valuationLow: Number(assessment.lowEstimate) || 0,
+                valuationMid: Number(assessment.midEstimate) || 0,
+                valuationHigh: Number(assessment.highEstimate) || 0,
+                adjustedEbitda: Number(assessment.adjustedEbitda) || 0,
+                financialPerformance: assessment.financialPerformance,
+                customerConcentration: assessment.customerConcentration,
+                managementTeam: assessment.managementTeam,
+                competitivePosition: assessment.competitivePosition,
+                growthProspects: assessment.growthProspects,
+                systemsProcesses: assessment.systemsProcesses,
+                assetQuality: assessment.assetQuality,
+                industryOutlook: assessment.industryOutlook,
+                riskFactors: assessment.riskFactors,
+                ownerDependency: assessment.ownerDependency,
+                followUpIntent: assessment.followUpIntent || 'unknown'
+              }
+            };
+            
+            await goHighLevelService.createOrUpdateContact(ghlContactData);
+            migrationResults.push({
+              type: 'assessment_update',
+              id: assessment.id,
+              email: assessment.email,
+              status: 'updated'
+            });
+          }
+          
+        } catch (error) {
+          console.error(`Failed to migrate assessment ${assessment.id}:`, error);
+          errors++;
+          migrationResults.push({
+            type: 'assessment',
+            id: assessment.id,
+            email: assessment.email,
+            status: 'error',
+            error: error instanceof Error ? error.message : 'Unknown error'
+          });
+        }
+      }
+      
+      console.log(`Migration completed: ${migratedContacts} contacts migrated, ${errors} errors`);
+      
+      res.json({
+        success: true,
+        summary: {
+          totalContacts: migratedContacts,
+          totalErrors: errors,
+          usersFound: users.length,
+          leadsFound: leads.length,
+          assessmentsFound: assessments.length
+        },
+        results: migrationResults
+      });
+      
+    } catch (error: any) {
+      console.error('Migration failed:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message,
+        message: "Migration to GoHighLevel failed" 
+      });
+    }
+  });
+
   // GET /api/test-webhook-purchase - Test purchase webhook
   app.get("/api/test-webhook-purchase", async (req, res) => {
     try {
