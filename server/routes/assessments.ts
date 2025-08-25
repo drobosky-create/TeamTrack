@@ -772,6 +772,7 @@ router.delete('/api/consumer/assessments/:id', async (req: Request, res: Respons
   }
 });
 
+
 // Test GoHighLevel API connection (must be before :id route)
 router.get('/api/assessments/test-ghl', async (req: Request, res: Response) => {
   try {
