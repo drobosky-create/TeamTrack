@@ -2075,16 +2075,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // GET /api/assessments - Get all assessments (for admin/debugging)
-  app.get("/api/assessments", async (req, res) => {
-    try {
-      const assessments = await storage.getAllValuationAssessments();
-      res.json(assessments);
-    } catch (error) {
-      console.error("Error fetching assessments:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  });
 
   // GET /api/assessment/:id - Get specific assessment
   app.get("/api/assessment/:id", async (req, res) => {
