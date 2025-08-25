@@ -30,39 +30,139 @@ interface GHLContact {
   customFields?: Record<string, any>;
 }
 
+// Send webhook notification for lead tracking
+async function sendGHLWebhook(data: any, type: 'free' | 'growth' = 'free') {
+  try {
+    const webhookUrl = type === 'growth' 
+      ? 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657'
+      : 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3';
+    
+    const webhookData = {
+      event: 'assessment_completed',
+      type: type,
+      timestamp: new Date().toISOString(),
+      contact: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        companyName: data.companyName,
+      },
+      assessment: {
+        tier: type,
+        overallGrade: data.overallGrade,
+        valuationLow: data.valuationLow,
+        valuationMid: data.valuationMid,
+        valuationHigh: data.valuationHigh,
+        adjustedEbitda: data.adjustedEbitda,
+        valuationMultiple: data.valuationMultiple,
+        industry: data.industry,
+        naicsCode: data.naicsCode,
+        followUpIntent: data.followUpIntent,
+      }
+    };
+
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(webhookData),
+    });
+
+    if (!response.ok) {
+      console.error(`Webhook failed (${response.status}):`, await response.text());
+      return false;
+    }
+
+    console.log(`Webhook sent successfully for ${type} assessment: ${data.email}`);
+    return true;
+  } catch (error) {
+    console.error('Failed to send webhook:', error);
+    return false;
+  }
+}
+
 async function createGHLContact(contact: GHLContact) {
   if (!process.env.GHL_API_KEY || !process.env.GHL_LOCATION_ID) {
     console.warn('GHL API credentials not configured');
     return null;
   }
 
+  const baseUrl = 'https://services.leadconnectorhq.com';
+  const locationId = process.env.GHL_LOCATION_ID;
+
   try {
-    const response = await fetch(`https://rest.gohighlevel.com/v1/contacts/`, {
-      method: 'POST',
+    // First, check if contact exists by email
+    const searchUrl = `${baseUrl}/locations/${locationId}/contacts?email=${encodeURIComponent(contact.email)}`;
+    const searchResponse = await fetch(searchUrl, {
+      method: 'GET',
       headers: {
         'Authorization': `Bearer ${process.env.GHL_API_KEY}`,
         'Content-Type': 'application/json',
+        'Version': '2021-07-28'
+      }
+    });
+
+    let contactId: string;
+    let method: string;
+    let url: string;
+
+    if (searchResponse.ok) {
+      const searchData = await searchResponse.json();
+      if (searchData.contacts && searchData.contacts.length > 0) {
+        // Update existing contact
+        contactId = searchData.contacts[0].id;
+        method = 'PUT';
+        url = `${baseUrl}/contacts/${contactId}`;
+        console.log(`Updating existing GHL contact for ${contact.email}`);
+      } else {
+        // Create new contact
+        method = 'POST';
+        url = `${baseUrl}/contacts/`;
+        console.log(`Creating new GHL contact for ${contact.email}`);
+      }
+    } else {
+      // If search fails, try to create new contact
+      method = 'POST';
+      url = `${baseUrl}/contacts/`;
+      console.log(`Search failed, creating new GHL contact for ${contact.email}`);
+    }
+
+    const contactData = {
+      locationId: locationId,
+      firstName: contact.firstName,
+      lastName: contact.lastName,
+      email: contact.email,
+      phone: contact.phone,
+      companyName: contact.companyName,
+      tags: contact.tags || ['assessment-lead'],
+      customFields: contact.customFields || {},
+    };
+
+    const response = await fetch(url, {
+      method: method,
+      headers: {
+        'Authorization': `Bearer ${process.env.GHL_API_KEY}`,
+        'Content-Type': 'application/json',
+        'Version': '2021-07-28'
       },
-      body: JSON.stringify({
-        locationId: process.env.GHL_LOCATION_ID,
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        email: contact.email,
-        phone: contact.phone,
-        companyName: contact.companyName,
-        tags: contact.tags || ['assessment-lead'],
-        customField: contact.customFields || {},
-      }),
+      body: JSON.stringify(contactData),
     });
 
     if (!response.ok) {
-      console.error('GHL API error:', await response.text());
+      const errorText = await response.text();
+      console.error(`GHL API error (${response.status}):`, errorText);
+      console.error('Request data:', JSON.stringify(contactData, null, 2));
       return null;
     }
 
-    return await response.json();
+    const result = await response.json();
+    console.log(`GHL contact ${method === 'POST' ? 'created' : 'updated'} successfully for ${contact.email}`);
+    return result;
   } catch (error) {
-    console.error('Failed to create GHL contact:', error);
+    console.error('Failed to create/update GHL contact:', error);
+    console.error('Contact data:', contact);
     return null;
   }
 }
@@ -251,25 +351,37 @@ router.post('/api/assessments/free', async (req: Request, res: Response) => {
   try {
     const data = req.body;
 
-    // Create GHL contact
+    // Calculate valuation first
+    const valuation = calculateValuation(data);
+    const narrativeSummary = generateNarrativeSummary(data, valuation);
+
+    // Create GHL contact with complete valuation data
     const ghlContact = await createGHLContact({
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
       phone: data.phone,
       companyName: data.companyName,
-      tags: ['free-assessment', data.industry],
+      tags: ['free-assessment', data.industry, `grade-${valuation.overallScore}`],
       customFields: {
         assessmentType: 'free',
         industry: data.industry,
         annualRevenue: data.annualRevenue,
         followUpIntent: data.followUpIntent,
+        overallGrade: valuation.overallScore,
+        valuationLow: valuation.lowEstimate,
+        valuationMid: valuation.midEstimate,
+        valuationHigh: valuation.highEstimate,
+        adjustedEbitda: valuation.adjustedEbitda,
+        valuationMultiple: valuation.valuationMultiple,
+        assessmentDate: new Date().toISOString(),
+        financialPerformance: data.financialPerformance,
+        customerConcentration: data.customerConcentration,
+        managementTeam: data.managementTeam,
+        competitivePosition: data.competitivePosition,
+        growthProspects: data.growthProspects,
       },
     });
-
-    // Calculate valuation
-    const valuation = calculateValuation(data);
-    const narrativeSummary = generateNarrativeSummary(data, valuation);
 
     // Save to database
     const [assessment] = await db.insert(valuationAssessments).values({
@@ -304,6 +416,17 @@ router.post('/api/assessments/free', async (req: Request, res: Response) => {
       narrativeSummary,
       isProcessed: true,
     }).returning();
+
+    // Send webhook notification
+    const webhookSent = await sendGHLWebhook({
+      ...data,
+      ...valuation,
+      companyName: data.companyName,
+    }, 'free');
+
+    if (webhookSent) {
+      console.log(`Free assessment completed and webhook sent for ${data.email}`);
+    }
 
     // Skip audit logging to avoid user structure issues
 
@@ -370,14 +493,18 @@ router.post('/api/assessments/growth', async (req: Request, res: Response) => {
       }
     }
 
-    // Create GHL contact with growth tag
+    // Calculate comprehensive valuation first
+    const valuation = calculateValuation(data);
+    const narrativeSummary = generateNarrativeSummary(data, valuation);
+
+    // Create GHL contact with complete valuation data
     const ghlContact = await createGHLContact({
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
       phone: data.phone,
       companyName: data.companyName,
-      tags: ['growth-assessment', 'paid-customer', data.industry],
+      tags: ['growth-assessment', 'paid-customer', data.industry, `grade-${valuation.overallScore}`],
       customFields: {
         assessmentType: 'growth',
         industry: data.industry,
@@ -385,12 +512,25 @@ router.post('/api/assessments/growth', async (req: Request, res: Response) => {
         annualRevenue: data.annualRevenue,
         followUpIntent: data.followUpIntent,
         paymentAmount: 497,
+        overallGrade: valuation.overallScore,
+        valuationLow: valuation.lowEstimate,
+        valuationMid: valuation.midEstimate,
+        valuationHigh: valuation.highEstimate,
+        adjustedEbitda: valuation.adjustedEbitda,
+        valuationMultiple: valuation.valuationMultiple,
+        assessmentDate: new Date().toISOString(),
+        financialPerformance: data.financialPerformance,
+        customerConcentration: data.customerConcentration,
+        managementTeam: data.managementTeam,
+        competitivePosition: data.competitivePosition,
+        growthProspects: data.growthProspects,
+        systemsProcesses: data.systemsProcesses,
+        assetQuality: data.assetQuality,
+        industryOutlook: data.industryOutlook,
+        riskFactors: data.riskFactors,
+        ownerDependency: data.ownerDependency,
       },
     });
-
-    // Calculate comprehensive valuation
-    const valuation = calculateValuation(data);
-    const narrativeSummary = generateNarrativeSummary(data, valuation);
 
     // Generate executive summary for growth tier
     const executiveSummary = `
@@ -473,6 +613,17 @@ router.post('/api/assessments/growth', async (req: Request, res: Response) => {
     //     },
     //   });
     // }
+
+    // Send webhook notification for growth assessment
+    const webhookSent = await sendGHLWebhook({
+      ...data,
+      ...valuation,
+      companyName: data.companyName,
+    }, 'growth');
+
+    if (webhookSent) {
+      console.log(`Growth assessment completed and webhook sent for ${data.email}`);
+    }
 
     res.json({ 
       success: true, 
@@ -960,6 +1111,60 @@ router.post('/api/valuation', async (req: Request, res: Response) => {
       success: false, 
       message: 'Failed to process valuation',
       error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// Test endpoint for GHL integration
+router.post('/api/assessments/test-ghl', async (req: Request, res: Response) => {
+  try {
+    const testData = {
+      firstName: 'Test',
+      lastName: 'Integration',
+      email: `test-${Date.now()}@example.com`,
+      phone: '555-0123',
+      companyName: 'Test Company',
+      industry: 'Technology',
+      annualRevenue: 1000000,
+      followUpIntent: 'yes',
+    };
+
+    console.log('Testing GHL integration with:', testData);
+
+    // Test contact creation
+    const contact = await createGHLContact({
+      ...testData,
+      tags: ['test-integration', 'api-test'],
+      customFields: {
+        testRun: true,
+        timestamp: new Date().toISOString(),
+      },
+    });
+
+    // Test webhook
+    const webhookResult = await sendGHLWebhook({
+      ...testData,
+      overallGrade: 'B',
+      valuationLow: 2000000,
+      valuationMid: 2500000,
+      valuationHigh: 3000000,
+      adjustedEbitda: 500000,
+      valuationMultiple: 5.0,
+    }, 'free');
+
+    res.json({
+      success: true,
+      message: 'GHL integration test completed',
+      contactCreated: !!contact,
+      webhookSent: webhookResult,
+      contactData: contact,
+    });
+  } catch (error: any) {
+    console.error('GHL test failed:', error);
+    res.status(500).json({
+      success: false,
+      message: 'GHL integration test failed',
+      error: error.message,
     });
   }
 });
